@@ -1,43 +1,46 @@
 package com.eclinic.web.rest;
 
-import com.eclinic.dao.AddressDAO;
-import com.eclinic.dao.PatientDAO;
-
-import com.eclinic.domain.Address;
-import com.eclinic.domain.Patient;
-
-import com.eclinic.service.AddressService;
-
-import java.util.List;
-
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.eclinic.dao.AddressDAO;
+import com.eclinic.dao.PatientDAO;
+import com.eclinic.domain.Address;
+import com.eclinic.domain.Patient;
+import com.eclinic.service.AddressService;
 
 /**
  * Spring Rest controller that handles CRUD requests for Address entities
  * 
  */
 
-@Controller("AddressRestController")
+@Component
+@Path("/Address")
 public class AddressRestController {
 
 	/**
 	 * DAO injected by Spring that manages Address entities
 	 * 
 	 */
-	@Autowired
+	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("wee-dao-context.xml");
+	
+//	@Autowired
+	//@PersistenceContext(unitName = "AddressDAO")
 	private AddressDAO addressDAO;
 
 	/**
@@ -48,7 +51,8 @@ public class AddressRestController {
 	private PatientDAO patientDAO;
 
 	/**
-	 * Service injected by Spring that provides CRUD operations for Address entities
+	 * Service injected by Spring that provides CRUD operations for Address
+	 * entities
 	 * 
 	 */
 	@Autowired
@@ -59,112 +63,168 @@ public class AddressRestController {
 	 * 
 	 */
 	@InitBinder
-	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register static property editors.
-		binder.registerCustomEditor(java.util.Calendar.class, new org.skyway.spring.util.databinding.CustomCalendarEditor());
-		binder.registerCustomEditor(byte[].class, new org.springframework.web.multipart.support.ByteArrayMultipartFileEditor());
-		binder.registerCustomEditor(boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(false));
-		binder.registerCustomEditor(Boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(true));
-		binder.registerCustomEditor(java.math.BigDecimal.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(java.math.BigDecimal.class, true));
-		binder.registerCustomEditor(Integer.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Integer.class, true));
-		binder.registerCustomEditor(java.util.Date.class, new org.skyway.spring.util.databinding.CustomDateEditor());
-		binder.registerCustomEditor(String.class, new org.skyway.spring.util.databinding.StringEditor());
-		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
-		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
+	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register
+																				// static
+																				// property
+																				// editors.
+		binder.registerCustomEditor(java.util.Calendar.class,
+				new org.skyway.spring.util.databinding.CustomCalendarEditor());
+		binder.registerCustomEditor(
+				byte[].class,
+				new org.springframework.web.multipart.support.ByteArrayMultipartFileEditor());
+		binder.registerCustomEditor(boolean.class,
+				new org.skyway.spring.util.databinding.EnhancedBooleanEditor(
+						false));
+		binder.registerCustomEditor(Boolean.class,
+				new org.skyway.spring.util.databinding.EnhancedBooleanEditor(
+						true));
+		binder.registerCustomEditor(java.math.BigDecimal.class,
+				new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(
+						java.math.BigDecimal.class, true));
+		binder.registerCustomEditor(Integer.class,
+				new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(
+						Integer.class, true));
+		binder.registerCustomEditor(java.util.Date.class,
+				new org.skyway.spring.util.databinding.CustomDateEditor());
+		binder.registerCustomEditor(String.class,
+				new org.skyway.spring.util.databinding.StringEditor());
+		binder.registerCustomEditor(Long.class,
+				new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(
+						Long.class, true));
+		binder.registerCustomEditor(Double.class,
+				new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(
+						Double.class, true));
+	}
+	
+	@PostConstruct
+	public void init(){
+		addressDAO =  (AddressDAO) context.getBean("AddressDAO");
+		
 	}
 
 	/**
 	 * Select an existing Address entity
 	 * 
 	 */
-	@RequestMapping(value = "/Address/{address_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Address loadAddress(@PathVariable Integer address_id) {
-		return addressDAO.findAddressByPrimaryKey(address_id);
+	// @RequestMapping(value = "/Address/{address_id}", method =
+	// RequestMethod.GET)
+	// @ResponseBody
+	@GET
+	@Path("/Address/{address_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadAddress(@PathParam("address_id") Integer address_id) {
+		addressDAO =  (AddressDAO) context.getBean("AddressDAO");
+		return Response.ok(addressDAO.findAddressByPrimaryKey(address_id)).build();// addressDAO.findAddressByPrimaryKey(address_id);
 	}
 
 	/**
 	 * Create a new Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Address/{address_id}/patients", method = RequestMethod.POST)
-	@ResponseBody
-	public Patient newAddressPatients(@PathVariable Integer address_id, @RequestBody Patient patient) {
+	@Path("/{address_id}/patients")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newAddressPatients(@PathParam("address_id") Integer address_id,
+			 Patient patient) {
 		addressService.saveAddressPatients(address_id, patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
 
 	/**
 	 * Save an existing Address entity
 	 * 
 	 */
-	@RequestMapping(value = "/Address", method = RequestMethod.PUT)
-	@ResponseBody
-	public Address saveAddress(@RequestBody Address address) {
+	@PUT
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveAddress( Address address) {
 		addressService.saveAddress(address);
-		return addressDAO.findAddressByPrimaryKey(address.getId());
+		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
 	}
 
 	/**
 	 * Show all Address entities
 	 * 
 	 */
-	@RequestMapping(value = "/Address", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Address> listAddresss() {
-		return new java.util.ArrayList<Address>(addressService.loadAddresss());
+//	@RequestMapping(value = "/Address", method = RequestMethod.GET)
+//	@ResponseBody
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listAddresss() {
+		return  Response.ok(addressService.loadAddresss()).build();
 	}
 
 	/**
 	 * Create a new Address entity
 	 * 
 	 */
-	@RequestMapping(value = "/Address", method = RequestMethod.POST)
-	@ResponseBody
-	public Address newAddress(@RequestBody Address address) {
+//	@RequestMapping(value = "/Address", method = RequestMethod.POST)
+//	@ResponseBody
+	@POST
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newAddress( Address address) {
 		addressService.saveAddress(address);
-		return addressDAO.findAddressByPrimaryKey(address.getId());
+		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
 	}
 
 	/**
 	 * View an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Address/{address_id}/patients/{patient_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Patient loadAddressPatients(@PathVariable Integer address_id, @PathVariable Integer related_patients_id) {
-		Patient patient = patientDAO.findPatientByPrimaryKey(related_patients_id, -1, -1);
+//	@RequestMapping(value = "/Address/{address_id}/patients/{patient_id}", method = RequestMethod.GET)
+//	@ResponseBody
+	@GET
+	@Path("/{address_id}/patients/{patient_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadAddressPatients(@PathParam("address_id") Integer address_id,
+			@PathParam("related_patients_id") Integer related_patients_id) {
+		Patient patient = patientDAO.findPatientByPrimaryKey(
+				related_patients_id, -1, -1);
 
-		return patient;
+		return Response.ok(patient).build();
 	}
 
 	/**
 	 * Delete an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Address/{address_id}/patients/{patient_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteAddressPatients(@PathVariable Integer address_id, @PathVariable Integer related_patients_id) {
-		addressService.deleteAddressPatients(address_id, related_patients_id);
+//	@RequestMapping(value = "/Address/{address_id}/patients/{patient_id}", method = RequestMethod.DELETE)
+//	@ResponseBody
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{address_id}/patients/{patient_id}")
+	public Response deleteAddressPatients(@PathParam("address_id") Integer address_id,
+			@PathParam("related_patients_id") Integer related_patients_id) {
+		return Response.ok(addressService.deleteAddressPatients(address_id, related_patients_id)).build();
 	}
 
 	/**
 	 * Save an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Address/{address_id}/patients", method = RequestMethod.PUT)
-	@ResponseBody
-	public Patient saveAddressPatients(@PathVariable Integer address_id, @RequestBody Patient patients) {
+//	@RequestMapping(value = "/Address/{address_id}/patients", method = RequestMethod.PUT)
+//	@ResponseBody
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{address_id}/patients")
+	@PUT
+	public Response saveAddressPatients(@PathParam("address_id") Integer address_id,
+			 Patient patients) {
 		addressService.saveAddressPatients(address_id, patients);
-		return patientDAO.findPatientByPrimaryKey(patients.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patients.getId())).build();
 	}
 
 	/**
 	 * Delete an existing Address entity
 	 * 
 	 */
-	@RequestMapping(value = "/Address/{address_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteAddress(@PathVariable Integer address_id) {
+//	@RequestMapping(value = "/Address/{address_id}", method = RequestMethod.DELETE)
+//	@ResponseBody
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{address_id}")
+	@DELETE
+	public void deleteAddress(@PathParam("address_id") Integer address_id) {
 		Address address = addressDAO.findAddressByPrimaryKey(address_id);
 		addressService.deleteAddress(address);
 	}
@@ -173,9 +233,14 @@ public class AddressRestController {
 	 * Show all Patient entities by Address
 	 * 
 	 */
-	@RequestMapping(value = "/Address/{address_id}/patients", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Patient> getAddressPatients(@PathVariable Integer address_id) {
-		return new java.util.ArrayList<Patient>(addressDAO.findAddressByPrimaryKey(address_id).getPatients());
+//	@RequestMapping(value = "/Address/{address_id}/patients", method = RequestMethod.GET)
+//	@ResponseBody
+	@GET
+	@Path("/{address_id}/patients")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAddressPatients(@PathParam("address_id") Integer address_id) {
+		return Response.ok(addressDAO
+				.findAddressByPrimaryKey(address_id).getPatients()).build();
 	}
+
 }
