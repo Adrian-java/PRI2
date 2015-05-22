@@ -1,7 +1,7 @@
 package com.eclinic.web.rest;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,8 +12,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.annotations.Form;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -29,18 +29,16 @@ import com.eclinic.service.AddressService;
  * 
  */
 
-@Component("AddressRestController")
 @Path("/Address")
+@Component("AddressRestController")
 public class AddressRestController {
 
 	/**
 	 * DAO injected by Spring that manages Address entities
 	 * 
 	 */
-	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("wee-dao-context.xml");
 	
-//	@Autowired
-	//@PersistenceContext(unitName = "AddressDAO")
+	@Autowired
 	private AddressDAO addressDAO;
 
 	/**
@@ -58,9 +56,14 @@ public class AddressRestController {
 	@Autowired
 	private AddressService addressService;
 
+	
+	public AddressRestController() {
+	}
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
+	 *
 	 */
 	@InitBinder
 	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register
@@ -96,11 +99,6 @@ public class AddressRestController {
 						Double.class, true));
 	}
 	
-	@PostConstruct
-	public void init(){
-		addressDAO =  (AddressDAO) context.getBean("AddressDAO");
-		
-	}
 
 	/**
 	 * Select an existing Address entity
@@ -113,8 +111,7 @@ public class AddressRestController {
 	@Path("/Address/{address_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadAddress(@PathParam("address_id") Integer address_id) {
-		addressDAO =  (AddressDAO) context.getBean("AddressDAO");
-		return Response.ok(addressDAO.findAddressByPrimaryKey(address_id)).build();// addressDAO.findAddressByPrimaryKey(address_id);
+		return Response.ok(addressDAO.findAddressByPrimaryKey(address_id)).build();
 	}
 
 	/**
@@ -134,10 +131,12 @@ public class AddressRestController {
 	 * Save an existing Address entity
 	 * 
 	 */
-	@PUT
+	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveAddress( Address address) {
+//		addressService = (AddressService) serviceContext.getBean("AddressService");
 		addressService.saveAddress(address);
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
 	}
@@ -162,8 +161,10 @@ public class AddressRestController {
 //	@RequestMapping(value = "/Address", method = RequestMethod.POST)
 //	@ResponseBody
 	@POST
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/add")
+	//gdy przekazujemy obiekt jako param to nie ma @Produces
+//	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response newAddress( Address address) {
 		addressService.saveAddress(address);
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
