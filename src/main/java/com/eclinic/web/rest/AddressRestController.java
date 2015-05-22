@@ -110,7 +110,7 @@ public class AddressRestController {
 	// RequestMethod.GET)
 	// @ResponseBody
 	@GET
-	@Path("/{address_id}")
+	@Path("/Address/{address_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadAddress(@PathParam("address_id") Integer address_id) {
 		addressDAO =  (AddressDAO) context.getBean("AddressDAO");
