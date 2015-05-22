@@ -55,7 +55,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 
 //@Controller("DoctorRestController")
-@Component
+@Component("DoctorRestController")
 @Path("/Doctor")
 public class DoctorRestController {
 

@@ -18,7 +18,9 @@
 	<context-param>
 		<param-name>resteasy.resources</param-name>
 		<param-value>com.eclinic.web.rest.AddressRestController</param-value>
-		<!-- <param-value>com.eclinic.web.rest.AdminRestController</param-value> -->
+		<param-value>com.eclinic.web.rest.AdminRestController</param-value> 
+		<param-value>com.eclinic.web.rest.ApplicationParameterRestController</param-value> 
+		<param-value>com.eclinic.web.rest.DoctorRestController</param-value> 
 	</context-param>
 	<servlet>
 		<description>
@@ -62,14 +64,10 @@
 		<servlet-name>wee Servlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	<!-- <listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener> -->
-	<!-- <listener>
-		<listener-class>
-			org.springframework.web.context.request.RequestContextListener
-		</listener-class>
-	</listener> -->
+	<!-- <listener> <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class> 
+		</listener> -->
+	<!-- <listener> <listener-class> org.springframework.web.context.request.RequestContextListener 
+		</listener-class> </listener> -->
 	<listener>
 		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 	</listener>
@@ -80,8 +78,7 @@
 		<description>generated-persistence-filter</description>
 		<filter-name>mysql1Filter</filter-name>
 		<filter-class>
-			org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter
-		</filter-class>
+			org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
 		<init-param>
 			<param-name>entityManagerFactoryBeanName</param-name>
 			<param-value>mysql1</param-value>

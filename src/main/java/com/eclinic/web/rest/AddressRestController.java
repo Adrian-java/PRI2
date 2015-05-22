@@ -29,7 +29,7 @@ import com.eclinic.service.AddressService;
  * 
  */
 
-@Component
+@Component("AddressRestController")
 @Path("/Address")
 public class AddressRestController {
 

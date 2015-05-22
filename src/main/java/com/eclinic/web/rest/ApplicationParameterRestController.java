@@ -37,8 +37,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  */
 
-//@Controller("ApplicationParameterRestController")
-@Component
+//@Controller
+@Component("ApplicationParameterRestController")
 @Path("/ApplicationParameter")
 public class ApplicationParameterRestController {
 

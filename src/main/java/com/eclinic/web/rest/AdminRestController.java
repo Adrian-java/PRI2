@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -41,7 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 
 //@Controller("AdminRestController")
-@Component  //
+@Component("AdminRestController")  
 @Path("/Admin") //
 public class AdminRestController {
 
@@ -151,7 +152,7 @@ public class AdminRestController {
 	
 	@GET
 	@Path("/{admin_id}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response loadAdmin(@PathParam("admin_id") Integer admin_id) {
 		adminDAO =  (AdminDAO) context.getBean("AdminDAO");
 		return Response.ok(adminDAO.findAdminByPrimaryKey(admin_id)).build();
