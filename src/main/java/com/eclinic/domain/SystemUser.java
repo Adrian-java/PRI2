@@ -1,21 +1,26 @@
 package com.eclinic.domain;
 
 import java.io.Serializable;
-
 import java.lang.StringBuilder;
-
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.xml.bind.annotation.*;
-
 import javax.persistence.*;
 
 /**
@@ -44,7 +49,7 @@ import javax.persistence.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "SystemUser")
 @XmlRootElement(namespace = "wee/com/eclinic/domain")
-public class SystemUser implements Serializable {
+public class SystemUser implements UserDetails, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -122,7 +127,7 @@ public class SystemUser implements Serializable {
 	/**
 	 */
 	@OneToMany(mappedBy = "systemUser", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Permission> permissions;
 
 	/**
@@ -282,7 +287,8 @@ public class SystemUser implements Serializable {
 		setEmail(that.getEmail());
 		setUnregisterDate(that.getUnregisterDate());
 		setWorker(that.getWorker());
-		setPermissions(new java.util.LinkedHashSet<com.eclinic.domain.Permission>(that.getPermissions()));
+		setPermissions(new java.util.LinkedHashSet<com.eclinic.domain.Permission>(
+				that.getPermissions()));
 	}
 
 	/**
@@ -324,10 +330,42 @@ public class SystemUser implements Serializable {
 		if (!(obj instanceof SystemUser))
 			return false;
 		SystemUser equalCheck = (SystemUser) obj;
-		if ((id == null && equalCheck.id != null) || (id != null && equalCheck.id == null))
+		if ((id == null && equalCheck.id != null)
+				|| (id != null && equalCheck.id == null))
 			return false;
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
 	}
+
+	@Transient
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Transient
+	public String getUsername() {
+		return login;
+	}
+
+	@Transient
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Transient
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Transient
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Transient
+	public boolean isEnabled() {
+		return true;
+	}
+
 }

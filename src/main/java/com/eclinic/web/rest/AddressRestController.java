@@ -12,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.annotations.Form;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -163,7 +162,7 @@ public class AddressRestController {
 	@POST
 	@Path("/add")
 	//gdy przekazujemy obiekt jako param to nie ma @Produces
-//	@Produces(MediaType.APPLICATION_JSON)
+	//@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response newAddress( Address address) {
 		addressService.saveAddress(address);

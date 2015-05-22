@@ -3,7 +3,6 @@ package com.eclinic.service;
 import com.eclinic.dao.PermissionDAO;
 import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.WorkerDAO;
-
 import com.eclinic.domain.Permission;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Worker;
@@ -12,9 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -46,6 +44,10 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 */
 	@Autowired
 	private WorkerDAO workerDAO;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 
 	/**
 	 * Instantiates a new SystemUserServiceImpl.
@@ -179,7 +181,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 			if (existingSystemUser != systemuser) {
 				existingSystemUser.setId(systemuser.getId());
 				existingSystemUser.setLogin(systemuser.getLogin());
-				existingSystemUser.setPassword(systemuser.getPassword());
+				existingSystemUser.setPassword(passwordEncoder.encode(systemuser.getPassword()));
 				existingSystemUser.setDescription(systemuser.getDescription());
 				existingSystemUser.setRegisterDate(systemuser.getRegisterDate());
 				existingSystemUser.setIsActive(systemuser.getIsActive());
