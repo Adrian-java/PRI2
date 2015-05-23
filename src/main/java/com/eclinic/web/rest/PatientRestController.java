@@ -7,7 +7,6 @@ import com.eclinic.dao.RecipeDAO;
 import com.eclinic.dao.SickLeaveDAO;
 import com.eclinic.dao.WorkerDAO;
 import com.eclinic.domain.Address;
-import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.PatientCard;
 import com.eclinic.domain.Recipe;
@@ -15,25 +14,24 @@ import com.eclinic.domain.SickLeave;
 import com.eclinic.domain.Worker;
 import com.eclinic.service.PatientService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for Patient entities
@@ -119,127 +117,170 @@ public class PatientRestController {
 	 * Save an existing Recipe entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/recipes", method = RequestMethod.PUT)
-	@ResponseBody
-	public Recipe savePatientRecipes(@PathVariable Integer patient_id, @RequestBody Recipe recipes) {
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/recipes")
+	@PUT
+	public Response savePatientRecipes(@PathParam("patient_id") Integer patient_id,
+			Recipe recipes) {
 		patientService.savePatientRecipes(patient_id, recipes);
-		return recipeDAO.findRecipeByPrimaryKey(recipes.getIdr());
+		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipes.getIdr())).build();
 	}
 
 	/**
 	 * Show all SickLeave entities by Patient
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/sickLeaves", method = RequestMethod.GET)
-	@ResponseBody
-	public List<SickLeave> getPatientSickLeaves(@PathVariable Integer patient_id) {
-		return new java.util.ArrayList<SickLeave>(patientDAO.findPatientByPrimaryKey(patient_id).getSickLeaves());
+	
+	
+	@GET
+	@Path("/{patient_id}/sickLeaves")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPatientSickLeaves(@PathParam("patient_id") Integer patient_id) {
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getSickLeaves()).build();
 	}
 
 	/**
 	 * Delete an existing SickLeave entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/sickLeaves/{sickleave_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePatientSickLeaves(@PathVariable Integer patient_id, @PathVariable Integer related_sickleaves_id) {
-		patientService.deletePatientSickLeaves(patient_id, related_sickleaves_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/sickLeaves/{sickleave_id}")
+	public Response deletePatientSickLeaves(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_sickleaves_id") Integer related_sickleaves_id) {
+		return Response.ok(patientService.deletePatientSickLeaves(patient_id, related_sickleaves_id)).build();
 	}
 
 	/**
 	 * Create a new Address entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/address", method = RequestMethod.POST)
-	@ResponseBody
-	public Address newPatientAddress(@PathVariable Integer patient_id, @RequestBody Address address) {
+
+	
+	@Path("/{patient_id}/address")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPatientAddress(@PathParam("patient_id") Integer patient_id,
+			Address address) {
 		patientService.savePatientAddress(patient_id, address);
-		return addressDAO.findAddressByPrimaryKey(address.getId());
+		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
 	}
 
 	/**
 	 * Select an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Patient loadPatient(@PathVariable Integer patient_id) {
-		return patientDAO.findPatientByPrimaryKey(patient_id);
+
+	
+	@GET
+	@Path("/{patient_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPatient(@PathParam("patient_id") Integer patient_id) {
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id)).build();
 	}
+
 
 	/**
 	 * Show all Worker entities by Patient
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/workers", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Worker> getPatientWorkers(@PathVariable Integer patient_id) {
-		return new java.util.ArrayList<Worker>(patientDAO.findPatientByPrimaryKey(patient_id).getWorkers());
+
+	
+	@GET
+	@Path("/{patient_id}/workers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPatientWorkers(@PathParam("patient_id") Integer patient_id) {
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getWorkers()).build();
 	}
 
 	/**
 	 * Save an existing SickLeave entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/sickLeaves", method = RequestMethod.PUT)
-	@ResponseBody
-	public SickLeave savePatientSickLeaves(@PathVariable Integer patient_id, @RequestBody SickLeave sickleaves) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/sickLeaves")
+	@PUT
+	public Response savePatientSickLeaves(@PathParam("patient_id") Integer patient_id,
+			SickLeave sickleaves) {
 		patientService.savePatientSickLeaves(patient_id, sickleaves);
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves.getId());
+		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves.getId())).build();
 	}
 
 	/**
 	 * View an existing PatientCard entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/patientCards/{patientcard_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public PatientCard loadPatientPatientCards(@PathVariable Integer patient_id, @PathVariable Integer related_patientcards_id) {
-		PatientCard patientcard = patientCardDAO.findPatientCardByPrimaryKey(related_patientcards_id, -1, -1);
 
-		return patientcard;
+	
+	@GET
+	@Path("/{doctor_id}/patientCards/{patientcard_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPatientPatientCards(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_patientcards_id") Integer related_patientcards_id) {
+		PatientCard patientcard = patientCardDAO.findPatientCardByPrimaryKey(related_patientcards_id, -1, -1);
+		return Response.ok(patientcard).build();
 	}
 
 	/**
 	 * Show all Patient entities
 	 * 
 	 */
-	@RequestMapping(value = "/Patient", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Patient> listPatients() {
-		return new java.util.ArrayList<Patient>(patientService.loadPatients());
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listPatients() {
+		return  Response.ok(patientService.loadPatients()).build();
 	}
 
 	/**
 	 * View an existing SickLeave entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/sickLeaves/{sickleave_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public SickLeave loadPatientSickLeaves(@PathVariable Integer patient_id, @PathVariable Integer related_sickleaves_id) {
-		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id, -1, -1);
 
-		return sickleave;
+	
+	@GET
+	@Path("/{patient_id}/sickLeaves/{sickleave_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPatientSickLeaves(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_sickleaves_id") Integer related_sickleaves_id) {
+		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id, -1, -1);
+		return Response.ok(sickleave).build();
 	}
 
 	/**
 	 * Create a new Recipe entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/recipes", method = RequestMethod.POST)
-	@ResponseBody
-	public Recipe newPatientRecipes(@PathVariable Integer patient_id, @RequestBody Recipe recipe) {
+
+	
+	@Path("/{patient_id}/recipes")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPatientRecipes(@PathParam("patient_id") Integer patient_id,
+			Recipe recipe) {
 		patientService.savePatientRecipes(patient_id, recipe);
-		return recipeDAO.findRecipeByPrimaryKey(recipe.getIdr());
+		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipe.getIdr())).build();
 	}
 
 	/**
 	 * Delete an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePatient(@PathVariable Integer patient_id) {
+	
+	
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}")
+	@DELETE
+	public void deletePatient(@PathParam("patient_id") Integer patient_id) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id);
 		patientService.deletePatient(patient);
 	}
@@ -248,90 +289,122 @@ public class PatientRestController {
 	 * View an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/workers/{worker_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Worker loadPatientWorkers(@PathVariable Integer patient_id, @PathVariable Integer related_workers_id) {
+
+	
+	@GET
+	@Path("/{patient_id}/workers/{worker_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPatientWorkers(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_workers_id") Integer related_workers_id) {
 		Worker worker = workerDAO.findWorkerByPrimaryKey(related_workers_id, -1, -1);
 
-		return worker;
+		return Response.ok(worker).build();
 	}
 
 	/**
 	 * View an existing Address entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/address/{address_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Address loadPatientAddress(@PathVariable Integer patient_id, @PathVariable Integer related_address_id) {
+
+	
+	@GET
+	@Path("/{patient_id}/address/{address_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPatientAddress(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_address_id") Integer related_address_id) {
 		Address address = addressDAO.findAddressByPrimaryKey(related_address_id, -1, -1);
 
-		return address;
+		return Response.ok(address).build();
 	}
 
 	/**
 	 * Save an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/workers", method = RequestMethod.PUT)
-	@ResponseBody
-	public Worker savePatientWorkers(@PathVariable Integer patient_id, @RequestBody Worker workers) {
-		patientService.savePatientWorkers(patient_id, workers);
-		return workerDAO.findWorkerByPrimaryKey(workers.getId());
-	}
 
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/workers")
+	@PUT
+	public Response savePatientWorkers(@PathParam("patient_id") Integer patient_id,
+			Worker workers) {
+		patientService.savePatientWorkers(patient_id, workers);
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(workers.getId())).build();
+	}
 	/**
 	 * Create a new PatientCard entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/patientCards", method = RequestMethod.POST)
-	@ResponseBody
-	public PatientCard newPatientPatientCards(@PathVariable Integer patient_id, @RequestBody PatientCard patientcard) {
+
+	
+	@Path("/{patient_id}/patientCards")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPatientPatientCards(@PathParam("patient_id") Integer patient_id,
+			PatientCard patientcard) {
 		patientService.savePatientPatientCards(patient_id, patientcard);
-		return patientCardDAO.findPatientCardByPrimaryKey(patientcard.getId());
+		return Response.ok(patientCardDAO.findPatientCardByPrimaryKey(patientcard.getId())).build();
 	}
+
 
 	/**
 	 * Create a new Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/workers", method = RequestMethod.POST)
-	@ResponseBody
-	public Worker newPatientWorkers(@PathVariable Integer patient_id, @RequestBody Worker worker) {
+
+	
+	@Path("/{patient_id}/workers")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPatientPatientCards(@PathParam("patient_id") Integer patient_id,
+			Worker worker) {
 		patientService.savePatientWorkers(patient_id, worker);
-		return workerDAO.findWorkerByPrimaryKey(worker.getId());
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
 	}
 
 	/**
 	 * Create a new SickLeave entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/sickLeaves", method = RequestMethod.POST)
-	@ResponseBody
-	public SickLeave newPatientSickLeaves(@PathVariable Integer patient_id, @RequestBody SickLeave sickleave) {
+
+	
+	@Path("/{patient_id}/sickLeaves")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPatientSickLeaves(@PathParam("patient_id") Integer patient_id,
+			SickLeave sickleave) {
 		patientService.savePatientSickLeaves(patient_id, sickleave);
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId());
+		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId())).build();
 	}
 
 	/**
 	 * Delete an existing Recipe entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/recipes/{recipe_idr}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePatientRecipes(@PathVariable Integer patient_id, @PathVariable Integer related_recipes_idr) {
-		patientService.deletePatientRecipes(patient_id, related_recipes_idr);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/recipes/{recipe_idr}")
+	public Response deletePatientRecipes(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_recipes_idr") Integer related_recipes_idr) {
+		return Response.ok(patientService.deletePatientRecipes(patient_id, related_recipes_idr)).build();
 	}
 
 	/**
 	 * View an existing Recipe entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/recipes/{recipe_idr}", method = RequestMethod.GET)
-	@ResponseBody
-	public Recipe loadPatientRecipes(@PathVariable Integer patient_id, @PathVariable Integer related_recipes_idr) {
+
+	@GET
+	@Path("/{patient_id}/recipes/{recipe_idr}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPatientRecipes(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_recipes_idr") Integer related_recipes_idr) {
 		Recipe recipe = recipeDAO.findRecipeByPrimaryKey(related_recipes_idr, -1, -1);
 
-		return recipe;
+		return Response.ok(recipe).build();
 	}
 
 	/**
@@ -354,92 +427,127 @@ public class PatientRestController {
 	 * Show all Recipe entities by Patient
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/recipes", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Recipe> getPatientRecipes(@PathVariable Integer patient_id) {
-		return new java.util.ArrayList<Recipe>(patientDAO.findPatientByPrimaryKey(patient_id).getRecipes());
+	
+	
+
+	@GET
+	@Path("/{patient_id}/recipes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPatientRecipes(@PathParam("patient_id") Integer patient_id) {
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getRecipes()).build();
 	}
 
 	/**
 	 * Delete an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/workers/{worker_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePatientWorkers(@PathVariable Integer patient_id, @PathVariable Integer related_workers_id) {
-		patientService.deletePatientWorkers(patient_id, related_workers_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/workers/{worker_id}")
+	public Response deletePatientWorkers(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_workers_id") Integer related_workers_id) {
+		return Response.ok(patientService.deletePatientWorkers(patient_id, related_workers_id)).build();
 	}
 
 	/**
 	 * Show all PatientCard entities by Patient
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/patientCards", method = RequestMethod.GET)
-	@ResponseBody
-	public List<PatientCard> getPatientPatientCards(@PathVariable Integer patient_id) {
-		return new java.util.ArrayList<PatientCard>(patientDAO.findPatientByPrimaryKey(patient_id).getPatientCards());
+	
+	
+	@GET
+	@Path("/{patient_id}/patientCards")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPatientPatientCards(@PathParam("patient_id") Integer patient_id) {
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getPatientCards()).build();
 	}
 
 	/**
 	 * Save an existing PatientCard entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/patientCards", method = RequestMethod.PUT)
-	@ResponseBody
-	public PatientCard savePatientPatientCards(@PathVariable Integer patient_id, @RequestBody PatientCard patientcards) {
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/patientCards")
+	@PUT
+	public Response savePatientWorkers(@PathParam("patient_id") Integer patient_id,
+			PatientCard patientcards) {
 		patientService.savePatientPatientCards(patient_id, patientcards);
-		return patientCardDAO.findPatientCardByPrimaryKey(patientcards.getId());
+		return Response.ok(patientCardDAO.findPatientCardByPrimaryKey(patientcards.getId())).build();
 	}
 
 	/**
 	 * Delete an existing PatientCard entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/patientCards/{patientcard_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePatientPatientCards(@PathVariable Integer patient_id, @PathVariable Integer related_patientcards_id) {
-		patientService.deletePatientPatientCards(patient_id, related_patientcards_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/patientCards/{patientcard_id}")
+	public Response deletePatientPatientCards(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_patientcards_id") Integer related_patientcards_id) {
+		return Response.ok(patientService.deletePatientPatientCards(patient_id, related_patientcards_id)).build();
 	}
+
 
 	/**
 	 * Delete an existing Address entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/address/{address_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePatientAddress(@PathVariable Integer patient_id, @PathVariable Integer related_address_id) {
-		patientService.deletePatientAddress(patient_id, related_address_id);
+	
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/address/{address_id}")
+	public Response deletePatientAddress(@PathParam("patient_id") Integer patient_id,
+			@PathParam("related_address_id") Integer related_address_id) {
+		return Response.ok(		patientService.deletePatientAddress(patient_id, related_address_id)).build();
 	}
+
 
 	/**
 	 * Get Address entity by Patient
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/address", method = RequestMethod.GET)
-	@ResponseBody
-	public Address getPatientAddress(@PathVariable Integer patient_id) {
-		return patientDAO.findPatientByPrimaryKey(patient_id).getAddress();
+
+
+	@GET
+	@Path("/{patient_id}/address")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPatientAddress(@PathParam("patient_id") Integer patient_id) {
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getAddress()).build();
 	}
 
 	/**
 	 * Create a new Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient", method = RequestMethod.POST)
-	@ResponseBody
-	public Patient newPatient(@RequestBody Patient patient) {
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPatient(Patient patient) {
 		patientService.savePatient(patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
 
 	/**
 	 * Save an existing Address entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient/{patient_id}/address", method = RequestMethod.PUT)
-	@ResponseBody
-	public Address savePatientAddress(@PathVariable Integer patient_id, @RequestBody Address address) {
+	
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/address")
+	@PUT
+	public Response savePatientAddress(@PathParam("patient_id") Integer patient_id,
+			Address address) {
 		patientService.savePatientAddress(patient_id, address);
-		return addressDAO.findAddressByPrimaryKey(address.getId());
+		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
 	}
 }
