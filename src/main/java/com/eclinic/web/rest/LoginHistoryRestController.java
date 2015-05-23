@@ -2,35 +2,35 @@ package com.eclinic.web.rest;
 
 import com.eclinic.dao.LoginHistoryDAO;
 import com.eclinic.dao.WorkerDAO;
-
 import com.eclinic.domain.LoginHistory;
 import com.eclinic.domain.Worker;
-
 import com.eclinic.service.LoginHistoryService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for LoginHistory entities
  * 
  */
-
-@Controller("LoginHistoryRestController")
+@Path("/LoginHistory")
+@Component("LoginHistoryRestController")
 public class LoginHistoryRestController {
 
 	/**
@@ -54,6 +54,8 @@ public class LoginHistoryRestController {
 	@Autowired
 	private LoginHistoryService loginHistoryService;
 
+	public LoginHistoryRestController() {
+	}
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -76,106 +78,134 @@ public class LoginHistoryRestController {
 	 * Get Worker entity by LoginHistory
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory/{loginhistory_id}/worker", method = RequestMethod.GET)
-	@ResponseBody
-	public Worker getLoginHistoryWorker(@PathVariable Integer loginhistory_id) {
-		return loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id).getWorker();
+
+	
+	@GET
+	@Path("/{loginhistory_id}/worker")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLoginHistoryWorker(@PathParam("loginhistory_id") Integer loginhistory_id) {
+		return Response.ok(loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id).getWorker()).build();
 	}
 
 	/**
 	 * Save an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory/{loginhistory_id}/worker", method = RequestMethod.PUT)
-	@ResponseBody
-	public Worker saveLoginHistoryWorker(@PathVariable Integer loginhistory_id, @RequestBody Worker worker) {
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{loginhistory_id}/worker")
+	@PUT
+	public Response saveLoginHistoryWorker(@PathParam("loginhistory_id") Integer loginhistory_id,
+			Worker worker) {
 		loginHistoryService.saveLoginHistoryWorker(loginhistory_id, worker);
-		return workerDAO.findWorkerByPrimaryKey(worker.getId());
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
 	}
 
 	/**
 	 * Select an existing LoginHistory entity
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory/{loginhistory_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public LoginHistory loadLoginHistory(@PathVariable Integer loginhistory_id) {
-		return loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id);
+	
+	@GET
+	@Path("/{loginhistory_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadDoctor(@PathParam("loginhistory_id") Integer loginhistory_id) {
+		return Response.ok(loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id)).build();
 	}
+
 
 	/**
 	 * Create a new LoginHistory entity
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory", method = RequestMethod.POST)
-	@ResponseBody
-	public LoginHistory newLoginHistory(@RequestBody LoginHistory loginhistory) {
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newLoginHistory( LoginHistory loginhistory) {
 		loginHistoryService.saveLoginHistory(loginhistory);
-		return loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory.getId());
+		return Response.ok(loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory.getId())).build();
 	}
-
 	/**
 	 * View an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory/{loginhistory_id}/worker/{worker_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Worker loadLoginHistoryWorker(@PathVariable Integer loginhistory_id, @PathVariable Integer related_worker_id) {
+
+	
+	@GET
+	@Path("/{loginhistory_id}/worker/{worker_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadDoctorGraphics(@PathParam("loginhistory_id") Integer loginhistory_id,
+			@PathParam("related_worker_id") Integer related_worker_id) {
 		Worker worker = workerDAO.findWorkerByPrimaryKey(related_worker_id, -1, -1);
 
-		return worker;
+		return Response.ok(worker).build();
 	}
 
 	/**
 	 * Create a new Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory/{loginhistory_id}/worker", method = RequestMethod.POST)
-	@ResponseBody
-	public Worker newLoginHistoryWorker(@PathVariable Integer loginhistory_id, @RequestBody Worker worker) {
+
+	
+	@Path("/{loginhistory_id}/worker")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newLoginHistoryWorker(@PathParam("loginhistory_id") Integer loginhistory_id,
+			Worker worker) {
 		loginHistoryService.saveLoginHistoryWorker(loginhistory_id, worker);
-		return workerDAO.findWorkerByPrimaryKey(worker.getId());
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
 	}
 
 	/**
 	 * Save an existing LoginHistory entity
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory", method = RequestMethod.PUT)
-	@ResponseBody
-	public LoginHistory saveLoginHistory(@RequestBody LoginHistory loginhistory) {
-		loginHistoryService.saveLoginHistory(loginhistory);
-		return loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory.getId());
-	}
 
+
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveLoginHistory(LoginHistory loginhistory) {
+		loginHistoryService.saveLoginHistory(loginhistory);
+		return Response.ok(loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory.getId())).build();
+	}
 	/**
 	 * Delete an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory/{loginhistory_id}/worker/{worker_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteLoginHistoryWorker(@PathVariable Integer loginhistory_id, @PathVariable Integer related_worker_id) {
-		loginHistoryService.deleteLoginHistoryWorker(loginhistory_id, related_worker_id);
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{loginhistory_id}/worker/{worker_id}")
+	public Response deleteLoginHistoryWorker(@PathParam("loginhistory_id") Integer loginhistory_id,
+			@PathParam("related_worker_id") Integer related_worker_id) {
+		return Response.ok(loginHistoryService.deleteLoginHistoryWorker(loginhistory_id, related_worker_id)).build();
 	}
 
 	/**
 	 * Show all LoginHistory entities
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory", method = RequestMethod.GET)
-	@ResponseBody
-	public List<LoginHistory> listLoginHistorys() {
-		return new java.util.ArrayList<LoginHistory>(loginHistoryService.loadLoginHistorys());
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listLoginHistorys() {
+		return  Response.ok(loginHistoryService.loadLoginHistorys()).build();
 	}
 
 	/**
 	 * Delete an existing LoginHistory entity
 	 * 
 	 */
-	@RequestMapping(value = "/LoginHistory/{loginhistory_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteLoginHistory(@PathVariable Integer loginhistory_id) {
-		LoginHistory loginhistory = loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id);
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{loginhistory_id}")
+	@DELETE
+	public void deleteDoctor(@PathParam("loginhistory_id") Integer loginhistory_id) {
+		LoginHistory loginhistory = loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id);		
 		loginHistoryService.deleteLoginHistory(loginhistory);
 	}
 }
