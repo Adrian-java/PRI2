@@ -90,7 +90,6 @@ public class AdminRestController {
 	public Response listAdmins() {
 		return  Response.ok(adminService.loadAdmins()).build();
 	}
-	//dziala
 
 	/**
 	 * View an existing Worker entity

@@ -1,6 +1,5 @@
 package com.eclinic.web.rest;
 
-import com.eclinic.dao.AddressDAO;
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.GraphicDAO;
 import com.eclinic.dao.PatientCardDAO;
@@ -10,10 +9,8 @@ import com.eclinic.dao.SpecializationDAO;
 import com.eclinic.dao.VisitDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
 import com.eclinic.dao.WorkerDAO;
-import com.eclinic.domain.Address;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Graphic;
-import com.eclinic.domain.Patient;
 import com.eclinic.domain.PatientCard;
 import com.eclinic.domain.Recipe;
 import com.eclinic.domain.SickLeave;
@@ -23,10 +20,8 @@ import com.eclinic.domain.VisitScheduler;
 import com.eclinic.domain.Worker;
 import com.eclinic.service.DoctorService;
 
-import java.util.List;
-
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -38,28 +33,21 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for Doctor entities
  * 
  */
 
-//@Controller("DoctorRestController")
-@Component("DoctorRestController")
+
 @Path("/Doctor")
+@Component("DoctorRestController")
 public class DoctorRestController {
 
-	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("wee-dao-context.xml");
 	/**
 	 * DAO injected by Spring that manages Doctor entities
 	 * 
@@ -130,6 +118,9 @@ public class DoctorRestController {
 	@Autowired
 	private DoctorService doctorService;
 
+	
+	public DoctorRestController() {
+	}
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -148,24 +139,12 @@ public class DoctorRestController {
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
 	
-	@PostConstruct
-	public void init(){
-		doctorDAO =  (DoctorDAO) context.getBean("DoctorDAO");
-		
-	}
 	
 	
 	/**
 	 * Create a new Graphic entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/graphics", method = RequestMethod.POST)
-	@ResponseBody
-	public Graphic newDoctorGraphics(@PathVariable Integer doctor_id, @RequestBody Graphic graphic) {
-		doctorService.saveDoctorGraphics(doctor_id, graphic);
-		return graphicDAO.findGraphicByPrimaryKey(graphic.getId());
-	}
-	*/
 	@Path("/{doctor_id}/graphics")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -179,12 +158,6 @@ public class DoctorRestController {
 	 * Create a new VisitScheduler entity
 	 * 
 	 */
-	/*@RequestMapping(value = "/Doctor/{doctor_id}/visitSchedulers", method = RequestMethod.POST)
-	@ResponseBody
-	public VisitScheduler newDoctorVisitSchedulers(@PathVariable Integer doctor_id, @RequestBody VisitScheduler visitscheduler) {
-		doctorService.saveDoctorVisitSchedulers(doctor_id, visitscheduler);
-		return visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler.getId());
-	}*/
 	@Path("/{doctor_id}/visitSchedulers")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -199,12 +172,6 @@ public class DoctorRestController {
 	 * Save an existing Graphic entity
 	 * 
 	 */
-	/*@RequestMapping(value = "/Doctor/{doctor_id}/graphics", method = RequestMethod.PUT)
-	@ResponseBody
-	public Graphic saveDoctorGraphics(@PathVariable Integer doctor_id, @RequestBody Graphic graphics) {
-		doctorService.saveDoctorGraphics(doctor_id, graphics);
-		return graphicDAO.findGraphicByPrimaryKey(graphics.getId());
-	}*/
 	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{address_id}/patients")
@@ -220,13 +187,7 @@ public class DoctorRestController {
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctor(@PathVariable Integer doctor_id) {
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id);
-		doctorService.deleteDoctor(doctor);
-	}
-*/
+
 	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}")
@@ -239,18 +200,11 @@ public class DoctorRestController {
 	 * Select an existing Doctor entity
 	 * 
 	 */
-	/* @RequestMapping(value = "/Doctor/{doctor_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor loadDoctor(@PathVariable Integer doctor_id) {
-		return doctorDAO.findDoctorByPrimaryKey(doctor_id);
-	}
-	*/
 	
 	@GET
 	@Path("/{doctor_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadDoctor(@PathParam("doctor_id") Integer doctor_id) {
-		doctorDAO =  (DoctorDAO) context.getBean("DoctorDAO");
 		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor_id)).build();
 	}
 
@@ -259,14 +213,6 @@ public class DoctorRestController {
 	 * Save an existing VisitScheduler entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/visitSchedulers", method = RequestMethod.PUT)
-	@ResponseBody
-	public VisitScheduler saveDoctorVisitSchedulers(@PathVariable Integer doctor_id, @RequestBody VisitScheduler visitschedulers) {
-		doctorService.saveDoctorVisitSchedulers(doctor_id, visitschedulers);
-		return visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitschedulers.getId());
-	}
-	
-	*/
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/visitSchedulers")
 	@PUT
@@ -280,14 +226,6 @@ public class DoctorRestController {
 	 * View an existing VisitScheduler entity
 	 * 
 	 */
-	/* @RequestMapping(value = "/Doctor/{doctor_id}/visitSchedulers/{visitscheduler_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public VisitScheduler loadDoctorVisitSchedulers(@PathVariable Integer doctor_id, @PathVariable Integer related_visitschedulers_id) {
-		VisitScheduler visitscheduler = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(related_visitschedulers_id, -1, -1);
-
-		return visitscheduler;
-	}
-	*/
 	@GET
 	@Path("/{doctor_id}/visitSchedulers/{visitscheduler_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -302,14 +240,6 @@ public class DoctorRestController {
 	 * View an existing Recipe entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/recipes/{recipe_idr}", method = RequestMethod.GET)
-	@ResponseBody
-	public Recipe loadDoctorRecipes(@PathVariable Integer doctor_id, @PathVariable Integer related_recipes_idr) {
-		Recipe recipe = recipeDAO.findRecipeByPrimaryKey(related_recipes_idr, -1, -1);
-
-		return recipe;
-	}
-	*/
 	@GET
 	@Path("/{doctor_id}/recipes/{recipe_idr}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -324,12 +254,6 @@ public class DoctorRestController {
 	 * Delete an existing Recipe entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/recipes/{recipe_idr}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctorRecipes(@PathVariable Integer doctor_id, @PathVariable Integer related_recipes_idr) {
-		doctorService.deleteDoctorRecipes(doctor_id, related_recipes_idr);
-	}
-	*/
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -343,14 +267,6 @@ public class DoctorRestController {
 	 * View an existing PatientCard entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/patientCards/{patientcard_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public PatientCard loadDoctorPatientCards(@PathVariable Integer doctor_id, @PathVariable Integer related_patientcards_id) {
-		PatientCard patientcard = patientCardDAO.findPatientCardByPrimaryKey(related_patientcards_id, -1, -1);
-
-		return patientcard;
-	}
-	*/
 	
 	@GET
 	@Path("/{doctor_id}/patientCards/{patientcard_id}")
@@ -366,12 +282,7 @@ public class DoctorRestController {
 	 * Show all PatientCard entities by Doctor
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/patientCards", method = RequestMethod.GET)
-	@ResponseBody
-	public List<PatientCard> getDoctorPatientCards(@PathVariable Integer doctor_id) {
-		return new java.util.ArrayList<PatientCard>(doctorDAO.findDoctorByPrimaryKey(doctor_id).getPatientCards());
-	}
-	*/
+
 	@GET
 	@Path("/{doctor_id}/patientCards")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -383,14 +294,6 @@ public class DoctorRestController {
 	 * View an existing Visit entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/visits/{visit_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Visit loadDoctorVisits(@PathVariable Integer doctor_id, @PathVariable Integer related_visits_id) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
-
-		return visit;
-	}
-	*/
 	
 	@GET
 	@Path("/{doctor_id}/visits/{visit_id}")
@@ -406,13 +309,6 @@ public class DoctorRestController {
 	 * Save an existing Worker entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/workers", method = RequestMethod.PUT)
-	@ResponseBody
-	public Worker saveDoctorWorkers(@PathVariable Integer doctor_id, @RequestBody Worker workers) {
-		doctorService.saveDoctorWorkers(doctor_id, workers);
-		return workerDAO.findWorkerByPrimaryKey(workers.getId());
-	}
-	*/
 	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/workers")
@@ -428,12 +324,6 @@ public class DoctorRestController {
 	 * Show all Specialization entities by Doctor
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/specializations", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Specialization> getDoctorSpecializations(@PathVariable Integer doctor_id) {
-		return new java.util.ArrayList<Specialization>(doctorDAO.findDoctorByPrimaryKey(doctor_id).getSpecializations());
-	}
-	*/
 	
 	@GET
 	@Path("/{doctor_id}/specializations")
@@ -446,12 +336,6 @@ public class DoctorRestController {
 	 * Delete an existing PatientCard entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/patientCards/{patientcard_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctorPatientCards(@PathVariable Integer doctor_id, @PathVariable Integer related_patientcards_id) {
-		doctorService.deleteDoctorPatientCards(doctor_id, related_patientcards_id);
-	}
-	*/
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -465,12 +349,6 @@ public class DoctorRestController {
 	 * Show all Graphic entities by Doctor
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/graphics", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Graphic> getDoctorGraphics(@PathVariable Integer doctor_id) {
-		return new java.util.ArrayList<Graphic>(doctorDAO.findDoctorByPrimaryKey(doctor_id).getGraphics());
-	}
-	*/
 	
 	@GET
 	@Path("/{doctor_id}/graphics")
@@ -483,14 +361,6 @@ public class DoctorRestController {
 	 * View an existing Specialization entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/specializations/{specialization_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Specialization loadDoctorSpecializations(@PathVariable Integer doctor_id, @PathVariable Integer related_specializations_id) {
-		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(related_specializations_id, -1, -1);
-
-		return specialization;
-	}
-	*/
 	@GET
 	@Path("/{doctor_id}/specializations/{specialization_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -505,14 +375,6 @@ public class DoctorRestController {
 	 * View an existing SickLeave entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/sickLeaves/{sickleave_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public SickLeave loadDoctorSickLeaves(@PathVariable Integer doctor_id, @PathVariable Integer related_sickleaves_id) {
-		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id, -1, -1);
-
-		return sickleave;
-	}
-	*/
 	@GET
 	@Path("/{doctor_id}/sickLeaves/{sickleave_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -526,13 +388,6 @@ public class DoctorRestController {
 	 * Create a new Recipe entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/recipes", method = RequestMethod.POST)
-	@ResponseBody
-	public Recipe newDoctorRecipes(@PathVariable Integer doctor_id, @RequestBody Recipe recipe) {
-		doctorService.saveDoctorRecipes(doctor_id, recipe);
-		return recipeDAO.findRecipeByPrimaryKey(recipe.getIdr());
-	}
-	*/
 	
 	@Path("/{doctor_id}/recipes")
 	@POST
@@ -547,13 +402,6 @@ public class DoctorRestController {
 	 * Save an existing Visit entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/visits", method = RequestMethod.PUT)
-	@ResponseBody
-	public Visit saveDoctorVisits(@PathVariable Integer doctor_id, @RequestBody Visit visits) {
-		doctorService.saveDoctorVisits(doctor_id, visits);
-		return visitDAO.findVisitByPrimaryKey(visits.getId());
-	}
-	*/
 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/visits")
@@ -567,13 +415,6 @@ public class DoctorRestController {
 	 * Create a new Specialization entity
 	 * 
 	 */
-	/*	@RequestMapping(value = "/Doctor/{doctor_id}/specializations", method = RequestMethod.POST)
-	@ResponseBody
-	public Specialization newDoctorSpecializations(@PathVariable Integer doctor_id, @RequestBody Specialization specialization) {
-		doctorService.saveDoctorSpecializations(doctor_id, specialization);
-		return specializationDAO.findSpecializationByPrimaryKey(specialization.getId());
-	}
-	*/
 	
 	@Path("/{doctor_id}/specializations")
 	@POST
@@ -588,13 +429,6 @@ public class DoctorRestController {
 	 * Create a new PatientCard entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/patientCards", method = RequestMethod.POST)
-	@ResponseBody
-	public PatientCard newDoctorPatientCards(@PathVariable Integer doctor_id, @RequestBody PatientCard patientcard) {
-		doctorService.saveDoctorPatientCards(doctor_id, patientcard);
-		return patientCardDAO.findPatientCardByPrimaryKey(patientcard.getId());
-	}
-	*/
 	
 	@Path("/{doctor_id}/patientCards")
 	@POST
@@ -609,15 +443,9 @@ public class DoctorRestController {
 	 * Show all Doctor entities
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Doctor> listDoctors() {
-		return new java.util.ArrayList<Doctor>(doctorService.loadDoctors());
-	}
-	*/
 	
 	@GET
-	@Path("/")
+	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listDoctors() {
 		return  Response.ok(doctorService.loadDoctors()).build();
@@ -627,16 +455,11 @@ public class DoctorRestController {
 	 * Create a new Doctor entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor", method = RequestMethod.POST)
-	@ResponseBody
-	public Doctor newDoctor(@RequestBody Doctor doctor) {
-		doctorService.saveDoctor(doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
-	}
-	*/
+
 	
 	@POST
-	@Path("/")
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newDoctor( Doctor doctor) {
 		doctorService.saveDoctor(doctor);
@@ -648,12 +471,6 @@ public class DoctorRestController {
 	 * Delete an existing Specialization entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/specializations/{specialization_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctorSpecializations(@PathVariable Integer doctor_id, @PathVariable Integer related_specializations_id) {
-		doctorService.deleteDoctorSpecializations(doctor_id, related_specializations_id);
-	}
-	*/
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -668,12 +485,6 @@ public class DoctorRestController {
 	 * Save an existing Specialization entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/specializations", method = RequestMethod.PUT)
-	@ResponseBody
-	public Specialization saveDoctorSpecializations(@PathVariable Integer doctor_id, @RequestBody Specialization specializations) {
-		doctorService.saveDoctorSpecializations(doctor_id, specializations);
-		return specializationDAO.findSpecializationByPrimaryKey(specializations.getId());
-	}*/
 	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/specializations")
@@ -688,11 +499,6 @@ public class DoctorRestController {
 	 * Show all Recipe entities by Doctor
 	 * 
 	 */
-	/*@RequestMapping(value = "/Doctor/{doctor_id}/recipes", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Recipe> getDoctorRecipes(@PathVariable Integer doctor_id) {
-		return new java.util.ArrayList<Recipe>(doctorDAO.findDoctorByPrimaryKey(doctor_id).getRecipes());
-	}*/
 	
 	@GET
 	@Path("/{doctor_id}/recipes")
@@ -705,13 +511,6 @@ public class DoctorRestController {
 	 * Create a new SickLeave entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/sickLeaves", method = RequestMethod.POST)
-	@ResponseBody
-	public SickLeave newDoctorSickLeaves(@PathVariable Integer doctor_id, @RequestBody SickLeave sickleave) {
-		doctorService.saveDoctorSickLeaves(doctor_id, sickleave);
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId());
-	}
-	*/
 	
 	@Path("/{doctor_id}/sickLeaves")
 	@POST
@@ -726,12 +525,6 @@ public class DoctorRestController {
 	 * Delete an existing Visit entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/visits/{visit_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctorVisits(@PathVariable Integer doctor_id, @PathVariable Integer related_visits_id) {
-		doctorService.deleteDoctorVisits(doctor_id, related_visits_id);
-	}
-	*/
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -745,14 +538,6 @@ public class DoctorRestController {
 	 * View an existing Graphic entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/graphics/{graphic_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Graphic loadDoctorGraphics(@PathVariable Integer doctor_id, @PathVariable Integer related_graphics_id) {
-		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(related_graphics_id, -1, -1);
-
-		return graphic;
-	}
-	*/
 	@GET
 	@Path("/{doctor_id}/graphics/{graphic_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -768,13 +553,7 @@ public class DoctorRestController {
 	 * Create a new Visit entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/visits", method = RequestMethod.POST)
-	@ResponseBody
-	public Visit newDoctorVisits(@PathVariable Integer doctor_id, @RequestBody Visit visit) {
-		doctorService.saveDoctorVisits(doctor_id, visit);
-		return visitDAO.findVisitByPrimaryKey(visit.getId());
-	}
-	*/
+
 	
 	@Path("/{doctor_id}/visits")
 	@POST
@@ -789,13 +568,7 @@ public class DoctorRestController {
 	 * Save an existing PatientCard entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/patientCards", method = RequestMethod.PUT)
-	@ResponseBody
-	public PatientCard saveDoctorPatientCards(@PathVariable Integer doctor_id, @RequestBody PatientCard patientcards) {
-		doctorService.saveDoctorPatientCards(doctor_id, patientcards);
-		return patientCardDAO.findPatientCardByPrimaryKey(patientcards.getId());
-	}
-	*/
+
 	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/patientCards")
@@ -810,16 +583,10 @@ public class DoctorRestController {
 	 * Save an existing Doctor entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor", method = RequestMethod.PUT)
-	@ResponseBody
-	public Doctor saveDoctor(@RequestBody Doctor doctor) {
-		doctorService.saveDoctor(doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
-	}
-	*/
+
 	
 	@PUT
-	@Path("/")
+	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response saveDoctor(Doctor doctor) {
 		doctorService.saveDoctor(doctor);
@@ -830,12 +597,7 @@ public class DoctorRestController {
 	 * Show all VisitScheduler entities by Doctor
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/visitSchedulers", method = RequestMethod.GET)
-	@ResponseBody
-	public List<VisitScheduler> getDoctorVisitSchedulers(@PathVariable Integer doctor_id) {
-		return new java.util.ArrayList<VisitScheduler>(doctorDAO.findDoctorByPrimaryKey(doctor_id).getVisitSchedulers());
-	}
-	*/
+
 	
 	@GET
 	@Path("/{doctor_id}/visitSchedulers")
@@ -849,14 +611,7 @@ public class DoctorRestController {
 	 * View an existing Worker entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/workers/{worker_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Worker loadDoctorWorkers(@PathVariable Integer doctor_id, @PathVariable Integer related_workers_id) {
-		Worker worker = workerDAO.findWorkerByPrimaryKey(related_workers_id, -1, -1);
 
-		return worker;
-	}
-	*/
 	
 	@GET
 	@Path("/{doctor_id}/workers/{worker_id}")
@@ -871,12 +626,7 @@ public class DoctorRestController {
 	 * Delete an existing SickLeave entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/sickLeaves/{sickleave_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctorSickLeaves(@PathVariable Integer doctor_id, @PathVariable Integer related_sickleaves_id) {
-		doctorService.deleteDoctorSickLeaves(doctor_id, related_sickleaves_id);
-	}
-	*/
+
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -890,13 +640,7 @@ public class DoctorRestController {
 	 * Save an existing Recipe entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/recipes", method = RequestMethod.PUT)
-	@ResponseBody
-	public Recipe saveDoctorRecipes(@PathVariable Integer doctor_id, @RequestBody Recipe recipes) {
-		doctorService.saveDoctorRecipes(doctor_id, recipes);
-		return recipeDAO.findRecipeByPrimaryKey(recipes.getIdr());
-	}
-	*/
+
 	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/recipes")
@@ -911,13 +655,7 @@ public class DoctorRestController {
 	 * Create a new Worker entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/workers", method = RequestMethod.POST)
-	@ResponseBody
-	public Worker newDoctorWorkers(@PathVariable Integer doctor_id, @RequestBody Worker worker) {
-		doctorService.saveDoctorWorkers(doctor_id, worker);
-		return workerDAO.findWorkerByPrimaryKey(worker.getId());
-	}
-	*/
+
 	@Path("/{doctor_id}/workers")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -931,12 +669,7 @@ public class DoctorRestController {
 	 * Delete an existing Graphic entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/graphics/{graphic_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctorGraphics(@PathVariable Integer doctor_id, @PathVariable Integer related_graphics_id) {
-		doctorService.deleteDoctorGraphics(doctor_id, related_graphics_id);
-	}
-	*/
+
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -950,11 +683,6 @@ public class DoctorRestController {
 	 * Delete an existing Worker entity
 	 * 
 	 */
-	/*@RequestMapping(value = "/Doctor/{doctor_id}/workers/{worker_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctorWorkers(@PathVariable Integer doctor_id, @PathVariable Integer related_workers_id) {
-		doctorService.deleteDoctorWorkers(doctor_id, related_workers_id);
-	}*/
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -968,12 +696,6 @@ public class DoctorRestController {
 	 * Show all Visit entities by Doctor
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/visits", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Visit> getDoctorVisits(@PathVariable Integer doctor_id) {
-		return new java.util.ArrayList<Visit>(doctorDAO.findDoctorByPrimaryKey(doctor_id).getVisits());
-	}
-	*/
 	
 	@GET
 	@Path("/{doctor_id}/visits")
@@ -988,12 +710,6 @@ public class DoctorRestController {
 	 * Show all Worker entities by Doctor
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/workers", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Worker> getDoctorWorkers(@PathVariable Integer doctor_id) {
-		return new java.util.ArrayList<Worker>(doctorDAO.findDoctorByPrimaryKey(doctor_id).getWorkers());
-	}
-	*/
 	
 	
 	@GET
@@ -1007,13 +723,6 @@ public class DoctorRestController {
 	 * Save an existing SickLeave entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/sickLeaves", method = RequestMethod.PUT)
-	@ResponseBody
-	public SickLeave saveDoctorSickLeaves(@PathVariable Integer doctor_id, @RequestBody SickLeave sickleaves) {
-		doctorService.saveDoctorSickLeaves(doctor_id, sickleaves);
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves.getId());
-	}
-	*/
 	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/sickLeaves")
@@ -1029,12 +738,6 @@ public class DoctorRestController {
 	 * Delete an existing VisitScheduler entity
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/visitSchedulers/{visitscheduler_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteDoctorVisitSchedulers(@PathVariable Integer doctor_id, @PathVariable Integer related_visitschedulers_id) {
-		doctorService.deleteDoctorVisitSchedulers(doctor_id, related_visitschedulers_id);
-	}
-	*/
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/visitSchedulers/{visitscheduler_id}")
@@ -1047,12 +750,6 @@ public class DoctorRestController {
 	 * Show all SickLeave entities by Doctor
 	 * 
 	 */
-/*	@RequestMapping(value = "/Doctor/{doctor_id}/sickLeaves", method = RequestMethod.GET)
-	@ResponseBody
-	public List<SickLeave> getDoctorSickLeaves(@PathVariable Integer doctor_id) {
-		return new java.util.ArrayList<SickLeave>(doctorDAO.findDoctorByPrimaryKey(doctor_id).getSickLeaves());
-	}
-	*/
 	
 	@GET
 	@Path("/{doctor_id}/sickLeaves")
