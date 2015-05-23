@@ -2,35 +2,33 @@ package com.eclinic.web.rest;
 
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.GraphicDAO;
-
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Graphic;
-
 import com.eclinic.service.GraphicService;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Spring Rest controller that handles CRUD requests for Graphic entities
  * 
  */
-
-@Controller("GraphicRestController")
+@Path("/Graphic")
+@Component("GraphicRestController")
 public class GraphicRestController {
 
 	/**
@@ -54,71 +52,10 @@ public class GraphicRestController {
 	@Autowired
 	private GraphicService graphicService;
 
-	/**
-	 * Create a new Doctor entity
-	 * 
-	 */
-	@RequestMapping(value = "/Graphic/{graphic_id}/doctor", method = RequestMethod.POST)
-	@ResponseBody
-	public Doctor newGraphicDoctor(@PathVariable Integer graphic_id, @RequestBody Doctor doctor) {
-		graphicService.saveGraphicDoctor(graphic_id, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+	public GraphicRestController() {
 	}
-
-	/**
-	 * Delete an existing Graphic entity
-	 * 
-	 */
-	@RequestMapping(value = "/Graphic/{graphic_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteGraphic(@PathVariable Integer graphic_id) {
-		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(graphic_id);
-		graphicService.deleteGraphic(graphic);
-	}
-
-	/**
-	 * Save an existing Graphic entity
-	 * 
-	 */
-	@RequestMapping(value = "/Graphic", method = RequestMethod.PUT)
-	@ResponseBody
-	public Graphic saveGraphic(@RequestBody Graphic graphic) {
-		graphicService.saveGraphic(graphic);
-		return graphicDAO.findGraphicByPrimaryKey(graphic.getId());
-	}
-
-	/**
-	 * Show all Graphic entities
-	 * 
-	 */
-	@RequestMapping(value = "/Graphic", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Graphic> listGraphics() {
-		return new java.util.ArrayList<Graphic>(graphicService.loadGraphics());
-	}
-
-	/**
-	 * View an existing Doctor entity
-	 * 
-	 */
-	@RequestMapping(value = "/Graphic/{graphic_id}/doctor/{doctor_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor loadGraphicDoctor(@PathVariable Integer graphic_id, @PathVariable Integer related_doctor_id) {
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
-
-		return doctor;
-	}
-
-	/**
-	 * Delete an existing Doctor entity
-	 * 
-	 */
-	@RequestMapping(value = "/Graphic/{graphic_id}/doctor/{doctor_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteGraphicDoctor(@PathVariable Integer graphic_id, @PathVariable Integer related_doctor_id) {
-		graphicService.deleteGraphicDoctor(graphic_id, related_doctor_id);
-	}
-
+	
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -138,44 +75,136 @@ public class GraphicRestController {
 	}
 
 	/**
+	 * Create a new Doctor entity
+	 * 
+	 */
+	
+	@Path("/{graphic_id}/doctor")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newGraphicDoctor(@PathParam("graphic_id") Integer graphic_id,
+			Doctor doctor) {
+		graphicService.saveGraphicDoctor(graphic_id, doctor);
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
+	}
+
+
+	/**
+	 * Delete an existing Graphic entity
+	 * 
+	 */
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{graphic_id}")
+	@DELETE
+	public void deleteGraphic(@PathParam("graphic_id") Integer graphic_id) {
+		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(graphic_id);
+		graphicService.deleteGraphic(graphic);
+	}
+
+	/**
+	 * Save an existing Graphic entity
+	 * 
+	 */
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveGraphic(Graphic graphic) {
+		graphicService.saveGraphic(graphic);
+		return Response.ok(graphicDAO.findGraphicByPrimaryKey(graphic.getId())).build();
+	}
+
+	/**
+	 * Show all Graphic entities
+	 * 
+	 */
+
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listGraphics() {
+		return  Response.ok(graphicService.loadGraphics()).build();
+	}
+
+	/**
+	 * View an existing Doctor entity
+	 * 
+	 */
+	
+	@GET
+	@Path("/{graphic_id}/doctor/{doctor_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadGraphicDoctor(@PathParam("graphic_id") Integer graphic_id,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
+		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
+
+		return Response.ok(doctor).build();
+	}
+
+	/**
+	 * Delete an existing Doctor entity
+	 * 
+	 */
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{graphic_id}/doctor/{doctor_id}")
+	public Response deleteDoctorSickLeaves(@PathParam("graphic_id") Integer graphic_id,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
+		return Response.ok(graphicService.deleteGraphicDoctor(graphic_id, related_doctor_id)).build();
+	}
+	/**
 	 * Get Doctor entity by Graphic
 	 * 
 	 */
-	@RequestMapping(value = "/Graphic/{graphic_id}/doctor", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor getGraphicDoctor(@PathVariable Integer graphic_id) {
-		return graphicDAO.findGraphicByPrimaryKey(graphic_id).getDoctor();
+	@GET
+	@Path("/{graphic_id}/doctor")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getGraphicDoctor(@PathParam("graphic_id") Integer graphic_id) {
+		return Response.ok(graphicDAO.findGraphicByPrimaryKey(graphic_id).getDoctor()).build();
 	}
 
 	/**
 	 * Create a new Graphic entity
 	 * 
 	 */
-	@RequestMapping(value = "/Graphic", method = RequestMethod.POST)
-	@ResponseBody
-	public Graphic newGraphic(@RequestBody Graphic graphic) {
+	
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newGraphic( Graphic graphic) {
 		graphicService.saveGraphic(graphic);
-		return graphicDAO.findGraphicByPrimaryKey(graphic.getId());
+		return Response.ok(graphicDAO.findGraphicByPrimaryKey(graphic.getId())).build();
 	}
 
 	/**
 	 * Save an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/Graphic/{graphic_id}/doctor", method = RequestMethod.PUT)
-	@ResponseBody
-	public Doctor saveGraphicDoctor(@PathVariable Integer graphic_id, @RequestBody Doctor doctor) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{graphic_id}/doctor")
+	@PUT
+	public Response saveGraphicDoctor(@PathParam("graphic_id") Integer graphic_id,
+			Doctor doctor) {
 		graphicService.saveGraphicDoctor(graphic_id, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
 	/**
 	 * Select an existing Graphic entity
 	 * 
 	 */
-	@RequestMapping(value = "/Graphic/{graphic_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Graphic loadGraphic(@PathVariable Integer graphic_id) {
-		return graphicDAO.findGraphicByPrimaryKey(graphic_id);
+
+	
+	@GET
+	@Path("/{graphic_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadGraphic(@PathParam("graphic_id") Integer graphic_id) {
+		return Response.ok(graphicDAO.findGraphicByPrimaryKey(graphic_id)).build();
 	}
 }
