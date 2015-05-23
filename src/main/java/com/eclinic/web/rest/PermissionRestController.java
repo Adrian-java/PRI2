@@ -4,24 +4,26 @@ import com.eclinic.dao.ModuleDAO;
 import com.eclinic.dao.PermissionDAO;
 import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.TypeOfUserDAO;
-
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Module;
 import com.eclinic.domain.Permission;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.TypeOfUser;
-
 import com.eclinic.service.PermissionService;
 
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,8 +35,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Spring Rest controller that handles CRUD requests for Permission entities
  * 
  */
-
-@Controller("PermissionRestController")
+@Path("/Permission")
+@Component("PermissionRestController")
 public class PermissionRestController {
 
 	/**
@@ -72,6 +74,27 @@ public class PermissionRestController {
 	@Autowired
 	private PermissionService permissionService;
 
+	
+	public PermissionRestController() {
+	}
+	
+	/**
+	 * Register custom, context-specific property editors
+	 * 
+	 */
+	@InitBinder
+	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register static property editors.
+		binder.registerCustomEditor(java.util.Calendar.class, new org.skyway.spring.util.databinding.CustomCalendarEditor());
+		binder.registerCustomEditor(byte[].class, new org.springframework.web.multipart.support.ByteArrayMultipartFileEditor());
+		binder.registerCustomEditor(boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(false));
+		binder.registerCustomEditor(Boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(true));
+		binder.registerCustomEditor(java.math.BigDecimal.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(java.math.BigDecimal.class, true));
+		binder.registerCustomEditor(Integer.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Integer.class, true));
+		binder.registerCustomEditor(java.util.Date.class, new org.skyway.spring.util.databinding.CustomDateEditor());
+		binder.registerCustomEditor(String.class, new org.skyway.spring.util.databinding.StringEditor());
+		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
+		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
+	}
 	/**
 	 * View an existing TypeOfUser entity
 	 * 
@@ -128,12 +151,17 @@ public class PermissionRestController {
 	 * Save an existing Permission entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission", method = RequestMethod.PUT)
-	@ResponseBody
-	public Permission savePermission(@RequestBody Permission permission) {
+
+	
+
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response savePermission(Permission permission) {
 		permissionService.savePermission(permission);
-		return permissionDAO.findPermissionByPrimaryKey(permission.getId());
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission.getId())).build();
 	}
+
 
 	/**
 	 * Create a new SystemUser entity
@@ -157,23 +185,7 @@ public class PermissionRestController {
 		permissionService.deletePermission(permission);
 	}
 
-	/**
-	 * Register custom, context-specific property editors
-	 * 
-	 */
-	@InitBinder
-	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register static property editors.
-		binder.registerCustomEditor(java.util.Calendar.class, new org.skyway.spring.util.databinding.CustomCalendarEditor());
-		binder.registerCustomEditor(byte[].class, new org.springframework.web.multipart.support.ByteArrayMultipartFileEditor());
-		binder.registerCustomEditor(boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(false));
-		binder.registerCustomEditor(Boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(true));
-		binder.registerCustomEditor(java.math.BigDecimal.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(java.math.BigDecimal.class, true));
-		binder.registerCustomEditor(Integer.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Integer.class, true));
-		binder.registerCustomEditor(java.util.Date.class, new org.skyway.spring.util.databinding.CustomDateEditor());
-		binder.registerCustomEditor(String.class, new org.skyway.spring.util.databinding.StringEditor());
-		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
-		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
-	}
+	
 
 	/**
 	 * View an existing Module entity

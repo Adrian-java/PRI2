@@ -6,26 +6,28 @@ import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.RecipeDAO;
 import com.eclinic.dao.SickLeaveDAO;
 import com.eclinic.dao.WorkerDAO;
-
 import com.eclinic.domain.Address;
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.PatientCard;
 import com.eclinic.domain.Recipe;
 import com.eclinic.domain.SickLeave;
 import com.eclinic.domain.Worker;
-
 import com.eclinic.service.PatientService;
 
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +39,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Spring Rest controller that handles CRUD requests for Patient entities
  * 
  */
-
-@Controller("PatientRestController")
+@Path("/Patient")
+@Component("PatientRestController")
 public class PatientRestController {
 
 	/**
@@ -90,6 +92,11 @@ public class PatientRestController {
 	@Autowired
 	private PatientService patientService;
 
+	public PatientRestController() {
+	}
+	
+	
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -331,12 +338,17 @@ public class PatientRestController {
 	 * Save an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Patient", method = RequestMethod.PUT)
-	@ResponseBody
-	public Patient savePatient(@RequestBody Patient patient) {
+
+	
+
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response savePatient(Patient patient) {
 		patientService.savePatient(patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
+
 
 	/**
 	 * Show all Recipe entities by Patient

@@ -4,24 +4,25 @@ import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.PatientCardDAO;
 import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.VisitDAO;
-
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.PatientCard;
 import com.eclinic.domain.Visit;
-
 import com.eclinic.service.PatientCardService;
 
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,8 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Spring Rest controller that handles CRUD requests for PatientCard entities
  * 
  */
-
-@Controller("PatientCardRestController")
+@Path("/PatientCard")
+@Component("PatientCardRestController")
 public class PatientCardRestController {
 
 	/**
@@ -72,6 +73,27 @@ public class PatientCardRestController {
 	@Autowired
 	private PatientCardService patientCardService;
 
+	public PatientCardRestController() {
+	}
+	
+	
+	/**
+	 * Register custom, context-specific property editors
+	 * 
+	 */
+	@InitBinder
+	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register static property editors.
+		binder.registerCustomEditor(java.util.Calendar.class, new org.skyway.spring.util.databinding.CustomCalendarEditor());
+		binder.registerCustomEditor(byte[].class, new org.springframework.web.multipart.support.ByteArrayMultipartFileEditor());
+		binder.registerCustomEditor(boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(false));
+		binder.registerCustomEditor(Boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(true));
+		binder.registerCustomEditor(java.math.BigDecimal.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(java.math.BigDecimal.class, true));
+		binder.registerCustomEditor(Integer.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Integer.class, true));
+		binder.registerCustomEditor(java.util.Date.class, new org.skyway.spring.util.databinding.CustomDateEditor());
+		binder.registerCustomEditor(String.class, new org.skyway.spring.util.databinding.StringEditor());
+		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
+		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
+	}
 	/**
 	 * Show all PatientCard entities
 	 * 
@@ -264,23 +286,7 @@ public class PatientCardRestController {
 		return patientDAO.findPatientByPrimaryKey(patient.getId());
 	}
 
-	/**
-	 * Register custom, context-specific property editors
-	 * 
-	 */
-	@InitBinder
-	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register static property editors.
-		binder.registerCustomEditor(java.util.Calendar.class, new org.skyway.spring.util.databinding.CustomCalendarEditor());
-		binder.registerCustomEditor(byte[].class, new org.springframework.web.multipart.support.ByteArrayMultipartFileEditor());
-		binder.registerCustomEditor(boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(false));
-		binder.registerCustomEditor(Boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(true));
-		binder.registerCustomEditor(java.math.BigDecimal.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(java.math.BigDecimal.class, true));
-		binder.registerCustomEditor(Integer.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Integer.class, true));
-		binder.registerCustomEditor(java.util.Date.class, new org.skyway.spring.util.databinding.CustomDateEditor());
-		binder.registerCustomEditor(String.class, new org.skyway.spring.util.databinding.StringEditor());
-		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
-		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
-	}
+	
 
 	/**
 	 * View an existing Patient entity
@@ -298,10 +304,15 @@ public class PatientCardRestController {
 	 * Save an existing PatientCard entity
 	 * 
 	 */
-	@RequestMapping(value = "/PatientCard", method = RequestMethod.PUT)
-	@ResponseBody
-	public PatientCard savePatientCard(@RequestBody PatientCard patientcard) {
+
+	
+
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response savePatientCard(PatientCard patientcard) {
 		patientCardService.savePatientCard(patientcard);
-		return patientCardDAO.findPatientCardByPrimaryKey(patientcard.getId());
+		return Response.ok(patientCardDAO.findPatientCardByPrimaryKey(patientcard.getId())).build();
 	}
+
 }
