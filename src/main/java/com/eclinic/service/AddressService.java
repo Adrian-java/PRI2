@@ -14,9 +14,10 @@ public interface AddressService {
 
 	/**
 	 * Save an existing Address entity
+	 * @return 
 	 * 
 	 */
-	public void saveAddress(Address address);
+	public Integer saveAddress(Address address);
 
 	/**
 	 * Delete an existing Patient entity

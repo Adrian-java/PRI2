@@ -1,21 +1,28 @@
 package com.eclinic.domain;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.io.Serializable;
-
-import java.lang.StringBuilder;
-
-import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.xml.bind.annotation.*;
-
-import javax.persistence.*;
 
 /**
  */
@@ -48,6 +55,7 @@ public class Address implements Serializable {
 	 */
 
 	@Column(name = "Id", nullable = false)
+	@GeneratedValue(strategy = IDENTITY)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
 	@XmlElement

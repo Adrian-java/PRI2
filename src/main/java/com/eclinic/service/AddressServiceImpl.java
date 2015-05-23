@@ -50,7 +50,7 @@ public class AddressServiceImpl implements AddressService {
 	 * 
 	 */
 	@Transactional
-	public void saveAddress(Address address) {
+	public Integer saveAddress(Address address) {
 		Address existingAddress = addressDAO.findAddressByPrimaryKey(address.getId());
 
 		if (existingAddress != null) {
@@ -68,6 +68,7 @@ public class AddressServiceImpl implements AddressService {
 			address = addressDAO.store(address);
 		}
 		addressDAO.flush();
+		return address.getId();
 	}
 
 	/**

@@ -103,11 +103,8 @@ public class AddressRestController {
 	 * Select an existing Address entity
 	 * 
 	 */
-	// @RequestMapping(value = "/Address/{address_id}", method =
-	// RequestMethod.GET)
-	// @ResponseBody
 	@GET
-	@Path("/Address/{address_id}")
+	@Path("/{address_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadAddress(@PathParam("address_id") Integer address_id) {
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address_id)).build();
@@ -131,11 +128,10 @@ public class AddressRestController {
 	 * 
 	 */
 	@POST
-	@Path("/")
+	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveAddress( Address address) {
-//		addressService = (AddressService) serviceContext.getBean("AddressService");
 		addressService.saveAddress(address);
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
 	}
@@ -144,10 +140,8 @@ public class AddressRestController {
 	 * Show all Address entities
 	 * 
 	 */
-//	@RequestMapping(value = "/Address", method = RequestMethod.GET)
-//	@ResponseBody
 	@GET
-	@Path("/")
+	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listAddresss() {
 		return  Response.ok(addressService.loadAddresss()).build();
@@ -157,24 +151,19 @@ public class AddressRestController {
 	 * Create a new Address entity
 	 * 
 	 */
-//	@RequestMapping(value = "/Address", method = RequestMethod.POST)
-//	@ResponseBody
 	@POST
-	@Path("/add")
-	//gdy przekazujemy obiekt jako param to nie ma @Produces
-	//@Produces(MediaType.APPLICATION_JSON)
+	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response newAddress( Address address) {
-		addressService.saveAddress(address);
-		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
+		Integer addedId = addressService.saveAddress(address);
+		return Response.ok(addressDAO.findAddressByPrimaryKey(addedId)).build();
 	}
 
 	/**
 	 * View an existing Patient entity
 	 * 
 	 */
-//	@RequestMapping(value = "/Address/{address_id}/patients/{patient_id}", method = RequestMethod.GET)
-//	@ResponseBody
 	@GET
 	@Path("/{address_id}/patients/{patient_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -190,8 +179,6 @@ public class AddressRestController {
 	 * Delete an existing Patient entity
 	 * 
 	 */
-//	@RequestMapping(value = "/Address/{address_id}/patients/{patient_id}", method = RequestMethod.DELETE)
-//	@ResponseBody
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{address_id}/patients/{patient_id}")
@@ -204,8 +191,6 @@ public class AddressRestController {
 	 * Save an existing Patient entity
 	 * 
 	 */
-//	@RequestMapping(value = "/Address/{address_id}/patients", method = RequestMethod.PUT)
-//	@ResponseBody
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{address_id}/patients")
 	@PUT
@@ -219,8 +204,6 @@ public class AddressRestController {
 	 * Delete an existing Address entity
 	 * 
 	 */
-//	@RequestMapping(value = "/Address/{address_id}", method = RequestMethod.DELETE)
-//	@ResponseBody
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{address_id}")
 	@DELETE
@@ -233,8 +216,6 @@ public class AddressRestController {
 	 * Show all Patient entities by Address
 	 * 
 	 */
-//	@RequestMapping(value = "/Address/{address_id}/patients", method = RequestMethod.GET)
-//	@ResponseBody
 	@GET
 	@Path("/{address_id}/patients")
 	@Produces(MediaType.APPLICATION_JSON)
