@@ -1,34 +1,34 @@
 package com.eclinic.web.rest;
 
 import com.eclinic.dao.ReportDAO;
-
 import com.eclinic.domain.Report;
-
 import com.eclinic.service.ReportService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for Report entities
  * 
  */
-
-@Controller("ReportRestController")
+@Path("/Report")
+@Component("ReportRestController")
 public class ReportRestController {
 
 	/**
@@ -45,46 +45,8 @@ public class ReportRestController {
 	@Autowired
 	private ReportService reportService;
 
-	/**
-	 * Save an existing Report entity
-	 * 
-	 */
-	@RequestMapping(value = "/Report", method = RequestMethod.PUT)
-	@ResponseBody
-	public Report saveReport(@RequestBody Report report) {
-		reportService.saveReport(report);
-		return reportDAO.findReportByPrimaryKey(report.getId());
-	}
-
-	/**
-	 * Create a new Report entity
-	 * 
-	 */
-	@RequestMapping(value = "/Report", method = RequestMethod.POST)
-	@ResponseBody
-	public Report newReport(@RequestBody Report report) {
-		reportService.saveReport(report);
-		return reportDAO.findReportByPrimaryKey(report.getId());
-	}
-
-	/**
-	 * Show all Report entities
-	 * 
-	 */
-	@RequestMapping(value = "/Report", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Report> listReports() {
-		return new java.util.ArrayList<Report>(reportService.loadReports());
-	}
-
-	/**
-	 * Select an existing Report entity
-	 * 
-	 */
-	@RequestMapping(value = "/Report/{report_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Report loadReport(@PathVariable Integer report_id) {
-		return reportDAO.findReportByPrimaryKey(report_id);
+	
+	public ReportRestController() {
 	}
 
 	/**
@@ -104,14 +66,76 @@ public class ReportRestController {
 		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
+	
+	/**
+	 * Save an existing Report entity
+	 * 
+	 */
+
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveReport(Report report) {
+		reportService.saveReport(report);
+		return Response.ok(reportDAO.findReportByPrimaryKey(report.getId())).build();
+	}
+
+	/**
+	 * Create a new Report entity
+	 * 
+	 */
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newReport( Report report) {
+		reportService.saveReport(report);
+		return Response.ok(reportDAO.findReportByPrimaryKey(report.getId())).build();
+	}
+
+
+	/**
+	 * Show all Report entities
+	 * 
+	 */
+
+	
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listReports() {
+		return  Response.ok(reportService.loadReports()).build();
+	}
+
+	/**
+	 * Select an existing Report entity
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{report_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadReport(@PathParam("report_id") Integer report_id) {
+		return Response.ok(reportDAO.findReportByPrimaryKey(report_id)).build();
+	}
+
 
 	/**
 	 * Delete an existing Report entity
 	 * 
 	 */
-	@RequestMapping(value = "/Report/{report_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteReport(@PathVariable Integer report_id) {
+
+	
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{report_id}")
+	@DELETE
+	public void deleteReport(@PathParam("report_id") Integer report_id) {
 		Report report = reportDAO.findReportByPrimaryKey(report_id);
 		reportService.deleteReport(report);
 	}

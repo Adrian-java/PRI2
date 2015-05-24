@@ -3,36 +3,37 @@ package com.eclinic.web.rest;
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.RecipeDAO;
-
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.Recipe;
 
 import com.eclinic.service.RecipeService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for Recipe entities
  * 
  */
-
-@Controller("RecipeRestController")
+@Path("/Recipe")
+@Component("RecipeRestController")
 public class RecipeRestController {
 
 	/**
@@ -63,93 +64,10 @@ public class RecipeRestController {
 	@Autowired
 	private RecipeService recipeService;
 
-	/**
-	 * View an existing Doctor entity
-	 * 
-	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/doctor/{doctor_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor loadRecipeDoctor(@PathVariable Integer recipe_idr, @PathVariable Integer related_doctor_id) {
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
-
-		return doctor;
+	public RecipeRestController() {
 	}
-
-	/**
-	 * Get Patient entity by Recipe
-	 * 
-	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/patient", method = RequestMethod.GET)
-	@ResponseBody
-	public Patient getRecipePatient(@PathVariable Integer recipe_idr) {
-		return recipeDAO.findRecipeByPrimaryKey(recipe_idr).getPatient();
-	}
-
-	/**
-	 * Delete an existing Doctor entity
-	 * 
-	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/doctor/{doctor_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteRecipeDoctor(@PathVariable Integer recipe_idr, @PathVariable Integer related_doctor_id) {
-		recipeService.deleteRecipeDoctor(recipe_idr, related_doctor_id);
-	}
-
-	/**
-	 * Delete an existing Patient entity
-	 * 
-	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/patient/{patient_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteRecipePatient(@PathVariable Integer recipe_idr, @PathVariable Integer related_patient_id) {
-		recipeService.deleteRecipePatient(recipe_idr, related_patient_id);
-	}
-
-	/**
-	 * View an existing Patient entity
-	 * 
-	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/patient/{patient_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Patient loadRecipePatient(@PathVariable Integer recipe_idr, @PathVariable Integer related_patient_id) {
-		Patient patient = patientDAO.findPatientByPrimaryKey(related_patient_id, -1, -1);
-
-		return patient;
-	}
-
-	/**
-	 * Delete an existing Recipe entity
-	 * 
-	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteRecipe(@PathVariable Integer recipe_idr) {
-		Recipe recipe = recipeDAO.findRecipeByPrimaryKey(recipe_idr);
-		recipeService.deleteRecipe(recipe);
-	}
-
-	/**
-	 * Create a new Patient entity
-	 * 
-	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/patient", method = RequestMethod.POST)
-	@ResponseBody
-	public Patient newRecipePatient(@PathVariable Integer recipe_idr, @RequestBody Patient patient) {
-		recipeService.saveRecipePatient(recipe_idr, patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
-	}
-
-	/**
-	 * Create a new Doctor entity
-	 * 
-	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/doctor", method = RequestMethod.POST)
-	@ResponseBody
-	public Doctor newRecipeDoctor(@PathVariable Integer recipe_idr, @RequestBody Doctor doctor) {
-		recipeService.saveRecipeDoctor(recipe_idr, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
-	}
-
+	
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -167,78 +85,223 @@ public class RecipeRestController {
 		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
+	
+	
+	/**
+	 * View an existing Doctor entity
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{recipe_idr}/doctor/{doctor_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadRecipeDoctor(@PathParam("recipe_idr") Integer recipe_idr,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
+		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
+		return Response.ok(doctor).build();
+	}
+
+	/**
+	 * Get Patient entity by Recipe
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{recipe_idr}/patient")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getRecipePatient(@PathParam("recipe_idr") Integer recipe_idr) {
+		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipe_idr).getPatient()).build();
+	}
+
+	/**
+	 * Delete an existing Doctor entity
+	 * 
+	 */
+
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{recipe_idr}/doctor/{doctor_id}")
+	public Response deleteRecipeDoctor(@PathParam("recipe_idr") Integer recipe_idr,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
+		return Response.ok(recipeService.deleteRecipeDoctor(recipe_idr, related_doctor_id)).build();
+	}
+	
+	
+	/**
+	 * Delete an existing Patient entity
+	 * 
+	 */
+	
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{recipe_idr}/patient/{patient_id}")
+	public Response deleteRecipePatient(@PathParam("recipe_idr") Integer recipe_idr,
+			@PathParam("related_patient_id") Integer related_patient_id) {
+		return Response.ok(recipeService.deleteRecipePatient(recipe_idr, related_patient_id)).build();
+	}
+
+	/**
+	 * View an existing Patient entity
+	 * 
+	 */
+
+	@GET
+	@Path("/{recipe_idr}/patient/{patient_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadRecipePatient(@PathParam("recipe_idr") Integer recipe_idr,
+			@PathParam("related_patient_id") Integer related_patient_id) {
+		Patient patient = patientDAO.findPatientByPrimaryKey(related_patient_id, -1, -1);
+
+		return Response.ok(patient).build();
+	}
+
+	/**
+	 * Delete an existing Recipe entity
+	 * 
+	 */
+
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{recipe_idr}")
+	@DELETE
+	public void deleteRecipe(@PathParam("recipe_idr") Integer recipe_idr) {
+		Recipe recipe = recipeDAO.findRecipeByPrimaryKey(recipe_idr);
+		recipeService.deleteRecipe(recipe);
+	}
+	/**
+	 * Create a new Patient entity
+	 * 
+	 */
+
+	@Path("/{recipe_idr}/patient")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newRecipePatient(@PathParam("recipe_idr") Integer recipe_idr,
+			 Patient patient) {
+		recipeService.saveRecipePatient(recipe_idr, patient);
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
+	}
+	
+
+	/**
+	 * Create a new Doctor entity
+	 * 
+	 */
+
+	
+	
+	@Path("/{recipe_idr}/doctor")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newRecipeDoctor(@PathParam("recipe_idr") Integer recipe_idr,
+			Doctor doctor) {
+		recipeService.saveRecipeDoctor(recipe_idr, doctor);
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
+	}
+
+	
 
 	/**
 	 * Create a new Recipe entity
 	 * 
 	 */
-	@RequestMapping(value = "/Recipe", method = RequestMethod.POST)
-	@ResponseBody
-	public Recipe newRecipe(@RequestBody Recipe recipe) {
+
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newRecipe( Recipe recipe) {
 		recipeService.saveRecipe(recipe);
-		return recipeDAO.findRecipeByPrimaryKey(recipe.getIdr());
+		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipe.getIdr())).build();
 	}
 
 	/**
 	 * Save an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/patient", method = RequestMethod.PUT)
-	@ResponseBody
-	public Patient saveRecipePatient(@PathVariable Integer recipe_idr, @RequestBody Patient patient) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{recipe_idr}/patient")
+	@PUT
+	public Response saveRecipePatient(@PathParam("recipe_idr") Integer recipe_idr,
+			Patient patient) {
 		recipeService.saveRecipePatient(recipe_idr, patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
+	
+	
 
 	/**
 	 * Show all Recipe entities
 	 * 
 	 */
-	@RequestMapping(value = "/Recipe", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Recipe> listRecipes() {
-		return new java.util.ArrayList<Recipe>(recipeService.loadRecipes());
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listRecipes() {
+		return  Response.ok(recipeService.loadRecipes()).build();
 	}
 
 	/**
 	 * Save an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/doctor", method = RequestMethod.PUT)
-	@ResponseBody
-	public Doctor saveRecipeDoctor(@PathVariable Integer recipe_idr, @RequestBody Doctor doctor) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{recipe_idr}/doctor")
+	@PUT
+	public Response saveRecipeDoctor(@PathParam("recipe_idr") Integer recipe_idr,
+			Doctor doctor) {
 		recipeService.saveRecipeDoctor(recipe_idr, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
 	/**
 	 * Save an existing Recipe entity
 	 * 
 	 */
-	@RequestMapping(value = "/Recipe", method = RequestMethod.PUT)
-	@ResponseBody
-	public Recipe saveRecipe(@RequestBody Recipe recipe) {
-		recipeService.saveRecipe(recipe);
-		return recipeDAO.findRecipeByPrimaryKey(recipe.getIdr());
-	}
 
+
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveRecipe(Recipe recipe) {
+		recipeService.saveRecipe(recipe);
+		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipe.getIdr())).build();
+	}
 	/**
 	 * Select an existing Recipe entity
 	 * 
 	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}", method = RequestMethod.GET)
-	@ResponseBody
-	public Recipe loadRecipe(@PathVariable Integer recipe_idr) {
-		return recipeDAO.findRecipeByPrimaryKey(recipe_idr);
+
+	@GET
+	@Path("/{recipe_idr}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadRecipe(@PathParam("recipe_idr") Integer recipe_idr) {
+		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipe_idr)).build();
 	}
 
 	/**
 	 * Get Doctor entity by Recipe
 	 * 
 	 */
-	@RequestMapping(value = "/Recipe/{recipe_idr}/doctor", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor getRecipeDoctor(@PathVariable Integer recipe_idr) {
-		return recipeDAO.findRecipeByPrimaryKey(recipe_idr).getDoctor();
+
+	
+	@GET
+	@Path("/{recipe_idr}/doctor")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getRecipeDoctor(@PathParam("recipe_idr") Integer recipe_idr) {
+		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipe_idr).getDoctor()).build();
 	}
 }
