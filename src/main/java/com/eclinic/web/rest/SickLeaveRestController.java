@@ -10,21 +10,24 @@ import com.eclinic.domain.SickLeave;
 import com.eclinic.domain.Visit;
 import com.eclinic.service.SickLeaveService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for SickLeave entities
@@ -97,126 +100,168 @@ public class SickLeaveRestController {
 	 * View an existing Visit entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/visit/{visit_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Visit loadSickLeaveVisit(@PathVariable Integer sickleave_id, @PathVariable Integer related_visit_id) {
+
+
+	@GET
+	@Path("/{sickleave_id}/visit/{visit_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSickLeaveVisit(@PathParam("sickleave_id") Integer sickleave_id,
+			@PathParam("related_visit_id") Integer related_visit_id) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(related_visit_id, -1, -1);
 
-		return visit;
+		return Response.ok(visit).build();
 	}
-
 	/**
 	 * Select an existing SickLeave entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public SickLeave loadSickLeave(@PathVariable Integer sickleave_id) {
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id);
+
+	@GET
+	@Path("/{sickleave_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSickLeave(@PathParam("sickleave_id") Integer sickleave_id) {
+		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id)).build();
 	}
+
 
 	/**
 	 * Delete an existing Visit entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/visit/{visit_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSickLeaveVisit(@PathVariable Integer sickleave_id, @PathVariable Integer related_visit_id) {
-		sickLeaveService.deleteSickLeaveVisit(sickleave_id, related_visit_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{sickleave_id}/visit/{visit_id}")
+	public Response deleteSickLeaveVisit(@PathParam("sickleave_id") Integer sickleave_id,
+			@PathParam("related_visit_id") Integer related_visit_id) {
+		return Response.ok(sickLeaveService.deleteSickLeaveVisit(sickleave_id, related_visit_id)).build();
 	}
 
 	/**
 	 * Save an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/doctor", method = RequestMethod.PUT)
-	@ResponseBody
-	public Doctor saveSickLeaveDoctor(@PathVariable Integer sickleave_id, @RequestBody Doctor doctor) {
+
+	
+	@Path("/{sickleave_id}/doctor")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveSickLeaveDoctor(@PathParam("sickleave_id") Integer sickleave_id,
+			Doctor doctor) {
 		sickLeaveService.saveSickLeaveDoctor(sickleave_id, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
 	/**
 	 * Delete an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/patient/{patient_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSickLeavePatient(@PathVariable Integer sickleave_id, @PathVariable Integer related_patient_id) {
-		sickLeaveService.deleteSickLeavePatient(sickleave_id, related_patient_id);
+
+	
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{sickleave_id}/patient/{patient_id}")
+	public Response deleteSickLeavePatient(@PathParam("sickleave_id") Integer sickleave_id,
+			@PathParam("related_patient_id") Integer related_patient_id) {
+		return Response.ok(sickLeaveService.deleteSickLeavePatient(sickleave_id, related_patient_id)).build();
 	}
 
 	/**
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/doctor/{doctor_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSickLeaveDoctor(@PathVariable Integer sickleave_id, @PathVariable Integer related_doctor_id) {
-		sickLeaveService.deleteSickLeaveDoctor(sickleave_id, related_doctor_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{sickleave_id}/doctor/{doctor_id}")
+	public Response deleteSickLeaveDoctor(@PathParam("sickleave_id") Integer sickleave_id,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
+		return Response.ok(sickLeaveService.deleteSickLeaveDoctor(sickleave_id, related_doctor_id)).build();
 	}
 
 	/**
 	 * Save an existing SickLeave entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave", method = RequestMethod.PUT)
-	@ResponseBody
-	public SickLeave saveSickLeave(@RequestBody SickLeave sickleave) {
-		sickLeaveService.saveSickLeave(sickleave);
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId());
-	}
 
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveSickLeave(SickLeave sickleave) {
+		sickLeaveService.saveSickLeave(sickleave);
+		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId())).build();
+	}
 	/**
 	 * Create a new Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/patient", method = RequestMethod.POST)
-	@ResponseBody
-	public Patient newSickLeavePatient(@PathVariable Integer sickleave_id, @RequestBody Patient patient) {
+
+	
+	@Path("/{sickleave_id}/patient")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSickLeavePatient(@PathParam("sickleave_id") Integer sickleave_id,
+			Patient patient) {
 		sickLeaveService.saveSickLeavePatient(sickleave_id, patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
 
 	/**
 	 * Get Patient entity by SickLeave
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/patient", method = RequestMethod.GET)
-	@ResponseBody
-	public Patient getSickLeavePatient(@PathVariable Integer sickleave_id) {
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id).getPatient();
+
+	@GET
+	@Path("/{sickleave_id}/patient")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSickLeavePatient(@PathParam("sickleave_id") Integer sickleave_id) {
+		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id).getPatient()).build();
 	}
 
 	/**
 	 * Create a new SickLeave entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave", method = RequestMethod.POST)
-	@ResponseBody
-	public SickLeave newSickLeave(@RequestBody SickLeave sickleave) {
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSickLeave(SickLeave sickleave) {
 		sickLeaveService.saveSickLeave(sickleave);
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId());
+		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId())).build();
 	}
 
 	/**
 	 * Create a new Visit entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/visit", method = RequestMethod.POST)
-	@ResponseBody
-	public Visit newSickLeaveVisit(@PathVariable Integer sickleave_id, @RequestBody Visit visit) {
+	
+	
+	@Path("/{sickleave_id}/visit")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSickLeaveVisit(@PathParam("sickleave_id") Integer sickleave_id,
+			Visit visit) {
 		sickLeaveService.saveSickLeaveVisit(sickleave_id, visit);
-		return visitDAO.findVisitByPrimaryKey(visit.getId());
+		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId())).build();
 	}
 
 	/**
 	 * Delete an existing SickLeave entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSickLeave(@PathVariable Integer sickleave_id) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{sickleave_id}")
+	@DELETE
+	public void deleteSickLeave(@PathParam("sickleave_id") Integer sickleave_id) {
 		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id);
 		sickLeaveService.deleteSickLeave(sickleave);
 	}
@@ -225,75 +270,99 @@ public class SickLeaveRestController {
 	 * Save an existing Visit entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/visit", method = RequestMethod.PUT)
-	@ResponseBody
-	public Visit saveSickLeaveVisit(@PathVariable Integer sickleave_id, @RequestBody Visit visit) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{sickleave_id}/visit")
+	@PUT
+	public Response saveSickLeaveVisit(@PathParam("sickleave_id") Integer sickleave_id,
+			Visit visit) {
 		sickLeaveService.saveSickLeaveVisit(sickleave_id, visit);
-		return visitDAO.findVisitByPrimaryKey(visit.getId());
+		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId())).build();
 	}
 
 	/**
 	 * Get Doctor entity by SickLeave
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/doctor", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor getSickLeaveDoctor(@PathVariable Integer sickleave_id) {
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id).getDoctor();
+	
+	
+	@GET
+	@Path("/{sickleave_id}/doctor")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSickLeaveDoctor(@PathParam("sickleave_id") Integer sickleave_id) {
+		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id).getDoctor()).build();
 	}
 
 	/**
 	 * Get Visit entity by SickLeave
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/visit", method = RequestMethod.GET)
-	@ResponseBody
-	public Visit getSickLeaveVisit(@PathVariable Integer sickleave_id) {
-		return sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id).getVisit();
+
+	
+	@GET
+	@Path("/{sickleave_id}/visit")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSickLeaveVisit(@PathParam("sickleave_id") Integer sickleave_id) {
+		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave_id).getVisit()).build();
 	}
 
 	/**
 	 * Show all SickLeave entities
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave", method = RequestMethod.GET)
-	@ResponseBody
-	public List<SickLeave> listSickLeaves() {
-		return new java.util.ArrayList<SickLeave>(sickLeaveService.loadSickLeaves());
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listSickLeaves() {
+		return  Response.ok(sickLeaveService.loadSickLeaves()).build();
 	}
 
 	/**
 	 * Save an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/patient", method = RequestMethod.PUT)
-	@ResponseBody
-	public Patient saveSickLeavePatient(@PathVariable Integer sickleave_id, @RequestBody Patient patient) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{sickleave_id}/patient")
+	@PUT
+	public Response saveDoctorSpecializations(@PathParam("sickleave_id") Integer sickleave_id,
+			Patient patient) {
 		sickLeaveService.saveSickLeavePatient(sickleave_id, patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
 
 	/**
 	 * Create a new Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/doctor", method = RequestMethod.POST)
-	@ResponseBody
-	public Doctor newSickLeaveDoctor(@PathVariable Integer sickleave_id, @RequestBody Doctor doctor) {
+
+	
+	@Path("/{sickleave_id}/doctor")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSickLeaveDoctor(@PathParam("sickleave_id") Integer sickleave_id,
+			Doctor doctor) {
 		sickLeaveService.saveSickLeaveDoctor(sickleave_id, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
 	/**
 	 * View an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/doctor/{doctor_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor loadSickLeaveDoctor(@PathVariable Integer sickleave_id, @PathVariable Integer related_doctor_id) {
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
-		return doctor;
+	
+	@GET
+	@Path("/{sickleave_id}/doctor/{doctor_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSickLeaveDoctor(@PathParam("sickleave_id") Integer sickleave_id,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
+		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
+		return Response.ok(doctor).build();
 	}
 
 	
@@ -301,11 +370,15 @@ public class SickLeaveRestController {
 	 * View an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/SickLeave/{sickleave_id}/patient/{patient_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Patient loadSickLeavePatient(@PathVariable Integer sickleave_id, @PathVariable Integer related_patient_id) {
+
+	
+	@GET
+	@Path("/{sickleave_id}/patient/{patient_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSickLeavePatient(@PathParam("sickleave_id") Integer sickleave_id,
+			@PathParam("related_patient_id") Integer related_patient_id) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(related_patient_id, -1, -1);
 
-		return patient;
+		return Response.ok(patient).build();
 	}
 }
