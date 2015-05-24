@@ -4,32 +4,30 @@ import com.eclinic.dao.ModuleDAO;
 import com.eclinic.dao.PermissionDAO;
 import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.TypeOfUserDAO;
-import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Module;
 import com.eclinic.domain.Permission;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.TypeOfUser;
 import com.eclinic.service.PermissionService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for Permission entities
@@ -99,53 +97,72 @@ public class PermissionRestController {
 	 * View an existing TypeOfUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/typeOfUsers/{typeofuser_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public TypeOfUser loadPermissionTypeOfUsers(@PathVariable Integer permission_id, @PathVariable Integer related_typeofusers_id) {
+
+	
+	@GET
+	@Path("/{permission_id}/typeOfUsers/{typeofuser_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id,
+			@PathParam("related_typeofusers_id") Integer related_typeofusers_id) {
 		TypeOfUser typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(related_typeofusers_id, -1, -1);
 
-		return typeofuser;
+		return Response.ok(typeofuser).build();
 	}
+
 
 	/**
 	 * Show all Permission entities
 	 * 
 	 */
-	@RequestMapping(value = "/Permission", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Permission> listPermissions() {
-		return new java.util.ArrayList<Permission>(permissionService.loadPermissions());
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listPermissions() {
+		return  Response.ok(permissionService.loadPermissions()).build();
 	}
 
 	/**
 	 * Delete an existing SystemUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/systemUser/{systemuser_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePermissionSystemUser(@PathVariable Integer permission_id, @PathVariable Integer related_systemuser_id) {
-		permissionService.deletePermissionSystemUser(permission_id, related_systemuser_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{permission_id}/systemUser/{systemuser_id}")
+	public Response deletePermissionSystemUser(@PathParam("permission_id") Integer permission_id,
+			@PathParam("related_systemuser_id") Integer related_systemuser_id) {
+		return Response.ok(permissionService.deletePermissionSystemUser(permission_id, related_systemuser_id)).build();
 	}
 
 	/**
 	 * Show all TypeOfUser entities by Permission
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/typeOfUsers", method = RequestMethod.GET)
-	@ResponseBody
-	public List<TypeOfUser> getPermissionTypeOfUsers(@PathVariable Integer permission_id) {
-		return new java.util.ArrayList<TypeOfUser>(permissionDAO.findPermissionByPrimaryKey(permission_id).getTypeOfUsers());
+
+	
+	@GET
+	@Path("/{permission_id}/typeOfUsers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id) {
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id).getTypeOfUsers()).build();
 	}
 
 	/**
 	 * Select an existing Permission entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Permission loadPermission(@PathVariable Integer permission_id) {
-		return permissionDAO.findPermissionByPrimaryKey(permission_id);
+
+	
+	@GET
+	@Path("/{permission_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPermission(@PathParam("permission_id") Integer permission_id) {
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id)).build();
 	}
+
 
 	/**
 	 * Save an existing Permission entity
@@ -167,23 +184,31 @@ public class PermissionRestController {
 	 * Create a new SystemUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/systemUser", method = RequestMethod.POST)
-	@ResponseBody
-	public SystemUser newPermissionSystemUser(@PathVariable Integer permission_id, @RequestBody SystemUser systemuser) {
+
+	
+	@Path("/{permission_id}/systemUser")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPermissionSystemUser(@PathParam("permission_id") Integer permission_id,
+			SystemUser systemuser) {
 		permissionService.savePermissionSystemUser(permission_id, systemuser);
-		return systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId());
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
 	}
 
 	/**
 	 * Delete an existing Permission entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePermission(@PathVariable Integer permission_id) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{permission_id}")
+	@DELETE
+	public void deleteDoctor(@PathParam("permission_id") Integer permission_id) {
 		Permission permission = permissionDAO.findPermissionByPrimaryKey(permission_id);
 		permissionService.deletePermission(permission);
-	}
+		}
+
 
 	
 
@@ -191,129 +216,177 @@ public class PermissionRestController {
 	 * View an existing Module entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/module/{module_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Module loadPermissionModule(@PathVariable Integer permission_id, @PathVariable Integer related_module_id) {
+
+	
+	@GET
+	@Path("/{permission_id}/module/{module_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPermissionModule(@PathParam("permission_id") Integer permission_id,
+			@PathParam("related_module_id") Integer related_module_id) {
 		Module module = moduleDAO.findModuleByPrimaryKey(related_module_id, -1, -1);
 
-		return module;
+		return Response.ok(module).build();
 	}
 
 	/**
 	 * Create a new Module entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/module", method = RequestMethod.POST)
-	@ResponseBody
-	public Module newPermissionModule(@PathVariable Integer permission_id, @RequestBody Module module) {
+
+	
+
+	@Path("/{permission_id}/module")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPermissionModule(@PathParam("permission_id") Integer permission_id,
+			Module module) {
 		permissionService.savePermissionModule(permission_id, module);
-		return moduleDAO.findModuleByPrimaryKey(module.getId());
+		return Response.ok(moduleDAO.findModuleByPrimaryKey(module.getId())).build();
 	}
 
 	/**
 	 * Delete an existing TypeOfUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/typeOfUsers/{typeofuser_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePermissionTypeOfUsers(@PathVariable Integer permission_id, @PathVariable Integer related_typeofusers_id) {
-		permissionService.deletePermissionTypeOfUsers(permission_id, related_typeofusers_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{permission_id}/typeOfUsers/{typeofuser_id}")
+	public Response deletePermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id,
+			@PathParam("related_typeofusers_id") Integer related_typeofusers_id) {
+		return Response.ok(permissionService.deletePermissionTypeOfUsers(permission_id, related_typeofusers_id)).build();
 	}
 
 	/**
 	 * Create a new TypeOfUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/typeOfUsers", method = RequestMethod.POST)
-	@ResponseBody
-	public TypeOfUser newPermissionTypeOfUsers(@PathVariable Integer permission_id, @RequestBody TypeOfUser typeofuser) {
-		permissionService.savePermissionTypeOfUsers(permission_id, typeofuser);
-		return typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser.getId());
-	}
 
+
+	
+	@Path("/{permission_id}/typeOfUsers")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id,
+			TypeOfUser typeofuser) {
+		permissionService.savePermissionTypeOfUsers(permission_id, typeofuser);
+		return Response.ok(typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser.getId())).build();
+	}
 	/**
 	 * Get SystemUser entity by Permission
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/systemUser", method = RequestMethod.GET)
-	@ResponseBody
-	public SystemUser getPermissionSystemUser(@PathVariable Integer permission_id) {
-		return permissionDAO.findPermissionByPrimaryKey(permission_id).getSystemUser();
+	
+	
+	@GET
+	@Path("/{permission_id}/systemUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPermissionSystemUser(@PathParam("permission_id") Integer permission_id) {
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id).getSystemUser()).build();
 	}
 
 	/**
 	 * Create a new Permission entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission", method = RequestMethod.POST)
-	@ResponseBody
-	public Permission newPermission(@RequestBody Permission permission) {
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newPermission( Permission permission) {
 		permissionService.savePermission(permission);
-		return permissionDAO.findPermissionByPrimaryKey(permission.getId());
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission.getId())).build();
 	}
 
 	/**
 	 * Delete an existing Module entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/module/{module_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deletePermissionModule(@PathVariable Integer permission_id, @PathVariable Integer related_module_id) {
-		permissionService.deletePermissionModule(permission_id, related_module_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{permission_id}/module/{module_id}")
+	public Response deletePermissionModule(@PathParam("permission_id") Integer permission_id,
+			@PathParam("related_module_id") Integer related_module_id) {
+		return Response.ok(permissionService.deletePermissionModule(permission_id, related_module_id)).build();
 	}
 
 	/**
 	 * Save an existing SystemUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/systemUser", method = RequestMethod.PUT)
-	@ResponseBody
-	public SystemUser savePermissionSystemUser(@PathVariable Integer permission_id, @RequestBody SystemUser systemuser) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{permission_id}/systemUser")
+	@PUT
+	public Response savePermissionSystemUser(@PathParam("permission_id") Integer permission_id,
+			SystemUser systemuser) {
 		permissionService.savePermissionSystemUser(permission_id, systemuser);
-		return systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId());
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
 	}
 
 	/**
 	 * Save an existing Module entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/module", method = RequestMethod.PUT)
-	@ResponseBody
-	public Module savePermissionModule(@PathVariable Integer permission_id, @RequestBody Module module) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{permission_id}/module")
+	@PUT
+	public Response savePermissionModule(@PathParam("permission_id") Integer permission_id,
+			Module module) {
 		permissionService.savePermissionModule(permission_id, module);
-		return moduleDAO.findModuleByPrimaryKey(module.getId());
+		return Response.ok(moduleDAO.findModuleByPrimaryKey(module.getId())).build();
 	}
 
 	/**
 	 * View an existing SystemUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/systemUser/{systemuser_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public SystemUser loadPermissionSystemUser(@PathVariable Integer permission_id, @PathVariable Integer related_systemuser_id) {
+
+	
+	
+	@GET
+	@Path("/{permission_id}/systemUser/{systemuser_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadPermissionSystemUser(@PathParam("permission_id") Integer permission_id,
+			@PathParam("related_systemuser_id") Integer related_systemuser_id) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
-		return systemuser;
+		return Response.ok(systemuser).build();
 	}
 
 	/**
 	 * Get Module entity by Permission
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/module", method = RequestMethod.GET)
-	@ResponseBody
-	public Module getPermissionModule(@PathVariable Integer permission_id) {
-		return permissionDAO.findPermissionByPrimaryKey(permission_id).getModule();
+
+	
+	@GET
+	@Path("/{permission_id}/module")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPermissionModule(@PathParam("permission_id") Integer permission_id) {
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id).getModule()).build();
 	}
 
 	/**
 	 * Save an existing TypeOfUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Permission/{permission_id}/typeOfUsers", method = RequestMethod.PUT)
-	@ResponseBody
-	public TypeOfUser savePermissionTypeOfUsers(@PathVariable Integer permission_id, @RequestBody TypeOfUser typeofusers) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{doctor_id}/typeOfUsers")
+	@PUT
+	public Response savePermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id,
+			TypeOfUser typeofusers) {
 		permissionService.savePermissionTypeOfUsers(permission_id, typeofusers);
-		return typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofusers.getId());
+		return Response.ok(typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofusers.getId())).build();
 	}
 }
