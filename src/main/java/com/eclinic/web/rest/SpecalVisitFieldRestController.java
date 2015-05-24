@@ -2,25 +2,29 @@ package com.eclinic.web.rest;
 
 import com.eclinic.dao.SpecalVisitFieldDAO;
 import com.eclinic.dao.SpecializationDAO;
+
 import com.eclinic.domain.SpecalVisitField;
 import com.eclinic.domain.Specialization;
 import com.eclinic.service.SpecalVisitFieldService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for SpecalVisitField entities
@@ -79,73 +83,94 @@ public class SpecalVisitFieldRestController {
 	 * Show all SpecalVisitField entities
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField", method = RequestMethod.GET)
-	@ResponseBody
-	public List<SpecalVisitField> listSpecalVisitFields() {
-		return new java.util.ArrayList<SpecalVisitField>(specalVisitFieldService.loadSpecalVisitFields());
+	
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listSpecalVisitFields() {
+		return  Response.ok(specalVisitFieldService.loadSpecalVisitFields()).build();
 	}
 
 	/**
 	 * View an existing Specialization entity
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField/{specalvisitfield_id}/specialization/{specialization_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Specialization loadSpecalVisitFieldSpecialization(@PathVariable Integer specalvisitfield_id, @PathVariable Integer related_specialization_id) {
-		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(related_specialization_id, -1, -1);
 
-		return specialization;
+	@GET
+	@Path("/{specalvisitfield_id}/specialization/{specialization_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSpecalVisitFieldSpecialization(@PathParam("specalvisitfield_id") Integer specalvisitfield_id,
+			@PathParam("related_specialization_id") Integer related_specialization_id) {
+		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(related_specialization_id, -1, -1);
+		return Response.ok(specialization).build();
 	}
 
 	/**
 	 * Select an existing SpecalVisitField entity
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField/{specalvisitfield_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public SpecalVisitField loadSpecalVisitField(@PathVariable Integer specalvisitfield_id) {
-		return specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield_id);
+
+	
+	@GET
+	@Path("/{specalvisitfield_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSpecalVisitField(@PathParam("specalvisitfield_id") Integer specalvisitfield_id) {
+		return Response.ok(specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield_id)).build();
 	}
 
 	/**
 	 * Save an existing Specialization entity
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField/{specalvisitfield_id}/specialization", method = RequestMethod.PUT)
-	@ResponseBody
-	public Specialization saveSpecalVisitFieldSpecialization(@PathVariable Integer specalvisitfield_id, @RequestBody Specialization specialization) {
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{specalvisitfield_id}/specialization")
+	@PUT
+	public Response saveSpecalVisitFieldSpecialization(@PathParam("specalvisitfield_id") Integer specalvisitfield_id,
+			Specialization specialization) {
 		specalVisitFieldService.saveSpecalVisitFieldSpecialization(specalvisitfield_id, specialization);
-		return specializationDAO.findSpecializationByPrimaryKey(specialization.getId());
+		return Response.ok(specializationDAO.findSpecializationByPrimaryKey(specialization.getId())).build();
 	}
+
 
 	/**
 	 * Save an existing SpecalVisitField entity
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField", method = RequestMethod.PUT)
-	@ResponseBody
-	public SpecalVisitField saveSpecalVisitField(@RequestBody SpecalVisitField specalvisitfield) {
+
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveSpecalVisitField(SpecalVisitField specalvisitfield) {
 		specalVisitFieldService.saveSpecalVisitField(specalvisitfield);
-		return specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield.getId());
+		return Response.ok(specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield.getId())).build();
 	}
 
 	/**
 	 * Delete an existing Specialization entity
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField/{specalvisitfield_id}/specialization/{specialization_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSpecalVisitFieldSpecialization(@PathVariable Integer specalvisitfield_id, @PathVariable Integer related_specialization_id) {
-		specalVisitFieldService.deleteSpecalVisitFieldSpecialization(specalvisitfield_id, related_specialization_id);
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{specalvisitfield_id}/specialization/{specialization_id}")
+	public Response deleteSpecalVisitFieldSpecialization(@PathParam("specalvisitfield_id") Integer specalvisitfield_id,
+			@PathParam("related_specialization_id") Integer related_specialization_id) {
+		return Response.ok(specalVisitFieldService.deleteSpecalVisitFieldSpecialization(specalvisitfield_id, related_specialization_id)).build();
 	}
+
 
 	/**
 	 * Delete an existing SpecalVisitField entity
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField/{specalvisitfield_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSpecalVisitField(@PathVariable Integer specalvisitfield_id) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{specalvisitfield_id}")
+	@DELETE
+	public void deleteSpecalVisitField(@PathParam("specalvisitfield_id") Integer specalvisitfield_id) {
 		SpecalVisitField specalvisitfield = specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield_id);
 		specalVisitFieldService.deleteSpecalVisitField(specalvisitfield);
 	}
@@ -154,11 +179,15 @@ public class SpecalVisitFieldRestController {
 	 * Create a new Specialization entity
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField/{specalvisitfield_id}/specialization", method = RequestMethod.POST)
-	@ResponseBody
-	public Specialization newSpecalVisitFieldSpecialization(@PathVariable Integer specalvisitfield_id, @RequestBody Specialization specialization) {
+
+	
+	@Path("/{specalvisitfield_id}/specialization")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSpecalVisitFieldSpecialization(@PathParam("specalvisitfield_id") Integer specalvisitfield_id,
+			Specialization specialization) {
 		specalVisitFieldService.saveSpecalVisitFieldSpecialization(specalvisitfield_id, specialization);
-		return specializationDAO.findSpecializationByPrimaryKey(specialization.getId());
+		return Response.ok(specializationDAO.findSpecializationByPrimaryKey(specialization.getId())).build();
 	}
 
 	
@@ -167,20 +196,27 @@ public class SpecalVisitFieldRestController {
 	 * Create a new SpecalVisitField entity
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField", method = RequestMethod.POST)
-	@ResponseBody
-	public SpecalVisitField newSpecalVisitField(@RequestBody SpecalVisitField specalvisitfield) {
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSpecalVisitField( SpecalVisitField specalvisitfield) {
 		specalVisitFieldService.saveSpecalVisitField(specalvisitfield);
-		return specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield.getId());
+		return Response.ok(specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield.getId())).build();
 	}
 
 	/**
 	 * Get Specialization entity by SpecalVisitField
 	 * 
 	 */
-	@RequestMapping(value = "/SpecalVisitField/{specalvisitfield_id}/specialization", method = RequestMethod.GET)
-	@ResponseBody
-	public Specialization getSpecalVisitFieldSpecialization(@PathVariable Integer specalvisitfield_id) {
-		return specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield_id).getSpecialization();
+
+	@GET
+	@Path("/{specalvisitfield_id}/specialization")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSpecalVisitFieldSpecialization(@PathParam("specalvisitfield_id") Integer specalvisitfield_id) {
+		return Response.ok(specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield_id).getSpecialization()).build();
 	}
+	
 }
