@@ -7,7 +7,6 @@ import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.ReceptionistDAO;
 import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.WorkerDAO;
-
 import com.eclinic.domain.Admin;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.LoginHistory;
@@ -15,32 +14,33 @@ import com.eclinic.domain.Patient;
 import com.eclinic.domain.Receptionist;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Worker;
-
 import com.eclinic.service.WorkerService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for Worker entities
  * 
  */
-
-@Controller("WorkerRestController")
+@Path("/Worker")
+@Component("WorkerRestController")
 public class WorkerRestController {
 
 	/**
@@ -99,17 +99,11 @@ public class WorkerRestController {
 	@Autowired
 	private WorkerService workerService;
 
-	/**
-	 * Save an existing LoginHistory entity
-	 * 
-	 */
-	@RequestMapping(value = "/Worker/{worker_id}/loginHistories", method = RequestMethod.PUT)
-	@ResponseBody
-	public LoginHistory saveWorkerLoginHistories(@PathVariable Integer worker_id, @RequestBody LoginHistory loginhistories) {
-		workerService.saveWorkerLoginHistories(worker_id, loginhistories);
-		return loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistories.getId());
-	}
-
+	
+	
+	public WorkerRestController(){}
+	
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -129,345 +123,474 @@ public class WorkerRestController {
 	}
 
 	/**
+	 * Save an existing LoginHistory entity
+	 * 
+	 */
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/loginHistories")
+	@PUT
+	public Response saveWorkerLoginHistories(@PathParam("worker_id") Integer worker_id,
+			LoginHistory loginhistories) {
+		workerService.saveWorkerLoginHistories(worker_id, loginhistories);
+		return Response.ok(loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistories.getId())).build();
+	}
+
+	
+	/**
 	 * Get Admin entity by Worker
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/admin", method = RequestMethod.GET)
-	@ResponseBody
-	public Admin getWorkerAdmin(@PathVariable Integer worker_id) {
-		return workerDAO.findWorkerByPrimaryKey(worker_id).getAdmin();
+
+	
+	@GET
+	@Path("/{worker_id}/admin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getWorkerAdmin(@PathParam("worker_id") Integer worker_id) {
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker_id).getAdmin()).build();
 	}
 
 	/**
 	 * Create a new Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/doctor", method = RequestMethod.POST)
-	@ResponseBody
-	public Doctor newWorkerDoctor(@PathVariable Integer worker_id, @RequestBody Doctor doctor) {
+
+
+	@Path("/{worker_id}/doctor")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newWorkerDoctor(@PathParam("worker_id") Integer worker_id,
+			Doctor doctor) {
 		workerService.saveWorkerDoctor(worker_id, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
 	/**
 	 * Save an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/patient", method = RequestMethod.PUT)
-	@ResponseBody
-	public Patient saveWorkerPatient(@PathVariable Integer worker_id, @RequestBody Patient patient) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/patient")
+	@PUT
+	public Response saveWorkerPatient(@PathParam("worker_id") Integer worker_id,
+			Patient patient) {
 		workerService.saveWorkerPatient(worker_id, patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
 
 	/**
 	 * Get Doctor entity by Worker
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/doctor", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor getWorkerDoctor(@PathVariable Integer worker_id) {
-		return workerDAO.findWorkerByPrimaryKey(worker_id).getDoctor();
+
+	
+	@GET
+	@Path("/{worker_id}/doctor")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getWorkerDoctor(@PathParam("worker_id") Integer worker_id) {
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker_id).getDoctor()).build();
 	}
+
 
 	/**
 	 * Save an existing SystemUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/systemUsers", method = RequestMethod.PUT)
-	@ResponseBody
-	public SystemUser saveWorkerSystemUsers(@PathVariable Integer worker_id, @RequestBody SystemUser systemusers) {
-		workerService.saveWorkerSystemUsers(worker_id, systemusers);
-		return systemUserDAO.findSystemUserByPrimaryKey(systemusers.getId());
-	}
 
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/systemUsers")
+	@PUT
+	public Response saveWorkerSystemUsers(@PathParam("worker_id") Integer worker_id,
+			SystemUser systemusers) {
+		workerService.saveWorkerSystemUsers(worker_id, systemusers);
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemusers.getId())).build();
+	}
 	/**
 	 * Save an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker", method = RequestMethod.PUT)
-	@ResponseBody
-	public Worker saveWorker(@RequestBody Worker worker) {
+
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response saveWorker( Worker worker) {
 		workerService.saveWorker(worker);
-		return workerDAO.findWorkerByPrimaryKey(worker.getId());
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
 	}
 
 	/**
 	 * Create a new Receptionist entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/receptionist", method = RequestMethod.POST)
-	@ResponseBody
-	public Receptionist newWorkerReceptionist(@PathVariable Integer worker_id, @RequestBody Receptionist receptionist) {
+
+	
+	@Path("/{worker_id}/receptionist")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newWorkerReceptionist(@PathParam("worker_id") Integer worker_id,
+			Receptionist receptionist) {
 		workerService.saveWorkerReceptionist(worker_id, receptionist);
-		return receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId());
+		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId())).build();
 	}
 
 	/**
 	 * Save an existing Admin entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/admin", method = RequestMethod.PUT)
-	@ResponseBody
-	public Admin saveWorkerAdmin(@PathVariable Integer worker_id, @RequestBody Admin admin) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/admin")
+	@PUT
+	public Response saveWorkerAdmin(@PathParam("worker_id") Integer worker_id,
+			Admin admin) {
 		workerService.saveWorkerAdmin(worker_id, admin);
-		return adminDAO.findAdminByPrimaryKey(admin.getId());
+		return Response.ok(adminDAO.findAdminByPrimaryKey(admin.getId())).build();
 	}
 
 	/**
 	 * Show all Worker entities
 	 * 
 	 */
-	@RequestMapping(value = "/Worker", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Worker> listWorkers() {
-		return new java.util.ArrayList<Worker>(workerService.loadWorkers());
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listWorkers() {
+		return  Response.ok(workerService.loadWorkers()).build();
 	}
 
 	/**
 	 * Create a new Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/patient", method = RequestMethod.POST)
-	@ResponseBody
-	public Patient newWorkerPatient(@PathVariable Integer worker_id, @RequestBody Patient patient) {
+
+	
+	@Path("/{worker_id}/patient")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newWorkerPatient(@PathParam("worker_id") Integer worker_id,
+			Patient patient) {
 		workerService.saveWorkerPatient(worker_id, patient);
-		return patientDAO.findPatientByPrimaryKey(patient.getId());
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
 
 	/**
 	 * Delete an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/patient/{patient_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteWorkerPatient(@PathVariable Integer worker_id, @PathVariable Integer related_patient_id) {
-		workerService.deleteWorkerPatient(worker_id, related_patient_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/patients/{patient_id}")
+	public Response deleteWorkerPatient(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_patient_id") Integer related_patient_id) {
+		return Response.ok(workerService.deleteWorkerPatient(worker_id, related_patient_id)).build();
 	}
 
 	/**
 	 * Save an existing Receptionist entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/receptionist", method = RequestMethod.PUT)
-	@ResponseBody
-	public Receptionist saveWorkerReceptionist(@PathVariable Integer worker_id, @RequestBody Receptionist receptionist) {
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/receptionist")
+	@PUT
+	public Response saveWorkerReceptionist(@PathParam("worker_id") Integer worker_id,
+			Receptionist receptionist) {
 		workerService.saveWorkerReceptionist(worker_id, receptionist);
-		return receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId());
+		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId())).build();
 	}
 
 	/**
 	 * View an existing SystemUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/systemUsers/{systemuser_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public SystemUser loadWorkerSystemUsers(@PathVariable Integer worker_id, @PathVariable Integer related_systemusers_id) {
+	
+	
+	@GET
+	@Path("/{worker_id}/systemUsers/{systemuser_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadWorkerSystemUsers(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_systemusers_id") Integer related_systemusers_id) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemusers_id, -1, -1);
 
-		return systemuser;
+		return Response.ok(systemuser).build();
 	}
 
 	/**
 	 * Get Receptionist entity by Worker
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/receptionist", method = RequestMethod.GET)
-	@ResponseBody
-	public Receptionist getWorkerReceptionist(@PathVariable Integer worker_id) {
-		return workerDAO.findWorkerByPrimaryKey(worker_id).getReceptionist();
+
+	
+	@GET
+	@Path("/{worker_id}/receptionist")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getWorkerReceptionist(@PathParam("worker_id") Integer worker_id) {
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker_id).getReceptionist()).build();
 	}
 
 	/**
 	 * Show all SystemUser entities by Worker
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/systemUsers", method = RequestMethod.GET)
-	@ResponseBody
-	public List<SystemUser> getWorkerSystemUsers(@PathVariable Integer worker_id) {
-		return new java.util.ArrayList<SystemUser>(workerDAO.findWorkerByPrimaryKey(worker_id).getSystemUsers());
+
+	@GET
+	@Path("/{worker_id}/systemUsers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getWorkerSystemUsers(@PathParam("worker_id") Integer worker_id) {
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker_id).getSystemUsers()).build();
 	}
 
 	/**
 	 * Create a new LoginHistory entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/loginHistories", method = RequestMethod.POST)
-	@ResponseBody
-	public LoginHistory newWorkerLoginHistories(@PathVariable Integer worker_id, @RequestBody LoginHistory loginhistory) {
+
+	
+	@Path("/{worker_id}/loginHistories")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newWorkerLoginHistories(@PathParam("worker_id") Integer worker_id,
+			LoginHistory loginhistory) {
 		workerService.saveWorkerLoginHistories(worker_id, loginhistory);
-		return loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory.getId());
+		return Response.ok( loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory.getId())).build();
 	}
 
 	/**
 	 * Create a new Admin entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/admin", method = RequestMethod.POST)
-	@ResponseBody
-	public Admin newWorkerAdmin(@PathVariable Integer worker_id, @RequestBody Admin admin) {
+
+	
+	@Path("/{worker_id}/admin")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newWorkerAdmin(@PathParam("worker_id") Integer worker_id,
+			Admin admin) {
 		workerService.saveWorkerAdmin(worker_id, admin);
-		return adminDAO.findAdminByPrimaryKey(admin.getId());
+		return Response.ok(adminDAO.findAdminByPrimaryKey(admin.getId())).build();
 	}
 
 	/**
 	 * View an existing Receptionist entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/receptionist/{receptionist_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Receptionist loadWorkerReceptionist(@PathVariable Integer worker_id, @PathVariable Integer related_receptionist_id) {
+
+	
+	@GET
+	@Path("/{worker_id}/receptionist/{receptionist_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadWorkerReceptionist(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_receptionist_id") Integer related_receptionist_id) {
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(related_receptionist_id, -1, -1);
 
-		return receptionist;
+		return Response.ok(receptionist).build();
 	}
 
 	/**
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/doctor/{doctor_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteWorkerDoctor(@PathVariable Integer worker_id, @PathVariable Integer related_doctor_id) {
-		workerService.deleteWorkerDoctor(worker_id, related_doctor_id);
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/doctor/{doctor_id}")
+	public Response deleteWorkerDoctor(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
+		return Response.ok(workerService.deleteWorkerDoctor(worker_id, related_doctor_id)).build();
 	}
 
 	/**
 	 * Delete an existing Admin entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/admin/{admin_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteWorkerAdmin(@PathVariable Integer worker_id, @PathVariable Integer related_admin_id) {
-		workerService.deleteWorkerAdmin(worker_id, related_admin_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/admin/{admin_id}")
+	public Response deleteWorkerAdmin(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_admin_id") Integer related_admin_id) {
+		return Response.ok(workerService.deleteWorkerAdmin(worker_id, related_admin_id)).build();
 	}
 
 	/**
 	 * Show all LoginHistory entities by Worker
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/loginHistories", method = RequestMethod.GET)
-	@ResponseBody
-	public List<LoginHistory> getWorkerLoginHistories(@PathVariable Integer worker_id) {
-		return new java.util.ArrayList<LoginHistory>(workerDAO.findWorkerByPrimaryKey(worker_id).getLoginHistories());
+	
+	@GET
+	@Path("/{worker_id}/loginHistories")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getWorkerLoginHistories(@PathParam("worker_id") Integer worker_id) {
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker_id).getLoginHistories()).build();
 	}
 
 	/**
 	 * View an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/doctor/{doctor_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor loadWorkerDoctor(@PathVariable Integer worker_id, @PathVariable Integer related_doctor_id) {
+
+	
+	@GET
+	@Path("/{worker_id}/doctor/{doctor_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadWorkerDoctor(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
-		return doctor;
+		return Response.ok(doctor).build();
 	}
 
 	/**
 	 * Save an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/doctor", method = RequestMethod.PUT)
-	@ResponseBody
-	public Doctor saveWorkerDoctor(@PathVariable Integer worker_id, @RequestBody Doctor doctor) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/doctor")
+	@PUT
+	public Response saveWorkerDoctor(@PathParam("worker_id") Integer worker_id,
+			Doctor doctor) {
 		workerService.saveWorkerDoctor(worker_id, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
 	/**
 	 * View an existing Admin entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/admin/{admin_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Admin loadWorkerAdmin(@PathVariable Integer worker_id, @PathVariable Integer related_admin_id) {
+
+	
+	@GET
+	@Path("/{worker_id}/admin/{admin_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadWorkerAdmin(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_admin_id") Integer related_admin_id) {
 		Admin admin = adminDAO.findAdminByPrimaryKey(related_admin_id, -1, -1);
 
-		return admin;
+		return Response.ok(admin).build();
 	}
 
 	/**
 	 * Select an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Worker loadWorker(@PathVariable Integer worker_id) {
-		return workerDAO.findWorkerByPrimaryKey(worker_id);
+
+	@GET
+	@Path("/{worker_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadWorker(@PathParam("worker_id") Integer worker_id) {
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker_id)).build();
 	}
 
 	/**
 	 * Delete an existing Receptionist entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/receptionist/{receptionist_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteWorkerReceptionist(@PathVariable Integer worker_id, @PathVariable Integer related_receptionist_id) {
-		workerService.deleteWorkerReceptionist(worker_id, related_receptionist_id);
-	}
 
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/receptionist/{receptionist_id}")
+	public Response deleteWorkerReceptionist(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_receptionist_id") Integer related_receptionist_id) {
+		return Response.ok(workerService.deleteWorkerReceptionist(worker_id, related_receptionist_id)).build();
+	}
 	/**
 	 * Delete an existing LoginHistory entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/loginHistories/{loginhistory_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteWorkerLoginHistories(@PathVariable Integer worker_id, @PathVariable Integer related_loginhistories_id) {
-		workerService.deleteWorkerLoginHistories(worker_id, related_loginhistories_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/loginHistories/{loginhistory_id}")
+	public Response deleteWorkerLoginHistories(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_loginhistories_id") Integer related_loginhistories_id) {
+		return Response.ok(workerService.deleteWorkerLoginHistories(worker_id, related_loginhistories_id)).build();
 	}
 
 	/**
 	 * Create a new Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker", method = RequestMethod.POST)
-	@ResponseBody
-	public Worker newWorker(@RequestBody Worker worker) {
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newWorker(Worker worker) {
 		workerService.saveWorker(worker);
-		return workerDAO.findWorkerByPrimaryKey(worker.getId());
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
 	}
 
 	/**
 	 * View an existing LoginHistory entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/loginHistories/{loginhistory_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public LoginHistory loadWorkerLoginHistories(@PathVariable Integer worker_id, @PathVariable Integer related_loginhistories_id) {
+
+	
+	@GET
+	@Path("/{worker_id}/loginHistories/{loginhistory_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadWorkerLoginHistories(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_loginhistories_id") Integer related_loginhistories_id) {
 		LoginHistory loginhistory = loginHistoryDAO.findLoginHistoryByPrimaryKey(related_loginhistories_id, -1, -1);
 
-		return loginhistory;
+		return Response.ok(loginhistory).build();
 	}
 
 	/**
 	 * Delete an existing SystemUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/systemUsers/{systemuser_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteWorkerSystemUsers(@PathVariable Integer worker_id, @PathVariable Integer related_systemusers_id) {
-		workerService.deleteWorkerSystemUsers(worker_id, related_systemusers_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}/systemUsers/{systemuser_id}")
+	public Response deleteWorkerSystemUsers(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_systemusers_id") Integer related_systemusers_id) {
+		return Response.ok(workerService.deleteWorkerSystemUsers(worker_id, related_systemusers_id)).build();
 	}
 
 	/**
 	 * Create a new SystemUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/systemUsers", method = RequestMethod.POST)
-	@ResponseBody
-	public SystemUser newWorkerSystemUsers(@PathVariable Integer worker_id, @RequestBody SystemUser systemuser) {
+
+	
+	@Path("/{worker_id}/systemUsers")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newWorkerSystemUsers(@PathParam("worker_id") Integer worker_id,
+			SystemUser systemuser) {
 		workerService.saveWorkerSystemUsers(worker_id, systemuser);
-		return systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId());
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
 	}
 
 	/**
 	 * Delete an existing Worker entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteWorker(@PathVariable Integer worker_id) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{worker_id}")
+	@DELETE
+	public void deleteWorker(@PathParam("worker_id") Integer worker_id) {
 		Worker worker = workerDAO.findWorkerByPrimaryKey(worker_id);
 		workerService.deleteWorker(worker);
 	}
@@ -476,21 +599,28 @@ public class WorkerRestController {
 	 * View an existing Patient entity
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/patient/{patient_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Patient loadWorkerPatient(@PathVariable Integer worker_id, @PathVariable Integer related_patient_id) {
+
+	
+	@GET
+	@Path("/{worker_id}/patient/{patient_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadWorkerPatient(@PathParam("worker_id") Integer worker_id,
+			@PathParam("related_patient_id") Integer related_patient_id) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(related_patient_id, -1, -1);
 
-		return patient;
+		return Response.ok(patient).build();
 	}
 
 	/**
 	 * Get Patient entity by Worker
 	 * 
 	 */
-	@RequestMapping(value = "/Worker/{worker_id}/patient", method = RequestMethod.GET)
-	@ResponseBody
-	public Patient getWorkerPatient(@PathVariable Integer worker_id) {
-		return workerDAO.findWorkerByPrimaryKey(worker_id).getPatient();
+
+	
+	@GET
+	@Path("/{worker_id}/patient")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getWorkerPatient(@PathParam("worker_id") Integer worker_id) {
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker_id).getPatient()).build();
 	}
 }
