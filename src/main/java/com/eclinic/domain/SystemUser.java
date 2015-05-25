@@ -7,6 +7,7 @@ import java.lang.StringBuilder;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ import javax.persistence.Transient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.xml.bind.annotation.*;
@@ -346,7 +348,10 @@ public class SystemUser implements UserDetails, Serializable {
 
 	@Transient
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+			authorities.add(new SimpleGrantedAuthority("user"));
+
+		return authorities;
 	}
 
 	@Transient
