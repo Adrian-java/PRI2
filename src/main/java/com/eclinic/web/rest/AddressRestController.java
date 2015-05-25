@@ -127,7 +127,7 @@ public class AddressRestController {
 	 * Save an existing Address entity
 	 * 
 	 */
-	@POST
+	@PUT
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
