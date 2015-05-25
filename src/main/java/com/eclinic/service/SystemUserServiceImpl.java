@@ -168,7 +168,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 			if (existingSystemUser != systemuser) {
 				existingSystemUser.setId(systemuser.getId());
 				existingSystemUser.setLogin(systemuser.getLogin());
-				existingSystemUser.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+				existingSystemUser.setPassword(systemuser.getPassword());
 				existingSystemUser.setDescription(systemuser.getDescription());
 				existingSystemUser.setRegisterDate(systemuser.getRegisterDate());
 				existingSystemUser.setIsActive(systemuser.getIsActive());
@@ -178,6 +178,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 			}
 			systemuser = systemUserDAO.store(existingSystemUser);
 		} else {
+			systemuser.setPassword(passwordEncoder.encode(systemuser.getPassword()));
 			systemuser = systemUserDAO.store(systemuser);
 		}
 		systemUserDAO.flush();
