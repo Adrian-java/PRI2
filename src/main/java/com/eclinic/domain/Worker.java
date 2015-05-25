@@ -1,21 +1,33 @@
 package com.eclinic.domain;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.io.Serializable;
-
-import java.lang.StringBuilder;
-
-import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.xml.bind.annotation.*;
-
-import javax.persistence.*;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  */
@@ -38,30 +50,31 @@ public class Worker implements Serializable {
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
 	Integer id;
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumns({ @JoinColumn(name = "id_patient", referencedColumnName = "id") })
 	@XmlTransient
 	Patient patient;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumns({ @JoinColumn(name = "id_admin", referencedColumnName = "Id") })
 	@XmlTransient
 	Admin admin;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumns({ @JoinColumn(name = "id_recepcionist", referencedColumnName = "Id") })
 	@XmlTransient
 	Receptionist receptionist;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumns({ @JoinColumn(name = "id_doctor", referencedColumnName = "Id") })
 	@XmlTransient
 	Doctor doctor;
@@ -96,7 +109,8 @@ public class Worker implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+	//@JsonIgnore
+	@JsonProperty("patient")
 	public Patient getPatient() {
 		return patient;
 	}

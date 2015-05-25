@@ -162,8 +162,8 @@ public class SystemUserRestController {
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response saveSystemUser(SystemUser systemuser) {
-		systemUserService.saveSystemUser(systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
+	Integer i=	systemUserService.saveSystemUser(systemuser);
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
 
 	/**
@@ -176,8 +176,8 @@ public class SystemUserRestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newSystemUser( SystemUser systemuser) {
-		systemUserService.saveSystemUser(systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
+		Integer i = systemUserService.saveSystemUser(systemuser);
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
 
 	/**

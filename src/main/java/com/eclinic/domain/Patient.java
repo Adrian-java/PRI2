@@ -1,21 +1,23 @@
 package com.eclinic.domain;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.io.Serializable;
-
 import java.lang.StringBuilder;
-
 import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.xml.bind.annotation.*;
-
 import javax.persistence.*;
 
 /**
@@ -53,6 +55,7 @@ public class Patient implements Serializable {
 	@Column(name = "id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
 	Integer id;
 	/**
@@ -117,7 +120,7 @@ public class Patient implements Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumns({ @JoinColumn(name = "id_address", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Address address;
@@ -266,7 +269,8 @@ public class Patient implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("address")
 	public Address getAddress() {
 		return address;
 	}

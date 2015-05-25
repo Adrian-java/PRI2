@@ -24,30 +24,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SystemUserServiceImpl implements SystemUserService {
 
-	/**
-	 * DAO injected by Spring that manages Permission entities
-	 * 
-	 */
 	@Autowired
 	private PermissionDAO permissionDAO;
 
-	/**
-	 * DAO injected by Spring that manages SystemUser entities
-	 * 
-	 */
 	@Autowired
 	private SystemUserDAO systemUserDAO;
 
-	/**
-	 * DAO injected by Spring that manages Worker entities
-	 * 
-	 */
 	@Autowired
 	private WorkerDAO workerDAO;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
 
 	/**
 	 * Instantiates a new SystemUserServiceImpl.
@@ -174,9 +162,8 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public void saveSystemUser(SystemUser systemuser) {
+	public Integer saveSystemUser(SystemUser systemuser) {
 		SystemUser existingSystemUser = systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId());
-
 		if (existingSystemUser != null) {
 			if (existingSystemUser != systemuser) {
 				existingSystemUser.setId(systemuser.getId());
@@ -194,6 +181,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 			systemuser = systemUserDAO.store(systemuser);
 		}
 		systemUserDAO.flush();
+		return systemuser.getId();
 	}
 
 	/**

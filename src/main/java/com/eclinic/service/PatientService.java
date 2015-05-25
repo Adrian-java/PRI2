@@ -60,7 +60,7 @@ public interface PatientService {
 	 * Save an existing Patient entity
 	 * 
 	 */
-	public void savePatient(Patient patient_1);
+	public Integer savePatient(Patient patient_1);
 
 	/**
 	 * Save an existing SickLeave entity

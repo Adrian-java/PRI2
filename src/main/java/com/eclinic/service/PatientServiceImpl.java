@@ -73,6 +73,7 @@ public class PatientServiceImpl implements PatientService {
 	 */
 	@Autowired
 	private WorkerDAO workerDAO;
+	
 
 	/**
 	 * Instantiates a new PatientServiceImpl.
@@ -202,7 +203,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public void savePatient(Patient patient) {
+	public Integer savePatient(Patient patient) {
 		Patient existingPatient = patientDAO.findPatientByPrimaryKey(patient.getId());
 
 		if (existingPatient != null) {
@@ -221,6 +222,7 @@ public class PatientServiceImpl implements PatientService {
 			patient = patientDAO.store(patient);
 		}
 		patientDAO.flush();
+		return patient.getId();
 	}
 
 	/**

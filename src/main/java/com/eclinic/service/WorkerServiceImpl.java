@@ -82,7 +82,7 @@ public class WorkerServiceImpl implements WorkerService {
 	 */
 	@Autowired
 	private WorkerDAO workerDAO;
-
+	
 	/**
 	 * Instantiates a new WorkerServiceImpl.
 	 *

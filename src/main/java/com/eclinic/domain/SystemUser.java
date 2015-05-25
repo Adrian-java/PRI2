@@ -1,5 +1,7 @@
 package com.eclinic.domain;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.io.Serializable;
 import java.lang.StringBuilder;
 import java.util.Calendar;
@@ -9,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -17,6 +20,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -58,6 +62,7 @@ public class SystemUser implements UserDetails, Serializable {
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
 	Integer id;
 	/**
@@ -120,7 +125,7 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumns({ @JoinColumn(name = "id_worker", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Worker worker;
@@ -246,7 +251,8 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+	//@JsonIgnore
+	@JsonProperty("worker")
 	public Worker getWorker() {
 		return worker;
 	}

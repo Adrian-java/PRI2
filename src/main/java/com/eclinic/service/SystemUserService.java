@@ -51,7 +51,7 @@ public interface SystemUserService {
 	 * Save an existing SystemUser entity
 	 * 
 	 */
-	public void saveSystemUser(SystemUser systemuser);
+	public Integer saveSystemUser(SystemUser systemuser);
 
 	/**
 	 * Delete an existing SystemUser entity
