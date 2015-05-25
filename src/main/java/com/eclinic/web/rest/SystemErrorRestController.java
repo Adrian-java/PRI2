@@ -3,32 +3,34 @@ package com.eclinic.web.rest;
 import com.eclinic.dao.SystemErrorDAO;
 
 import com.eclinic.domain.SystemError;
-
 import com.eclinic.service.SystemErrorService;
 
-import java.util.List;
+
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for SystemError entities
  * 
  */
-
-@Controller("SystemErrorRestController")
+@Path("/SystemError")
+@Component("SystemErrorRestController")
 public class SystemErrorRestController {
 
 	/**
@@ -44,60 +46,11 @@ public class SystemErrorRestController {
 	 */
 	@Autowired
 	private SystemErrorService systemErrorService;
-
-	/**
-	 * Save an existing SystemError entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemError", method = RequestMethod.PUT)
-	@ResponseBody
-	public SystemError saveSystemError(@RequestBody SystemError systemerror) {
-		systemErrorService.saveSystemError(systemerror);
-		return systemErrorDAO.findSystemErrorByPrimaryKey(systemerror.getId());
-	}
-
-	/**
-	 * Delete an existing SystemError entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemError/{systemerror_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSystemError(@PathVariable Integer systemerror_id) {
-		SystemError systemerror = systemErrorDAO.findSystemErrorByPrimaryKey(systemerror_id);
-		systemErrorService.deleteSystemError(systemerror);
-	}
-
-	/**
-	 * Show all SystemError entities
-	 * 
-	 */
-	@RequestMapping(value = "/SystemError", method = RequestMethod.GET)
-	@ResponseBody
-	public List<SystemError> listSystemErrors() {
-		return new java.util.ArrayList<SystemError>(systemErrorService.loadSystemErrors());
-	}
-
-	/**
-	 * Create a new SystemError entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemError", method = RequestMethod.POST)
-	@ResponseBody
-	public SystemError newSystemError(@RequestBody SystemError systemerror) {
-		systemErrorService.saveSystemError(systemerror);
-		return systemErrorDAO.findSystemErrorByPrimaryKey(systemerror.getId());
-	}
-
-	/**
-	 * Select an existing SystemError entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemError/{systemerror_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public SystemError loadSystemError(@PathVariable Integer systemerror_id) {
-		return systemErrorDAO.findSystemErrorByPrimaryKey(systemerror_id);
-	}
-
+	
+	public SystemErrorRestController(){}
+	
+	
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -115,4 +68,74 @@ public class SystemErrorRestController {
 		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
+	
+	/**
+	 * Save an existing SystemError entity
+	 * 
+	 */
+
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveSystemError(SystemError systemerror) {
+		systemErrorService.saveSystemError(systemerror);
+		return Response.ok(systemErrorDAO.findSystemErrorByPrimaryKey(systemerror.getId())).build();
+	}
+
+	/**
+	 * Delete an existing SystemError entity
+	 * 
+	 */
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{systemerror_id}")
+	@DELETE
+	public void deleteSystemError(@PathParam("systemerror_id") Integer systemerror_id) {
+		SystemError systemerror = systemErrorDAO.findSystemErrorByPrimaryKey(systemerror_id);
+		systemErrorService.deleteSystemError(systemerror);
+	}
+
+	/**
+	 * Show all SystemError entities
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listSystemErrors() {
+		return  Response.ok(systemErrorService.loadSystemErrors()).build();
+	}
+
+	/**
+	 * Create a new SystemError entity
+	 * 
+	 */
+
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSystemError( SystemError systemerror) {
+		systemErrorService.saveSystemError(systemerror);
+		return Response.ok(systemErrorDAO.findSystemErrorByPrimaryKey(systemerror.getId())).build();
+	}
+
+	/**
+	 * Select an existing SystemError entity
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{systemerror_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSystemError(@PathParam("systemerror_id") Integer systemerror_id) {
+		return Response.ok(systemErrorDAO.findSystemErrorByPrimaryKey(systemerror_id)).build();
+	}
+
+	
 }

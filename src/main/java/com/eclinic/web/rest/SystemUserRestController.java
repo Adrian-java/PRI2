@@ -7,32 +7,33 @@ import com.eclinic.dao.WorkerDAO;
 import com.eclinic.domain.Permission;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Worker;
-
 import com.eclinic.service.SystemUserService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for SystemUser entities
  * 
  */
-
-@Controller("SystemUserRestController")
+@Path("/SystemUser")
+@Component("SystemUserRestController")
 public class SystemUserRestController {
 
 	/**
@@ -63,171 +64,10 @@ public class SystemUserRestController {
 	@Autowired
 	private SystemUserService systemUserService;
 
-	/**
-	 * View an existing Permission entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/permissions/{permission_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Permission loadSystemUserPermissions(@PathVariable Integer systemuser_id, @PathVariable Integer related_permissions_id) {
-		Permission permission = permissionDAO.findPermissionByPrimaryKey(related_permissions_id, -1, -1);
-
-		return permission;
-	}
-
-	/**
-	 * Delete an existing Permission entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/permissions/{permission_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSystemUserPermissions(@PathVariable Integer systemuser_id, @PathVariable Integer related_permissions_id) {
-		systemUserService.deleteSystemUserPermissions(systemuser_id, related_permissions_id);
-	}
-
-	/**
-	 * Create a new Permission entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/permissions", method = RequestMethod.POST)
-	@ResponseBody
-	public Permission newSystemUserPermissions(@PathVariable Integer systemuser_id, @RequestBody Permission permission) {
-		systemUserService.saveSystemUserPermissions(systemuser_id, permission);
-		return permissionDAO.findPermissionByPrimaryKey(permission.getId());
-	}
-
-	/**
-	 * View an existing Worker entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/worker/{worker_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Worker loadSystemUserWorker(@PathVariable Integer systemuser_id, @PathVariable Integer related_worker_id) {
-		Worker worker = workerDAO.findWorkerByPrimaryKey(related_worker_id, -1, -1);
-
-		return worker;
-	}
-
-	/**
-	 * Select an existing SystemUser entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public SystemUser loadSystemUser(@PathVariable Integer systemuser_id) {
-		return systemUserDAO.findSystemUserByPrimaryKey(systemuser_id);
-	}
-
-	/**
-	 * Save an existing SystemUser entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser", method = RequestMethod.PUT)
-	@ResponseBody
-	public SystemUser saveSystemUser(@RequestBody SystemUser systemuser) {
-		systemUserService.saveSystemUser(systemuser);
-		return systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId());
-	}
-
-	/**
-	 * Create a new SystemUser entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser", method = RequestMethod.POST)
-	@ResponseBody
-	public SystemUser newSystemUser(@RequestBody SystemUser systemuser) {
-		systemUserService.saveSystemUser(systemuser);
-		return systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId());
-	}
-
-	/**
-	 * Delete an existing SystemUser entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSystemUser(@PathVariable Integer systemuser_id) {
-		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(systemuser_id);
-		systemUserService.deleteSystemUser(systemuser);
-	}
-
-	/**
-	 * Get Worker entity by SystemUser
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/worker", method = RequestMethod.GET)
-	@ResponseBody
-	public Worker getSystemUserWorker(@PathVariable Integer systemuser_id) {
-		return systemUserDAO.findSystemUserByPrimaryKey(systemuser_id).getWorker();
-	}
-
-	/**
-	 * Save an existing Worker entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/worker", method = RequestMethod.PUT)
-	@ResponseBody
-	public Worker saveSystemUserWorker(@PathVariable Integer systemuser_id, @RequestBody Worker worker) {
-		systemUserService.saveSystemUserWorker(systemuser_id, worker);
-		return workerDAO.findWorkerByPrimaryKey(worker.getId());
-	}
-
-	/**
-	 * Show all SystemUser entities
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser", method = RequestMethod.GET)
-	@ResponseBody
-	public List<SystemUser> listSystemUsers() {
-		return new java.util.ArrayList<SystemUser>(systemUserService.loadSystemUsers());
-	}
-
-	/**
-	 * Delete an existing Worker entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/worker/{worker_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteSystemUserWorker(@PathVariable Integer systemuser_id, @PathVariable Integer related_worker_id) {
-		systemUserService.deleteSystemUserWorker(systemuser_id, related_worker_id);
-	}
-
-	/**
-	 * Save an existing Permission entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/permissions", method = RequestMethod.PUT)
-	@ResponseBody
-	public Permission saveSystemUserPermissions(@PathVariable Integer systemuser_id, @RequestBody Permission permissions) {
-		systemUserService.saveSystemUserPermissions(systemuser_id, permissions);
-		return permissionDAO.findPermissionByPrimaryKey(permissions.getId());
-	}
-
-	/**
-	 * Show all Permission entities by SystemUser
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/permissions", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Permission> getSystemUserPermissions(@PathVariable Integer systemuser_id) {
-		return new java.util.ArrayList<Permission>(systemUserDAO.findSystemUserByPrimaryKey(systemuser_id).getPermissions());
-	}
-
-	/**
-	 * Create a new Worker entity
-	 * 
-	 */
-	@RequestMapping(value = "/SystemUser/{systemuser_id}/worker", method = RequestMethod.POST)
-	@ResponseBody
-	public Worker newSystemUserWorker(@PathVariable Integer systemuser_id, @RequestBody Worker worker) {
-		systemUserService.saveSystemUserWorker(systemuser_id, worker);
-		return workerDAO.findWorkerByPrimaryKey(worker.getId());
-	}
-
-	/**
-	 * Register custom, context-specific property editors
-	 * 
-	 */
+	
+	public SystemUserRestController(){}
+	
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register static property editors.
 		binder.registerCustomEditor(java.util.Calendar.class, new org.skyway.spring.util.databinding.CustomCalendarEditor());
@@ -241,4 +81,219 @@ public class SystemUserRestController {
 		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
+	
+	/**
+	 * View an existing Permission entity
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{systemuser_id}/permissions/{permission_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSystemUserPermissions(@PathParam("systemuser_id") Integer systemuser_id,
+			@PathParam("related_permissions_id") Integer related_permissions_id) {
+		Permission permission = permissionDAO.findPermissionByPrimaryKey(related_permissions_id, -1, -1);
+		return Response.ok(permission).build();
+	}
+
+	/**
+	 * Delete an existing Permission entity
+	 * 
+	 */
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{systemuser_id}/permissions/{permission_id}")
+	public Response deleteSystemUserPermissions(@PathParam("systemuser_id") Integer systemuser_id,
+			@PathParam("related_permissions_id") Integer related_permissions_id) {
+		return Response.ok(systemUserService.deleteSystemUserPermissions(systemuser_id, related_permissions_id)).build();
+	}
+
+	/**
+	 * Create a new Permission entity
+	 * 
+	 */
+
+	@Path("/{systemuser_id}/permissions")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSystemUserPermissions(@PathParam("systemuser_id") Integer systemuser_id,
+			Permission permission) {
+		systemUserService.saveSystemUserPermissions(systemuser_id, permission);
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission.getId())).build();
+	}
+
+	/**
+	 * View an existing Worker entity
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{systemuser_id}/worker/{worker_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSystemUserWorker(@PathParam("systemuser_id") Integer systemuser_id,
+			@PathParam("related_worker_id") Integer related_worker_id) {
+		Worker worker = workerDAO.findWorkerByPrimaryKey(related_worker_id, -1, -1);
+		return Response.ok(worker).build();
+	}
+
+	/**
+	 * Select an existing SystemUser entity
+	 * 
+	 */
+
+	@GET
+	@Path("/{systemuser_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSystemUser(@PathParam("systemuser_id") Integer systemuser_id) {
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser_id)).build();
+	}
+
+	/**
+	 * Save an existing SystemUser entity
+	 * 
+	 */
+
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveSystemUser(SystemUser systemuser) {
+		systemUserService.saveSystemUser(systemuser);
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
+	}
+
+	/**
+	 * Create a new SystemUser entity
+	 * 
+	 */
+
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSystemUser( SystemUser systemuser) {
+		systemUserService.saveSystemUser(systemuser);
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
+	}
+
+	/**
+	 * Delete an existing SystemUser entity
+	 * 
+	 */
+
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{systemuser_id}")
+	@DELETE
+	public void deleteSystemUser(@PathParam("systemuser_id") Integer systemuser_id) {
+		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(systemuser_id);
+		systemUserService.deleteSystemUser(systemuser);
+	}
+
+	/**
+	 * Get Worker entity by SystemUser
+	 * 
+	 */
+
+
+	@GET
+	@Path("/{systemuser_id}/worker")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSystemUserWorker(@PathParam("systemuser_id") Integer systemuser_id) {
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser_id).getWorker()).build();
+	}
+
+	/**
+	 * Save an existing Worker entity
+	 * 
+	 */
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{systemuser_id}/worker")
+	@PUT
+	public Response saveSystemUserWorker(@PathParam("systemuser_id") Integer systemuser_id,
+			Worker worker) {
+		systemUserService.saveSystemUserWorker(systemuser_id, worker);
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
+	}
+
+	/**
+	 * Show all SystemUser entities
+	 * 
+	 */
+
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listSystemUsers() {
+		return  Response.ok(systemUserService.loadSystemUsers()).build();
+	}
+
+	/**
+	 * Delete an existing Worker entity
+	 * 
+	 */
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{systemuser_id}/worker/{worker_id}")
+	public Response deleteSystemUserWorker(@PathParam("systemuser_id") Integer systemuser_id,
+			@PathParam("related_worker_id") Integer related_worker_id) {
+		return Response.ok(systemUserService.deleteSystemUserWorker(systemuser_id, related_worker_id)).build();
+	}
+
+	/**
+	 * Save an existing Permission entity
+	 * 
+	 */
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{systemuser_id}/permissions")
+	@PUT
+	public Response saveSystemUserPermissions(@PathParam("systemuser_id") Integer systemuser_id,
+			Permission permissions) {
+		systemUserService.saveSystemUserPermissions(systemuser_id, permissions);
+		return Response.ok( permissionDAO.findPermissionByPrimaryKey(permissions.getId())).build();
+	}
+
+	/**
+	 * Show all Permission entities by SystemUser
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{systemuser_id}/permissions")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSystemUserPermissions(@PathParam("systemuser_id") Integer systemuser_id) {
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser_id).getPermissions()).build();
+	}
+
+	/**
+	 * Create a new Worker entity
+	 * 
+	 */
+
+	
+	@Path("/{systemuser_id}/worker")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSystemUserWorker(@PathParam("systemuser_id") Integer systemuser_id,
+			Worker worker) {
+		systemUserService.saveSystemUserWorker(systemuser_id, worker);
+		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
+	}
+
+	/**
+	 * Register custom, context-specific property editors
+	 * 
+	 */
+	
 }
