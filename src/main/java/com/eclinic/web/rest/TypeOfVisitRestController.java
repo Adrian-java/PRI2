@@ -1,81 +1,64 @@
 package com.eclinic.web.rest;
 
-import com.eclinic.dao.TypeOfVisitDAO;
-import com.eclinic.dao.VisitDAO;
+import com.eclinic.dao.PermissionDAO;
+import com.eclinic.dao.TypeOfUserDAO;
 
-import com.eclinic.domain.TypeOfVisit;
-import com.eclinic.domain.Visit;
+import com.eclinic.domain.Permission;
+import com.eclinic.domain.TypeOfUser;
+import com.eclinic.service.TypeOfUserService;
 
-import com.eclinic.service.TypeOfVisitService;
-
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
- * Spring Rest controller that handles CRUD requests for TypeOfVisit entities
+ * Spring Rest controller that handles CRUD requests for TypeOfUser entities
  * 
  */
-
-@Controller("TypeOfVisitRestController")
-public class TypeOfVisitRestController {
+@Path("/TypeOfUser")
+@Component("TypeOfUserRestController")
+public class TypeOfUserRestController {
 
 	/**
-	 * DAO injected by Spring that manages TypeOfVisit entities
+	 * DAO injected by Spring that manages Permission entities
 	 * 
 	 */
 	@Autowired
-	private TypeOfVisitDAO typeOfVisitDAO;
+	private PermissionDAO permissionDAO;
 
 	/**
-	 * DAO injected by Spring that manages Visit entities
+	 * DAO injected by Spring that manages TypeOfUser entities
 	 * 
 	 */
 	@Autowired
-	private VisitDAO visitDAO;
+	private TypeOfUserDAO typeOfUserDAO;
 
 	/**
-	 * Service injected by Spring that provides CRUD operations for TypeOfVisit entities
+	 * Service injected by Spring that provides CRUD operations for TypeOfUser entities
 	 * 
 	 */
 	@Autowired
-	private TypeOfVisitService typeOfVisitService;
+	private TypeOfUserService typeOfUserService;
 
-	/**
-	 * View an existing Visit entity
-	 * 
-	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits/{visit_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Visit loadTypeOfVisitVisits(@PathVariable Integer typeofvisit_id, @PathVariable Integer related_visits_id) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
-
-		return visit;
-	}
-
-	/**
-	 * Delete an existing Visit entity
-	 * 
-	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits/{visit_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteTypeOfVisitVisits(@PathVariable Integer typeofvisit_id, @PathVariable Integer related_visits_id) {
-		typeOfVisitService.deleteTypeOfVisitVisits(typeofvisit_id, related_visits_id);
-	}
-
+	
+	
+	public TypeOfUserRestController(){}
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -93,89 +76,147 @@ public class TypeOfVisitRestController {
 		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
-
+	
 	/**
-	 * Delete an existing TypeOfVisit entity
+	 * Delete an existing TypeOfUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteTypeOfVisit(@PathVariable Integer typeofvisit_id) {
-		TypeOfVisit typeofvisit = typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id);
-		typeOfVisitService.deleteTypeOfVisit(typeofvisit);
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{typeofuser_id}")
+	@DELETE
+	public void deleteTypeOfUser(@PathParam("typeofuser_id") Integer typeofuser_id) {
+		TypeOfUser typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser_id);
+		typeOfUserService.deleteTypeOfUser(typeofuser);
 	}
 
 	/**
-	 * Save an existing TypeOfVisit entity
+	 * Select an existing TypeOfUser entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit", method = RequestMethod.PUT)
-	@ResponseBody
-	public TypeOfVisit saveTypeOfVisit(@RequestBody TypeOfVisit typeofvisit) {
-		typeOfVisitService.saveTypeOfVisit(typeofvisit);
-		return typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit.getId());
+
+	
+	@GET
+	@Path("/{typeofuser_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadTypeOfUser(@PathParam("typeofuser_id") Integer typeofuser_id) {
+		return Response.ok(typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser_id)).build();
+	}
+
+	
+
+	/**
+	 * Create a new TypeOfUser entity
+	 * 
+	 */
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newTypeOfUser( TypeOfUser typeofuser) {
+		typeOfUserService.saveTypeOfUser(typeofuser);
+		return Response.ok(typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser.getId())).build();
 	}
 
 	/**
-	 * Create a new TypeOfVisit entity
+	 * Delete an existing Permission entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit", method = RequestMethod.POST)
-	@ResponseBody
-	public TypeOfVisit newTypeOfVisit(@RequestBody TypeOfVisit typeofvisit) {
-		typeOfVisitService.saveTypeOfVisit(typeofvisit);
-		return typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit.getId());
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{typeofuser_id}/permission/{permission_id}")
+	public Response deleteTypeOfUserPermission(@PathParam("typeofuser_id") Integer typeofuser_id,
+			@PathParam("related_permission_id") Integer related_permission_id) {
+		return Response.ok(typeOfUserService.deleteTypeOfUserPermission(typeofuser_id, related_permission_id)).build();
 	}
 
 	/**
-	 * Show all Visit entities by TypeOfVisit
+	 * Create a new Permission entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Visit> getTypeOfVisitVisits(@PathVariable Integer typeofvisit_id) {
-		return new java.util.ArrayList<Visit>(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id).getVisits());
+
+	
+	@Path("/{typeofuser_id}/permission")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newTypeOfUserPermission(@PathParam("typeofuser_id") Integer typeofuser_id,
+			Permission permission) {
+		typeOfUserService.saveTypeOfUserPermission(typeofuser_id, permission);
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission.getId())).build();
 	}
 
 	/**
-	 * Show all TypeOfVisit entities
+	 * Save an existing Permission entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit", method = RequestMethod.GET)
-	@ResponseBody
-	public List<TypeOfVisit> listTypeOfVisits() {
-		return new java.util.ArrayList<TypeOfVisit>(typeOfVisitService.loadTypeOfVisits());
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{typeofuser_id}/permission")
+	@PUT
+	public Response saveTypeOfUserPermission(@PathParam("typeofuser_id") Integer typeofuser_id,
+			Permission permission) {
+		typeOfUserService.saveTypeOfUserPermission(typeofuser_id, permission);
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission.getId())).build();
 	}
 
 	/**
-	 * Create a new Visit entity
+	 * Show all TypeOfUser entities
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits", method = RequestMethod.POST)
-	@ResponseBody
-	public Visit newTypeOfVisitVisits(@PathVariable Integer typeofvisit_id, @RequestBody Visit visit) {
-		typeOfVisitService.saveTypeOfVisitVisits(typeofvisit_id, visit);
-		return visitDAO.findVisitByPrimaryKey(visit.getId());
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listTypeOfUsers() {
+		return  Response.ok(typeOfUserService.loadTypeOfUsers()).build();
 	}
 
 	/**
-	 * Select an existing TypeOfVisit entity
+	 * View an existing Permission entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public TypeOfVisit loadTypeOfVisit(@PathVariable Integer typeofvisit_id) {
-		return typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id);
+
+	
+	@GET
+	@Path("/{typeofuser_id}/permission/{permission_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadTypeOfUserPermission(@PathParam("typeofuser_id") Integer typeofuser_id,
+			@PathParam("related_permission_id") Integer related_permission_id) {
+		Permission permission = permissionDAO.findPermissionByPrimaryKey(related_permission_id, -1, -1);
+
+		return Response.ok(permission).build();
 	}
 
 	/**
-	 * Save an existing Visit entity
+	 * Get Permission entity by TypeOfUser
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits", method = RequestMethod.PUT)
-	@ResponseBody
-	public Visit saveTypeOfVisitVisits(@PathVariable Integer typeofvisit_id, @RequestBody Visit visits) {
-		typeOfVisitService.saveTypeOfVisitVisits(typeofvisit_id, visits);
-		return visitDAO.findVisitByPrimaryKey(visits.getId());
+
+	@GET
+	@Path("/{typeofuser_id}/permission")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTypeOfUserPermission(@PathParam("typeofuser_id") Integer typeofuser_id) {
+		return Response.ok(typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser_id).getPermission()).build();
+	}
+
+	/**
+	 * Save an existing TypeOfUser entity
+	 * 
+	 */
+
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response saveTypeOfUser(TypeOfUser typeofuser) {
+		typeOfUserService.saveTypeOfUser(typeofuser);
+		return Response.ok(typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser.getId())).build();
 	}
 }
