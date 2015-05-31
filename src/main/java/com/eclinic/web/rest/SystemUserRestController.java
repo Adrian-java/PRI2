@@ -3,11 +3,12 @@ package com.eclinic.web.rest;
 import com.eclinic.dao.PermissionDAO;
 import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.WorkerDAO;
-
 import com.eclinic.domain.Permission;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Worker;
 import com.eclinic.service.SystemUserService;
+
+
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -114,6 +117,7 @@ public class SystemUserRestController {
 	/**
 	 * Create a new Permission entity
 	 * 
+	 * 
 	 */
 
 	@Path("/{systemuser_id}/permissions")
@@ -172,10 +176,61 @@ public class SystemUserRestController {
 	 */
 
 	@POST
-	@Path("/new")
+	@Path("/newPatient")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newSystemUser( SystemUser systemuser) {
+	public Response newSystemUserPatient( SystemUser systemuser) {
+		if(systemuser.getWorker()!=null){
+			Worker w = systemuser.getWorker();
+			if(w.getDoctor()!=null || w.getAdmin()!=null || w.getReceptionist()!=null){
+				return null;
+			}
+		}
+		Integer i = systemUserService.saveSystemUser(systemuser);
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+	}
+	
+	@POST
+	@Path("/newDoctor")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSystemUserDoctor( SystemUser systemuser) {
+		if(systemuser.getWorker()!=null){
+			Worker w = systemuser.getWorker();
+			if(w.getPatient()!=null || w.getAdmin()!=null || w.getReceptionist()!=null){
+				return null;
+			}
+		}
+		Integer i = systemUserService.saveSystemUser(systemuser);
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+	}
+	
+	@POST
+	@Path("/newReceptionist")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSystemUserReceptionist( SystemUser systemuser) {
+		if(systemuser.getWorker()!=null){
+			Worker w = systemuser.getWorker();
+			if(w.getDoctor()!=null || w.getAdmin()!=null || w.getPatient()!=null){
+				return null;
+			}
+		}
+		Integer i = systemUserService.saveSystemUser(systemuser);
+		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+	}
+	
+	@POST
+	@Path("/newAdmin")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newSystemUserAdmin( SystemUser systemuser) {
+		if(systemuser.getWorker()!=null){
+			Worker w = systemuser.getWorker();
+			if(w.getDoctor()!=null || w.getPatient()!=null || w.getReceptionist()!=null){
+				return null;
+			}
+		}
 		Integer i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}

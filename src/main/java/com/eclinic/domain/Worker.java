@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  */
@@ -103,6 +105,7 @@ public class Worker implements Serializable {
 
 	/**
 	 */
+	@PreAuthorize("hasRole('admin')")
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
@@ -136,7 +139,8 @@ public class Worker implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("receptionist")
 	public Receptionist getReceptionist() {
 		return receptionist;
 	}
@@ -149,7 +153,8 @@ public class Worker implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("doctor")
 	public Doctor getDoctor() {
 		return doctor;
 	}

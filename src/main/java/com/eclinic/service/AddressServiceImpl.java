@@ -2,7 +2,6 @@ package com.eclinic.service;
 
 import com.eclinic.dao.AddressDAO;
 import com.eclinic.dao.PatientDAO;
-
 import com.eclinic.domain.Address;
 import com.eclinic.domain.Patient;
 
@@ -10,9 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -50,6 +48,7 @@ public class AddressServiceImpl implements AddressService {
 	 * 
 	 */
 	@Transactional
+	@PreAuthorize("hasRole('admin')")
 	public Integer saveAddress(Address address) {
 		Address existingAddress = addressDAO.findAddressByPrimaryKey(address.getId());
 

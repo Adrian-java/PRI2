@@ -75,7 +75,7 @@ public class Receptionist implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	byte[] access;
+	String access;
 
 	/**
 	 */
@@ -138,13 +138,13 @@ public class Receptionist implements Serializable {
 
 	/**
 	 */
-	public void setAccess(byte[] access) {
+	public void setAccess(String access) {
 		this.access = access;
 	}
 
 	/**
 	 */
-	public byte[] getAccess() {
+	public String getAccess() {
 		return this.access;
 	}
 

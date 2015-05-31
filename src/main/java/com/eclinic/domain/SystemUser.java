@@ -3,31 +3,41 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
 
 /**
  */
@@ -117,6 +127,11 @@ public class SystemUser implements UserDetails, Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String email;
+	
+	@Column(name = "role", length = 20, nullable = false)
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	String role;
 	/**
 	 */
 	@Temporal(TemporalType.DATE)
@@ -349,7 +364,7 @@ public class SystemUser implements UserDetails, Serializable {
 	@Transient
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-			authorities.add(new SimpleGrantedAuthority("user"));
+			authorities.add(new SimpleGrantedAuthority(role));
 
 		return authorities;
 	}
@@ -376,7 +391,16 @@ public class SystemUser implements UserDetails, Serializable {
 
 	@Transient
 	public boolean isEnabled() {
-		return true;
+		return isActive;
+//		return true;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }
