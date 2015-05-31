@@ -126,7 +126,8 @@ public class Worker implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("admin")
 	public Admin getAdmin() {
 		return admin;
 	}
