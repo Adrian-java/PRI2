@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -80,6 +79,8 @@ public interface SystemUserDAO extends JpaDao<SystemUser> {
 	 *
 	 */
 	public SystemUser findSystemUserById(Integer id_1) throws DataAccessException;
+	
+	public SystemUser findSystemUserByPesel(String pesel) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findSystemUserById
@@ -171,29 +172,7 @@ public interface SystemUserDAO extends JpaDao<SystemUser> {
 	 */
 	public Set<SystemUser> findSystemUserByEmail(String email_1, int startResult, int maxRows) throws DataAccessException;
 
-	/**
-	 * JPQL Query - findSystemUserByLoginContaining
-	 *
-	 */
-	public Set<SystemUser> findSystemUserByLoginContaining(String login) throws DataAccessException;
 
-	/**
-	 * JPQL Query - findSystemUserByLoginContaining
-	 *
-	 */
-	public Set<SystemUser> findSystemUserByLoginContaining(String login, int startResult, int maxRows) throws DataAccessException;
-
-	/**
-	 * JPQL Query - findSystemUserByLogin
-	 *
-	 */
-	public Set<SystemUser> findSystemUserByLogin(String login_1) throws DataAccessException;
-
-	/**
-	 * JPQL Query - findSystemUserByLogin
-	 *
-	 */
-	public Set<SystemUser> findSystemUserByLogin(String login_1, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findSystemUserByUnregisterDateBefore

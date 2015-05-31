@@ -124,18 +124,6 @@ public interface PatientDAO extends JpaDao<Patient> {
 	public Set<Patient> findPatientByNameContaining(String name, int startResult, int maxRows) throws DataAccessException;
 
 	/**
-	 * JPQL Query - findPatientByPeselContaining
-	 *
-	 */
-	public Set<Patient> findPatientByPeselContaining(String pesel) throws DataAccessException;
-
-	/**
-	 * JPQL Query - findPatientByPeselContaining
-	 *
-	 */
-	public Set<Patient> findPatientByPeselContaining(String pesel, int startResult, int maxRows) throws DataAccessException;
-
-	/**
 	 * JPQL Query - findPatientByEMail
 	 *
 	 */
@@ -171,17 +159,6 @@ public interface PatientDAO extends JpaDao<Patient> {
 	 */
 	public Set<Patient> findPatientByDateOfBirth(Calendar dateOfBirth_2, int startResult, int maxRows) throws DataAccessException;
 
-	/**
-	 * JPQL Query - findPatientByPesel
-	 *
-	 */
-	public Set<Patient> findPatientByPesel(String pesel_1) throws DataAccessException;
-
-	/**
-	 * JPQL Query - findPatientByPesel
-	 *
-	 */
-	public Set<Patient> findPatientByPesel(String pesel_1, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findPatientByPrimaryKey

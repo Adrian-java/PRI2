@@ -1,5 +1,8 @@
 package com.eclinic.web.rest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.eclinic.dao.PermissionDAO;
 import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.WorkerDAO;
@@ -7,6 +10,8 @@ import com.eclinic.domain.Permission;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Worker;
 import com.eclinic.service.SystemUserService;
+
+
 
 
 
@@ -186,6 +191,12 @@ public class SystemUserRestController {
 				return null;
 			}
 		}
+		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
+		if(s!=null){
+			Map<String,String> map = new HashMap<String,String>();
+			map.put("status", "Podany pesel/login istnieje");
+			return Response.ok(map).build();
+		}
 		Integer i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
@@ -200,6 +211,12 @@ public class SystemUserRestController {
 			if(w.getPatient()!=null || w.getAdmin()!=null || w.getReceptionist()!=null){
 				return null;
 			}
+		}
+		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
+		if(s!=null){
+			Map<String,String> map = new HashMap<String,String>();
+			map.put("status", "Podany pesel/login istnieje");
+			return Response.ok(map).build();
 		}
 		Integer i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
@@ -216,6 +233,12 @@ public class SystemUserRestController {
 				return null;
 			}
 		}
+		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
+		if(s!=null){
+			Map<String,String> map = new HashMap<String,String>();
+			map.put("status", "Podany pesel/login istnieje");
+			return Response.ok(map).build();
+		}
 		Integer i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
@@ -230,6 +253,12 @@ public class SystemUserRestController {
 			if(w.getDoctor()!=null || w.getPatient()!=null || w.getReceptionist()!=null){
 				return null;
 			}
+		}
+		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
+		if(s!=null){
+			Map<String,String> map = new HashMap<String,String>();
+			map.put("status", "Podany pesel/login istnieje");
+			return Response.ok(map).build();
 		}
 		Integer i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();

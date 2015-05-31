@@ -18,8 +18,7 @@ public class UserService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 
-		SystemUser su = systemUserDao.findSystemUserByLogin(username)
-				.iterator().next();
+		SystemUser su = systemUserDao.findSystemUserByPesel(username);
 		return su;
 	}
 }

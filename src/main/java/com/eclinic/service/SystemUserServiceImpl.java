@@ -167,7 +167,6 @@ public class SystemUserServiceImpl implements SystemUserService {
 		if (existingSystemUser != null) {
 			if (existingSystemUser != systemuser) {
 				existingSystemUser.setId(systemuser.getId());
-				existingSystemUser.setLogin(systemuser.getLogin());
 				existingSystemUser.setPassword(systemuser.getPassword());
 				existingSystemUser.setDescription(systemuser.getDescription());
 				existingSystemUser.setRegisterDate(systemuser.getRegisterDate());

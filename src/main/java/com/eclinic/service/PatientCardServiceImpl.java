@@ -77,7 +77,6 @@ public class PatientCardServiceImpl implements PatientCardService {
 			existingpatient.setId(related_patient.getId());
 			existingpatient.setName(related_patient.getName());
 			existingpatient.setSurname(related_patient.getSurname());
-			existingpatient.setPesel(related_patient.getPesel());
 			existingpatient.setDateOfBirth(related_patient.getDateOfBirth());
 			existingpatient.setEMail(related_patient.getEMail());
 			existingpatient.setPhoneNr(related_patient.getPhoneNr());

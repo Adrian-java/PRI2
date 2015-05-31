@@ -211,7 +211,6 @@ public class PatientServiceImpl implements PatientService {
 				existingPatient.setId(patient.getId());
 				existingPatient.setName(patient.getName());
 				existingPatient.setSurname(patient.getSurname());
-				existingPatient.setPesel(patient.getPesel());
 				existingPatient.setDateOfBirth(patient.getDateOfBirth());
 				existingPatient.setEMail(patient.getEMail());
 				existingPatient.setPhoneNr(patient.getPhoneNr());

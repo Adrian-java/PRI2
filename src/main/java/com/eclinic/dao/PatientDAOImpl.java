@@ -267,27 +267,7 @@ public class PatientDAOImpl extends AbstractJpaDao<Patient> implements
 		return new LinkedHashSet<Patient>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findPatientByPeselContaining
-	 *
-	 */
-	@Transactional
-	public Set<Patient> findPatientByPeselContaining(String pesel) throws DataAccessException {
-
-		return findPatientByPeselContaining(pesel, -1, -1);
-	}
-
-	/**
-	 * JPQL Query - findPatientByPeselContaining
-	 *
-	 */
-
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public Set<Patient> findPatientByPeselContaining(String pesel, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findPatientByPeselContaining", startResult, maxRows, pesel);
-		return new LinkedHashSet<Patient>(query.getResultList());
-	}
+	
 
 	/**
 	 * JPQL Query - findPatientByEMail
@@ -355,28 +335,7 @@ public class PatientDAOImpl extends AbstractJpaDao<Patient> implements
 		return new LinkedHashSet<Patient>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findPatientByPesel
-	 *
-	 */
-	@Transactional
-	public Set<Patient> findPatientByPesel(String pesel) throws DataAccessException {
-
-		return findPatientByPesel(pesel, -1, -1);
-	}
-
-	/**
-	 * JPQL Query - findPatientByPesel
-	 *
-	 */
-
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public Set<Patient> findPatientByPesel(String pesel, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findPatientByPesel", startResult, maxRows, pesel);
-		return new LinkedHashSet<Patient>(query.getResultList());
-	}
-
+	
 	/**
 	 * JPQL Query - findPatientByPrimaryKey
 	 *

@@ -188,6 +188,18 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 
 		return findSystemUserById(id, -1, -1);
 	}
+	
+	
+	@Transactional
+	public SystemUser findSystemUserByPesel(String pesel) throws DataAccessException {
+
+		try {
+			Query query = createNamedQuery("findSystemUserByPesel", -1, -1, pesel);
+			return (com.eclinic.domain.SystemUser) query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
 
 	/**
 	 * JPQL Query - findSystemUserById
@@ -358,49 +370,7 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		return new LinkedHashSet<SystemUser>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findSystemUserByLoginContaining
-	 *
-	 */
-	@Transactional
-	public Set<SystemUser> findSystemUserByLoginContaining(String login) throws DataAccessException {
 
-		return findSystemUserByLoginContaining(login, -1, -1);
-	}
-
-	/**
-	 * JPQL Query - findSystemUserByLoginContaining
-	 *
-	 */
-
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public Set<SystemUser> findSystemUserByLoginContaining(String login, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findSystemUserByLoginContaining", startResult, maxRows, login);
-		return new LinkedHashSet<SystemUser>(query.getResultList());
-	}
-
-	/**
-	 * JPQL Query - findSystemUserByLogin
-	 *
-	 */
-	@Transactional
-	public Set<SystemUser> findSystemUserByLogin(String login) throws DataAccessException {
-
-		return findSystemUserByLogin(login, -1, -1);
-	}
-
-	/**
-	 * JPQL Query - findSystemUserByLogin
-	 *
-	 */
-
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public Set<SystemUser> findSystemUserByLogin(String login, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findSystemUserByLogin", startResult, maxRows, login);
-		return new LinkedHashSet<SystemUser>(query.getResultList());
-	}
 
 	/**
 	 * JPQL Query - findSystemUserByUnregisterDateBefore

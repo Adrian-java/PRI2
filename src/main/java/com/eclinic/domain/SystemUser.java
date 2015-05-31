@@ -49,9 +49,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 		@NamedQuery(name = "findSystemUserByEmail", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.email = ?1"),
 		@NamedQuery(name = "findSystemUserByEmailContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.email like ?1"),
 		@NamedQuery(name = "findSystemUserById", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.id = ?1"),
+		@NamedQuery(name = "findSystemUserByPesel", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.pesel = ?1"),
 		@NamedQuery(name = "findSystemUserByIsActive", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.isActive = ?1"),
-		@NamedQuery(name = "findSystemUserByLogin", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.login = ?1"),
-		@NamedQuery(name = "findSystemUserByLoginContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.login like ?1"),
 		@NamedQuery(name = "findSystemUserByPassword", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.password = ?1"),
 		@NamedQuery(name = "findSystemUserByPasswordContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.password like ?1"),
 		@NamedQuery(name = "findSystemUserByPrimaryKey", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.id = ?1"),
@@ -80,17 +79,16 @@ public class SystemUser implements UserDetails, Serializable {
 	/**
 	 */
 
-	@Column(name = "login", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	String login;
-	/**
-	 */
-
 	@Column(name = "password", length = 20000, nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String password;
+	
+	@Column(name = "pesel", length = 20, nullable = false)
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	private
+	String pesel;
 	/**
 	 */
 
@@ -164,17 +162,6 @@ public class SystemUser implements UserDetails, Serializable {
 		return this.id;
 	}
 
-	/**
-	 */
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	/**
-	 */
-	public String getLogin() {
-		return this.login;
-	}
 
 	/**
 	 */
@@ -301,7 +288,6 @@ public class SystemUser implements UserDetails, Serializable {
 	 */
 	public void copy(SystemUser that) {
 		setId(that.getId());
-		setLogin(that.getLogin());
 		setPassword(that.getPassword());
 		setDescription(that.getDescription());
 		setRegisterDate(that.getRegisterDate());
@@ -323,7 +309,6 @@ public class SystemUser implements UserDetails, Serializable {
 		StringBuilder buffer = new StringBuilder();
 
 		buffer.append("id=[").append(id).append("] ");
-		buffer.append("login=[").append(login).append("] ");
 		buffer.append("password=[").append(password).append("] ");
 		buffer.append("description=[").append(description).append("] ");
 		buffer.append("registerDate=[").append(registerDate).append("] ");
@@ -371,7 +356,7 @@ public class SystemUser implements UserDetails, Serializable {
 
 	@Transient
 	public String getUsername() {
-		return login;
+		return pesel;
 	}
 
 	@Transient
@@ -401,6 +386,14 @@ public class SystemUser implements UserDetails, Serializable {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getPesel() {
+		return pesel;
+	}
+
+	public void setPesel(String pesel) {
+		this.pesel = pesel;
 	}
 
 }

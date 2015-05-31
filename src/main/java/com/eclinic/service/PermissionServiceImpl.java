@@ -234,7 +234,7 @@ public class PermissionServiceImpl implements PermissionService {
 		// copy into the existing record to preserve existing relationships
 		if (existingsystemUser != null) {
 			existingsystemUser.setId(related_systemuser.getId());
-			existingsystemUser.setLogin(related_systemuser.getLogin());
+			existingsystemUser.setPesel(related_systemuser.getPesel());
 			existingsystemUser.setPassword(related_systemuser.getPassword());
 			existingsystemUser.setDescription(related_systemuser.getDescription());
 			existingsystemUser.setRegisterDate(related_systemuser.getRegisterDate());

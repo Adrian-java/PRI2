@@ -215,7 +215,6 @@ public class WorkerServiceImpl implements WorkerService {
 			existingpatient.setId(related_patient.getId());
 			existingpatient.setName(related_patient.getName());
 			existingpatient.setSurname(related_patient.getSurname());
-			existingpatient.setPesel(related_patient.getPesel());
 			existingpatient.setDateOfBirth(related_patient.getDateOfBirth());
 			existingpatient.setEMail(related_patient.getEMail());
 			existingpatient.setPhoneNr(related_patient.getPhoneNr());
@@ -454,7 +453,7 @@ public class WorkerServiceImpl implements WorkerService {
 		// copy into the existing record to preserve existing relationships
 		if (existingsystemUsers != null) {
 			existingsystemUsers.setId(related_systemusers.getId());
-			existingsystemUsers.setLogin(related_systemusers.getLogin());
+			existingsystemUsers.setPesel(related_systemusers.getPesel());
 			existingsystemUsers.setPassword(related_systemusers.getPassword());
 			existingsystemUsers.setDescription(related_systemusers.getDescription());
 			existingsystemUsers.setRegisterDate(related_systemusers.getRegisterDate());

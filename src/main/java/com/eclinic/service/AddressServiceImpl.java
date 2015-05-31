@@ -140,7 +140,6 @@ public class AddressServiceImpl implements AddressService {
 			existingpatients.setId(related_patients.getId());
 			existingpatients.setName(related_patients.getName());
 			existingpatients.setSurname(related_patients.getSurname());
-			existingpatients.setPesel(related_patients.getPesel());
 			existingpatients.setDateOfBirth(related_patients.getDateOfBirth());
 			existingpatients.setEMail(related_patients.getEMail());
 			existingpatients.setPhoneNr(related_patients.getPhoneNr());

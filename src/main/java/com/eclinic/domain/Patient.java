@@ -35,8 +35,6 @@ import javax.persistence.*;
 		@NamedQuery(name = "findPatientById", query = "select myPatient from Patient myPatient where myPatient.id = ?1"),
 		@NamedQuery(name = "findPatientByName", query = "select myPatient from Patient myPatient where myPatient.name = ?1"),
 		@NamedQuery(name = "findPatientByNameContaining", query = "select myPatient from Patient myPatient where myPatient.name like ?1"),
-		@NamedQuery(name = "findPatientByPesel", query = "select myPatient from Patient myPatient where myPatient.pesel = ?1"),
-		@NamedQuery(name = "findPatientByPeselContaining", query = "select myPatient from Patient myPatient where myPatient.pesel like ?1"),
 		@NamedQuery(name = "findPatientByPhoneNr", query = "select myPatient from Patient myPatient where myPatient.phoneNr = ?1"),
 		@NamedQuery(name = "findPatientByPhoneNrContaining", query = "select myPatient from Patient myPatient where myPatient.phoneNr like ?1"),
 		@NamedQuery(name = "findPatientByPrimaryKey", query = "select myPatient from Patient myPatient where myPatient.id = ?1"),
@@ -74,15 +72,7 @@ public class Patient implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String surname;
-	/**
-	 * pesel
-	 * 
-	 */
-
-	@Column(name = "pesel", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	String pesel;
+	
 	/**
 	 * data urodzenia
 	 * 
@@ -183,22 +173,6 @@ public class Patient implements Serializable {
 	 */
 	public String getSurname() {
 		return this.surname;
-	}
-
-	/**
-	 * pesel
-	 * 
-	 */
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
-	}
-
-	/**
-	 * pesel
-	 * 
-	 */
-	public String getPesel() {
-		return this.pesel;
 	}
 
 	/**
@@ -352,7 +326,6 @@ public class Patient implements Serializable {
 		setId(that.getId());
 		setName(that.getName());
 		setSurname(that.getSurname());
-		setPesel(that.getPesel());
 		setDateOfBirth(that.getDateOfBirth());
 		setEMail(that.getEMail());
 		setPhoneNr(that.getPhoneNr());
@@ -375,7 +348,6 @@ public class Patient implements Serializable {
 		buffer.append("id=[").append(id).append("] ");
 		buffer.append("name=[").append(name).append("] ");
 		buffer.append("surname=[").append(surname).append("] ");
-		buffer.append("pesel=[").append(pesel).append("] ");
 		buffer.append("dateOfBirth=[").append(dateOfBirth).append("] ");
 		buffer.append("EMail=[").append(EMail).append("] ");
 		buffer.append("phoneNr=[").append(phoneNr).append("] ");
