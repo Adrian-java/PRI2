@@ -1,5 +1,9 @@
 package com.eclinic.web.rest;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.eclinic.dao.AddressDAO;
 import com.eclinic.dao.PatientCardDAO;
 import com.eclinic.dao.PatientDAO;
@@ -15,6 +19,11 @@ import com.eclinic.domain.Worker;
 import com.eclinic.service.PatientService;
 
 
+
+
+
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -27,6 +36,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -236,7 +249,17 @@ public class PatientRestController {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listPatients() {
-		return  Response.ok(patientService.loadPatients()).build();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			 return  Response.ok( mapper.writeValueAsString( patientService.loadPatients())).build();
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -549,5 +572,17 @@ public class PatientRestController {
 			Address address) {
 		patientService.savePatientAddress(patient_id, address);
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
+	}
+
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{patient_id}/address")
+	@PUT
+	public Response confirmedPatient(@PathParam("id") Integer id) {
+		Patient p  = patientDAO.findPatientByPrimaryKey(id);
+		p.setConfirmed(1);
+		patientService.savePatient(p);
+		Map<String, String> map = new HashMap<String,String>();
+		return Response.ok(map.put("status","zmieniono")).build();
 	}
 }

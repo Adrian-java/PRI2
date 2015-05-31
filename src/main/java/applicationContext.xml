@@ -43,11 +43,11 @@
 			access="denyAll" />
 
 		<security:intercept-url method="GET" pattern="/rest/**"
-			access="hasRole('user')" />
+			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 		<security:intercept-url method="PUT" pattern="/rest/**"
-			access="hasRole('user')" />
+			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 		<security:intercept-url method="POST" pattern="/rest/**"
-			access="hasRole('user')" />
+			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 
 		<security:intercept-url method="DELETE"
 			pattern="/rest/news/**" access="hasRole('admin')" />
