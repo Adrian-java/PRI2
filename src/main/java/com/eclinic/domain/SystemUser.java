@@ -171,6 +171,7 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public String getPassword() {
 		return this.password;
 	}
@@ -219,6 +220,7 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public Boolean getChangedPassword() {
 		return this.changedPassword;
 	}
@@ -243,6 +245,7 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
+	@JsonIgnore	
 	public Calendar getUnregisterDate() {
 		return this.unregisterDate;
 	}
@@ -346,6 +349,7 @@ public class SystemUser implements UserDetails, Serializable {
 		return true;
 	}
 
+	@JsonIgnore
 	@Transient
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
@@ -354,32 +358,38 @@ public class SystemUser implements UserDetails, Serializable {
 		return authorities;
 	}
 
+	@JsonIgnore
 	@Transient
 	public String getUsername() {
 		return pesel;
 	}
 
+	@JsonIgnore
 	@Transient
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Transient
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Transient
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Transient
 	public boolean isEnabled() {
 		return isActive;
 //		return true;
 	}
 
+	
 	public String getRole() {
 		return role;
 	}
