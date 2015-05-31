@@ -1,5 +1,7 @@
 package com.eclinic.web.rest;
 
+import java.io.IOException;
+
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.SpecializationDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
@@ -7,6 +9,8 @@ import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.service.VisitSchedulerService;
+
+
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +25,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -234,6 +241,9 @@ public class VisitSchedulerRestController {
 
 	/**
 	 * Show all VisitScheduler entities
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * 
 	 */
 
@@ -241,8 +251,8 @@ public class VisitSchedulerRestController {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listVisitSchedulers() {
-		return  Response.ok(visitSchedulerService.loadVisitSchedulers()).build();
+	public Response listVisitSchedulers() throws JsonGenerationException, JsonMappingException, IOException {
+		return  Response.ok(new ObjectMapper().writeValueAsString(visitSchedulerService.loadVisitSchedulers())).build();
 	}
 
 	/**

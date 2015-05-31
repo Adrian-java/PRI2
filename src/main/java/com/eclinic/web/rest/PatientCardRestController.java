@@ -1,5 +1,7 @@
 package com.eclinic.web.rest;
 
+import java.io.IOException;
+
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.PatientCardDAO;
 import com.eclinic.dao.PatientDAO;
@@ -9,6 +11,8 @@ import com.eclinic.domain.Patient;
 import com.eclinic.domain.PatientCard;
 import com.eclinic.domain.Visit;
 import com.eclinic.service.PatientCardService;
+
+
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +27,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -95,6 +102,9 @@ public class PatientCardRestController {
 	}
 	/**
 	 * Show all PatientCard entities
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * 
 	 */
 
@@ -102,8 +112,8 @@ public class PatientCardRestController {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listPatientCards() {
-		return  Response.ok(patientCardService.loadPatientCards()).build();
+	public Response listPatientCards() throws JsonGenerationException, JsonMappingException, IOException {
+		return  Response.ok(new ObjectMapper().writeValueAsString(patientCardService.loadPatientCards())).build();
 	}
 
 	/**

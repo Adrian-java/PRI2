@@ -1,5 +1,7 @@
 package com.eclinic.web.rest;
 
+import java.io.IOException;
+
 import com.eclinic.dao.ApplicationParameterDAO;
 import com.eclinic.domain.ApplicationParameter;
 import com.eclinic.service.ApplicationParameterService;
@@ -16,6 +18,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -96,14 +101,17 @@ public class ApplicationParameterRestController {
 
 	/**
 	 * Show all ApplicationParameter entities
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * 
 	 */
 	
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listApplicationParameters() {
-		return  Response.ok(applicationParameterService.loadApplicationParameters()).build();
+	public Response listApplicationParameters() throws JsonGenerationException, JsonMappingException, IOException {
+		return  Response.ok(new ObjectMapper().writeValueAsString(applicationParameterService.loadApplicationParameters())).build();
 	}
 
 	

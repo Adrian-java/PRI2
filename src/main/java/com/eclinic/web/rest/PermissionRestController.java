@@ -1,5 +1,7 @@
 package com.eclinic.web.rest;
 
+import java.io.IOException;
+
 import com.eclinic.dao.ModuleDAO;
 import com.eclinic.dao.PermissionDAO;
 import com.eclinic.dao.SystemUserDAO;
@@ -9,6 +11,8 @@ import com.eclinic.domain.Permission;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.TypeOfUser;
 import com.eclinic.service.PermissionService;
+
+
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +27,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -112,6 +119,9 @@ public class PermissionRestController {
 
 	/**
 	 * Show all Permission entities
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * 
 	 */
 
@@ -119,8 +129,8 @@ public class PermissionRestController {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listPermissions() {
-		return  Response.ok(permissionService.loadPermissions()).build();
+	public Response listPermissions() throws JsonGenerationException, JsonMappingException, IOException {
+		return  Response.ok(new ObjectMapper().writeValueAsString(permissionService.loadPermissions())).build();
 	}
 
 	/**

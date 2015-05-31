@@ -1,11 +1,14 @@
 package com.eclinic.web.rest;
 
+import java.io.IOException;
+
 import com.eclinic.dao.StatusOfVisitDAO;
 import com.eclinic.dao.VisitDAO;
-
 import com.eclinic.domain.StatusOfVisit;
 import com.eclinic.domain.Visit;
 import com.eclinic.service.StatusOfVisitService;
+
+
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +23,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -148,6 +154,9 @@ public class StatusOfVisitRestController {
 
 	/**
 	 * Show all StatusOfVisit entities
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * 
 	 */
 
@@ -155,8 +164,8 @@ public class StatusOfVisitRestController {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listStatusOfVisits() {
-		return  Response.ok(statusOfVisitService.loadStatusOfVisits()).build();
+	public Response listStatusOfVisits() throws JsonGenerationException, JsonMappingException, IOException {
+		return  Response.ok(new ObjectMapper().writeValueAsString(statusOfVisitService.loadStatusOfVisits())).build();
 	}
 
 	/**

@@ -1,15 +1,18 @@
 package com.eclinic.web.rest;
 
+import java.io.IOException;
+
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.SpecalVisitFieldDAO;
 import com.eclinic.dao.SpecializationDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
 import com.eclinic.domain.Doctor;
-
 import com.eclinic.domain.SpecalVisitField;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.service.SpecializationService;
+
+
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +27,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -124,6 +130,9 @@ public class SpecializationRestController {
 
 	/**
 	 * Show all Specialization entities
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * 
 	 */
 
@@ -131,8 +140,8 @@ public class SpecializationRestController {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listSpecializations() {
-		return  Response.ok(specializationService.loadSpecializations()).build();
+	public Response listSpecializations() throws JsonGenerationException, JsonMappingException, IOException {
+		return  Response.ok(new ObjectMapper().writeValueAsString(specializationService.loadSpecializations())).build();
 	}
 
 	/**

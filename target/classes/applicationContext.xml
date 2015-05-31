@@ -31,12 +31,24 @@
 			position="FORM_LOGIN_FILTER" />
 		<security:intercept-url pattern="/rest/auth/token"
 			access="permitAll" />
+		<security:intercept-url pattern="/rest/SystemUser/newPatient"
+			access="permitAll" />
+		<security:intercept-url pattern="/rest/SystemUser/newDoctor"
+			access="hasRole('admin') or hasRole('superAdmin')" />
+		<security:intercept-url pattern="/rest/SystemUser/newReceptionist"
+			access="hasRole('admin') or hasRole('superAdmin')" />
+		<security:intercept-url pattern="/rest/SystemUser/newAdmin"
+			access="hasRole('superAdmin')" />
+		<security:intercept-url pattern="/rest/SystemUser/save"
+			access="denyAll" />
+
 		<security:intercept-url method="GET" pattern="/rest/**"
-			access="hasRole('user')" />
+			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 		<security:intercept-url method="PUT" pattern="/rest/**"
-			access="hasRole('user')" />
+			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 		<security:intercept-url method="POST" pattern="/rest/**"
-			access="hasRole('user')" />
+			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
+
 		<security:intercept-url method="DELETE"
 			pattern="/rest/news/**" access="hasRole('admin')" />
 	</security:http>

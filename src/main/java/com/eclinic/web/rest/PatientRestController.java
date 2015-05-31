@@ -249,9 +249,9 @@ public class PatientRestController {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listPatients() {
-		ObjectMapper mapper = new ObjectMapper();
+//		ObjectMapper mapper = new ObjectMapper();
 		try {
-			 return  Response.ok( mapper.writeValueAsString( patientService.loadPatients())).build();
+			 return  Response.ok( new ObjectMapper().writeValueAsString(patientService.loadPatients())).build();
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

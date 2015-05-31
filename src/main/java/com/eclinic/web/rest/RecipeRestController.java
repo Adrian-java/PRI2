@@ -1,13 +1,16 @@
 package com.eclinic.web.rest;
 
+import java.io.IOException;
+
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.RecipeDAO;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.Recipe;
-
 import com.eclinic.service.RecipeService;
+
+
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -240,6 +246,9 @@ public class RecipeRestController {
 
 	/**
 	 * Show all Recipe entities
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 * 
 	 */
 
@@ -247,8 +256,8 @@ public class RecipeRestController {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listRecipes() {
-		return  Response.ok(recipeService.loadRecipes()).build();
+	public Response listRecipes() throws JsonGenerationException, JsonMappingException, IOException {
+		return  Response.ok(new ObjectMapper().writeValueAsString(recipeService.loadRecipes())).build();
 	}
 
 	/**
