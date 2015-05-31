@@ -19,6 +19,7 @@ import com.eclinic.service.SystemUserService;
 
 
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -34,6 +35,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -324,7 +326,7 @@ public class SystemUserRestController {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listSystemUsers() throws JsonGenerationException, JsonMappingException, IOException {
-		return  Response.ok(new ObjectMapper().writeValueAsString(systemUserService.loadSystemUsers())).build();
+		return  Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS, false).writeValueAsString(systemUserService.loadSystemUsers())).build();
 	}
 
 	/**

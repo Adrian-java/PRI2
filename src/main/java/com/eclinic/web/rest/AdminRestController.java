@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -96,7 +97,7 @@ public class AdminRestController {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listAdmins() throws JsonGenerationException, JsonMappingException, IOException {
-		return  Response.ok(new ObjectMapper().writeValueAsString(adminService.loadAdmins())).build();
+		return  Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS, false).writeValueAsString(adminService.loadAdmins())).build();
 	}
 
 	/**

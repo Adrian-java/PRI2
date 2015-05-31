@@ -21,6 +21,7 @@ import com.eclinic.service.WorkerService;
 
 
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,6 +37,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -273,7 +275,7 @@ public class WorkerRestController {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listWorkers() throws JsonGenerationException, JsonMappingException, IOException {
-		return  Response.ok(new ObjectMapper().writeValueAsString(workerService.loadWorkers())).build();
+		return  Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS, false).writeValueAsString(workerService.loadWorkers())).build();
 	}
 
 	/**
