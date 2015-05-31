@@ -3,36 +3,36 @@ package com.eclinic.web.rest;
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.SpecializationDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
-
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.VisitScheduler;
-
 import com.eclinic.service.VisitSchedulerService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for VisitScheduler entities
  * 
  */
-
-@Controller("VisitSchedulerRestController")
+@Path("/VisitScheduler")
+@Component("VisitSchedulerRestController")
 public class VisitSchedulerRestController {
 
 	/**
@@ -63,82 +63,9 @@ public class VisitSchedulerRestController {
 	@Autowired
 	private VisitSchedulerService visitSchedulerService;
 
-	/**
-	 * Delete an existing Specialization entity
-	 * 
-	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/specialization/{specialization_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteVisitSchedulerSpecialization(@PathVariable Integer visitscheduler_id, @PathVariable Integer related_specialization_id) {
-		visitSchedulerService.deleteVisitSchedulerSpecialization(visitscheduler_id, related_specialization_id);
-	}
-
-	/**
-	 * Create a new Doctor entity
-	 * 
-	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/doctor", method = RequestMethod.POST)
-	@ResponseBody
-	public Doctor newVisitSchedulerDoctor(@PathVariable Integer visitscheduler_id, @RequestBody Doctor doctor) {
-		visitSchedulerService.saveVisitSchedulerDoctor(visitscheduler_id, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
-	}
-
-	/**
-	 * Create a new VisitScheduler entity
-	 * 
-	 */
-	@RequestMapping(value = "/VisitScheduler", method = RequestMethod.POST)
-	@ResponseBody
-	public VisitScheduler newVisitScheduler(@RequestBody VisitScheduler visitscheduler) {
-		visitSchedulerService.saveVisitScheduler(visitscheduler);
-		return visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler.getId());
-	}
-
-	/**
-	 * View an existing Specialization entity
-	 * 
-	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/specialization/{specialization_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Specialization loadVisitSchedulerSpecialization(@PathVariable Integer visitscheduler_id, @PathVariable Integer related_specialization_id) {
-		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(related_specialization_id, -1, -1);
-
-		return specialization;
-	}
-
-	/**
-	 * Select an existing VisitScheduler entity
-	 * 
-	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public VisitScheduler loadVisitScheduler(@PathVariable Integer visitscheduler_id) {
-		return visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id);
-	}
-
-	/**
-	 * Create a new Specialization entity
-	 * 
-	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/specialization", method = RequestMethod.POST)
-	@ResponseBody
-	public Specialization newVisitSchedulerSpecialization(@PathVariable Integer visitscheduler_id, @RequestBody Specialization specialization) {
-		visitSchedulerService.saveVisitSchedulerSpecialization(visitscheduler_id, specialization);
-		return specializationDAO.findSpecializationByPrimaryKey(specialization.getId());
-	}
-
-	/**
-	 * Delete an existing VisitScheduler entity
-	 * 
-	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteVisitScheduler(@PathVariable Integer visitscheduler_id) {
-		VisitScheduler visitscheduler = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id);
-		visitSchedulerService.deleteVisitScheduler(visitscheduler);
-	}
-
+	
+	public VisitSchedulerRestController(){}
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -157,88 +84,221 @@ public class VisitSchedulerRestController {
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
 
+	
+	/**
+	 * Delete an existing Specialization entity
+	 * 
+	 */
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{visitscheduler_id}/specialization/{specialization_id}")
+	public Response deleteVisitSchedulerSpecialization(@PathParam("visitscheduler_id") Integer visitscheduler_id,
+			@PathParam("related_specialization_id") Integer related_specialization_id) {
+		return Response.ok(visitSchedulerService.deleteVisitSchedulerSpecialization(visitscheduler_id, related_specialization_id)).build();
+	}
+
+	/**
+	 * Create a new Doctor entity
+	 * 
+	 */
+
+	@Path("/{visitscheduler_id}/doctor")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newVisitSchedulerDoctor(@PathParam("visitscheduler_id") Integer visitscheduler_id,
+			Doctor doctor) {
+		visitSchedulerService.saveVisitSchedulerDoctor(visitscheduler_id, doctor);
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
+	}
+
+	/**
+	 * Create a new VisitScheduler entity
+	 * 
+	 */
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newVisitScheduler(VisitScheduler visitscheduler) {
+		visitSchedulerService.saveVisitScheduler(visitscheduler);
+		return Response.ok(visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler.getId())).build();
+	}
+
+	/**
+	 * View an existing Specialization entity
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{visitscheduler_id}/specialization/{specialization_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadVisitSchedulerSpecialization(@PathParam("visitscheduler_id") Integer visitscheduler_id,
+			@PathParam("related_specialization_id") Integer related_specialization_id) {
+		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(related_specialization_id, -1, -1);
+
+		return Response.ok(specialization).build();
+	}
+
+
+	/**
+	 * Select an existing VisitScheduler entity
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{visitscheduler_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadVisitScheduler(@PathParam("visitscheduler_id") Integer visitscheduler_id) {
+		return Response.ok(visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id)).build();
+	}
+
+	/**
+	 * Create a new Specialization entity
+	 * 
+	 */
+
+	
+	@Path("/{visitscheduler_id}/specialization")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newVisitSchedulerSpecialization(@PathParam("visitscheduler_id") Integer visitscheduler_id,
+			Specialization specialization) {
+		visitSchedulerService.saveVisitSchedulerSpecialization(visitscheduler_id, specialization);
+		return Response.ok(specializationDAO.findSpecializationByPrimaryKey(specialization.getId())).build();
+	}
+
+	/**
+	 * Delete an existing VisitScheduler entity
+	 * 
+	 */
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{visitscheduler_id}")
+	@DELETE
+	public void deleteVisitScheduler(@PathParam("visitscheduler_id") Integer visitscheduler_id) {
+		VisitScheduler visitscheduler = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id);
+		visitSchedulerService.deleteVisitScheduler(visitscheduler);
+	}
+
+	
 	/**
 	 * Get Doctor entity by VisitScheduler
 	 * 
 	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/doctor", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor getVisitSchedulerDoctor(@PathVariable Integer visitscheduler_id) {
-		return visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id).getDoctor();
+
+	
+	@GET
+	@Path("/{visitscheduler_id}/doctor")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getVisitSchedulerDoctor(@PathParam("visitscheduler_id") Integer visitscheduler_id) {
+		return Response.ok(visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id).getDoctor()).build();
 	}
 
 	/**
 	 * View an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/doctor/{doctor_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Doctor loadVisitSchedulerDoctor(@PathVariable Integer visitscheduler_id, @PathVariable Integer related_doctor_id) {
+
+	
+	@GET
+	@Path("/{visitscheduler_id}/doctor/{doctor_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadVisitSchedulerDoctor(@PathParam("visitscheduler_id") Integer visitscheduler_id,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
-		return doctor;
+		return Response.ok(doctor).build();
 	}
+
 
 	/**
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/doctor/{doctor_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteVisitSchedulerDoctor(@PathVariable Integer visitscheduler_id, @PathVariable Integer related_doctor_id) {
-		visitSchedulerService.deleteVisitSchedulerDoctor(visitscheduler_id, related_doctor_id);
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{visitscheduler_id}/doctor/{doctor_id}")
+	public Response deleteVisitSchedulerDoctor(@PathParam("visitscheduler_id") Integer visitscheduler_id,
+			@PathParam("related_doctor_id") Integer related_doctor_id) {
+		return Response.ok(visitSchedulerService.deleteVisitSchedulerDoctor(visitscheduler_id, related_doctor_id)).build();
 	}
 
 	/**
 	 * Show all VisitScheduler entities
 	 * 
 	 */
-	@RequestMapping(value = "/VisitScheduler", method = RequestMethod.GET)
-	@ResponseBody
-	public List<VisitScheduler> listVisitSchedulers() {
-		return new java.util.ArrayList<VisitScheduler>(visitSchedulerService.loadVisitSchedulers());
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listVisitSchedulers() {
+		return  Response.ok(visitSchedulerService.loadVisitSchedulers()).build();
 	}
 
 	/**
 	 * Save an existing Doctor entity
 	 * 
 	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/doctor", method = RequestMethod.PUT)
-	@ResponseBody
-	public Doctor saveVisitSchedulerDoctor(@PathVariable Integer visitscheduler_id, @RequestBody Doctor doctor) {
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{visitscheduler_id}/doctor")
+	@PUT
+	public Response saveVisitSchedulerDoctor(@PathParam("visitscheduler_id") Integer visitscheduler_id,
+			Doctor doctor) {
 		visitSchedulerService.saveVisitSchedulerDoctor(visitscheduler_id, doctor);
-		return doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
 	/**
 	 * Save an existing Specialization entity
 	 * 
 	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/specialization", method = RequestMethod.PUT)
-	@ResponseBody
-	public Specialization saveVisitSchedulerSpecialization(@PathVariable Integer visitscheduler_id, @RequestBody Specialization specialization) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{visitscheduler_id}/specialization")
+	@PUT
+	public Response saveVisitSchedulerSpecialization(@PathParam("visitscheduler_id") Integer visitscheduler_id,
+			Specialization specialization) {
 		visitSchedulerService.saveVisitSchedulerSpecialization(visitscheduler_id, specialization);
-		return specializationDAO.findSpecializationByPrimaryKey(specialization.getId());
+		return Response.ok(specializationDAO.findSpecializationByPrimaryKey(specialization.getId())).build();
 	}
 
 	/**
 	 * Save an existing VisitScheduler entity
 	 * 
 	 */
-	@RequestMapping(value = "/VisitScheduler", method = RequestMethod.PUT)
-	@ResponseBody
-	public VisitScheduler saveVisitScheduler(@RequestBody VisitScheduler visitscheduler) {
+
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response saveVisitScheduler(VisitScheduler visitscheduler) {
 		visitSchedulerService.saveVisitScheduler(visitscheduler);
-		return visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler.getId());
+		return Response.ok(visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler.getId())).build();
 	}
 
 	/**
 	 * Get Specialization entity by VisitScheduler
 	 * 
 	 */
-	@RequestMapping(value = "/VisitScheduler/{visitscheduler_id}/specialization", method = RequestMethod.GET)
-	@ResponseBody
-	public Specialization getVisitSchedulerSpecialization(@PathVariable Integer visitscheduler_id) {
-		return visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id).getSpecialization();
+
+	
+	@GET
+	@Path("/{visitscheduler_id}/specialization")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getVisitSchedulerSpecialization(@PathParam("visitscheduler_id") Integer visitscheduler_id) {
+		return Response.ok(visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id).getSpecialization()).build();
 	}
 }

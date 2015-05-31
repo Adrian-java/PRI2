@@ -5,32 +5,32 @@ import com.eclinic.dao.VisitDAO;
 
 import com.eclinic.domain.TypeOfVisit;
 import com.eclinic.domain.Visit;
-
 import com.eclinic.service.TypeOfVisitService;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Spring Rest controller that handles CRUD requests for TypeOfVisit entities
  * 
  */
-
-@Controller("TypeOfVisitRestController")
+@Path("/TypeOfVisit")
+@Component("TypeOfVisitRestController")
 public class TypeOfVisitRestController {
 
 	/**
@@ -54,28 +54,10 @@ public class TypeOfVisitRestController {
 	@Autowired
 	private TypeOfVisitService typeOfVisitService;
 
-	/**
-	 * View an existing Visit entity
-	 * 
-	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits/{visit_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Visit loadTypeOfVisitVisits(@PathVariable Integer typeofvisit_id, @PathVariable Integer related_visits_id) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
-
-		return visit;
-	}
-
-	/**
-	 * Delete an existing Visit entity
-	 * 
-	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits/{visit_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteTypeOfVisitVisits(@PathVariable Integer typeofvisit_id, @PathVariable Integer related_visits_id) {
-		typeOfVisitService.deleteTypeOfVisitVisits(typeofvisit_id, related_visits_id);
-	}
-
+	
+	public TypeOfVisitRestController(){}
+	
+	
 	/**
 	 * Register custom, context-specific property editors
 	 * 
@@ -93,14 +75,49 @@ public class TypeOfVisitRestController {
 		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
+	
+	/**
+	 * View an existing Visit entity
+	 * 
+	 */
+
+	
+	@GET
+	@Path("/{typeofvisit_id}/visits/{visit_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadTypeOfVisitVisits(@PathParam("typeofvisit_id") Integer typeofvisit_id,
+			@PathParam("related_visits_id") Integer related_visits_id) {
+		Visit visit = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
+
+
+		return Response.ok(visit).build();
+	}
+
+	/**
+	 * Delete an existing Visit entity
+	 * 
+	 */
+
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{typeofvisit_id}/visits/{visit_id}")
+	public Response deleteTypeOfVisitVisits(@PathParam("typeofvisit_id") Integer typeofvisit_id,
+			@PathParam("related_visits_id") Integer related_visits_id) {
+		return Response.ok(typeOfVisitService.deleteTypeOfVisitVisits(typeofvisit_id, related_visits_id)).build();
+	}
+	
 
 	/**
 	 * Delete an existing TypeOfVisit entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteTypeOfVisit(@PathVariable Integer typeofvisit_id) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{typeofvisit_id}")
+	@DELETE
+	public void deleteTypeOfVisit(@PathParam("typeofvisit_id") Integer typeofvisit_id) {
 		TypeOfVisit typeofvisit = typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id);
 		typeOfVisitService.deleteTypeOfVisit(typeofvisit);
 	}
@@ -109,73 +126,98 @@ public class TypeOfVisitRestController {
 	 * Save an existing TypeOfVisit entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit", method = RequestMethod.PUT)
-	@ResponseBody
-	public TypeOfVisit saveTypeOfVisit(@RequestBody TypeOfVisit typeofvisit) {
+
+	
+	@PUT
+	@Path("/save")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response saveTypeOfVisit( TypeOfVisit typeofvisit) {
 		typeOfVisitService.saveTypeOfVisit(typeofvisit);
-		return typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit.getId());
+		return Response.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit.getId())).build();
 	}
 
 	/**
 	 * Create a new TypeOfVisit entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit", method = RequestMethod.POST)
-	@ResponseBody
-	public TypeOfVisit newTypeOfVisit(@RequestBody TypeOfVisit typeofvisit) {
+
+	
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newTypeOfVisit( TypeOfVisit typeofvisit) {
 		typeOfVisitService.saveTypeOfVisit(typeofvisit);
-		return typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit.getId());
+		return Response.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit.getId())).build();
 	}
+
 
 	/**
 	 * Show all Visit entities by TypeOfVisit
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Visit> getTypeOfVisitVisits(@PathVariable Integer typeofvisit_id) {
-		return new java.util.ArrayList<Visit>(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id).getVisits());
+
+	
+	@GET
+	@Path("/{typeofvisit_id}/visits")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTypeOfVisitVisits(@PathParam("typeofvisit_id") Integer typeofvisit_id) {
+		return Response.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id).getVisits()).build();
 	}
 
 	/**
 	 * Show all TypeOfVisit entities
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit", method = RequestMethod.GET)
-	@ResponseBody
-	public List<TypeOfVisit> listTypeOfVisits() {
-		return new java.util.ArrayList<TypeOfVisit>(typeOfVisitService.loadTypeOfVisits());
+
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listTypeOfVisits() {
+		return  Response.ok(typeOfVisitService.loadTypeOfVisits()).build();
 	}
 
 	/**
 	 * Create a new Visit entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits", method = RequestMethod.POST)
-	@ResponseBody
-	public Visit newTypeOfVisitVisits(@PathVariable Integer typeofvisit_id, @RequestBody Visit visit) {
+
+	
+	@Path("/{typeofvisit_id}/visits")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newTypeOfVisitVisits(@PathParam("typeofvisit_id") Integer typeofvisit_id,
+			Visit visit) {
 		typeOfVisitService.saveTypeOfVisitVisits(typeofvisit_id, visit);
-		return visitDAO.findVisitByPrimaryKey(visit.getId());
+		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId())).build();
 	}
 
 	/**
 	 * Select an existing TypeOfVisit entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public TypeOfVisit loadTypeOfVisit(@PathVariable Integer typeofvisit_id) {
-		return typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id);
-	}
 
+	
+	@GET
+	@Path("/{typeofvisit_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadTypeOfVisit(@PathParam("typeofvisit_id") Integer typeofvisit_id) {
+		return Response.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id)).build();
+	}
 	/**
 	 * Save an existing Visit entity
 	 * 
 	 */
-	@RequestMapping(value = "/TypeOfVisit/{typeofvisit_id}/visits", method = RequestMethod.PUT)
-	@ResponseBody
-	public Visit saveTypeOfVisitVisits(@PathVariable Integer typeofvisit_id, @RequestBody Visit visits) {
+
+	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{typeofvisit_id}/visits")
+	@PUT
+	public Response saveTypeOfVisitVisits(@PathParam("typeofvisit_id") Integer typeofvisit_id,
+			Visit visits) {
 		typeOfVisitService.saveTypeOfVisitVisits(typeofvisit_id, visits);
-		return visitDAO.findVisitByPrimaryKey(visits.getId());
+		return Response.ok(visitDAO.findVisitByPrimaryKey(visits.getId())).build();
 	}
 }
