@@ -105,6 +105,20 @@ public class SystemUserRestController {
 		return Response.ok(map).build();
 	}
 	
+	
+	/**
+	 * Return actually SystemUser
+	 * 
+	 */
+
+	@GET
+	@Path("/{pesel}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSystemUserByPesel(@PathParam("pesel") String pesel) {
+		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
+		return Response.ok(s).build();
+	}
+	
 	/**
 	 * View an existing Permission entity
 	 * 
