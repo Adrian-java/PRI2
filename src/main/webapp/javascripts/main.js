@@ -5,14 +5,18 @@ console.log("sth");
 var clinic = angular.module('clinic', ['ui.router', 'ngCookies']);
 
 clinic.config(function($stateProvider, $urlRouterProvider) {
-	$urlRouterProvider.otherwise("/");
+	$urlRouterProvider.otherwise("/home");
 
 	$stateProvider
-		.state('login', {
-			url: "/login",
-			templateUrl: "partials/login.html"
-		});
-});
+		.state('main', {
+			url: "/home",
+			templateUrl: "partials/main.html"
+		})
+		.state('add_user', {
+			url: "/new",
+			templateUrl: "partials/newUser.html"
+		})
+})
 
 clinic.controller('exampleController', ['$scope', '$rootScope', '$http', '$cookies', function($scope, $rootScope, $http, $cookies) {
 	
