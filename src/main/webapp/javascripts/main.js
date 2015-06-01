@@ -42,6 +42,60 @@ clinic.controller('exampleController', ['$scope', '$rootScope', '$http', '$cooki
 	});*/
 }]);
 
+clinic.controller('NewUserController', function($scope, $http, $cookies){
+	$scope.addUser = function(user){
+		var userInfo = {
+				"role": "patient",
+				"pesel": user.pesel,
+				"changedPassword": "false",
+				"password": user.password,
+				"worker": {
+					"patient": {
+						"name": user.first_name,
+						"surname": user.last_name,
+						"dateOfBirth": user.birth_date,
+						"EMail": "",
+						"phoneNr": user.phone,
+						"confirmed": "0",
+						"address": {
+							"city": user.city,
+							"countryCode": user.county_code,
+							"province": user.province,
+							"country": user.country,
+							"countryCodeCity": user.county_code,
+							"homeNr": user.home_nr,
+						}
+					}
+				},
+				"registerDate": "",
+				"isActive": "true",
+				"email": user.email				
+			};
+		console.log(userInfo);
+		$http({
+			method: 'POST',
+			url: "http://localhost:8080/wee/rest/SystemUser/newPatient",
+			data: userInfo,
+			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
+		}).success(function(result){
+			console.log("user added");
+			console.log(result);
+			
+			
+			
+			
+			
+			
+			
+			
+		});
+	}
+	
+	
+});
+
+
+
 clinic.controller('igCtrl', function ($scope, $http, $cookies) {
 
     $scope.email = "";

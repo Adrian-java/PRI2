@@ -1,1 +1,19 @@
-sth
+<div ng-controller="NewUserController" style="margin-top: 100px">
+	<f orm>
+	    Pesel: <input type="text" ng-model="user.pesel" /><br />
+	    Imię: <input type="text" ng-model="user.first_name" /><br />
+	    Nazwisko: <input type="text" ng-model="user.last_name" /><br />
+	    E-mail: <input type="email" ng-model="user.email" /><br />
+	    Hasło: <input type="text" ng-model="user.password" /><br />
+	    Data urodzenia: <input type="text" ng-model="user.birth_date" /><br />
+	    Numer telefonu: <input type="text" ng-model="user.phone" /><br />
+	    Miasto: <input type="text" ng-model="user.city" /><br />
+	    Kod pocztowy: <input type="text" ng-model="user.county_code" /><br />
+	    Województwo: <input type="text" ng-model="user.province" /><br />
+	    Kraj: <input type="text" ng-model="user.country" /><br />
+	    Numer domu/mieszkania <input type="text" ng-model="user.home_nr" /><br />
+	    Gender: <input type="radio" ng-model="user.gender" value="male" />male
+	    <!-- <input type="button" ng-click="reset()" value="Reset" />  -->
+	    <input type="submit" ng-click="addUser(user)" value="Dodaj" />
+	</form>
+</div>
