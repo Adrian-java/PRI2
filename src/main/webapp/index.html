@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html ng-app="clinic">
+<head>
+	<meta charset="UTF-8">
+	<title>PRI FRONT</title>
+	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="javascripts/main.js"></script>
+	
+</head>
+<body ng-controller="igCtrl">
+	<ig-login></ig-login>
+	<div ui-view></div>
+	<!-- navigation -->
+	<nav role="navigation" class="navbar navbar-default navbar-fixed-top">
+    	<div class="container">
+		    <div class="navbar-header">
+		        <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+		            <span class="sr-only">Toggle navigation</span>
+		            <span class="icon-bar"></span>
+		            <span class="icon-bar"></span>
+		            <span class="icon-bar"></span>
+		        </button>
+		        <a href="#" class="navbar-brand"><img src="images/logo.png"></a>
+		    </div>
+	    <!-- Collection of nav links and other content for toggling -->
+		    <div id="navbarCollapse" class="collapse navbar-collapse">
+		        <!--<ul class="nav navbar-nav">
+		            <li class="active"><a href="#">Przychodnia</a></li>		  
+		        </ul>-->
+		        <ul class="nav navbar-nav navbar-right">
+		        	<li><a ui-sref="add_visit">Dodaj wizytę</a></li>
+		            <li><a ui-sref="services">Usługi</a></li>
+		            <li><a ui-sref="price_list">Cennik</a></li>
+		            <li><a ui-sref="contact">Kontakt</a></li>
+		            <li><a ui-sref="panel" ng-show="loggedIn">Panel</a></li></li>
+		            <li><a href="#" ng-hide="loggedIn" ng-click="showLogin()">login</a></li>
+       	 			<li><a href="#" ng-show="loggedIn"ng-click="logout()">logout</a></li>
+		        	
+		        </ul>
+		    </div>
+		</div>
+	</nav>
+
+	<header class="container-fluid">
+		<div class="row">
+			<div class="col-xs-2 col-md-6"></div>
+			<div class="col-xs-10 col-md-6">
+				<form>
+					<div class="form_content">
+						<div class="form_header_content">
+							<div class="form_header">
+								<span class="line_below">
+									Umów się na wizytę
+								</span>
+							</div>
+							<div class="line"></div>
+						</div>
+						<span class="line_below select_type">
+							Specjalizacja
+						</span>
+						<div class="select_arrow">Kardiologia</div>
+						<div class="line"></div>
+						<span class="line_below select_type">
+							Lekarz
+						</span>
+						<div class="select_arrow">Rozwiń listę</div>
+						<div class="line"></div>
+						<span class="line_below select_type">
+							Termin wizyty
+						</span>
+						<div class="select_arrow">01.01.2015 - 9:00</div>
+						<div class="line"></div>
+						<div class="confirm_content">
+							<span class="line_below confirm">
+								Dalej
+							</span>
+							<div class="line"></div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+	</header>
+
+
+	<div class="container first">
+		<div class="row">
+			<div class="col-xs-12 section_header">
+				O NAS
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 section_header_line"></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 section_box">
+				<div class="box">
+					<div class="box_header">
+						Wyspecjalizowana kadra
+					</div>
+					<div class="box_content">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nulla urna, 
+volutpat vitae enim sed, accumsan egestas magna. Phasellus scelerisque, velit 
+quis dapibus viverra, urna turpis pretium tellus, a bibendum nunc ligula sit amet 
+mi. Fusce pellentesque fringilla mi in commodo. 
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 section_box">
+				<div class="box">
+					<div class="box_header">
+						Nowoczesne wyposażenie
+					</div>
+					<div class="box_content">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nulla urna, 
+volutpat vitae enim sed, accumsan egestas magna. Phasellus scelerisque, velit 
+quis dapibus viverra, urna turpis pretium tellus, a bibendum nunc ligula sit amet 
+mi. Fusce pellentesque fringilla mi in commodo. 
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 section_box">
+				<div class="box">
+					<div class="box_header">
+						Współpraca z NFZ
+					</div>
+					<div class="box_content">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nulla urna, 
+volutpat vitae enim sed, accumsan egestas magna. Phasellus scelerisque, velit 
+quis dapibus viverra, urna turpis pretium tellus, a bibendum nunc ligula sit amet 
+mi. Fusce pellentesque fringilla mi in commodo. 
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 section_box">
+				<div class="box">
+					<div class="box_header">
+						Profesjonalna pomoc
+					</div>
+					<div class="box_content">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nulla urna, 
+volutpat vitae enim sed, accumsan egestas magna. Phasellus scelerisque, velit 
+quis dapibus viverra, urna turpis pretium tellus, a bibendum nunc ligula sit amet 
+mi. Fusce pellentesque fringilla mi in commodo. 
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="container second">
+		<div class="row">
+			<div class="col-xs-12 section_header">
+				Wyposażenie
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 section_header_line"></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 additional_section_text">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 list_item">
+				<img src="images/arrow_list.png">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			</div>
+			<div class="col-xs-12 list_item">
+				<img src="images/arrow_list.png">
+				Duis lorem mi, faucibus ut massa a, congue condimentum lorem. 
+			</div>
+			<div class="col-xs-12 list_item">
+				<img src="images/arrow_list.png">
+				Duis lorem mi, faucibus ut massa a, congue condimentum lorem. 
+			</div>
+			<div class="col-xs-12 list_item">
+				<img src="images/arrow_list.png">
+				Duis lorem mi, faucibus ut massa a, congue condimentum lorem. 				
+			</div>
+			<div class="col-xs-12 list_item">
+				<img src="images/arrow_list.png">
+				Suspendisse potenti. Mauris quis lacus quis ipsum auctor rutrum. 				
+			</div>
+			<div class="col-xs-12 list_item">
+				<img src="images/arrow_list.png">
+				Praesent facilisis sapien magna, luctus accumsan tortor lacinia quis. 				
+			</div>
+			<div class="col-xs-12 list_item">
+				<img src="images/arrow_list.png">
+				Maecenas at ullamcorper est, aliquet mattis dui.
+			</div>
+			<div class="col-xs-12 list_item">
+				<img src="images/arrow_list.png">
+				Quisque nulla dui, pulvinar vitae nisl non, efficitur molestie dui.				
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid third">
+		<div class="row">
+			<div class="col-xs-12 section_header">
+				Kadra
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 section_header_line_w_b_margin"></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 team">
+				<div class="team_context">
+					<div class="team_text">
+						Lorem ipsum sit amet, consectetur adipiscing elit.
+					</div>
+					<button class="team_button" href="#">
+						Zobacz listę specjalistów
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<image src="images/map.jpg">
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="contact_header">
+						Kontakt
+					</div>
+					<div class="contact_details">
+						Lorem ipsum <br>
+						ul. Strzeszyńska 34 <br>
+						60-876, Poznań <br>
+						+48 604 123 512 <br>
+						przychodnia@przychodnia.pl
+					</div>
+				</div>
+			</div>
+		<div>
+	</footer>
+	<div ng-controller="exampleController">
+		{{example}}
+	</div>
+</body>
+</html>
