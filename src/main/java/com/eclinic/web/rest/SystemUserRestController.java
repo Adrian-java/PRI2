@@ -11,15 +11,6 @@ import com.eclinic.domain.Permission;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Worker;
 import com.eclinic.service.SystemUserService;
-
-
-
-
-
-
-
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -96,6 +87,22 @@ public class SystemUserRestController {
 		binder.registerCustomEditor(String.class, new org.skyway.spring.util.databinding.StringEditor());
 		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
+	}
+	
+	
+	/**
+	 * Return actually SystemUser role
+	 * 
+	 */
+
+	@GET
+	@Path("/role/{pesel}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getRoleByPesel(@PathParam("pesel") String pesel) {
+		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("role", s.getRole());
+		return Response.ok(map).build();
 	}
 	
 	/**
