@@ -1,0 +1,11 @@
+<div ng-controller="PanelController">
+	{{role}}
+	<div ng-if="role=='superAdmin'" ng-controller="NewAdminController">
+		<form>
+		    Pesel: <input type="text" ng-model="user.pesel" /><br />
+		    E-mail: <input type="email" ng-model="user.email" /><br />
+		    Hasło: <input type="text" ng-model="user.password" /><br />
+		    <input type="submit" ng-click="addUser(user)" value="Dodaj" />
+		</form>
+	</div>
+</div>

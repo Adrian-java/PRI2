@@ -16,6 +16,14 @@ clinic.config(function($stateProvider, $urlRouterProvider) {
 			url: "/new",
 			templateUrl: "partials/newUser.html"
 		})
+		.state('panel', {
+			url: "/panel",
+			templateUrl: "partials/panel.html"
+		})
+		.state('add_admin', {
+			url: "/newAdmin",
+			templateUrl: "partials/newAdmin.html"
+		})
 })
 
 clinic.controller('exampleController', ['$scope', '$rootScope', '$http', '$cookies', function($scope, $rootScope, $http, $cookies) {
@@ -54,7 +62,7 @@ clinic.controller('NewUserController', function($scope, $http, $cookies){
 						"name": user.first_name,
 						"surname": user.last_name,
 						"dateOfBirth": user.birth_date,
-						"EMail": "",
+						"EMail": user.email,
 						"phoneNr": user.phone,
 						"confirmed": "0",
 						"address": {
@@ -67,7 +75,7 @@ clinic.controller('NewUserController', function($scope, $http, $cookies){
 						}
 					}
 				},
-				"registerDate": "",
+				"registerDate": "2015-01-01",
 				"isActive": "true",
 				"email": user.email				
 			};
@@ -95,6 +103,48 @@ clinic.controller('NewUserController', function($scope, $http, $cookies){
 });
 
 
+clinic.controller('NewAdminController', function($scope, $http, $cookies){
+	$scope.addUser = function(user){
+		var userInfo = {
+				"role": "admin",
+				"pesel": user.pesel,
+				"changedPassword": "false",
+				"password": user.password,
+				"registerDate": "2015-01-01",
+				"isActive": "true",
+				"email": user.email,
+				"worker": {
+					"admin": {
+						"isSuper": 0
+					}
+				},
+			};
+		$http({
+			method: 'POST',
+			url: "http://localhost:8080/wee/rest/SystemUser/newAdmin",
+			data: userInfo,
+			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
+		}).success(function(result){
+			console.log("admin added");
+			console.log(result);		
+		});
+	}
+});
+
+clinic.controller('PanelController', function($scope, $http, $cookies) {
+	$scope.pesel = $cookies.get('token').split(":")[0]
+	
+	$http({
+			method: 'GET',
+			url: "http://localhost:8080/wee/rest/SystemUser/role/"+$scope.pesel,
+			headers: {'XToken': $cookies.get('token')}
+		}).success(function(result){
+			$scope.role = result.role;
+			console.log(result);
+		}).error(function(error){
+			
+		});
+})
 
 clinic.controller('igCtrl', function ($scope, $http, $cookies) {
 
