@@ -4,13 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.eclinic.dao.PermissionDAO;
-import com.eclinic.dao.SystemUserDAO;
-import com.eclinic.dao.WorkerDAO;
-import com.eclinic.domain.Permission;
-import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.Worker;
-import com.eclinic.service.SystemUserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -22,17 +15,24 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+
+import com.eclinic.dao.PermissionDAO;
+import com.eclinic.dao.SystemUserDAO;
+import com.eclinic.dao.WorkerDAO;
+import com.eclinic.domain.Permission;
+import com.eclinic.domain.SystemUser;
+import com.eclinic.domain.Worker;
+import com.eclinic.service.SystemUserService;
 
 
 /**
@@ -103,20 +103,6 @@ public class SystemUserRestController {
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("role", s.getRole());
 		return Response.ok(map).build();
-	}
-	
-	
-	/**
-	 * Return actually SystemUser
-	 * 
-	 */
-
-	@GET
-	@Path("/{pesel}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSystemUserByPesel(@PathParam("pesel") String pesel) {
-		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
-		return Response.ok(s).build();
 	}
 	
 	/**
@@ -217,7 +203,7 @@ public class SystemUserRestController {
 		if(systemuser.getWorker()!=null){
 			Worker w = systemuser.getWorker();
 			if(w.getDoctor()!=null || w.getAdmin()!=null || w.getReceptionist()!=null){
-				return null;
+				return Response.status(Status.NOT_ACCEPTABLE).build();
 			}
 		}
 		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
@@ -238,7 +224,7 @@ public class SystemUserRestController {
 		if(systemuser.getWorker()!=null){
 			Worker w = systemuser.getWorker();
 			if(w.getPatient()!=null || w.getAdmin()!=null || w.getReceptionist()!=null){
-				return null;
+				return Response.status(Status.NOT_ACCEPTABLE).build();
 			}
 		}
 		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
@@ -259,7 +245,7 @@ public class SystemUserRestController {
 		if(systemuser.getWorker()!=null){
 			Worker w = systemuser.getWorker();
 			if(w.getDoctor()!=null || w.getAdmin()!=null || w.getPatient()!=null){
-				return null;
+				return Response.status(Status.NOT_ACCEPTABLE).build();
 			}
 		}
 		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
@@ -280,7 +266,7 @@ public class SystemUserRestController {
 		if(systemuser.getWorker()!=null){
 			Worker w = systemuser.getWorker();
 			if(w.getDoctor()!=null || w.getPatient()!=null || w.getReceptionist()!=null){
-				return null;
+				return Response.status(Status.NOT_ACCEPTABLE).build();
 			}
 		}
 		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
