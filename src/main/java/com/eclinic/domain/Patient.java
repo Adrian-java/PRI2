@@ -87,7 +87,7 @@ public class Patient implements Serializable {
 	 * 
 	 */
 
-	@Column(name = "e_mail", length = 20)
+	@Column(name = "e_mail", length = 20, nullable=true)
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String EMail;
