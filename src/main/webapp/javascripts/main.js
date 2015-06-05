@@ -24,6 +24,14 @@ clinic.config(function($stateProvider, $urlRouterProvider) {
 			url: "/newAdmin",
 			templateUrl: "partials/newAdmin.html"
 		})
+		.state('add_doctor', {
+			url: "/newDoctor",
+			templateUrl: "partials/newDoctor.html"
+		})
+		.state('add_receptionist', {
+			url: "/newReceptionist",
+			templateUrl: "partials/newReceptionist.html"
+		})
 })
 
 clinic.controller('exampleController', ['$scope', '$rootScope', '$http', '$cookies', function($scope, $rootScope, $http, $cookies) {
@@ -131,6 +139,72 @@ clinic.controller('NewAdminController', function($scope, $http, $cookies){
 	}
 });
 
+clinic.controller('NewDoctorController', function($scope, $http, $cookies) {
+	$scope.addUser = function(user){
+		var userInfo = 
+		{
+			"role":"doctor",
+			"pesel": user.pesel,
+			"changedPassword":"false",
+			"password":user.password,
+			"registerDate":"2015-05-04",
+			"isActive":"true",
+			"email": user.email,
+			"worker":
+				  {
+					"doctor":
+						{
+						"name": user.first_name,
+						"surname": user.last_name 
+						}
+				}			
+		};
+		$http({
+			method: 'POST',
+			url: "http://localhost:8080/wee/rest/SystemUser/newDoctor",
+			data: userInfo,
+			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
+		}).success(function(result){
+			console.log("doctor added");
+			console.log(result);		
+		});
+	}
+})
+
+clinic.controller('NewReceptionistController', function($scope, $http, $cookies) {
+	$scope.addUser = function(user){
+		var userInfo = 
+		{
+			"role":"receptionist",
+			"pesel": user.pesel,
+			"changedPassword":"false",
+			"password":user.password,
+			"registerDate":"2015-05-04",
+			"isActive":"true",
+			"email": user.email,
+			"worker":
+				  {
+					"receptionist":
+						{
+						"name": user.first_name,
+						"surname": user.last_name,
+						"phoneNr": user.phone,
+						"access": "access"
+						}
+				}			
+		};
+		$http({
+			method: 'POST',
+			url: "http://localhost:8080/wee/rest/SystemUser/newReceptionist",
+			data: userInfo,
+			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
+		}).success(function(result){
+			console.log("recept added");
+			console.log(result);		
+		});
+	}
+})
+
 clinic.controller('PanelController', function($scope, $http, $cookies) {
 	$scope.pesel = $cookies.get('token').split(":")[0]
 	
@@ -150,7 +224,7 @@ clinic.controller('igCtrl', function ($scope, $http, $cookies) {
 
     $scope.email = "";
     $scope.pwd = "";
-    $scope.loggedIn = false;
+    $scope.loggedIn = $cookies.get('token') ? true : false;
     $scope.loggingIn = false;
 
     $scope.showLogin = function () {
@@ -161,6 +235,7 @@ clinic.controller('igCtrl', function ($scope, $http, $cookies) {
         // do your logout logic
         $scope.user = null;
         $scope.loggedIn = false;
+        $cookies.remove('token');
     };
 
     $scope.login = function () {
@@ -200,13 +275,14 @@ clinic.directive('igLogin', function () {
 '      <form name="form" ng-submit="submit()"> ' +
 '        <div class="modal-content"> ' +
 '          <div class="modal-header"> ' +
-'            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"> Cancel </button>' +
-'              <h3> </h3 > ' +
+'		   	 <div class="login_header">Logowanie</div>' +
 '          </div>' +
 '          <div class="modal-body">' +
-'            <table border="0"><tr><td>Email: </td><td><input type="text" ng-model="email"></input> </td></tr> ' +
-'            <tr><td>Password: </td><td><input type="password" ng-model="pwd"> </input></td></tr>' +
-'            <tr><td colspan="2"><input type="submit" class="btn btn-primary" id="submit" ng-click="submit()" value="Login"></input></td></tr></table> ' +
+'            <table border="0"><tr><td></td><td><input type="text" ng-model="email" placeholder="Pesel:"></input> </td></tr> ' +
+'            <tr><td></td><td><input type="password" ng-model="pwd" placeholder="Password:"> </input></td></tr>' +
+'            <tr><td colspan="2"><input type="submit" class="btn login_submit" id="submit" ng-click="submit()" value="Login"></input></td></tr> ' +
+'			 <tr><td colspan="2"><button type="button" class="btn login_cancel" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">Anuluj</button></td></tr> ' +
+'			 <tr><td colspan="2"><button type="button" class="btn login_forgotten" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">Nie pamiętasz hasła?</button></td></tr></table> ' +
 '          </div>' +
 '        </div> ' +
 '      </form>' +

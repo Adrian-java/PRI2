@@ -2,5 +2,11 @@
 	{{role}}
 	<div ng-if="role=='superAdmin'">
 		<a ui-sref="add_admin">Add admin</a>
+		
 	</div>
+	<div ng-if="role=='superAdmin' || role=='admin'">
+		<a ui-sref="add_doctor">New Doctor</a>
+		<a ui-sref="add_receptionist">New Receptionist</a>
+	</div>
+	
 </div>

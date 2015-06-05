@@ -1,0 +1,17 @@
+<div ng-controller="PanelController">
+	{{role}}
+	<div ng-if="role=='superAdmin' || role=='admin'" ng-controller="NewDoctorController">
+		<form>
+		    Pesel: <input type="text" ng-model="user.pesel" /><br />
+		    Hasło: <input type="text" ng-model="user.password" /><br />
+		    E-mail: <input type="email" ng-model="user.email" /><br />
+		    Imię: <input type="text" ng-model="user.first_name" /><br />
+		    Nazwisko: <input type="text" ng-model="user.last_name" /><br />
+		    <input type="submit" ng-click="addUser(user)" value="Dodaj" />
+		</form>
+	</div>
+</div>
+
+
+
+

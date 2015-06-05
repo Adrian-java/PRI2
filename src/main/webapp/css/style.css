@@ -5,18 +5,19 @@ body{
 }
 
 .navbar-default{
-	background: transparent;
+	background: #ffffff;
 	border: none;
 }
 
 .navbar-default .navbar-nav > li > a {
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: 400;
-	color: #ffffff;
+	color: #168e89;
 }
 
 .navbar-default .navbar-nav > li {
-	margin-top: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 header {
@@ -27,7 +28,7 @@ header {
 
 }
 
-form {
+.new_visit_form {
 	margin-top: 150px;
 	margin-bottom: 50px;
 	background-color: #ffffff;
@@ -201,3 +202,62 @@ footer {
 	margin-left: 30px;
 	font-size: 22px;
 }
+
+.modal-content {
+	border: none;
+	border-radius: 0px;
+	background-color: #168e89;
+}
+
+.login_header {
+	color: #ffffff;
+	font-size: 30px;
+	text-align: center;
+}
+
+.modal-body table {
+	width: 100%;
+}
+
+.modal-body table td {
+	text-align: center;
+}
+
+.modal-body table input {
+	width: 80%;
+	
+}
+
+.modal-header {
+	border: none;
+}
+
+.modal-dialog {
+	max-width: 400px;
+	
+}
+
+.modal-body {
+	font-size: 20px;
+}
+
+.btn, .btn:hover, .btn:active, .btn:visited {
+	background: transparent;
+	border: none;
+	color: #ffffff;
+}
+
+.btn:hover {
+	opacity: 0.8;
+}
+
+.login_submit {
+	font-size:30px;
+	margin-top: 20px;
+}
+
+.login_cancel, .login_forgotten {
+	font-size: 16px;
+	margin-top: -20px;
+}
+
