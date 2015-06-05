@@ -13,6 +13,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.xml.bind.annotation.*;
 import javax.persistence.*;
@@ -145,7 +146,8 @@ public class Doctor implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("specialization")
 	public Set<Specialization> getSpecializations() {
 		if (specializations == null) {
 			specializations = new java.util.LinkedHashSet<com.eclinic.domain.Specialization>();
