@@ -163,7 +163,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 */
 	@Transactional
 	public Integer saveSystemUser(SystemUser systemuser) {
-		SystemUser existingSystemUser = systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId());
+		SystemUser existingSystemUser = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
 		if (existingSystemUser != null) {
 			if (existingSystemUser != systemuser) {
 				existingSystemUser.setId(systemuser.getId());

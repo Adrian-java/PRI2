@@ -304,3 +304,20 @@ footer {
 	background: transparent;
 	border: none;
 }
+
+.panel_box {
+	background-color: #168e89;
+	text-align: center;
+	height: 160px;
+}
+
+.panel_box img {
+	height: 100px;
+	margin-top: 28px;
+}
+
+.patients_list_row {
+	font-size: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
