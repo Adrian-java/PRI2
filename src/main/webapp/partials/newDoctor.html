@@ -1,9 +1,9 @@
 <div ng-controller="PanelController">
-	<div ng-if="role=='superAdmin'" ng-controller="NewAdminController">
+	<div ng-if="role=='superAdmin' || role=='admin'" ng-controller="NewDoctorController">
 		<div class="new_user_header">
 			<div class="container">
 				<div class="col-xs-12">
-					Dodawanie nowego administratora
+					Dodawanie nowego lekarza
 				</div>
 			</div>
 		</div>
@@ -15,8 +15,14 @@
 				<div class="col-xs-12">
 					E-mail: <input type="email" ng-model="user.email" /><br />	
 				</div>
-				<div class="col-xs-12 last_line">
+				<div class="col-xs-12">
 					Hasło: <input type="text" ng-model="user.password" /><br />	
+				</div>
+				<div class="col-xs-12">
+					Imię: <input type="text" ng-model="user.first_name" /><br />	
+				</div>
+				<div class="col-xs-12 last_line">
+					Nazwisko: <input type="text" ng-model="user.last_name" /><br />	
 				</div>
 			</div>
 		</div>
@@ -25,3 +31,6 @@
 		</div>
 	</div>
 </div>
+
+
+

@@ -2,21 +2,28 @@
 
 body{
 	font-family: 'Open Sans Condensed', sans-serif;
+	padding-top: 60px;
 }
 
 .navbar-default{
-	background: transparent;
+	background: #ffffff;
 	border: none;
 }
 
 .navbar-default .navbar-nav > li > a {
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: 400;
-	color: #ffffff;
+	color: #168e89;
 }
 
 .navbar-default .navbar-nav > li {
-	margin-top: 20px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.navbar-default img {
+	width: 40px;
+	margin-top: -7px;
 }
 
 header {
@@ -27,7 +34,7 @@ header {
 
 }
 
-form {
+.new_visit_form {
 	margin-top: 150px;
 	margin-bottom: 50px;
 	background-color: #ffffff;
@@ -200,4 +207,117 @@ footer {
 	margin-top: 15px;
 	margin-left: 30px;
 	font-size: 22px;
+}
+
+.modal-content {
+	border: none;
+	border-radius: 0px;
+	background-color: #168e89;
+}
+
+.login_header {
+	color: #ffffff;
+	font-size: 30px;
+	text-align: center;
+}
+
+.modal-body table {
+	width: 100%;
+}
+
+.modal-body table td {
+	text-align: center;
+}
+
+.modal-body table input {
+	width: 80%;
+	
+}
+
+.modal-header {
+	border: none;
+}
+
+.modal-dialog {
+	max-width: 400px;
+	
+}
+
+.modal-body {
+	font-size: 20px;
+}
+
+.btn, .btn:hover, .btn:active, .btn:visited {
+	background: transparent;
+	border: none;
+	color: #ffffff;
+}
+
+.btn:hover {
+	opacity: 0.8;
+}
+
+.login_submit {
+	font-size:30px;
+	margin-top: 20px;
+}
+
+.login_cancel, .login_forgotten {
+	font-size: 16px;
+	margin-top: -20px;
+}
+
+.new_user_header{
+	background-color: #168e89;
+	text-align: center;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	font-size: 30px;
+	color: #ffffff;
+}
+
+.new_user_basic_info, .new_user_additional_info, .new_user_submit {
+	background-color: #42a9a5;
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 24px;
+	color: #ffffff;
+}
+
+.new_user_form .col-xs-12 {
+	font-size: 20px;
+}
+
+.new_user_form .col-xs-12 input{
+	border: none;
+	width: 100%;
+	border-bottom: 2px solid #168e89;
+	margin: 5px auto 5px auto;
+}
+
+.last_line {
+	margin-bottom: 30px;
+}
+
+.new_user_submit input{
+	background: transparent;
+	border: none;
+}
+
+.panel_box {
+	background-color: #168e89;
+	text-align: center;
+	height: 160px;
+}
+
+.panel_box img {
+	height: 100px;
+	margin-top: 28px;
+}
+
+.patients_list_row {
+	font-size: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }

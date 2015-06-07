@@ -1,6 +1,53 @@
-<div ng-controller="PanelController" style="margin-top: 150px">
-	{{role}}
-	<div ng-if="role=='superAdmin'">
-		<a ui-sref="add_admin">Add admin</a>
+<div ng-controller="PanelController">
+	<div class="container">
+		<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-if="role=='superAdmin'">
+			<div class="panel_box">
+				<img src="images/new_patient_panel.png">	
+			</div>
+			<div class="panel_box_desc">
+				<a ui-sref="add_admin">Dodaj administratora</a>
+			</div>
+		</div>
+		<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-if="role=='superAdmin' || role=='admin'">
+			<div class="panel_box">
+				<img src="images/new_patient_panel.png">	
+			</div>
+			<div class="panel_box_desc">
+				<a ui-sref="add_doctor">Dodaj lekarza</a>
+			</div>
+		</div>
+		<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-if="role=='superAdmin' || role=='admin'">
+			<div class="panel_box">
+				<img src="images/new_patient_panel.png">	
+			</div>
+			<div class="panel_box_desc">
+				<a ui-sref="add_receptionist">Dodaj recepcjonistę</a>
+			</div>
+		</div>
+		<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-if="role=='superAdmin' || role=='admin' || role=='receptionist' || role=='doctor'">
+			<div class="panel_box">
+				<img src="images/patient_list_panel.png">	
+			</div>
+			<div class="panel_box_desc">
+				<a ui-sref="patients_list">Lista pacjentów</a>
+			</div>
+		</div>
+		<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-if="role=='superAdmin' || role=='admin' || role=='receptionist' || role=='doctor'">
+			<div class="panel_box">
+				<img src="images/doctors_list_panel.png">	
+			</div>
+			<div class="panel_box_desc">
+				<a ui-sref="doctors_list">Lista lekarzy</a>
+			</div>
+		</div>
+		<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-if="role=='superAdmin' || role=='admin' || role=='receptionist' || role=='doctor'">
+			<div class="panel_box">
+				<img src="images/doctors_list_panel.png">	
+			</div>
+			<div class="panel_box_desc">
+				<a ui-sref="edit_doctor({ pesel: 'doctor44' })">Edycja lekarza</a>
+			</div>
+		</div>
+
 	</div>
 </div>
