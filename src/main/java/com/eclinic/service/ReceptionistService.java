@@ -51,7 +51,7 @@ public interface ReceptionistService {
 	 * Save an existing Receptionist entity
 	 * 
 	 */
-	public void saveReceptionist(Receptionist receptionist_1);
+	public Integer saveReceptionist(Receptionist receptionist_1);
 
 	/**
 	 * Delete an existing Worker entity

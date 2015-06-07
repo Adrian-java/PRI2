@@ -64,42 +64,42 @@ public class Doctor implements Serializable {
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-//	@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Specialization> specializations;
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.PatientCard> patientCards;
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-//	@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Recipe> recipes;
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Graphic> graphics;
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Visit> visits;
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-//	@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Worker> workers;
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.VisitScheduler> visitSchedulers;
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
 
 	/**
@@ -146,7 +146,7 @@ public class Doctor implements Serializable {
 
 	/**
 	 */
-//	@JsonIgnore
+	// @JsonIgnore
 	@JsonProperty("specialization")
 	public Set<Specialization> getSpecializations() {
 		if (specializations == null) {
@@ -277,17 +277,28 @@ public class Doctor implements Serializable {
 	 *
 	 */
 	public void copy(Doctor that) {
-		setId(that.getId());
-		setName(that.getName());
-		setSurname(that.getSurname());
-		setSpecializations(new java.util.LinkedHashSet<com.eclinic.domain.Specialization>(that.getSpecializations()));
-		setPatientCards(new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>(that.getPatientCards()));
-		setRecipes(new java.util.LinkedHashSet<com.eclinic.domain.Recipe>(that.getRecipes()));
-		setGraphics(new java.util.LinkedHashSet<com.eclinic.domain.Graphic>(that.getGraphics()));
-		setVisits(new java.util.LinkedHashSet<com.eclinic.domain.Visit>(that.getVisits()));
-		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(that.getWorkers()));
-		setVisitSchedulers(new java.util.LinkedHashSet<com.eclinic.domain.VisitScheduler>(that.getVisitSchedulers()));
-		setSickLeaves(new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>(that.getSickLeaves()));
+		if (that.getId() != null)
+			setId(that.getId());
+		if (that.getName() != null)
+			setName(that.getName());
+		if (that.getSurname() != null)
+			setSurname(that.getSurname());
+		setSpecializations(new java.util.LinkedHashSet<com.eclinic.domain.Specialization>(
+				that.getSpecializations()));
+		setPatientCards(new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>(
+				that.getPatientCards()));
+		setRecipes(new java.util.LinkedHashSet<com.eclinic.domain.Recipe>(
+				that.getRecipes()));
+		setGraphics(new java.util.LinkedHashSet<com.eclinic.domain.Graphic>(
+				that.getGraphics()));
+		setVisits(new java.util.LinkedHashSet<com.eclinic.domain.Visit>(
+				that.getVisits()));
+		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(
+				that.getWorkers()));
+		setVisitSchedulers(new java.util.LinkedHashSet<com.eclinic.domain.VisitScheduler>(
+				that.getVisitSchedulers()));
+		setSickLeaves(new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>(
+				that.getSickLeaves()));
 	}
 
 	/**
@@ -323,7 +334,8 @@ public class Doctor implements Serializable {
 		if (!(obj instanceof Doctor))
 			return false;
 		Doctor equalCheck = (Doctor) obj;
-		if ((id == null && equalCheck.id != null) || (id != null && equalCheck.id == null))
+		if ((id == null && equalCheck.id != null)
+				|| (id != null && equalCheck.id == null))
 			return false;
 		if (id != null && !id.equals(equalCheck.id))
 			return false;

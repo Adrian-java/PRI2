@@ -80,12 +80,12 @@ public class Receptionist implements Serializable {
 	/**
 	 */
 	@OneToMany(mappedBy = "receptionist", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Visit> visits;
 	/**
 	 */
 	@OneToMany(mappedBy = "receptionist", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-//	@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Worker> workers;
 
 	/**
@@ -190,13 +190,20 @@ public class Receptionist implements Serializable {
 	 *
 	 */
 	public void copy(Receptionist that) {
-		setId(that.getId());
-		setName(that.getName());
-		setSurname(that.getSurname());
-		setPhoneNr(that.getPhoneNr());
-		setAccess(that.getAccess());
-		setVisits(new java.util.LinkedHashSet<com.eclinic.domain.Visit>(that.getVisits()));
-		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(that.getWorkers()));
+		if (that.getId() != null)
+			setId(that.getId());
+		if (that.getName() != null)
+			setName(that.getName());
+		if (that.getSurname() != null)
+			setSurname(that.getSurname());
+		if (that.getPhoneNr() != null)
+			setPhoneNr(that.getPhoneNr());
+		if (that.getAccess() != null)
+			setAccess(that.getAccess());
+		setVisits(new java.util.LinkedHashSet<com.eclinic.domain.Visit>(
+				that.getVisits()));
+		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(
+				that.getWorkers()));
 	}
 
 	/**
@@ -234,7 +241,8 @@ public class Receptionist implements Serializable {
 		if (!(obj instanceof Receptionist))
 			return false;
 		Receptionist equalCheck = (Receptionist) obj;
-		if ((id == null && equalCheck.id != null) || (id != null && equalCheck.id == null))
+		if ((id == null && equalCheck.id != null)
+				|| (id != null && equalCheck.id == null))
 			return false;
 		if (id != null && !id.equals(equalCheck.id))
 			return false;

@@ -24,6 +24,7 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "findAllPatientCards", query = "select myPatientCard from PatientCard myPatientCard"),
+		@NamedQuery(name = "findPatientCardByPatientId", query = "select myPatientCard from PatientCard myPatientCard where myPatientCard.patient = ?1"),
 		@NamedQuery(name = "findPatientCardById", query = "select myPatientCard from PatientCard myPatientCard where myPatientCard.id = ?1"),
 		@NamedQuery(name = "findPatientCardByPrimaryKey", query = "select myPatientCard from PatientCard myPatientCard where myPatientCard.id = ?1"),
 		@NamedQuery(name = "findPatientCardByRegisterDate", query = "select myPatientCard from PatientCard myPatientCard where myPatientCard.registerDate = ?1"),

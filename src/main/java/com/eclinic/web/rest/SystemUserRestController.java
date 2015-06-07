@@ -21,18 +21,29 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig.Feature;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.PermissionDAO;
+import com.eclinic.dao.ReceptionistDAO;
 import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.WorkerDAO;
+import com.eclinic.domain.Doctor;
+import com.eclinic.domain.Patient;
 import com.eclinic.domain.Permission;
+import com.eclinic.domain.Receptionist;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Worker;
+import com.eclinic.service.DoctorService;
+import com.eclinic.service.PatientService;
+import com.eclinic.service.ReceptionistService;
 import com.eclinic.service.SystemUserService;
 
 /**
@@ -49,6 +60,9 @@ public class SystemUserRestController {
 	 */
 	@Autowired
 	private PermissionDAO permissionDAO;
+
+	@Autowired
+	private PatientDAO patientDao;
 
 	/**
 	 * DAO injected by Spring that manages SystemUser entities
@@ -71,6 +85,21 @@ public class SystemUserRestController {
 	 */
 	@Autowired
 	private SystemUserService systemUserService;
+
+	@Autowired
+	private PatientService patientService;
+
+	@Autowired
+	private DoctorService doctorService;
+
+	@Autowired
+	private ReceptionistService receptionistService;
+
+	@Autowired
+	private DoctorDAO doctorDao;
+
+	@Autowired
+	private ReceptionistDAO receptionistDao;
 
 	public SystemUserRestController() {
 	}
@@ -243,61 +272,87 @@ public class SystemUserRestController {
 	/**
 	 * Create a new SystemUser entity
 	 * 
+	 * @throws IOException
+	 * @throws DataAccessException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
+	 * 
 	 */
 
 	@PUT
-	@Path("/savePatient")
+	@Path("/savePatient/{pesel}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveSystemUserPatient(SystemUser systemuser) {
-		if (systemuser.getWorker() != null) {
-			Worker w = systemuser.getWorker();
-			if (w.getDoctor() != null || w.getAdmin() != null
-					|| w.getReceptionist() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
-		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+	public Response saveSystemUserPatient(Patient patient,
+			@PathParam("pesel") String pesel) throws JsonGenerationException, JsonMappingException, DataAccessException, IOException {
+		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
+		Integer id = su.getWorker().getPatient().getId();
+		Patient p = patientDao.findPatientById(id);
+		if (p instanceof HibernateProxy) {
+            // Unwrap Proxy;
+            //      -- loading, if necessary.
+            HibernateProxy proxy = (HibernateProxy) p;
+            LazyInitializer li = proxy.getHibernateLazyInitializer();
+            p=  (Patient) li.getImplementation();
+        } 
+		p.copy(patient);
+		Integer i = patientService.savePatient(p);
+		return Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
+				false).writeValueAsString(patientDao.findPatientById(i))).build();
 	}
 
 	@PUT
-	@Path("/saveDoctor")
+	@Path("/saveDoctor/{pesel}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveSystemUserDoctor(SystemUser systemuser) {
-		if (systemuser.getWorker() != null) {
-			Worker w = systemuser.getWorker();
-			if (w.getPatient() != null || w.getAdmin() != null
-					|| w.getReceptionist() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
-		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+	public Response saveSystemUserDoctor(Doctor doctor,
+			@PathParam("pesel") String pesel) throws JsonGenerationException, JsonMappingException, IOException {
+		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
+		Integer id = su.getWorker().getDoctor().getId();
+		Doctor d = doctorDao.findDoctorById(id);
+		if (d instanceof HibernateProxy) {
+            // Unwrap Proxy;
+            //      -- loading, if necessary.
+            HibernateProxy proxy = (HibernateProxy) d;
+            LazyInitializer li = proxy.getHibernateLazyInitializer();
+            d=  (Doctor) li.getImplementation();
+        } 
+		d.copy(doctor);
+		Integer i = doctorService.saveDoctor(d);
+		return Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
+				false).writeValueAsString(d)).build();
 	}
 
 	@PUT
-	@Path("/saveReceptionist")
+	@Path("/saveReceptionist/{pesel}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveSystemUserReceptionist(SystemUser systemuser) {
-		if (systemuser.getWorker() != null) {
-			Worker w = systemuser.getWorker();
-			if (w.getDoctor() != null || w.getAdmin() != null
-					|| w.getPatient() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
-		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+	public Response saveSystemUserReceptionist(Receptionist receptionist,
+			@PathParam("pesel") String pesel) throws JsonGenerationException, JsonMappingException, DataAccessException, IOException {
+		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
+		Integer id = su.getWorker().getReceptionist().getId();
+		Receptionist r = receptionistDao.findReceptionistById(id);
+		
+		if (r instanceof HibernateProxy) {
+            // Unwrap Proxy;
+            //      -- loading, if necessary.
+            HibernateProxy proxy = (HibernateProxy) r;
+            LazyInitializer li = proxy.getHibernateLazyInitializer();
+            r=  (Receptionist) li.getImplementation();
+        } 
+		
+		r.copy(receptionist);
+		Integer i = receptionistService.saveReceptionist(r);
+		return Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
+				false).writeValueAsString(receptionistDao.findReceptionistByPrimaryKey(i))).build();
 	}
 
 	@PUT
-	@Path("/saveAdmin")
+	@Path("/saveAdmin/{pesel}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveSystemUserAdmin(SystemUser systemuser) {
+	public Response saveSystemUserAdmin(SystemUser systemuser,
+			@PathParam("pesel") String pesel) {
 		if (systemuser.getWorker() != null) {
 			Worker w = systemuser.getWorker();
 			if (w.getDoctor() != null || w.getPatient() != null
@@ -313,7 +368,9 @@ public class SystemUserRestController {
 	@Path("/changed/{pesel}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response confirmedPatient(@PathParam("pesel") String pesel) throws JsonGenerationException, JsonMappingException, DataAccessException, IOException {
+	public Response confirmedPatient(@PathParam("pesel") String pesel)
+			throws JsonGenerationException, JsonMappingException,
+			DataAccessException, IOException {
 		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
 		if (s != null && s.getWorker().getPatient() != null) {
 			s.getWorker().getPatient().setConfirmed(1);

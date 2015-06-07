@@ -57,9 +57,10 @@ public interface DoctorService {
 
 	/**
 	 * Save an existing Doctor entity
+	 * @return 
 	 * 
 	 */
-	public void saveDoctor(Doctor doctor_1);
+	public Integer saveDoctor(Doctor doctor_1);
 
 	/**
 	 * Delete an existing Recipe entity

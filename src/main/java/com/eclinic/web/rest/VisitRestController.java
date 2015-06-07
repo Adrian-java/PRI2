@@ -7,16 +7,28 @@ import com.eclinic.dao.PatientCardDAO;
 import com.eclinic.dao.ReceptionistDAO;
 import com.eclinic.dao.SickLeaveDAO;
 import com.eclinic.dao.StatusOfVisitDAO;
+import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.TypeOfVisitDAO;
 import com.eclinic.dao.VisitDAO;
 import com.eclinic.domain.Doctor;
+import com.eclinic.domain.Patient;
 import com.eclinic.domain.PatientCard;
 import com.eclinic.domain.Receptionist;
 import com.eclinic.domain.SickLeave;
 import com.eclinic.domain.StatusOfVisit;
+import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.TypeOfVisit;
 import com.eclinic.domain.Visit;
+import com.eclinic.model.VisitModel;
+import com.eclinic.service.PatientCardService;
 import com.eclinic.service.VisitService;
+
+
+
+
+
+
+
 
 
 
@@ -32,6 +44,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -75,6 +88,11 @@ public class VisitRestController {
 	 * DAO injected by Spring that manages SickLeave entities
 	 * 
 	 */
+	
+	@Autowired
+	private PatientCardService patientCardService;
+	
+	
 	@Autowired
 	private SickLeaveDAO sickLeaveDAO;
 
@@ -105,6 +123,9 @@ public class VisitRestController {
 	 */
 	@Autowired
 	private VisitService visitService;
+	
+	@Autowired 
+	private SystemUserDAO systemUserDao;
 
 	
 	public VisitRestController(){}
@@ -198,9 +219,36 @@ public class VisitRestController {
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newVisit( Visit visit) {
-		visitService.saveVisit(visit);
-		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId())).build();
+	public Response newVisit( VisitModel visitmodel) {
+		try{
+		Doctor d = systemUserDao.findSystemUserByPesel(visitmodel.getDoctorLogin()).getWorker().getDoctor();
+		Patient p  = systemUserDao.findSystemUserByPesel(visitmodel.getPatientPesel()).getWorker().getPatient();
+		PatientCard pc = patientCardDAO.findPatientCardByPatientId(p);
+		if(pc==null){
+			pc= new PatientCard();
+			pc.setDoctor(d);
+			pc.setPatient(p);
+			pc.setRegisterDate(systemUserDao.findSystemUserByPesel(visitmodel.getDoctorLogin()).getRegisterDate());
+			Integer id = patientCardService.savePatientCard(pc);
+		}
+		Receptionist r = systemUserDao.findSystemUserByPesel(visitmodel.getRecepcionistLogin()).getWorker().getReceptionist();
+		StatusOfVisit sov = statusOfVisitDAO.findStatusOfVisitByType(visitmodel.getStatusOfVisit()).iterator().next();
+		TypeOfVisit tof = typeOfVisitDAO.findTypeOfVisitByName(visitmodel.getTypeOfVisit()).iterator().next();
+		Visit visit = new Visit();
+		visit.setDateOfVisit(visitmodel.getDateOfVisit());
+		visit.setDescriptionOfVisit(visitmodel.getDescriptionOfVisit());
+		visit.setDoctor(d);
+		visit.setIsLeave(visitmodel.getIsLeave());
+		visit.setReceptionist(r);
+		visit.setSpecial(visitmodel.getSpecial());
+		visit.setStatusOfVisit(sov);
+		visit.setTypeOfVisit(tof);
+		visit.setPatientCard(pc);
+		Integer  i = visitService.saveVisit(visit);
+		return Response.ok(visitDAO.findVisitByPrimaryKey(i)).build();
+		}catch(Exception e){
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 	}
 
 

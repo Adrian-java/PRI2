@@ -78,7 +78,7 @@ public interface PatientCardService {
 	 * Save an existing PatientCard entity
 	 * 
 	 */
-	public void savePatientCard(PatientCard patientcard_1);
+	public Integer savePatientCard(PatientCard patientcard_1);
 
 	/**
 	 */

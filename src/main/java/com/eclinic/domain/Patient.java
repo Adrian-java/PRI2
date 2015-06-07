@@ -72,7 +72,7 @@ public class Patient implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String surname;
-	
+
 	/**
 	 * data urodzenia
 	 * 
@@ -87,7 +87,7 @@ public class Patient implements Serializable {
 	 * 
 	 */
 
-	@Column(name = "e_mail", length = 20, nullable=true)
+	@Column(name = "e_mail", length = 20, nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String EMail;
@@ -110,29 +110,29 @@ public class Patient implements Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumns({ @JoinColumn(name = "id_address", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Address address;
 	/**
 	 */
 	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.PatientCard> patientCards;
 	/**
 	 */
 	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Recipe> recipes;
 	/**
 	 */
 	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Worker> workers;
 	/**
 	 */
 	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
+	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
 
 	/**
@@ -243,7 +243,7 @@ public class Patient implements Serializable {
 
 	/**
 	 */
-//	@JsonIgnore
+	// @JsonIgnore
 	@JsonProperty("address")
 	public Address getAddress() {
 		return address;
@@ -323,18 +323,30 @@ public class Patient implements Serializable {
 	 *
 	 */
 	public void copy(Patient that) {
-		setId(that.getId());
-		setName(that.getName());
-		setSurname(that.getSurname());
-		setDateOfBirth(that.getDateOfBirth());
-		setEMail(that.getEMail());
-		setPhoneNr(that.getPhoneNr());
-		setConfirmed(that.getConfirmed());
-		setAddress(that.getAddress());
-		setPatientCards(new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>(that.getPatientCards()));
-		setRecipes(new java.util.LinkedHashSet<com.eclinic.domain.Recipe>(that.getRecipes()));
-		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(that.getWorkers()));
-		setSickLeaves(new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>(that.getSickLeaves()));
+		if (that.getId() != null)
+			setId(that.getId());
+		if (that.getName() != null)
+			setName(that.getName());
+		if (that.getSurname() != null)
+			setSurname(that.getSurname());
+		if (that.getDateOfBirth() != null)
+			setDateOfBirth(that.getDateOfBirth());
+		if (that.getEMail() != null)
+			setEMail(that.getEMail());
+		if (that.getPhoneNr() != null)
+			setPhoneNr(that.getPhoneNr());
+		if (that.getConfirmed() != null)
+			setConfirmed(that.getConfirmed());
+		if (that.getAddress() != null)
+			setAddress(that.getAddress());
+		setPatientCards(new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>(
+				that.getPatientCards()));
+		setRecipes(new java.util.LinkedHashSet<com.eclinic.domain.Recipe>(
+				that.getRecipes()));
+		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(
+				that.getWorkers()));
+		setSickLeaves(new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>(
+				that.getSickLeaves()));
 	}
 
 	/**
@@ -374,7 +386,8 @@ public class Patient implements Serializable {
 		if (!(obj instanceof Patient))
 			return false;
 		Patient equalCheck = (Patient) obj;
-		if ((id == null && equalCheck.id != null) || (id != null && equalCheck.id == null))
+		if ((id == null && equalCheck.id != null)
+				|| (id != null && equalCheck.id == null))
 			return false;
 		if (id != null && !id.equals(equalCheck.id))
 			return false;

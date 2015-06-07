@@ -1,12 +1,12 @@
 package com.eclinic.dao;
 
+import com.eclinic.domain.Patient;
 import com.eclinic.domain.PatientCard;
 
 import java.util.Calendar;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -44,6 +44,8 @@ public interface PatientCardDAO extends JpaDao<PatientCard> {
 	 *
 	 */
 	public PatientCard findPatientCardByPrimaryKey(Integer id_1) throws DataAccessException;
+	
+	public PatientCard findPatientCardByPatientId(Patient id_1) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findPatientCardByPrimaryKey

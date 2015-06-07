@@ -163,7 +163,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	 * 
 	 */
 	@Transactional
-	public void saveReceptionist(Receptionist receptionist) {
+	public Integer saveReceptionist(Receptionist receptionist) {
 		Receptionist existingReceptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId());
 
 		if (existingReceptionist != null) {
@@ -179,6 +179,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 			receptionist = receptionistDAO.store(receptionist);
 		}
 		receptionistDAO.flush();
+		return receptionist.getId();
 	}
 
 	/**

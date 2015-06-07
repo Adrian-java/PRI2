@@ -1,5 +1,6 @@
 package com.eclinic.dao;
 
+import com.eclinic.domain.Patient;
 import com.eclinic.domain.PatientCard;
 
 import java.util.Arrays;
@@ -13,11 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.skyway.spring.util.dao.AbstractJpaDao;
-
 import org.springframework.dao.DataAccessException;
-
 import org.springframework.stereotype.Repository;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -212,5 +210,15 @@ public class PatientCardDAOImpl extends AbstractJpaDao<PatientCard> implements
 	 */
 	public boolean canBeMerged(PatientCard entity) {
 		return true;
+	}
+
+	@Transactional
+	public PatientCard findPatientCardByPatientId(Patient id){
+		try {
+			Query query = createNamedQuery("findPatientCardByPatientId",-1,-1,id);
+			return (com.eclinic.domain.PatientCard) query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
 	}
 }

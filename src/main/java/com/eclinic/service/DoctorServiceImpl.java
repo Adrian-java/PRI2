@@ -228,7 +228,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public void saveDoctor(Doctor doctor) {
+	public Integer saveDoctor(Doctor doctor) {
 		Doctor existingDoctor = doctorDAO.findDoctorByPrimaryKey(doctor.getId());
 
 		if (existingDoctor != null) {
@@ -242,6 +242,7 @@ public class DoctorServiceImpl implements DoctorService {
 			doctor = doctorDAO.store(doctor);
 		}
 		doctorDAO.flush();
+		return doctor.getId();
 	}
 
 	/**

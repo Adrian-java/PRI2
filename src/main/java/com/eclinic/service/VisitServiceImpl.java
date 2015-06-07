@@ -198,7 +198,7 @@ public class VisitServiceImpl implements VisitService {
 	 * 
 	 */
 	@Transactional
-	public void saveVisit(Visit visit) {
+	public Integer saveVisit(Visit visit) {
 		Visit existingVisit = visitDAO.findVisitByPrimaryKey(visit.getId());
 
 		if (existingVisit != null) {
@@ -214,6 +214,7 @@ public class VisitServiceImpl implements VisitService {
 			visit = visitDAO.store(visit);
 		}
 		visitDAO.flush();
+		return visit.getId();
 	}
 
 	/**

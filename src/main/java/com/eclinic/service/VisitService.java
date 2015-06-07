@@ -57,7 +57,7 @@ public interface VisitService {
 	 * Save an existing Visit entity
 	 * 
 	 */
-	public void saveVisit(Visit visit_1);
+	public Integer saveVisit(Visit visit_1);
 
 	/**
 	 * Return a count of all Visit entity

@@ -260,7 +260,7 @@ public class PatientCardServiceImpl implements PatientCardService {
 	 * 
 	 */
 	@Transactional
-	public void savePatientCard(PatientCard patientcard) {
+	public Integer savePatientCard(PatientCard patientcard) {
 		PatientCard existingPatientCard = patientCardDAO.findPatientCardByPrimaryKey(patientcard.getId());
 
 		if (existingPatientCard != null) {
@@ -273,6 +273,7 @@ public class PatientCardServiceImpl implements PatientCardService {
 			patientcard = patientCardDAO.store(patientcard);
 		}
 		patientCardDAO.flush();
+		return patientcard.getId();
 	}
 
 	/**

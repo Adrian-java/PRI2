@@ -61,7 +61,7 @@ public class Visit implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	byte[] descriptionOfVisit;
+	String descriptionOfVisit;
 	/**
 	 */
 
@@ -139,13 +139,13 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	public void setDescriptionOfVisit(byte[] descriptionOfVisit) {
+	public void setDescriptionOfVisit(String descriptionOfVisit) {
 		this.descriptionOfVisit = descriptionOfVisit;
 	}
 
 	/**
 	 */
-	public byte[] getDescriptionOfVisit() {
+	public String getDescriptionOfVisit() {
 		return this.descriptionOfVisit;
 	}
 
