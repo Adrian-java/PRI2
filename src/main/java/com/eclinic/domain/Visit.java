@@ -82,31 +82,31 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_patient_card", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	PatientCard patientCard;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_type_of_visit", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	TypeOfVisit typeOfVisit;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_receptionist", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Receptionist receptionist;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_status_of_visit", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	StatusOfVisit statusOfVisit;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_doctor", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Doctor doctor;

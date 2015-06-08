@@ -1,39 +1,9 @@
 package com.eclinic.web.rest;
 
 import java.io.IOException;
-
-import com.eclinic.dao.DoctorDAO;
-import com.eclinic.dao.PatientCardDAO;
-import com.eclinic.dao.ReceptionistDAO;
-import com.eclinic.dao.SickLeaveDAO;
-import com.eclinic.dao.StatusOfVisitDAO;
-import com.eclinic.dao.SystemUserDAO;
-import com.eclinic.dao.TypeOfVisitDAO;
-import com.eclinic.dao.VisitDAO;
-import com.eclinic.domain.Doctor;
-import com.eclinic.domain.Patient;
-import com.eclinic.domain.PatientCard;
-import com.eclinic.domain.Receptionist;
-import com.eclinic.domain.SickLeave;
-import com.eclinic.domain.StatusOfVisit;
-import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.TypeOfVisit;
-import com.eclinic.domain.Visit;
-import com.eclinic.model.VisitModel;
-import com.eclinic.service.PatientCardService;
-import com.eclinic.service.VisitService;
-
-
-
-
-
-
-
-
-
-
-
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -57,6 +27,28 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+
+import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.PatientCardDAO;
+import com.eclinic.dao.ReceptionistDAO;
+import com.eclinic.dao.SickLeaveDAO;
+import com.eclinic.dao.StatusOfVisitDAO;
+import com.eclinic.dao.SystemUserDAO;
+import com.eclinic.dao.TypeOfVisitDAO;
+import com.eclinic.dao.VisitDAO;
+import com.eclinic.domain.Doctor;
+import com.eclinic.domain.Patient;
+import com.eclinic.domain.PatientCard;
+import com.eclinic.domain.Receptionist;
+import com.eclinic.domain.SickLeave;
+import com.eclinic.domain.StatusOfVisit;
+import com.eclinic.domain.SystemUser;
+import com.eclinic.domain.TypeOfVisit;
+import com.eclinic.domain.Visit;
+import com.eclinic.model.VisitModel;
+import com.eclinic.model.VisitUser;
+import com.eclinic.service.PatientCardService;
+import com.eclinic.service.VisitService;
 
 
 /**
@@ -510,8 +502,23 @@ public class VisitRestController {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listVisits() throws JsonGenerationException, JsonMappingException, IOException {
+		
+		List<VisitUser> set = new ArrayList<VisitUser>();
+		Set<Visit> visit = visitService.loadVisits();
+		Set<SystemUser> sys = systemUserDao.findAllSystemUsers();
+		for(Visit v : visit){
+			for(SystemUser su : sys){
+				if(su.getWorker().getPatient()!=null && v.getPatientCard().getPatient().getId().equals(su.getWorker().getPatient().getId())){
+					VisitUser vu = new VisitUser();
+					vu.setSystemUser(su);
+					vu.setVisit(v);
+					set.add(vu);
+				}
+			}
+		}
+		
 		return  Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
-				false).writeValueAsString(visitService.loadVisits())).build();
+				false).writeValueAsString(set)).build();
 	}
 	/**
 	 * Save an existing TypeOfVisit entity

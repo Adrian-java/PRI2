@@ -57,13 +57,13 @@ public class PatientCard implements Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_patient", referencedColumnName = "id", nullable = false) })
 	@XmlTransient
 	Patient patient;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_default_doctor", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Doctor doctor;
