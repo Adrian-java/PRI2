@@ -195,8 +195,9 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 
 		try {
 			Query query = createNamedQuery("findSystemUserByPesel", -1, -1, pesel);
-			SystemUser su = (SystemUser) query.getResultList().get(0);
-			return su;
+			return (com.eclinic.domain.SystemUser) query.getSingleResult();
+//			SystemUser su = (SystemUser) query.getResultList().get(0);
+//			return su;
 		} catch (NoResultException nre) {
 			return null;
 		}
