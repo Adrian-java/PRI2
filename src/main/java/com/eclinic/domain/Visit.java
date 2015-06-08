@@ -14,6 +14,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.xml.bind.annotation.*;
 import javax.persistence.*;
@@ -30,6 +31,8 @@ import javax.persistence.*;
 		@NamedQuery(name = "findVisitById", query = "select myVisit from Visit myVisit where myVisit.id = ?1"),
 		@NamedQuery(name = "findVisitByIsLeave", query = "select myVisit from Visit myVisit where myVisit.isLeave = ?1"),
 		@NamedQuery(name = "findVisitByPrimaryKey", query = "select myVisit from Visit myVisit where myVisit.id = ?1"),
+		@NamedQuery(name = "findVisitByPesel", query = "select v from Visit v where v.patientCard in (select id from PatientCard where patient in (select id from Patient p where  id in (select patient from Worker where id in (select worker from SystemUser where pesel =?1 ))))"),
+
 		@NamedQuery(name = "findVisitBySpecial", query = "select myVisit from Visit myVisit where myVisit.special = ?1") })
 @Table(catalog = "eclinic", name = "Visit")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -181,7 +184,8 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("patientCard")
 	public PatientCard getPatientCard() {
 		return patientCard;
 	}
@@ -194,7 +198,8 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("typeOfVisit")
 	public TypeOfVisit getTypeOfVisit() {
 		return typeOfVisit;
 	}
@@ -207,7 +212,8 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("receptionist")
 	public Receptionist getReceptionist() {
 		return receptionist;
 	}
@@ -220,7 +226,8 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("statusOfVisit")
 	public StatusOfVisit getStatusOfVisit() {
 		return statusOfVisit;
 	}
@@ -233,7 +240,8 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	@JsonIgnore
+//	@JsonIgnore
+	@JsonProperty("doctor")
 	public Doctor getDoctor() {
 		return doctor;
 	}

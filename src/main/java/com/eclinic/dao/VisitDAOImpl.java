@@ -13,11 +13,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.skyway.spring.util.dao.AbstractJpaDao;
-
 import org.springframework.dao.DataAccessException;
-
 import org.springframework.stereotype.Repository;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -255,5 +252,11 @@ public class VisitDAOImpl extends AbstractJpaDao<Visit> implements VisitDAO {
 	 */
 	public boolean canBeMerged(Visit entity) {
 		return true;
+	}
+
+	@Override
+	public Set<Visit> findVisitByPesel(String pesel) throws DataAccessException {
+		Query query = createNamedQuery("findVisitByPesel", -1, -1, pesel);
+		return new LinkedHashSet<Visit>(query.getResultList());
 	}
 }

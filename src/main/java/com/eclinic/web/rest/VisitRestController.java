@@ -33,6 +33,8 @@ import com.eclinic.service.VisitService;
 
 
 
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -49,7 +51,9 @@ import javax.ws.rs.core.Response.Status;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -466,6 +470,14 @@ public class VisitRestController {
 	public Response loadVisit(@PathParam("visit_id") Integer visit_id) {
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit_id)).build();
 	}
+	
+	@GET
+	@Path("/get/{pesel}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getVisitByPesel(@PathParam("pesel") String pesel) throws JsonGenerationException, JsonMappingException, DataAccessException, IOException {
+		return Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
+				false).writeValueAsString(visitDAO.findVisitByPesel(pesel))).build();
+	}
 
 	/**
 	 * Create a new TypeOfVisit entity
@@ -498,7 +510,8 @@ public class VisitRestController {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listVisits() throws JsonGenerationException, JsonMappingException, IOException {
-		return  Response.ok(new ObjectMapper().writeValueAsString(visitService.loadVisits())).build();
+		return  Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
+				false).writeValueAsString(visitService.loadVisits())).build();
 	}
 	/**
 	 * Save an existing TypeOfVisit entity
