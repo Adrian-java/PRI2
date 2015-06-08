@@ -61,12 +61,27 @@ clinic.config(function($stateProvider, $urlRouterProvider) {
 				$scope.pesel = $stateParams.pesel;
 			}
 		})
+		.state('edit_user', {
+			url: "/editUser/:pesel",
+			templateUrl: "partials/editUser.html",
+			controller: function($scope, $stateParams){
+				$scope.pesel = $stateParams.pesel;
+			}
+		})
 		.state('remove_user', {
 			url: "removeUser/:pesel",
 			templateUrl: "partials/removeUser.html",
 			controller: function($scope, $stateParams){
 				$scope.pesel = $stateParams.pesel;
 			}
+		})
+		.state('new_visit', {
+			url: "/newVisit",
+			templateUrl: "partials/newVisit.html"
+		})
+		.state('visit_list', {
+			url: "/visits",
+			templateUrl: "partials/visits.html"
 		})
 })
 
@@ -163,6 +178,31 @@ clinic.controller('NewUserController', function($scope, $http, $cookies){
 	
 });
 
+clinic.controller('NewVisitController', function($scope, $http, $cookies){
+	$scope.addVisit = function(){
+		var visit = {
+				"dateOfVisit": $scope.visit_date,
+				"descriptionOfVisit":"",
+				"isLeave":"false",
+				"special":"false",
+				"doctorLogin": $scope.doctor_id,
+				"statusOfVisit":"Zarejestrowany",
+				"recepcionistLogin":"00990099",
+				"typeOfVisit":"Badanie",
+				"patientPesel": $scope.patient_id
+			};
+		$http({
+			method: 'POST',
+			url: "http://localhost:8080/wee/rest/Visit/new",
+			data: visit,
+			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
+		}).success(function(result){
+			console.log("visit added");
+			console.log(result);		
+		});
+	}
+});
+
 
 clinic.controller('NewAdminController', function($scope, $http, $cookies){
 	$scope.addUser = function(user){
@@ -225,40 +265,43 @@ clinic.controller('NewDoctorController', function($scope, $http, $cookies) {
 })
 
 clinic.controller('EditDoctorController', function($scope, $http, $cookies, $state) {
-	$scope.doctor = {}; 
-	$scope.$watch('user', function(){
-		if($scope.user){
-			$scope.doctor.pesel = $scope.user.pesel;
-			$scope.doctor.email = $scope.user.email;
-			$scope.doctor.first_name = $scope.user.worker.doctor.name;
-			$scope.doctor.last_name = $scope.user.worker.doctor.surname;
-		}
-	})
 	
 	$scope.editUser = function(){
 		console.log($scope.user);
-		/*var userInfo = 
-		{
-			"pesel": user.pesel,
-			"email": user.email,
-			"worker":
-				  {
-					"doctor":
-						{
-						"name": user.first_name,
-						"surname": user.last_name 
-						}
-				}			
-		};*/
+		var userInfo = {
+				"name": $scope.user.worker.doctor.name,
+				"surname": $scope.user.worker.doctor.surname
+		}
 		$http({
 			method: 'PUT',
-			url: "http://localhost:8080/wee/rest/SystemUser/saveDoctor",
-			data: $scope.user,
+			url: "http://localhost:8080/wee/rest/SystemUser/saveDoctor/"+$scope.user.pesel,
+			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
 			console.log("doctor saved");
 			console.log(result);	
 			$state.go('doctors_list')
+		});
+	}
+})
+
+clinic.controller('EditUserController', function($scope, $http, $cookies, $state) {
+	
+	$scope.editUser = function(){
+		console.log($scope.user);
+		var userInfo = {
+				"name": $scope.user.worker.patient.name,
+				"surname": $scope.user.worker.patient.surname
+		}
+		$http({
+			method: 'PUT',
+			url: "http://localhost:8080/wee/rest/SystemUser/savePatient/"+$scope.user.pesel,
+			data: userInfo,
+			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
+		}).success(function(result){
+			console.log("doctor saved");
+			console.log(result);	
+			$state.go('patients_list')
 		});
 	}
 })
