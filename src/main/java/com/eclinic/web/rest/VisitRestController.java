@@ -2,6 +2,8 @@ package com.eclinic.web.rest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -45,46 +47,26 @@ import com.eclinic.domain.StatusOfVisit;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.TypeOfVisit;
 import com.eclinic.domain.Visit;
+import com.eclinic.email.sender.EmailSender;
+import com.eclinic.email.sender.VisitWriter;
 import com.eclinic.model.VisitModel;
 import com.eclinic.model.VisitUser;
 import com.eclinic.service.PatientCardService;
 import com.eclinic.service.VisitService;
 
-
-/**
- * Spring Rest controller that handles CRUD requests for Visit entities
- * 
- */
 @Path("/Visit")
 @Component("VisitRestController")
 public class VisitRestController {
 
-	/**
-	 * DAO injected by Spring that manages Doctor entities
-	 * 
-	 */
 	@Autowired
 	private DoctorDAO doctorDAO;
 
-	/**
-	 * DAO injected by Spring that manages PatientCard entities
-	 * 
-	 */
 	@Autowired
 	private PatientCardDAO patientCardDAO;
 
-	/**
-	 * DAO injected by Spring that manages Receptionist entities
-	 * 
-	 */
 	@Autowired
 	private ReceptionistDAO receptionistDAO;
 
-	/**
-	 * DAO injected by Spring that manages SickLeave entities
-	 * 
-	 */
-	
 	@Autowired
 	private PatientCardService patientCardService;
 	
@@ -92,44 +74,27 @@ public class VisitRestController {
 	@Autowired
 	private SickLeaveDAO sickLeaveDAO;
 
-	/**
-	 * DAO injected by Spring that manages StatusOfVisit entities
-	 * 
-	 */
 	@Autowired
 	private StatusOfVisitDAO statusOfVisitDAO;
 
-	/**
-	 * DAO injected by Spring that manages TypeOfVisit entities
-	 * 
-	 */
 	@Autowired
 	private TypeOfVisitDAO typeOfVisitDAO;
 
-	/**
-	 * DAO injected by Spring that manages Visit entities
-	 * 
-	 */
 	@Autowired
 	private VisitDAO visitDAO;
 
-	/**
-	 * Service injected by Spring that provides CRUD operations for Visit entities
-	 * 
-	 */
 	@Autowired
 	private VisitService visitService;
 	
 	@Autowired 
 	private SystemUserDAO systemUserDao;
+	
+	@Autowired
+	private VisitWriter writer;
 
 	
 	public VisitRestController(){}
 	
-	/**
-	 * Register custom, context-specific property editors
-	 * 
-	 */
 	@InitBinder
 	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register static property editors.
 		binder.registerCustomEditor(java.util.Calendar.class, new org.skyway.spring.util.databinding.CustomCalendarEditor());
@@ -144,14 +109,6 @@ public class VisitRestController {
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
 
-	
-	
-	/**
-	 * Delete an existing TypeOfVisit entity
-	 * 
-	 */
-
-	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/typeOfVisit/{typeofvisit_id}")
@@ -160,12 +117,6 @@ public class VisitRestController {
 		return Response.ok(visitService.deleteVisitTypeOfVisit(visit_id, related_typeofvisit_id)).build();
 	}
 
-	/**
-	 * Delete an existing SickLeave entity
-	 * 
-	 */
-
-	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/sickLeaves/{sickleave_id}")
@@ -173,13 +124,6 @@ public class VisitRestController {
 			@PathParam("related_sickleaves_id") Integer related_sickleaves_id) {
 		return Response.ok(visitService.deleteVisitSickLeaves(visit_id, related_sickleaves_id)).build();
 	}
-
-
-	/**
-	 * View an existing TypeOfVisit entity
-	 * 
-	 */
-
 	
 	@GET
 	@Path("/{visit_id}/typeOfVisit/{typeofvisit_id}")
@@ -190,13 +134,6 @@ public class VisitRestController {
 
 		return Response.ok(typeofvisit).build();
 	}
-
-	/**
-	 * Delete an existing Doctor entity
-	 * 
-	 */
-	
-
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -205,11 +142,7 @@ public class VisitRestController {
 			@PathParam("related_doctor_id") Integer related_doctor_id) {
 		return Response.ok(visitService.deleteVisitDoctor(visit_id, related_doctor_id)).build();
 	}
-	/**
-	 * Create a new Visit entity
-	 * 
-	 */
-
+	
 	
 	@POST
 	@Path("/new")
@@ -217,55 +150,122 @@ public class VisitRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newVisit( VisitModel visitmodel) {
 		try{
-		Doctor d = systemUserDao.findSystemUserByPesel(visitmodel.getDoctorLogin()).getWorker().getDoctor();
-		Patient p  = systemUserDao.findSystemUserByPesel(visitmodel.getPatientPesel()).getWorker().getPatient();
-		PatientCard pc = patientCardDAO.findPatientCardByPatientId(p);
-		if(pc==null){
-			pc= new PatientCard();
-			pc.setDoctor(d);
-			pc.setPatient(p);
-			pc.setRegisterDate(systemUserDao.findSystemUserByPesel(visitmodel.getDoctorLogin()).getRegisterDate());
-			Integer id = patientCardService.savePatientCard(pc);
-		}
-		Receptionist r = systemUserDao.findSystemUserByPesel(visitmodel.getRecepcionistLogin()).getWorker().getReceptionist();
-		StatusOfVisit sov = statusOfVisitDAO.findStatusOfVisitByType(visitmodel.getStatusOfVisit()).iterator().next();
-		TypeOfVisit tof = typeOfVisitDAO.findTypeOfVisitByName(visitmodel.getTypeOfVisit()).iterator().next();
-		Visit visit = new Visit();
-		visit.setDateOfVisit(visitmodel.getDateOfVisit());
-		visit.setDescriptionOfVisit(visitmodel.getDescriptionOfVisit());
-		visit.setDoctor(d);
-		visit.setIsLeave(visitmodel.getIsLeave());
-		visit.setReceptionist(r);
-		visit.setSpecial(visitmodel.getSpecial());
-		visit.setStatusOfVisit(sov);
-		visit.setTypeOfVisit(tof);
-		visit.setPatientCard(pc);
-		Integer  i = visitService.saveVisit(visit);
-		return Response.ok(visitDAO.findVisitByPrimaryKey(i)).build();
+			Integer id = createNewVisit(visitmodel);
+		return Response.ok(visitDAO.findVisitByPrimaryKey(id)).build();
 		}catch(Exception e){
-			return Response.status(Status.NOT_ACCEPTABLE).build();
+			throw new RuntimeException(e);
+//			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 	}
 
+	private Integer createNewVisit(VisitModel visitmodel) {
+		Doctor doctor = createDoctor();
+		Patient patient = createPatient(visitmodel);
+		PatientCard patientCard = validatePatientCard(doctor, patient);
+		Receptionist receptionist = createReceptionist();
+		StatusOfVisit visitStatus = createVisitStatus();
+		TypeOfVisit visitType = createVisitType();
+		
+		Visit visit = new Visit(doctor, receptionist, patientCard);
+		setVisitParameters(visitmodel, visitStatus, visitType, visit);
+		Integer  id = visitService.saveVisit(visit);
 
-	/**
-	 * Get TypeOfVisit entity by Visit
-	 * 
-	 */
+		sendVisitConfirmation(patient);
+		savePatientEmailOnReminderList(patient.getEMail(), visitmodel.getDateOfVisit());
+		return id;
+	}
+
+	private PatientCard validatePatientCard(Doctor doctor, Patient patient) {
+		PatientCard patientCard = patientCardDAO.findPatientCardByPatientId(patient);
+		if(patientCard==null)
+			patientCard = createPatientCard(doctor, patient);
+		return patientCard;
+	}
+
+	private void sendVisitConfirmation(Patient patient) {
+		EmailSender sender = new EmailSender();
+		sender.send(patient.getEMail());
+	}
 	
-	
+	private void savePatientEmailOnReminderList(String email, Calendar visitDate) {
+//		VisitWriter writer = new VisitWriter();
+		try {
+			writer.saveVisit(visitDate, email);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void setVisitParameters(VisitModel visitmodel, StatusOfVisit visitStatus, TypeOfVisit visitType,
+			Visit visit) {
+		visit.setDateOfVisit(visitmodel.getDateOfVisit());
+		visit.setDescriptionOfVisit(visitmodel.getDescriptionOfVisit());
+		visit.setIsLeave(visitmodel.getIsLeave());
+		visit.setSpecial(visitmodel.getSpecial());
+		visit.setStatusOfVisit(visitStatus);
+		visit.setTypeOfVisit(visitType);
+	}
+
+	private TypeOfVisit createVisitType() {
+		//		TypeOfVisit visitType = typeOfVisitDAO.findTypeOfVisitByName(visitmodel.getTypeOfVisit()).iterator().next();
+				TypeOfVisit visitType = new TypeOfVisit();
+				visitType.setId(1);
+		return visitType;
+	}
+
+	private StatusOfVisit createVisitStatus() {
+		StatusOfVisit visitStatus = new StatusOfVisit();
+		visitStatus.setId(1);
+//		StatusOfVisit visitStatus = statusOfVisitDAO.findStatusOfVisitByType(visitmodel.getStatusOfVisit())
+//				.iterator()
+//				.next();
+		return visitStatus;
+	}
+
+	private Receptionist createReceptionist() {
+//		Receptionist receptionist = systemUserDao.findSystemUserByPesel(visitmodel.getRecepcionistLogin()).getWorker().getReceptionist();
+		Receptionist receptionist = new Receptionist();
+		receptionist.setId(1);
+		return receptionist;
+	}
+
+	private PatientCard createPatientCard(Doctor doctor, Patient patient) {
+		PatientCard patientcCard = new PatientCard();
+		patientcCard.setDoctor(doctor);
+		patientcCard.setPatient(patient);
+//			pc.setRegisterDate(systemUserDao.findSystemUserByPesel(visitmodel.getDoctorLogin()).getRegisterDate());
+		Calendar cal = Calendar.getInstance();
+		patientcCard.setRegisterDate(cal);
+		Integer id = patientCardService.savePatientCard(patientcCard);
+		return patientcCard;
+	}
+
+	private Patient createPatient(VisitModel visitmodel) {
+//		Patient patient  = systemUserDao.findSystemUserByPesel(visitmodel.getPatientPesel())
+//				.getWorker()
+//				.getPatient();
+		Patient patient = new Patient();
+		patient.setName("Pacjent");
+		patient.setId(23);
+		patient.setEMail(visitmodel.getPatientEmail());
+		return patient;
+	}
+
+	private Doctor createDoctor() {
+//		Doctor doctor = systemUserDao.findSystemUserByPesel(visitmodel.getDoctorLogin())
+//				.getWorker()
+//				.getDoctor();
+		Doctor doctor = new Doctor();
+		doctor.setId(1);
+		return doctor;
+	}
+
 	@GET
 	@Path("/{visit_id}/typeOfVisit")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getVisitTypeOfVisit(@PathParam("visit_id") Integer visit_id) {
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit_id).getTypeOfVisit()).build();
 	}
-
-	/**
-	 * View an existing SickLeave entity
-	 * 
-	 */
-
 	
 	@GET
 	@Path("/{visit_id}/sickLeaves/{sickleave_id}")
@@ -277,13 +277,6 @@ public class VisitRestController {
 		return Response.ok(sickleave).build();
 	}
 
-
-	/**
-	 * Get StatusOfVisit entity by Visit
-	 * 
-	 */
-
-
 	@GET
 	@Path("/{visit_id}/statusOfVisit")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -291,12 +284,6 @@ public class VisitRestController {
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit_id).getStatusOfVisit()).build();
 	}
 
-	/**
-	 * Delete an existing Receptionist entity
-	 * 
-	 */
-
-	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/receptionist/{receptionist_id}")
@@ -305,12 +292,6 @@ public class VisitRestController {
 		return Response.ok(visitService.deleteVisitReceptionist(visit_id, related_receptionist_id)).build();
 	}
 
-
-	/**
-	 * Show all SickLeave entities by Visit
-	 * 
-	 */
-
 	@GET
 	@Path("/{visit_id}/sickLeaves")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -318,12 +299,6 @@ public class VisitRestController {
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit_id).getSickLeaves()).build();
 	}
 
-	/**
-	 * Create a new StatusOfVisit entity
-	 * 
-	 */
-
-	
 	@Path("/{visit_id}/statusOfVisit")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -332,12 +307,6 @@ public class VisitRestController {
 		visitService.saveVisitStatusOfVisit(visit_id, statusofvisit);
 		return Response.ok(statusOfVisitDAO.findStatusOfVisitByPrimaryKey(statusofvisit.getId())).build();
 	}
-
-	/**
-	 * Delete an existing PatientCard entity
-	 * 
-	 */
-
 	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -347,12 +316,6 @@ public class VisitRestController {
 		return Response.ok(visitService.deleteVisitPatientCard(visit_id, related_patientcard_id)).build();
 	}
 
-	/**
-	 * Save an existing SickLeave entity
-	 * 
-	 */
-
-	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/sickLeaves")
 	@PUT
@@ -362,12 +325,6 @@ public class VisitRestController {
 		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves.getId())).build();
 	}
 
-	/**
-	 * View an existing Doctor entity
-	 * 
-	 */
-
-	
 	@GET
 	@Path("/{visit_id}/doctor/{doctor_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -377,12 +334,6 @@ public class VisitRestController {
 		return Response.ok(doctor).build();
 	}
 
-	/**
-	 * Save an existing Receptionist entity
-	 * 
-	 */
-
-	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/receptionist")
 	@PUT
@@ -392,12 +343,6 @@ public class VisitRestController {
 		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId())).build();
 	}
 
-	/**
-	 * Delete an existing StatusOfVisit entity
-	 * 
-	 */
-
-	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/statusOfVisit/{statusofvisit_id}")
@@ -406,12 +351,6 @@ public class VisitRestController {
 		return Response.ok(visitService.deleteVisitStatusOfVisit(visit_id, related_statusofvisit_id)).build();
 	}
 
-	/**
-	 * Delete an existing Visit entity
-	 * 
-	 */
-
-	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}")
 	@DELETE
@@ -420,12 +359,6 @@ public class VisitRestController {
 		visitService.deleteVisit(visit);
 	}
 
-	/**
-	 * Create a new PatientCard entity
-	 * 
-	 */
-
-	
 	@Path("/{visit_id}/patientCard")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -435,12 +368,6 @@ public class VisitRestController {
 		return Response.ok(patientCardDAO.findPatientCardByPrimaryKey(patientcard.getId())).build();
 	}
 
-	/**
-	 * Save an existing Doctor entity
-	 * 
-	 */
-
-	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/doctor")
 	@PUT
@@ -450,12 +377,6 @@ public class VisitRestController {
 		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
-	/**
-	 * Select an existing Visit entity
-	 * 
-	 */
-
-	
 	@GET
 	@Path("/{visit_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -471,13 +392,6 @@ public class VisitRestController {
 				false).writeValueAsString(visitDAO.findVisitByPesel(pesel))).build();
 	}
 
-	/**
-	 * Create a new TypeOfVisit entity
-	 * 
-	 */
-
-	
-	
 	@Path("/{visit_id}/typeOfVisit")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -487,17 +401,6 @@ public class VisitRestController {
 		return Response.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit.getId())).build();
 	}
 
-	
-	/**
-	 * Show all Visit entities
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
-	 * 
-	 */
-
-
-	
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -520,12 +423,6 @@ public class VisitRestController {
 		return  Response.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
 				false).writeValueAsString(set)).build();
 	}
-	/**
-	 * Save an existing TypeOfVisit entity
-	 * 
-	 */
-
-	
 	
 	@Path("/{visit_id}/typeOfVisit")
 	@POST
@@ -536,13 +433,6 @@ public class VisitRestController {
 		return Response.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit.getId())).build();
 	}
 
-	/**
-	 * View an existing PatientCard entity
-	 * 
-	 */
-
-	
-	
 	@GET
 	@Path("/{visit_id}/patientCard/{patientcard_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -552,12 +442,6 @@ public class VisitRestController {
 		return Response.ok(patientcard).build();
 	}
 
-	/**
-	 * Get Receptionist entity by Visit
-	 * 
-	 */
-	
-	
 	@GET
 	@Path("/{visit_id}/receptionist")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -565,12 +449,6 @@ public class VisitRestController {
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit_id).getReceptionist()).build();
 	}
 
-	/**
-	 * Save an existing Visit entity
-	 * 
-	 */
-
-	
 	@PUT
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -579,11 +457,6 @@ public class VisitRestController {
 		visitService.saveVisit(visit);
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId())).build();
 	}
-
-	/**
-	 * Create a new SickLeave entity
-	 * 
-	 */
 
 	@Path("/{visit_id}/sickLeaves")
 	@POST
@@ -594,13 +467,6 @@ public class VisitRestController {
 		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId())).build();
 	}
 
-	/**
-	 * Save an existing StatusOfVisit entity
-	 * 
-	 */
-
-
-	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/statusOfVisit")
 	@PUT
@@ -609,11 +475,6 @@ public class VisitRestController {
 		visitService.saveVisitStatusOfVisit(visit_id, statusofvisit);
 		return Response.ok(statusOfVisitDAO.findStatusOfVisitByPrimaryKey(statusofvisit.getId())).build();
 	}
-
-	/**
-	 * View an existing StatusOfVisit entity
-	 * 
-	 */
 
 	@GET
 	@Path("/{visit_id}/statusOfVisit/{statusofvisit_id}")
@@ -624,12 +485,6 @@ public class VisitRestController {
 		return Response.ok(statusofvisit).build();
 	}
 
-	/**
-	 * View an existing Receptionist entity
-	 * 
-	 */
-
-	
 	@GET
 	@Path("/{visit_id}/receptionist/{receptionist_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -639,12 +494,6 @@ public class VisitRestController {
 		return Response.ok(receptionist).build();
 	}
 
-	/**
-	 * Create a new Doctor entity
-	 * 
-	 */
-	
-	
 	@Path("/{visit_id}/doctor")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -654,23 +503,12 @@ public class VisitRestController {
 		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId())).build();
 	}
 
-	/**
-	 * Get PatientCard entity by Visit
-	 * 
-	 */
-
-	
 	@GET
 	@Path("/{visit_id}/patientCard")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getVisitPatientCard(@PathParam("visit_id") Integer visit_id) {
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit_id).getPatientCard()).build();
 	}
-
-	/**
-	 * Get Doctor entity by Visit
-	 * 
-	 */
 
 	@GET
 	@Path("/{visit_id}/doctor")
@@ -679,12 +517,6 @@ public class VisitRestController {
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit_id).getDoctor()).build();
 	}
 
-	/**
-	 * Create a new Receptionist entity
-	 * 
-	 */
-
-	
 	@Path("/{visit_id}/receptionist")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -694,12 +526,6 @@ public class VisitRestController {
 		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId())).build();
 	}
 
-	/**
-	 * Save an existing PatientCard entity
-	 * 
-	 */
-
-	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/patientCard")
 	@PUT

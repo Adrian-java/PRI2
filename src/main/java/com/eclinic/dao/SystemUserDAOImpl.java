@@ -66,20 +66,12 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		return dataTypes;
 	}
 
-	/**
-	 * JPQL Query - findSystemUserByUnregisterDate
-	 *
-	 */
+
 	@Transactional
 	public Set<SystemUser> findSystemUserByUnregisterDate(java.util.Calendar unregisterDate) throws DataAccessException {
 
 		return findSystemUserByUnregisterDate(unregisterDate, -1, -1);
 	}
-
-	/**
-	 * JPQL Query - findSystemUserByUnregisterDate
-	 *
-	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -88,20 +80,11 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		return new LinkedHashSet<SystemUser>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findSystemUserByChangedPassword
-	 *
-	 */
 	@Transactional
 	public Set<SystemUser> findSystemUserByChangedPassword(Boolean changedPassword) throws DataAccessException {
 
 		return findSystemUserByChangedPassword(changedPassword, -1, -1);
 	}
-
-	/**
-	 * JPQL Query - findSystemUserByChangedPassword
-	 *
-	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -110,20 +93,11 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		return new LinkedHashSet<SystemUser>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findSystemUserByPrimaryKey
-	 *
-	 */
 	@Transactional
 	public SystemUser findSystemUserByPrimaryKey(Integer id) throws DataAccessException {
 
 		return findSystemUserByPrimaryKey(id, -1, -1);
 	}
-
-	/**
-	 * JPQL Query - findSystemUserByPrimaryKey
-	 *
-	 */
 
 	@Transactional
 	public SystemUser findSystemUserByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException {
@@ -135,20 +109,11 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		}
 	}
 
-	/**
-	 * JPQL Query - findSystemUserByPasswordContaining
-	 *
-	 */
 	@Transactional
 	public Set<SystemUser> findSystemUserByPasswordContaining(String password) throws DataAccessException {
 
 		return findSystemUserByPasswordContaining(password, -1, -1);
 	}
-
-	/**
-	 * JPQL Query - findSystemUserByPasswordContaining
-	 *
-	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -157,20 +122,11 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		return new LinkedHashSet<SystemUser>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findSystemUserByRegisterDate
-	 *
-	 */
 	@Transactional
 	public Set<SystemUser> findSystemUserByRegisterDate(java.util.Calendar registerDate) throws DataAccessException {
 
 		return findSystemUserByRegisterDate(registerDate, -1, -1);
 	}
-
-	/**
-	 * JPQL Query - findSystemUserByRegisterDate
-	 *
-	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -179,16 +135,11 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		return new LinkedHashSet<SystemUser>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findSystemUserById
-	 *
-	 */
 	@Transactional
 	public SystemUser findSystemUserById(Integer id) throws DataAccessException {
 
 		return findSystemUserById(id, -1, -1);
 	}
-	
 	
 	@Transactional
 	public SystemUser findSystemUserByPesel(String pesel) throws DataAccessException {
@@ -203,11 +154,6 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		}
 	}
 
-	/**
-	 * JPQL Query - findSystemUserById
-	 *
-	 */
-
 	@Transactional
 	public SystemUser findSystemUserById(Integer id, int startResult, int maxRows) throws DataAccessException {
 		try {
@@ -218,20 +164,11 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		}
 	}
 
-	/**
-	 * JPQL Query - findAllSystemUsers
-	 *
-	 */
 	@Transactional
 	public Set<SystemUser> findAllSystemUsers() throws DataAccessException {
 
 		return findAllSystemUsers(-1, -1);
 	}
-
-	/**
-	 * JPQL Query - findAllSystemUsers
-	 *
-	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -240,20 +177,11 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		return new LinkedHashSet<SystemUser>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findSystemUserByEmailContaining
-	 *
-	 */
 	@Transactional
 	public Set<SystemUser> findSystemUserByEmailContaining(String email) throws DataAccessException {
 
 		return findSystemUserByEmailContaining(email, -1, -1);
 	}
-
-	/**
-	 * JPQL Query - findSystemUserByEmailContaining
-	 *
-	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -262,20 +190,11 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 		return new LinkedHashSet<SystemUser>(query.getResultList());
 	}
 
-	/**
-	 * JPQL Query - findSystemUserByPassword
-	 *
-	 */
 	@Transactional
 	public Set<SystemUser> findSystemUserByPassword(String password) throws DataAccessException {
 
 		return findSystemUserByPassword(password, -1, -1);
 	}
-
-	/**
-	 * JPQL Query - findSystemUserByPassword
-	 *
-	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional

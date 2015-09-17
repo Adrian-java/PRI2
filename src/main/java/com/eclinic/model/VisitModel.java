@@ -22,6 +22,17 @@ public class VisitModel {
 	private String typeOfVisit;
 
 	private String patientPesel;
+	
+	private String patientEmail;
+
+	
+	public String getPatientEmail() {
+		return patientEmail;
+	}
+
+	public void setPatientEmail(String patientEmail) {
+		this.patientEmail = patientEmail;
+	}
 
 	public Calendar getDateOfVisit() {
 		return dateOfVisit;

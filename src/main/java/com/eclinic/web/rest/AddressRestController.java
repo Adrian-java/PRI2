@@ -28,35 +28,16 @@ import com.eclinic.domain.Address;
 import com.eclinic.domain.Patient;
 import com.eclinic.service.AddressService;
 
-/**
- * Spring Rest controller that handles CRUD requests for Address entities
- * 
- */
-
 @Path("/Address")
 @Component("AddressRestController")
 public class AddressRestController {
-
-	/**
-	 * DAO injected by Spring that manages Address entities
-	 * 
-	 */
 	
 	@Autowired
 	private AddressDAO addressDAO;
 
-	/**
-	 * DAO injected by Spring that manages Patient entities
-	 * 
-	 */
 	@Autowired
 	private PatientDAO patientDAO;
 
-	/**
-	 * Service injected by Spring that provides CRUD operations for Address
-	 * entities
-	 * 
-	 */
 	@Autowired
 	private AddressService addressService;
 
@@ -64,11 +45,6 @@ public class AddressRestController {
 	public AddressRestController() {
 	}
 	
-	/**
-	 * Register custom, context-specific property editors
-	 * 
-	 *
-	 */
 	@InitBinder
 	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register
 																				// static
@@ -104,10 +80,6 @@ public class AddressRestController {
 	}
 	
 
-	/**
-	 * Select an existing Address entity
-	 * 
-	 */
 	@GET
 	@Path("/{address_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -115,10 +87,6 @@ public class AddressRestController {
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address_id)).build();
 	}
 
-	/**
-	 * Create a new Patient entity
-	 * 
-	 */
 	@Path("/{address_id}/patients")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -128,10 +96,6 @@ public class AddressRestController {
 		return Response.ok(patientDAO.findPatientByPrimaryKey(patient.getId())).build();
 	}
 
-	/**
-	 * Save an existing Address entity
-	 * 
-	 */
 	@POST
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -141,13 +105,6 @@ public class AddressRestController {
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId())).build();
 	}
 
-	/**
-	 * Show all Address entities
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
-	 * 
-	 */
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -155,10 +112,6 @@ public class AddressRestController {
 		return  Response.ok(new ObjectMapper().writeValueAsString(addressService.loadAddresss())).build();
 	}
 
-	/**
-	 * Create a new Address entity
-	 * 
-	 */
 	@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -168,10 +121,6 @@ public class AddressRestController {
 		return Response.ok(addressDAO.findAddressByPrimaryKey(addedId)).build();
 	}
 
-	/**
-	 * View an existing Patient entity
-	 * 
-	 */
 	@GET
 	@Path("/{address_id}/patients/{patient_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -183,10 +132,6 @@ public class AddressRestController {
 		return Response.ok(patient).build();
 	}
 
-	/**
-	 * Delete an existing Patient entity
-	 * 
-	 */
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{address_id}/patients/{patient_id}")
@@ -195,10 +140,6 @@ public class AddressRestController {
 		return Response.ok(addressService.deleteAddressPatients(address_id, related_patients_id)).build();
 	}
 
-	/**
-	 * Save an existing Patient entity
-	 * 
-	 */
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{address_id}/patients")
 	@PUT
@@ -208,10 +149,6 @@ public class AddressRestController {
 		return Response.ok(patientDAO.findPatientByPrimaryKey(patients.getId())).build();
 	}
 
-	/**
-	 * Delete an existing Address entity
-	 * 
-	 */
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{address_id}")
 	@DELETE
@@ -220,10 +157,6 @@ public class AddressRestController {
 		addressService.deleteAddress(address);
 	}
 
-	/**
-	 * Show all Patient entities by Address
-	 * 
-	 */
 	@GET
 	@Path("/{address_id}/patients")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -115,9 +115,16 @@ public class Visit implements Serializable {
 	@OneToMany(mappedBy = "visit", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
 //	@XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
-
-	/**
-	 */
+	
+	public Visit() {}
+	
+	public Visit(Doctor doctor, Receptionist receptionist, PatientCard patientCard) {
+		this.doctor = doctor;
+		this.receptionist = receptionist;
+		this.patientCard = patientCard;
+	}
+	
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -264,8 +271,7 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	public Visit() {
-	}
+	
 
 	/**
 	 * Copies the contents of the specified bean into this bean.

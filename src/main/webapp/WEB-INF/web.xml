@@ -17,18 +17,26 @@
 	</context-param>
 	<context-param>
 		<param-name>resteasy.resources</param-name>
-		<param-value>com.eclinic.web.rest.AddressRestController</param-value>
-		<param-value>com.eclinic.web.rest.AdminRestController</param-value> 
-		<param-value>com.eclinic.web.rest.ApplicationParameterRestController</param-value> 
-		<param-value>com.eclinic.web.rest.DoctorRestController</param-value> 
+		<param-value>
+			com.eclinic.web.rest.AddressRestController,
+			com.eclinic.web.rest.AdminRestController,
+			com.eclinic.web.rest.ApplicationParameterRestController,
+			com.eclinic.web.rest.DoctorRestController
+		</param-value> 
 	</context-param>
+	<listener>
+		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
+	</listener>
 	<servlet>
 		<description>
 			JAX-RS Tools Generated - Do not modify
 		</description>
 		<servlet-name>JAX-RS Servlet</servlet-name>
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
-		<!-- <servlet-class> com.sun.jersey.spi.container.servlet.ServletContainer 
+		<!--  <servlet-class> com.sun.jersey.spi.container.servlet.ServletContainer 
 			</servlet-class> -->
 		<!-- <init-param> <param-name>com.sun.jersey.config.property.packages</param-name> 
 			<param-value>com.eclinic.web.rest</param-value> </init-param> <init-param> 
@@ -68,12 +76,7 @@
 		</listener> -->
 	<!-- <listener> <listener-class> org.springframework.web.context.request.RequestContextListener 
 		</listener-class> </listener> -->
-	<listener>
-		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-	</listener>
-	<listener>
-		<listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
-	</listener>
+	
 	<filter>
 		<description>generated-persistence-filter</description>
 		<filter-name>mysql1Filter</filter-name>

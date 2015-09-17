@@ -45,21 +45,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "findAllSystemUsers", query = "select mySystemUser from SystemUser mySystemUser"),
-		@NamedQuery(name = "findSystemUserByChangedPassword", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.changedPassword = ?1"),
-		@NamedQuery(name = "findSystemUserByEmail", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.email = ?1"),
-		@NamedQuery(name = "findSystemUserByEmailContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.email like ?1"),
-		@NamedQuery(name = "findSystemUserById", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.id = ?1"),
+		@NamedQuery(name = "findSystemUserByChangedPassword", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.changedPassword = ?"),
+		@NamedQuery(name = "findSystemUserByEmail", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.email = ?"),
+		@NamedQuery(name = "findSystemUserByEmailContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.email like ?"),
+		@NamedQuery(name = "findSystemUserById", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.id = ?"),
 		@NamedQuery(name = "findSystemUserByPesel", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.pesel = ?1"),
-		@NamedQuery(name = "findSystemUserByIsActive", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.isActive = ?1"),
-		@NamedQuery(name = "findSystemUserByPassword", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.password = ?1"),
-		@NamedQuery(name = "findSystemUserByPasswordContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.password like ?1"),
-		@NamedQuery(name = "findSystemUserByPrimaryKey", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.id = ?1"),
-		@NamedQuery(name = "findSystemUserByRegisterDate", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate = ?1"),
-		@NamedQuery(name = "findSystemUserByRegisterDateAfter", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate > ?1"),
-		@NamedQuery(name = "findSystemUserByRegisterDateBefore", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate < ?1"),
-		@NamedQuery(name = "findSystemUserByUnregisterDate", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate = ?1"),
-		@NamedQuery(name = "findSystemUserByUnregisterDateAfter", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate > ?1"),
-		@NamedQuery(name = "findSystemUserByUnregisterDateBefore", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate < ?1") })
+		@NamedQuery(name = "findSystemUserByIsActive", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.isActive = ?"),
+		@NamedQuery(name = "findSystemUserByPassword", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.password = ?"),
+		@NamedQuery(name = "findSystemUserByPasswordContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.password like ?"),
+		@NamedQuery(name = "findSystemUserByPrimaryKey", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.id = ?"),
+		@NamedQuery(name = "findSystemUserByRegisterDate", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate = ?"),
+		@NamedQuery(name = "findSystemUserByRegisterDateAfter", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate > ?"),
+		@NamedQuery(name = "findSystemUserByRegisterDateBefore", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate < ?"),
+		@NamedQuery(name = "findSystemUserByUnregisterDate", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate = ?"),
+		@NamedQuery(name = "findSystemUserByUnregisterDateAfter", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate > ?"),
+		@NamedQuery(name = "findSystemUserByUnregisterDateBefore", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate < ?") })
 @Table(catalog = "eclinic", name = "System_User")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "SystemUser")
@@ -78,7 +78,7 @@ public class SystemUser implements UserDetails, Serializable {
 	Integer id;
 	/**
 	 */
-
+	
 	@Column(name = "password", length = 20000, nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
