@@ -18,12 +18,12 @@
 		<module>../ClinicMain</module>
 		<module>../ClinicScheduler</module>
 	</modules>
-	<dependencies>
-		<dependency>
-			<groupId>com.eclinic</groupId>
-			<artifactId>ClinicStorage</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
+<!-- 	<dependencies> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.eclinic</groupId> -->
+<!-- 			<artifactId>ClinicStorage</artifactId> -->
+<!-- 			<version>0.0.1-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
+<!-- 	</dependencies> -->
 
 </project>
