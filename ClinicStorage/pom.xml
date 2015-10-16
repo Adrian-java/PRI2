@@ -1,12 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>ClinicStorage</groupId>
+	<groupId>com.eclinic</groupId>
 	<artifactId>ClinicStorage</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-
 	<name>ClinicStorage</name>
 	<url>http://maven.apache.org</url>
 
@@ -15,6 +12,7 @@
 		<guice.version>3.0-rc3</guice.version>
 		<jackson-version>1.9.0</jackson-version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
@@ -649,18 +647,10 @@
 			<artifactId>sitemesh</artifactId>
 			<version>2.4.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.directwebremoting</groupId>
-			<artifactId>dwr</artifactId>
-			<version>2.0.5</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.directwebremoting</groupId> -->
+		<!-- <artifactId>dwr</artifactId> -->
+		<!-- <version>2.0.5</version> -->
+		<!-- </dependency> -->
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>skyway-public-site</id>
-			<name>Skyway Public Maven Repository</name>
-			<url>http://downloads.skywayperspectives.org/maven-repo</url>
-		</repository>
-	</repositories>
-
 </project>
