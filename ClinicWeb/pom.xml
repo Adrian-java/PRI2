@@ -30,8 +30,8 @@
 				<configuration>
 					<version>3.0</version>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<warName>ROOT</warName>
-					<outputDirectory>/var/lib/openshift/562228f67628e1d7a7000081/app-root/runtime/dependencies/jbossews/webapps</outputDirectory>
+					<warName>Clinic</warName>
+					<outputDirectory>../../dependencies/jbossews/webapps</outputDirectory>
 <!-- 					<outputDirectory>/home/adrian/tomcat7/webapps</outputDirectory> -->
 				</configuration>
 			</plugin>
