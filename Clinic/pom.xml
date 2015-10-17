@@ -12,18 +12,20 @@
 		<jackson-version>1.9.0</jackson-version>
 	</properties>
 	<modules>
+		<module>../ClinicWeb</module>
 		<module>../ClinicStorage</module>
 		<module>../ClinicCore</module>
 		<module>../ClinicDocs</module>
 		<module>../ClinicMain</module>
 		<module>../ClinicScheduler</module>
 	</modules>
-<!-- 	<dependencies> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.eclinic</groupId> -->
-<!-- 			<artifactId>ClinicStorage</artifactId> -->
-<!-- 			<version>0.0.1-SNAPSHOT</version> -->
-<!-- 		</dependency> -->
-<!-- 	</dependencies> -->
+	<dependencies>
+		<dependency>
+			<groupId>com.eclinic</groupId>
+			<artifactId>ClinicStorage</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+<!-- 			<scope>compile</scope> -->
+		</dependency>
+	</dependencies>
 
 </project>

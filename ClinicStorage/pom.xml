@@ -12,7 +12,7 @@
 		<guice.version>3.0-rc3</guice.version>
 		<jackson-version>1.9.0</jackson-version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
@@ -653,4 +653,16 @@
 		<!-- <version>2.0.5</version> -->
 		<!-- </dependency> -->
 	</dependencies>
+<!-- 	<build> -->
+<!-- 		<plugins> -->
+<!-- 			<plugin> -->
+<!-- 				<artifactId>maven-compiler-plugin</artifactId> -->
+<!-- 				<version>3.3</version> -->
+<!-- 				<configuration> -->
+<!-- 					<source>1.6</source> -->
+<!-- 					<target>1.6</target> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
+<!-- 		</plugins> -->
+<!-- 	</build> -->
 </project>
