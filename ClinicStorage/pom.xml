@@ -61,12 +61,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish</groupId>
-			<artifactId>javax.jms</artifactId>
-			<version>3.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish</groupId>
 			<artifactId>javax.management.j2ee</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
@@ -323,11 +317,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc-portlet</artifactId>
-			<version>4.1.0.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jms</artifactId>
 			<version>4.1.0.RELEASE</version>
 		</dependency>
 		<dependency>
@@ -647,12 +636,14 @@
 			<artifactId>sitemesh</artifactId>
 			<version>2.4.2</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.directwebremoting</groupId> -->
-		<!-- <artifactId>dwr</artifactId> -->
-		<!-- <version>2.0.5</version> -->
-		<!-- </dependency> -->
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>skyway-public-site</id>
+			<name>Skyway Public Maven Repository</name>
+			<url>http://downloads.skywayperspectives.org/maven-repo</url>
+		</repository>
+	</repositories>
 <!-- 	<build> -->
 <!-- 		<plugins> -->
 <!-- 			<plugin> -->
