@@ -7,7 +7,7 @@
         <dependent-module archiveName="ClinicStorage-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ClinicStorage/ClinicStorage">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="ClinicWeb"/>
         <property name="java-output-path" value="/ClinicWeb/target/classes"/>
+        <property name="context-root" value="ROOT"/>
     </wb-module>
 </project-modules>
