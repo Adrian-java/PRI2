@@ -45,6 +45,8 @@ import com.eclinic.service.DoctorService;
 import com.eclinic.service.PatientService;
 import com.eclinic.service.ReceptionistService;
 import com.eclinic.service.SystemUserService;
+import com.eclinic.user.mangament.doctor.DoctorCrud;
+import com.eclinic.user.mangament.patient.PatientCrud;
 
 /**
  * Spring Rest controller that handles CRUD requests for SystemUser entities
@@ -54,6 +56,11 @@ import com.eclinic.service.SystemUserService;
 @Component("SystemUserRestController")
 public class SystemUserRestController {
 
+	@Autowired
+	private PatientCrud patientCrud;
+	
+	@Autowired
+	private DoctorCrud doctorCrud;
 	/**
 	 * DAO injected by Spring that manages Permission entities
 	 * 
@@ -395,6 +402,9 @@ public class SystemUserRestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newSystemUserPatient(SystemUser systemuser) {
+<<<<<<< HEAD
+		return patientCrud.addPatient(systemuser);
+=======
 		if (systemuser.getWorker() != null) {
 			if(systemuser.getEmail()==null)
 				systemuser.setEmail("em");
@@ -413,29 +423,15 @@ public class SystemUserRestController {
 		}
 		Integer i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+>>>>>>> f62bc54c83f2aa23a10380ffb54980d9119dbe71
 	}
 
 	@POST
 	@Path("/newDoctor")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newSystemUserDoctor(SystemUser systemuser) {
-		if (systemuser.getWorker() != null) {
-			Worker w = systemuser.getWorker();
-			if (w.getPatient() != null || w.getAdmin() != null
-					|| w.getReceptionist() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
-		}
-		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser
-				.getPesel());
-		if (s != null) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("status", "Podany pesel/login istnieje");
-			return Response.ok(map).build();
-		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+	public Response newSystemUserDoctor(SystemUser systemUser) {
+		return doctorCrud.AddDoctor(systemUser);
 	}
 
 	@POST
