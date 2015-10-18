@@ -1,19 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.eclinic</groupId>
 	<artifactId>ClinicWeb</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<description />
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<parent>
-		<groupId>com.eclinic</groupId>
-		<artifactId>ClinicParent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../Clinic</relativePath>
-	</parent>
+	<dependencies>
+		<dependency>
+			<groupId>com.eclinic</groupId>
+			<artifactId>ClinicStorage</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.eclinic</groupId>
+			<artifactId>ClinicCore</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -30,9 +38,9 @@
 				<configuration>
 					<version>3.0</version>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<warName>Clinic</warName>
-					<outputDirectory>../../dependencies/jbossews/webapps</outputDirectory>
-<!-- 					<outputDirectory>/home/adrian/tomcat7/webapps</outputDirectory> -->
+					<warName>ROOT</warName>
+					<!-- <outputDirectory>../../dependencies/jbossews/webapps</outputDirectory> -->
+					<outputDirectory>/home/adrian/tomcat7/webapps</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

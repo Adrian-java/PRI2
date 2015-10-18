@@ -396,6 +396,8 @@ public class SystemUserRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newSystemUserPatient(SystemUser systemuser) {
 		if (systemuser.getWorker() != null) {
+			if(systemuser.getEmail()==null)
+				systemuser.setEmail("em");
 			Worker w = systemuser.getWorker();
 			if (w.getDoctor() != null || w.getAdmin() != null
 					|| w.getReceptionist() != null) {

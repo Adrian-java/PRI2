@@ -3,12 +3,6 @@ package com.eclinic.web.rest;
 
 import java.io.IOException;
 
-import com.eclinic.dao.AdminDAO;
-import com.eclinic.dao.WorkerDAO;
-import com.eclinic.domain.Admin;
-import com.eclinic.domain.Worker;
-import com.eclinic.service.AdminService;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -29,6 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+
+import com.eclinic.dao.AdminDAO;
+import com.eclinic.dao.WorkerDAO;
+import com.eclinic.domain.Admin;
+import com.eclinic.domain.Worker;
+import com.eclinic.service.AdminService;
 
 /**
  * Spring Rest controller that handles CRUD requests for Admin entities

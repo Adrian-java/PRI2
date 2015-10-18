@@ -88,7 +88,7 @@ clinic.config(function($stateProvider, $urlRouterProvider) {
 clinic.controller('DoctorsListDetailsController', function($scope, $http, $cookies, $stateParams){
 	$http({
 		method: 'GET',
-		url: "http://localhost:8080/wee/rest/SystemUser/get/"+$stateParams.pesel,
+		url: "http://localhost:8080/rest/SystemUser/get/"+$stateParams.pesel,
 		headers: {'XToken': $cookies.get('token')}
 	}).success(function(result){
 		$scope.user = result;
@@ -102,7 +102,7 @@ clinic.controller('DoctorsListDetailsController', function($scope, $http, $cooki
 clinic.controller('PatientsListDetailsController', function($scope, $http, $cookies, $stateParams){
 	$http({
 		method: 'GET',
-		url: "http://localhost:8080/wee/rest/SystemUser/get/"+$stateParams.pesel,
+		url: "http://localhost:8080/rest/SystemUser/get/"+$stateParams.pesel,
 		headers: {'XToken': $cookies.get('token')}
 	}).success(function(result){
 		$scope.user = result;
@@ -115,7 +115,7 @@ clinic.controller('PatientsListDetailsController', function($scope, $http, $cook
 clinic.controller('RemoveUserController', function($scope, $http, $cookies, $stateParams, $state){
 	$http({
 		method: 'DELETE',
-		url: "http://localhost:8080/wee/rest/SystemUser/"+$stateParams.pesel,
+		url: "http://localhost:8080/rest/SystemUser/"+$stateParams.pesel,
 		headers: {'XToken': $cookies.get('token')}
 	}).success(function(result){
 		$scope.user = result;
@@ -158,7 +158,7 @@ clinic.controller('NewUserController', function($scope, $http, $cookies){
 		console.log(userInfo);
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/wee/rest/SystemUser/newPatient",
+			url: "http://localhost:8080/rest/SystemUser/newPatient",
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -193,7 +193,7 @@ clinic.controller('NewVisitController', function($scope, $http, $cookies){
 			};
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/wee/rest/Visit/new",
+			url: "http://localhost:8080/rest/Visit/new",
 			data: visit,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -222,7 +222,7 @@ clinic.controller('NewAdminController', function($scope, $http, $cookies){
 			};
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/wee/rest/SystemUser/newAdmin",
+			url: "http://localhost:8080/rest/SystemUser/newAdmin",
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -254,7 +254,7 @@ clinic.controller('NewDoctorController', function($scope, $http, $cookies) {
 		};
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/wee/rest/SystemUser/newDoctor",
+			url: "http://localhost:8080/rest/SystemUser/newDoctor",
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -274,7 +274,7 @@ clinic.controller('EditDoctorController', function($scope, $http, $cookies, $sta
 		}
 		$http({
 			method: 'PUT',
-			url: "http://localhost:8080/wee/rest/SystemUser/saveDoctor/"+$scope.user.pesel,
+			url: "http://localhost:8080/rest/SystemUser/saveDoctor/"+$scope.user.pesel,
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -295,7 +295,7 @@ clinic.controller('EditUserController', function($scope, $http, $cookies, $state
 		}
 		$http({
 			method: 'PUT',
-			url: "http://localhost:8080/wee/rest/SystemUser/savePatient/"+$scope.user.pesel,
+			url: "http://localhost:8080/rest/SystemUser/savePatient/"+$scope.user.pesel,
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -330,7 +330,7 @@ clinic.controller('NewReceptionistController', function($scope, $http, $cookies,
 		};
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/wee/rest/SystemUser/newReceptionist",
+			url: "http://localhost:8080/rest/SystemUser/newReceptionist",
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -346,7 +346,7 @@ clinic.controller('PanelController', function($scope, $http, $cookies) {
 	
 	$http({
 			method: 'GET',
-			url: "http://localhost:8080/wee/rest/SystemUser/role/"+$scope.pesel,
+			url: "http://localhost:8080/rest/SystemUser/role/"+$scope.pesel,
 			headers: {'XToken': $cookies.get('token')}
 		}).success(function(result){
 			$scope.role = result.role;
@@ -360,7 +360,7 @@ clinic.controller('PatientsListController', function($scope, $http, $cookies) {
 	var patientsList = [];
 	$http({
 		method: 'GET',
-		url: "http://localhost:8080/wee/rest/SystemUser/list",
+		url: "http://localhost:8080/rest/SystemUser/list",
 		headers: {'XToken': $cookies.get('token')}
 	}).success(function(result){
 		$scope.patientsList = result;
@@ -409,7 +409,7 @@ clinic.controller('igCtrl', function ($scope, $http, $cookies) {
     	$http({
     		method: 'POST',
     		isArray: false,
-    		url: "http://localhost:8080/wee/rest/auth/token",
+    		url: "http://localhost:8080/rest/auth/token",
     		data: $.param({
     			username: $scope.email,
     			password: $scope.pwd
