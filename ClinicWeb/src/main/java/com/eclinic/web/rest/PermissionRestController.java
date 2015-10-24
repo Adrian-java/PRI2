@@ -153,12 +153,12 @@ public class PermissionRestController {
 	 */
 
 	
-	@GET
-	@Path("/{permission_id}/typeOfUsers")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id) {
-		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id).getTypeOfUsers()).build();
-	}
+//	@GET
+//	@Path("/{permission_id}/typeOfUsers")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response getPermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id) {
+//		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id).getTypeOfUsers()).build();
+//	}
 
 	/**
 	 * Select an existing Permission entity
@@ -293,7 +293,7 @@ public class PermissionRestController {
 	@Path("/{permission_id}/systemUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPermissionSystemUser(@PathParam("permission_id") Integer permission_id) {
-		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id).getSystemUser()).build();
+		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id).getSystemUserPermission()).build();
 	}
 
 	/**

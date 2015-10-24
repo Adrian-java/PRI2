@@ -3,18 +3,29 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
-import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
 
 /**
  */
@@ -59,10 +70,10 @@ public class TypeOfUser implements Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({ @JoinColumn(name = "id_permission", referencedColumnName = "Id", nullable = false) })
-	@XmlTransient
-	Permission permission;
+	@OneToMany(mappedBy = "typeOfUser", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	private
+//	@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Permission> permission;
 
 	/**
 	 */
@@ -102,16 +113,6 @@ public class TypeOfUser implements Serializable {
 
 	/**
 	 */
-	public void setPermission(Permission permission) {
-		this.permission = permission;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Permission getPermission() {
-		return permission;
-	}
 
 	/**
 	 */
@@ -126,7 +127,6 @@ public class TypeOfUser implements Serializable {
 		setId(that.getId());
 		setType(that.getType());
 		setDescription(that.getDescription());
-		setPermission(that.getPermission());
 	}
 
 	/**
@@ -167,5 +167,15 @@ public class TypeOfUser implements Serializable {
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
+	}
+
+	public //	@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Permission> getPermission() {
+		return permission;
+	}
+
+	public void setPermission(//	@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Permission> permission) {
+		this.permission = permission;
 	}
 }

@@ -30,8 +30,8 @@ import javax.persistence.*;
 		@NamedQuery(name = "findPatientByDateOfBirth", query = "select myPatient from Patient myPatient where myPatient.dateOfBirth = ?1"),
 		@NamedQuery(name = "findPatientByDateOfBirthAfter", query = "select myPatient from Patient myPatient where myPatient.dateOfBirth > ?1"),
 		@NamedQuery(name = "findPatientByDateOfBirthBefore", query = "select myPatient from Patient myPatient where myPatient.dateOfBirth < ?1"),
-		@NamedQuery(name = "findPatientByEMail", query = "select myPatient from Patient myPatient where myPatient.EMail = ?1"),
-		@NamedQuery(name = "findPatientByEMailContaining", query = "select myPatient from Patient myPatient where myPatient.EMail like ?1"),
+		@NamedQuery(name = "findPatientByEMail", query = "select myPatient from Patient myPatient"),
+		@NamedQuery(name = "findPatientByEMailContaining", query = "select myPatient from Patient myPatient"),
 		@NamedQuery(name = "findPatientById", query = "select myPatient from Patient myPatient where myPatient.id = ?1"),
 		@NamedQuery(name = "findPatientByName", query = "select myPatient from Patient myPatient where myPatient.name = ?1"),
 		@NamedQuery(name = "findPatientByNameContaining", query = "select myPatient from Patient myPatient where myPatient.name like ?1"),
@@ -87,10 +87,10 @@ public class Patient implements Serializable {
 	 * 
 	 */
 
-	@Column(name = "e_mail", length = 20, nullable = true)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	String EMail;
+//	@Column(name = "e_mail", length = 20, nullable = true)
+//	@Basic(fetch = FetchType.EAGER)
+//	@XmlElement
+//	String EMail;
 	/**
 	 * telefon
 	 * 
@@ -195,17 +195,17 @@ public class Patient implements Serializable {
 	 * email
 	 * 
 	 */
-	public void setEMail(String EMail) {
-		this.EMail = EMail;
-	}
-
-	/**
-	 * email
-	 * 
-	 */
-	public String getEMail() {
-		return this.EMail;
-	}
+//	public void setEMail(String EMail) {
+//		this.EMail = EMail;
+//	}
+//
+//	/**
+//	 * email
+//	 * 
+//	 */
+//	public String getEMail() {
+//		return this.EMail;
+//	}
 
 	/**
 	 * telefon
@@ -331,8 +331,8 @@ public class Patient implements Serializable {
 			setSurname(that.getSurname());
 		if (that.getDateOfBirth() != null)
 			setDateOfBirth(that.getDateOfBirth());
-		if (that.getEMail() != null)
-			setEMail(that.getEMail());
+//		if (that.getEMail() != null)
+//			setEMail(that.getEMail());
 		if (that.getPhoneNr() != null)
 			setPhoneNr(that.getPhoneNr());
 		if (that.getConfirmed() != null)
@@ -361,7 +361,7 @@ public class Patient implements Serializable {
 		buffer.append("name=[").append(name).append("] ");
 		buffer.append("surname=[").append(surname).append("] ");
 		buffer.append("dateOfBirth=[").append(dateOfBirth).append("] ");
-		buffer.append("EMail=[").append(EMail).append("] ");
+//		buffer.append("EMail=[").append(EMail).append("] ");
 		buffer.append("phoneNr=[").append(phoneNr).append("] ");
 		buffer.append("confirmed=[").append(confirmed).append("] ");
 

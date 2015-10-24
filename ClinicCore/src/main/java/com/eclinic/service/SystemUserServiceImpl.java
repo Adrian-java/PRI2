@@ -88,8 +88,8 @@ public class SystemUserServiceImpl implements SystemUserService {
 			related_permissions = existingpermissions;
 		}
 
-		related_permissions.setSystemUser(systemuser);
-		systemuser.getPermissions().add(related_permissions);
+//		related_permissions.setSystemUser(systemuser);
+	//	systemuser.getPermissions().add(related_permissions);
 		related_permissions = permissionDAO.store(related_permissions);
 		permissionDAO.flush();
 
@@ -109,8 +109,8 @@ public class SystemUserServiceImpl implements SystemUserService {
 
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(systemuser_id, -1, -1);
 
-		related_permissions.setSystemUser(null);
-		systemuser.getPermissions().remove(related_permissions);
+		related_permissions.setSystemUserPermission(null);
+		//systemuser.getPermissions().remove(related_permissions);
 
 		permissionDAO.remove(related_permissions);
 		permissionDAO.flush();

@@ -80,6 +80,7 @@
 			value="org.springframework.web.servlet.view.JstlView" />
 		<property name="order" value="-1" />
 	</bean>
+	
 
 	<!-- ******************************************************************** -->
 	<!-- Scan for web layer annotated beans -->

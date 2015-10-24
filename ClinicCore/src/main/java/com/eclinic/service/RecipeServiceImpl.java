@@ -116,7 +116,7 @@ public class RecipeServiceImpl implements RecipeService {
 			existingpatient.setName(related_patient.getName());
 			existingpatient.setSurname(related_patient.getSurname());
 			existingpatient.setDateOfBirth(related_patient.getDateOfBirth());
-			existingpatient.setEMail(related_patient.getEMail());
+//			existingpatient.setEMail(related_patient.getEMail());
 			existingpatient.setPhoneNr(related_patient.getPhoneNr());
 			existingpatient.setConfirmed(related_patient.getConfirmed());
 			related_patient = existingpatient;

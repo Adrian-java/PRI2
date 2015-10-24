@@ -7,8 +7,13 @@ import java.lang.StringBuilder;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -27,6 +32,7 @@ import javax.persistence.*;
 		@NamedQuery(name = "findPermissionByEdit", query = "select myPermission from Permission myPermission where myPermission.edit = ?1"),
 		@NamedQuery(name = "findPermissionByExecute", query = "select myPermission from Permission myPermission where myPermission.execute = ?1"),
 		@NamedQuery(name = "findPermissionById", query = "select myPermission from Permission myPermission where myPermission.id = ?1"),
+		@NamedQuery(name = "findPermissionByUserType", query="select myPermission from Permission myPermission where myPermission.typeOfUser = ?1"),
 		@NamedQuery(name = "findPermissionByPrimaryKey", query = "select myPermission from Permission myPermission where myPermission.id = ?1") })
 @Table(catalog = "eclinic", name = "Permission")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -69,20 +75,19 @@ public class Permission implements Serializable {
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({ @JoinColumn(name = "id_system_user", referencedColumnName = "Id", nullable = false) })
-	@XmlTransient
-	SystemUser systemUser;
-	/**
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({ @JoinColumn(name = "id_module", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Module module;
 	/**
 	 */
+	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumns({ @JoinColumn(name = "id_type_of_user", referencedColumnName = "Id", nullable = false) })
+	TypeOfUser typeOfUser;
+	
 	@OneToMany(mappedBy = "permission", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	private
 //	@XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.TypeOfUser> typeOfUsers;
+	java.util.Set<SystemUserPermission> systemUserPermission;
 
 	/**
 	 */
@@ -134,16 +139,6 @@ public class Permission implements Serializable {
 
 	/**
 	 */
-	public void setSystemUser(SystemUser systemUser) {
-		this.systemUser = systemUser;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public SystemUser getSystemUser() {
-		return systemUser;
-	}
 
 	/**
 	 */
@@ -158,21 +153,6 @@ public class Permission implements Serializable {
 		return module;
 	}
 
-	/**
-	 */
-	public void setTypeOfUsers(Set<TypeOfUser> typeOfUsers) {
-		this.typeOfUsers = typeOfUsers;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<TypeOfUser> getTypeOfUsers() {
-		if (typeOfUsers == null) {
-			typeOfUsers = new java.util.LinkedHashSet<com.eclinic.domain.TypeOfUser>();
-		}
-		return typeOfUsers;
-	}
 
 	/**
 	 */
@@ -188,9 +168,7 @@ public class Permission implements Serializable {
 		setDisplay(that.getDisplay());
 		setEdit(that.getEdit());
 		setExecute(that.getExecute());
-		setSystemUser(that.getSystemUser());
 		setModule(that.getModule());
-		setTypeOfUsers(new java.util.LinkedHashSet<com.eclinic.domain.TypeOfUser>(that.getTypeOfUsers()));
 	}
 
 	/**
@@ -233,4 +211,25 @@ public class Permission implements Serializable {
 			return false;
 		return true;
 	}
+
+
+
+	public TypeOfUser getTypeOfUser() {
+		return typeOfUser;
+	}
+
+	public void setTypeOfUser(TypeOfUser typeOfUser) {
+		this.typeOfUser = typeOfUser;
+	}
+
+	public //	@XmlElement(name = "", namespace = "")
+	java.util.Set<SystemUserPermission> getSystemUserPermission() {
+		return systemUserPermission;
+	}
+
+	public void setSystemUserPermission(//	@XmlElement(name = "", namespace = "")
+	java.util.Set<SystemUserPermission> systemUserPermission) {
+		this.systemUserPermission = systemUserPermission;
+	}
+
 }

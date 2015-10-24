@@ -1,11 +1,11 @@
 package com.eclinic.dao;
 
 import com.eclinic.domain.Permission;
+import com.eclinic.domain.TypeOfUser;
 
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -85,5 +85,7 @@ public interface PermissionDAO extends JpaDao<Permission> {
 	 *
 	 */
 	public Set<Permission> findPermissionByDisplay(Boolean display, int startResult, int maxRows) throws DataAccessException;
+	
+	public Set<Permission> findPermissionByUserType(TypeOfUser userType) throws DataAccessException;
 
 }

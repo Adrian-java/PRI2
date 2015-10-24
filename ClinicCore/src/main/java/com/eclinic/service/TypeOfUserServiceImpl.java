@@ -63,8 +63,7 @@ public class TypeOfUserServiceImpl implements TypeOfUserService {
 			related_permission = existingpermission;
 		}
 
-		typeofuser.setPermission(related_permission);
-		related_permission.getTypeOfUsers().add(typeofuser);
+//		typeofuser.setPermission(related_permission);
 		typeofuser = typeOfUserDAO.store(typeofuser);
 		typeOfUserDAO.flush();
 
@@ -111,7 +110,6 @@ public class TypeOfUserServiceImpl implements TypeOfUserService {
 		Permission related_permission = permissionDAO.findPermissionByPrimaryKey(related_permission_id, -1, -1);
 
 		typeofuser.setPermission(null);
-		related_permission.getTypeOfUsers().remove(typeofuser);
 		typeofuser = typeOfUserDAO.store(typeofuser);
 		typeOfUserDAO.flush();
 

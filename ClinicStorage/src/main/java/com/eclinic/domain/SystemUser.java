@@ -146,10 +146,12 @@ public class SystemUser implements UserDetails, Serializable {
 	Worker worker;
 	/**
 	 */
-	@OneToMany(mappedBy = "systemUser", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Permission> permissions;
 
+	
+	@OneToMany(mappedBy = "systemUser", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	private
+//	@XmlElement(name = "", namespace = "")
+	java.util.Set<SystemUserPermission> systemUserPermission;
 	/**
 	 */
 	public void setId(Integer id) {
@@ -264,21 +266,6 @@ public class SystemUser implements UserDetails, Serializable {
 		return worker;
 	}
 
-	/**
-	 */
-	public void setPermissions(Set<Permission> permissions) {
-		this.permissions = permissions;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<Permission> getPermissions() {
-		if (permissions == null) {
-			permissions = new java.util.LinkedHashSet<com.eclinic.domain.Permission>();
-		}
-		return permissions;
-	}
 
 	/**
 	 */
@@ -299,8 +286,6 @@ public class SystemUser implements UserDetails, Serializable {
 		setEmail(that.getEmail());
 		setUnregisterDate(that.getUnregisterDate());
 		setWorker(that.getWorker());
-		setPermissions(new java.util.LinkedHashSet<com.eclinic.domain.Permission>(
-				that.getPermissions()));
 	}
 
 	/**
@@ -404,6 +389,16 @@ public class SystemUser implements UserDetails, Serializable {
 
 	public void setPesel(String pesel) {
 		this.pesel = pesel;
+	}
+
+	public //	@XmlElement(name = "", namespace = "")
+	java.util.Set<SystemUserPermission> getSystemUserPermission() {
+		return systemUserPermission;
+	}
+
+	public void setSystemUserPermission(//	@XmlElement(name = "", namespace = "")
+	java.util.Set<SystemUserPermission> systemUserPermission) {
+		this.systemUserPermission = systemUserPermission;
 	}
 
 }

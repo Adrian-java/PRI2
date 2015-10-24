@@ -93,7 +93,6 @@ public class PermissionServiceImpl implements PermissionService {
 		Permission permission = permissionDAO.findPermissionByPrimaryKey(permission_id, -1, -1);
 
 		related_typeofusers.setPermission(null);
-		permission.getTypeOfUsers().remove(related_typeofusers);
 
 		typeOfUserDAO.remove(related_typeofusers);
 		typeOfUserDAO.flush();
@@ -172,8 +171,7 @@ public class PermissionServiceImpl implements PermissionService {
 			related_typeofusers = existingtypeOfUsers;
 		}
 
-		related_typeofusers.setPermission(permission);
-		permission.getTypeOfUsers().add(related_typeofusers);
+//		related_typeofusers.setPermission(permission);
 		related_typeofusers = typeOfUserDAO.store(related_typeofusers);
 		typeOfUserDAO.flush();
 
@@ -192,8 +190,8 @@ public class PermissionServiceImpl implements PermissionService {
 		Permission permission = permissionDAO.findPermissionByPrimaryKey(permission_id, -1, -1);
 		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
-		permission.setSystemUser(null);
-		related_systemuser.getPermissions().remove(permission);
+		permission.setSystemUserPermission(null);
+		//related_systemuser.getPermissions().remove(permission);
 		permission = permissionDAO.store(permission);
 		permissionDAO.flush();
 
@@ -245,8 +243,8 @@ public class PermissionServiceImpl implements PermissionService {
 			related_systemuser = existingsystemUser;
 		}
 
-		permission.setSystemUser(related_systemuser);
-		related_systemuser.getPermissions().add(permission);
+//		permission.setSystemUser(related_systemuser);
+		//related_systemuser.getPermissions().add(permission);
 		permission = permissionDAO.store(permission);
 		permissionDAO.flush();
 

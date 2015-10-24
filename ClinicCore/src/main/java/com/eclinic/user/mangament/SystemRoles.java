@@ -9,6 +9,11 @@ import com.eclinic.domain.SystemUser;
 import com.eclinic.exception.ClinicException;
 
 public class SystemRoles {
+
+	public static enum Roles {
+		Super_Admin, Admin, Doctor, Patient, Receptionist
+	}
+
 	private Logger logger = Logger.getLogger(SystemRoles.class);
 
 	public void setOrChangeRoleBySystemUser(SystemUser systemUser, String role)

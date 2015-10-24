@@ -1,6 +1,7 @@
 package com.eclinic.dao;
 
 import com.eclinic.domain.Permission;
+import com.eclinic.domain.TypeOfUser;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,11 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.skyway.spring.util.dao.AbstractJpaDao;
-
 import org.springframework.dao.DataAccessException;
-
 import org.springframework.stereotype.Repository;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -212,5 +210,12 @@ public class PermissionDAOImpl extends AbstractJpaDao<Permission> implements
 	 */
 	public boolean canBeMerged(Permission entity) {
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<Permission> findPermissionByUserType(TypeOfUser userType)
+			throws DataAccessException {
+		Query query = createNamedQuery("findPermissionByUserType",-1,-1,userType);
+		return new LinkedHashSet<Permission>(query.getResultList());
 	}
 }

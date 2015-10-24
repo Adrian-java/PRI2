@@ -212,7 +212,7 @@ public class PatientServiceImpl implements PatientService {
 				existingPatient.setName(patient.getName());
 				existingPatient.setSurname(patient.getSurname());
 				existingPatient.setDateOfBirth(patient.getDateOfBirth());
-				existingPatient.setEMail(patient.getEMail());
+//				existingPatient.setEMail(patient.getEMail());
 				existingPatient.setPhoneNr(patient.getPhoneNr());
 				existingPatient.setConfirmed(patient.getConfirmed());
 			}
