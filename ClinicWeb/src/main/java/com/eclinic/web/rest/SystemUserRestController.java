@@ -42,6 +42,7 @@ import com.eclinic.domain.Permission;
 import com.eclinic.domain.Receptionist;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Worker;
+import com.eclinic.domain.view.DoctorView;
 import com.eclinic.domain.view.PatientView;
 import com.eclinic.domain.view.SystemUserPermissionView;
 import com.eclinic.service.DoctorService;
@@ -607,7 +608,7 @@ public class SystemUserRestController {
 			@PathParam("systemuser_id") Integer systemuser_id, Worker worker) {
 		systemUserService.saveSystemUserWorker(systemuser_id, worker);
 		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId()))
-				.build();
+				.build(); 
 	}
 
 	@Path("/patients/all")
@@ -624,6 +625,30 @@ public class SystemUserRestController {
 	public Response getPatientByPesel(@PathParam("pesel") String pesel) {
 		PatientView patient = patientCrud.getPatientByPesel(pesel);
 		return Response.ok(patient).build();
+	}
+	
+	@Path("/doctors/all")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllDoctors() {
+		Set<DoctorView> allDoctors = doctorCrud.getAllDoctors();
+		return Response.ok(allDoctors).build();
+	}
+	
+	@Path("/doctor/{pesel}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDoctorByPesel(@PathParam("pesel") String pesel) {
+		DoctorView doctor = doctorCrud.getDoctorByPesel(pesel);
+		return Response.ok(doctor).build();
+	}
+	
+	@Path("/doctors/specialization/{specialization}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDoctorsBySpecialization(@PathParam("specialization") String specialization) {
+		Set<DoctorView> doctors = doctorCrud.getDoctorsBySpecialization(specialization);
+		return Response.ok(doctors).build();
 	}
 
 	/**

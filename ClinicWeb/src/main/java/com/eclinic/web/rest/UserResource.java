@@ -40,7 +40,7 @@ public class UserResource {
 		Authentication authentication = this.authManager.authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		UserDetails userDetails = this.userService.loadUserByUsername(username);
-
+		
 		return new TokenTransfer(TokenUtils.createToken(userDetails));
 	}
 }
