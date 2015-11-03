@@ -11,7 +11,7 @@
 	<import resource="classpath:wee-service-context.xml" />
 	<import resource="classpath:wee-web-context.xml" />
 
-
+ 
 	<bean id="passwordEncoder"
 		class="org.springframework.security.crypto.password.StandardPasswordEncoder">
 		<constructor-arg value="ThisIsASecretSoChangeMe" />
@@ -44,12 +44,21 @@
 		<security:intercept-url pattern="/rest/Visit/list"
 			access="hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 
+
 		<security:intercept-url method="GET" pattern="/rest/**"
 			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 		<security:intercept-url method="PUT" pattern="/rest/**"
 			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 		<security:intercept-url method="POST" pattern="/rest/**"
 			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
+
+			
+			<security:intercept-url method="GET" pattern="/rest/**"
+			access="permitAll" />
+		<security:intercept-url method="PUT" pattern="/rest/**"
+			access="permitAll" />
+		<security:intercept-url method="POST" pattern="/rest/**"
+			access="permitAll" />
 
 		<security:intercept-url method="DELETE"
 			pattern="/rest/news/**" access="hasRole('admin')" />
@@ -62,4 +71,5 @@
 		id="authenticationTokenProcessingFilter">
 
 	</bean>
+
 </beans>

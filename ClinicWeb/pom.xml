@@ -39,7 +39,7 @@
 					<version>3.0</version>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<warName>ROOT</warName>
-					<outputDirectory>../dependencies/jbossews/webapps</outputDirectory> 
+					<outputDirectory>C:\Tomcat\webapps</outputDirectory> 
 				<!--	<outputDirectory>/home/adrian/tomcat7/webapps</outputDirectory> -->
 				</configuration>
 			</plugin>
