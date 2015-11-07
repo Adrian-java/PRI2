@@ -6,3 +6,4 @@ Servers
 RemoteSystemsTempFiles/
 .git
 *~
+.project
