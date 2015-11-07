@@ -4,45 +4,42 @@ import java.util.Date;
 import java.util.Set;
 
 import com.eclinic.domain.Doctor;
-import com.eclinic.domain.Patient;
-import com.eclinic.domain.Specialization;
 import com.eclinic.domain.StatusOfVisit;
 import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
+import com.eclinic.visit.mapper.NewVisitMapper;
+import com.eclinic.visit.mapper.NewVisitSchedulerMapper;
+import com.eclinic.visit.mapper.VisitProposal;
 
 public interface VisitCrud {
 
-	public Set<Visit> findVisitByDate(Date date);
+    public Set<Visit> findVisitByDate(Date date);
 
-	public Set<Visit> findVisitByDoctor(Doctor doctor);
+    public Set<Visit> findVisitByDoctor(Doctor doctor);
 
-	public Set<Visit> findVisitByPatient(Patient patient);
+    public Set<Visit> findVisitByPatient(Integer id);
 
-	public Set<Visit> findVisitBySpecialization(Specialization specialization);
+    public Set<Visit> findVisitBySpecialization(String specialization);
 
-	public Set<Visit> findVisitByStatus(StatusOfVisit status);
+    public Set<Visit> findVisitByStatus(String status);
 
-	public VisitScheduler findFirstFreeTermByDoctor(Doctor doctor);
+    public VisitProposal findFirstFreeTermByDoctor(Integer id);
 
-	public VisitScheduler findFirstFreeTermBySpecialization(
-			Specialization specialization);
+    public VisitProposal findFirstFreeTermBySpecialization(String specialization);
 
-	public Set<VisitScheduler> findFreeTermsByDoctor(Doctor doctor,
-			Integer resultCounterMonth);
+    public Set<VisitProposal> findFreeTermsByDoctor(Integer id, Integer resultCounterMonth);
 
-	public Set<VisitScheduler> findFreeTermsBySpecialization(
-			Specialization specialization, Integer resultCounterMonth);
-	
-	public void addVisitScheduler(VisitScheduler visitScheduler);
-	
-	public void deleteVisitScheduler(VisitScheduler visitScheduler);
-	
-	public void addVisit(Visit visit);
-	
-	public void changeStatusOfVisit(Visit visit, StatusOfVisit status);
-	
-	public void deleteVisit(Visit visit);
-	
-	
+    public Set<VisitProposal> findFreeTermsBySpecialization(String specialization,
+	    Integer resultCounterMonth);
+
+    public VisitScheduler addVisitScheduler(NewVisitSchedulerMapper visitSchedulerMapper);
+
+    public void deleteVisitScheduler(VisitScheduler visitScheduler);
+
+    public Visit addVisit(NewVisitMapper visit);
+
+    public void changeStatusOfVisit(Integer id, String status);
+
+    public void deleteVisit(Integer id);
 
 }

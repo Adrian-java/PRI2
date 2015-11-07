@@ -143,7 +143,7 @@ public class GraphicServiceImpl implements GraphicService {
 			if (existingGraphic != graphic) {
 				existingGraphic.setId(graphic.getId());
 				existingGraphic.setAbsence(graphic.getAbsence());
-				existingGraphic.setDay(graphic.getDay());
+//				existingGraphic.setDay(graphic.getDay());
 			}
 			graphic = graphicDAO.store(existingGraphic);
 		} else {

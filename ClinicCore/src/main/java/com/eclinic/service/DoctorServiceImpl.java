@@ -352,10 +352,10 @@ public class DoctorServiceImpl implements DoctorService {
 		// copy into the existing record to preserve existing relationships
 		if (existingvisitSchedulers != null) {
 			existingvisitSchedulers.setId(related_visitschedulers.getId());
-			existingvisitSchedulers.setNumberOfDay(related_visitschedulers.getNumberOfDay());
+//			existingvisitSchedulers.setNumberOfDay(related_visitschedulers.getNumberOfDay());
 			existingvisitSchedulers.setNumberOfMonth(related_visitschedulers.getNumberOfMonth());
 			existingvisitSchedulers.setDescription(related_visitschedulers.getDescription());
-			existingvisitSchedulers.setTimeOfVisit(related_visitschedulers.getTimeOfVisit());
+//			existingvisitSchedulers.setTimeOfVisit(related_visitschedulers.getTimeOfVisit());
 			related_visitschedulers = existingvisitSchedulers;
 		}
 
@@ -506,7 +506,7 @@ public class DoctorServiceImpl implements DoctorService {
 		if (existinggraphics != null) {
 			existinggraphics.setId(related_graphics.getId());
 			existinggraphics.setAbsence(related_graphics.getAbsence());
-			existinggraphics.setDay(related_graphics.getDay());
+//			existinggraphics.setDay(related_graphics.getDay());
 			related_graphics = existinggraphics;
 		}
 

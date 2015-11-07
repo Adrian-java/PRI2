@@ -21,6 +21,11 @@
 			<artifactId>ClinicCore</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.eclinic</groupId>
+			<artifactId>ClinicScheduler</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -39,8 +44,8 @@
 					<version>3.0</version>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<warName>ROOT</warName>
-					<outputDirectory>../dependencies/jbossews/webapps</outputDirectory> 
-				<!--	<outputDirectory>/home/adrian/tomcat7/webapps</outputDirectory> -->
+<!-- 					<outputDirectory>../dependencies/jbossews/webapps</outputDirectory>  -->
+					<outputDirectory>/home/adrian/tomcat7/webapps</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

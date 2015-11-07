@@ -30,9 +30,11 @@ import javax.persistence.*;
 		@NamedQuery(name = "findVisitByDateOfVisitBefore", query = "select myVisit from Visit myVisit where myVisit.dateOfVisit < ?1"),
 		@NamedQuery(name = "findVisitById", query = "select myVisit from Visit myVisit where myVisit.id = ?1"),
 		@NamedQuery(name = "findVisitByIsLeave", query = "select myVisit from Visit myVisit where myVisit.isLeave = ?1"),
+		@NamedQuery(name = "findVisitByStatus", query = "select myVisit from Visit myVisit where myVisit.typeOfVisit.name = ?1"),
 		@NamedQuery(name = "findVisitByPrimaryKey", query = "select myVisit from Visit myVisit where myVisit.id = ?1"),
 		@NamedQuery(name = "findVisitByPesel", query = "select v from Visit v where v.patientCard in (select pc.id from PatientCard pc where pc.patient in (select p.id from Patient p where  p.id in (select w.patient from Worker w where w.id in (select su.worker from SystemUser su where su.pesel =?1 ))))"),
-
+		@NamedQuery(name = "findVisitByDateDoctor", query = "select v from Visit v where v.doctor = ?1)"),
+		@NamedQuery(name = "findVisitByPatient", query = "select v from Visit v "),
 		@NamedQuery(name = "findVisitBySpecial", query = "select myVisit from Visit myVisit where myVisit.special = ?1") })
 @Table(catalog = "eclinic", name = "Visit")
 @XmlAccessorType(XmlAccessType.FIELD)

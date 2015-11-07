@@ -1,5 +1,6 @@
 package com.eclinic.dao;
 
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Visit;
 
 import java.util.Arrays;
@@ -103,6 +104,13 @@ public class VisitDAOImpl extends AbstractJpaDao<Visit> implements VisitDAO {
 	@Transactional
 	public Set<Visit> findVisitByDateOfVisit(java.util.Calendar dateOfVisit, int startResult, int maxRows) throws DataAccessException {
 		Query query = createNamedQuery("findVisitByDateOfVisit", startResult, maxRows, dateOfVisit);
+		return new LinkedHashSet<Visit>(query.getResultList());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public Set<Visit> findVisitByDoctor(Doctor doctor, int startResult, int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findVisitByDateDoctor", startResult, maxRows, doctor);
 		return new LinkedHashSet<Visit>(query.getResultList());
 	}
 
@@ -256,6 +264,16 @@ public class VisitDAOImpl extends AbstractJpaDao<Visit> implements VisitDAO {
 
 	public Set<Visit> findVisitByPesel(String pesel) throws DataAccessException {
 		Query query = createNamedQuery("findVisitByPesel", -1, -1, pesel);
+		return new LinkedHashSet<Visit>(query.getResultList());
+	}
+
+	public Set<Visit> findVisitByPatient(Integer id) throws DataAccessException {
+	    Query query = createNamedQuery("findVisitByPatient", -1, -1, id);
+		return new LinkedHashSet<Visit>(query.getResultList());
+	}
+
+	public Set<Visit> findVisitByStatus(String status) throws DataAccessException {
+	    Query query = createNamedQuery("findVisitByStatus", -1, -1, status);
 		return new LinkedHashSet<Visit>(query.getResultList());
 	}
 }

@@ -131,10 +131,10 @@ public class SpecializationServiceImpl implements SpecializationService {
 		// copy into the existing record to preserve existing relationships
 		if (existingvisitSchedulers != null) {
 			existingvisitSchedulers.setId(related_visitschedulers.getId());
-			existingvisitSchedulers.setNumberOfDay(related_visitschedulers.getNumberOfDay());
+//			existingvisitSchedulers.setNumberOfDay(related_visitschedulers.getNumberOfDay());
 			existingvisitSchedulers.setNumberOfMonth(related_visitschedulers.getNumberOfMonth());
 			existingvisitSchedulers.setDescription(related_visitschedulers.getDescription());
-			existingvisitSchedulers.setTimeOfVisit(related_visitschedulers.getTimeOfVisit());
+//			existingvisitSchedulers.setTimeOfVisit(related_visitschedulers.getTimeOfVisit());
 			related_visitschedulers = existingvisitSchedulers;
 		}
 

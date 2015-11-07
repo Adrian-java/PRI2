@@ -3,20 +3,30 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
-import java.util.Calendar;
-import java.util.Set;
+import java.sql.Time;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.skyway.spring.util.databinding.TypeConversionUtils;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
 
 /**
  */
@@ -25,10 +35,12 @@ import javax.persistence.*;
 @NamedQueries({
 		@NamedQuery(name = "findAllVisitSchedulers", query = "select myVisitScheduler from VisitScheduler myVisitScheduler"),
 		@NamedQuery(name = "findVisitSchedulerById", query = "select myVisitScheduler from VisitScheduler myVisitScheduler where myVisitScheduler.id = ?1"),
-		@NamedQuery(name = "findVisitSchedulerByNumberOfDay", query = "select myVisitScheduler from VisitScheduler myVisitScheduler where myVisitScheduler.numberOfDay = ?1"),
+		@NamedQuery(name = "findVisitSchedulerByNumberOfDay", query = "select myVisitScheduler from VisitScheduler myVisitScheduler"),
+		@NamedQuery(name = "findVisitSchedulerBySpecializationName", query="select myVisitScheduler from VisitScheduler myVisitScheduler where myVisitScheduler.specialization.name = ?1"),
 		@NamedQuery(name = "findVisitSchedulerByNumberOfMonth", query = "select myVisitScheduler from VisitScheduler myVisitScheduler where myVisitScheduler.numberOfMonth = ?1"),
 		@NamedQuery(name = "findVisitSchedulerByPrimaryKey", query = "select myVisitScheduler from VisitScheduler myVisitScheduler where myVisitScheduler.id = ?1"),
-		@NamedQuery(name = "findVisitSchedulerByTimeOfVisit", query = "select myVisitScheduler from VisitScheduler myVisitScheduler where myVisitScheduler.timeOfVisit = ?1") })
+		@NamedQuery(name = "findVisitSchedulerByDoctor", query="select myVisitScheduler from VisitScheduler myVisitScheduler where myVisitScheduler.doctor = ?1"),
+		@NamedQuery(name = "findVisitSchedulerByTimeOfVisit", query = "select myVisitScheduler from VisitScheduler myVisitScheduler") })
 @Table(catalog = "eclinic", name = "Visit_Scheduler")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "VisitScheduler")
@@ -44,13 +56,13 @@ public class VisitScheduler implements Serializable {
 	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
 	Integer id;
-	/**
-	 */
-
-	@Column(name = "number_of_day", nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	Integer numberOfDay;
+//	/**
+//	 */
+//
+//	@Column(name = "number_of_day", nullable = false)
+//	@Basic(fetch = FetchType.EAGER)
+//	@XmlElement
+//	Integer numberOfDay;
 	/**
 	 */
 
@@ -68,11 +80,17 @@ public class VisitScheduler implements Serializable {
 	byte[] description;
 	/**
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "time_of_visit")
+	@Column(name = "time_from")
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
-	Calendar timeOfVisit;
+	private
+	Time timeFrom;
+	
+	@Column(name = "time_to")
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	private
+	Time timeTo;
 
 	/**
 	 */
@@ -86,6 +104,11 @@ public class VisitScheduler implements Serializable {
 	@JoinColumns({ @JoinColumn(name = "id_doctor", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Doctor doctor;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumns({ @JoinColumn(name = "id_seven_days", referencedColumnName = "Id", nullable = false) })
+	@XmlTransient
+	SevenDays sevenDays;
 
 	/**
 	 */
@@ -99,17 +122,17 @@ public class VisitScheduler implements Serializable {
 		return this.id;
 	}
 
-	/**
-	 */
-	public void setNumberOfDay(Integer numberOfDay) {
-		this.numberOfDay = numberOfDay;
-	}
-
-	/**
-	 */
-	public Integer getNumberOfDay() {
-		return this.numberOfDay;
-	}
+//	/**
+//	 */
+//	public void setNumberOfDay(Integer numberOfDay) {
+//		this.numberOfDay = numberOfDay;
+//	}
+//
+//	/**
+//	 */
+//	public Integer getNumberOfDay() {
+//		return this.numberOfDay;
+//	}
 
 	/**
 	 */
@@ -135,18 +158,6 @@ public class VisitScheduler implements Serializable {
 		return this.description;
 	}
 
-	/**
-	 */
-	public void setTimeOfVisit(Calendar timeOfVisit) {
-		TypeConversionUtils.clearDateFields(timeOfVisit);
-		this.timeOfVisit = timeOfVisit;
-	}
-
-	/**
-	 */
-	public Calendar getTimeOfVisit() {
-		return this.timeOfVisit;
-	}
 
 	/**
 	 */
@@ -185,10 +196,8 @@ public class VisitScheduler implements Serializable {
 	 */
 	public void copy(VisitScheduler that) {
 		setId(that.getId());
-		setNumberOfDay(that.getNumberOfDay());
 		setNumberOfMonth(that.getNumberOfMonth());
 		setDescription(that.getDescription());
-		setTimeOfVisit(that.getTimeOfVisit());
 		setSpecialization(that.getSpecialization());
 		setDoctor(that.getDoctor());
 	}
@@ -202,10 +211,8 @@ public class VisitScheduler implements Serializable {
 		StringBuilder buffer = new StringBuilder();
 
 		buffer.append("id=[").append(id).append("] ");
-		buffer.append("numberOfDay=[").append(numberOfDay).append("] ");
 		buffer.append("numberOfMonth=[").append(numberOfMonth).append("] ");
 		buffer.append("description=[").append(description).append("] ");
-		buffer.append("timeOfVisit=[").append(timeOfVisit).append("] ");
 
 		return buffer.toString();
 	}
@@ -233,5 +240,29 @@ public class VisitScheduler implements Serializable {
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
+	}
+
+	public SevenDays getSevenDays() {
+		return sevenDays;
+	}
+
+	public void setSevenDays(SevenDays sevenDays) {
+		this.sevenDays = sevenDays;
+	}
+
+	public Time getTimeFrom() {
+		return timeFrom;
+	}
+
+	public void setTimeFrom(Time timeFrom) {
+		this.timeFrom = timeFrom;
+	}
+
+	public Time getTimeTo() {
+		return timeTo;
+	}
+
+	public void setTimeTo(Time timeTo) {
+		this.timeTo = timeTo;
 	}
 }
