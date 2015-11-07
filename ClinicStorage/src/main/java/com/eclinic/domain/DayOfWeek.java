@@ -11,7 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -20,6 +21,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @Entity
+@NamedQueries({ @NamedQuery(name = "findDayOfWeekById", query = "select myD from DayOfWeek myD where myD.id = ?1") })
 @Table(catalog = "eclinic", name = "Day_Of_Week")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "Day_Of_Week")
@@ -37,8 +39,6 @@ public class DayOfWeek {
 	 */
 
 	@Column(name = "name")
-	@Basic(fetch = FetchType.EAGER)
-	@Lob
 	@XmlElement
 	private
 	String name;

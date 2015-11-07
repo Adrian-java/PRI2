@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -17,6 +19,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @Entity
+@NamedQueries({ @NamedQuery(name = "findSevenDaysById", query = "select myS from SevenDays myS where myS.id = ?1") })
 @Table(catalog = "eclinic", name = "Seven_Days")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "SevenDays")
@@ -28,35 +31,35 @@ public class SevenDays {
 	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
 	Integer id;
-	
+
 	@Column(name = "mon", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	Boolean mon;
-	
+
 	@Column(name = "tue", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	Boolean tue;
-	
+
 	@Column(name = "wen", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	Boolean wen;
-	
+
 	@Column(name = "thu", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	Boolean thu;
-	
+
 	@Column(name = "fri", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	Boolean fri;
-	
+
 	@Column(name = "sat", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	Boolean sat;
-	
+
 	@Column(name = "sun", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	Boolean sun;
-	
+
 	@OneToMany(mappedBy = "sevenDays", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.VisitScheduler> visitScheduler;
@@ -125,15 +128,14 @@ public class SevenDays {
 		this.sun = sun;
 	}
 
-	public // @XmlElement(name = "", namespace = "")
+	public// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.VisitScheduler> getVisitScheduler() {
 		return visitScheduler;
 	}
 
 	public void setVisitScheduler(// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.VisitScheduler> visitScheduler) {
+			java.util.Set<com.eclinic.domain.VisitScheduler> visitScheduler) {
 		this.visitScheduler = visitScheduler;
 	}
-	
-	
+
 }

@@ -109,6 +109,11 @@ public class Doctor implements Serializable {
 	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
 
+	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	private
+	// @XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Documents> documents;
+	
 	/**
 	 */
 	public void setId(Integer id) {
@@ -347,5 +352,15 @@ public class Doctor implements Serializable {
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
+	}
+
+	public // @XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Documents> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(// @XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Documents> documents) {
+		this.documents = documents;
 	}
 }
