@@ -34,6 +34,7 @@
 		<class>com.eclinic.domain.SystemUserPermission</class>
 		<class>com.eclinic.domain.SevenDays</class>
 		<class>com.eclinic.domain.DayOfWeek</class>
+		<class>com.eclinic.domain.Documents</class>
 
 		<class>com.eclinic.domain.view.PatientView</class>
 		<class>com.eclinic.domain.view.DoctorView</class>
