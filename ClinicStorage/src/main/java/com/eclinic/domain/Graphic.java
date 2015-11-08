@@ -3,19 +3,30 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
-import java.util.Calendar;
-import java.util.Set;
+import java.sql.Time;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
 
 /**
  */
@@ -23,9 +34,9 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "findAllGraphics", query = "select myGraphic from Graphic myGraphic"),
-		@NamedQuery(name = "findGraphicByDay", query = "select myGraphic from Graphic myGraphic where myGraphic.day = ?1"),
-		@NamedQuery(name = "findGraphicByDayAfter", query = "select myGraphic from Graphic myGraphic where myGraphic.day > ?1"),
-		@NamedQuery(name = "findGraphicByDayBefore", query = "select myGraphic from Graphic myGraphic where myGraphic.day < ?1"),
+		@NamedQuery(name = "findGraphicByDay", query = "select myGraphic from Graphic myGraphic"),
+		@NamedQuery(name = "findGraphicByDayAfter", query = "select myGraphic from Graphic myGraphic "),
+		@NamedQuery(name = "findGraphicByDayBefore", query = "select myGraphic from Graphic myGraphic"),
 		@NamedQuery(name = "findGraphicById", query = "select myGraphic from Graphic myGraphic where myGraphic.id = ?1"),
 		@NamedQuery(name = "findGraphicByPrimaryKey", query = "select myGraphic from Graphic myGraphic where myGraphic.id = ?1") })
 @Table(catalog = "eclinic", name = "Graphic")
@@ -51,13 +62,18 @@ public class Graphic implements Serializable {
 	@Lob
 	@XmlElement
 	byte[] absence;
-	/**
-	 */
-	@Temporal(TemporalType.DATE)
-	@Column(name = "day", nullable = false)
+	
+	@Column(name = "time_from", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
-	Calendar day;
+	private
+	Time timeFrom;
+	
+	@Column(name = "time_to", nullable = false)
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	private
+	Time timeTo;
 
 	/**
 	 */
@@ -65,6 +81,12 @@ public class Graphic implements Serializable {
 	@JoinColumns({ @JoinColumn(name = "id_doctor", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Doctor doctor;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({ @JoinColumn(name = "id_day_of_week", referencedColumnName = "Id", nullable = false) })
+	private
+//	@XmlTransient
+	DayOfWeek dayOfWeek;
 
 	/**
 	 */
@@ -92,18 +114,6 @@ public class Graphic implements Serializable {
 
 	/**
 	 */
-	public void setDay(Calendar day) {
-		this.day = day;
-	}
-
-	/**
-	 */
-	public Calendar getDay() {
-		return this.day;
-	}
-
-	/**
-	 */
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
@@ -127,7 +137,6 @@ public class Graphic implements Serializable {
 	public void copy(Graphic that) {
 		setId(that.getId());
 		setAbsence(that.getAbsence());
-		setDay(that.getDay());
 		setDoctor(that.getDoctor());
 	}
 
@@ -141,7 +150,6 @@ public class Graphic implements Serializable {
 
 		buffer.append("id=[").append(id).append("] ");
 		buffer.append("absence=[").append(absence).append("] ");
-		buffer.append("day=[").append(day).append("] ");
 
 		return buffer.toString();
 	}
@@ -169,5 +177,31 @@ public class Graphic implements Serializable {
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
+	}
+
+	public Time getTimeFrom() {
+		return timeFrom;
+	}
+
+	public void setTimeFrom(Time timeFrom) {
+		this.timeFrom = timeFrom;
+	}
+
+	public Time getTimeTo() {
+		return timeTo;
+	}
+
+	public void setTimeTo(Time timeTo) {
+		this.timeTo = timeTo;
+	}
+
+	public //	@XmlTransient
+	DayOfWeek getDayOfWeek() {
+		return dayOfWeek;
+	}
+
+	public void setDayOfWeek(//	@XmlTransient
+	DayOfWeek dayOfWeek) {
+		this.dayOfWeek = dayOfWeek;
 	}
 }

@@ -1,0 +1,9 @@
+/target/
+.settings/
+.classpath
+.metadata
+Servers
+RemoteSystemsTempFiles/
+.git
+*~
+.project

@@ -1,5 +1,6 @@
 package com.eclinic.dao;
 
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.VisitScheduler;
 
 import java.util.Arrays;
@@ -13,11 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.skyway.spring.util.dao.AbstractJpaDao;
-
 import org.springframework.dao.DataAccessException;
-
 import org.springframework.stereotype.Repository;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -212,5 +210,17 @@ public class VisitSchedulerDAOImpl extends AbstractJpaDao<VisitScheduler>
 	 */
 	public boolean canBeMerged(VisitScheduler entity) {
 		return true;
+	}
+
+	@Transactional
+	public Set<VisitScheduler> findVisitSchedulerBySpecialization(
+			String specialization) throws DataAccessException {
+		Query query = createNamedQuery("findVisitSchedulerBySpecializationName", -1, -1, specialization);
+		return new LinkedHashSet<VisitScheduler>(query.getResultList());
+	}
+
+	public Set<VisitScheduler> findVisitSchedulerByDoctor(Doctor d) throws DataAccessException {
+	    Query query = createNamedQuery("findVisitSchedulerByDoctor", -1, -1, d);
+		return new LinkedHashSet<VisitScheduler>(query.getResultList());
 	}
 }

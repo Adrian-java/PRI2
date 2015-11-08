@@ -211,10 +211,10 @@ public class VisitSchedulerServiceImpl implements VisitSchedulerService {
 		if (existingVisitScheduler != null) {
 			if (existingVisitScheduler != visitscheduler) {
 				existingVisitScheduler.setId(visitscheduler.getId());
-				existingVisitScheduler.setNumberOfDay(visitscheduler.getNumberOfDay());
+//				existingVisitScheduler.setNumberOfDay(visitscheduler.GETNUMBEROFDAY());
 				existingVisitScheduler.setNumberOfMonth(visitscheduler.getNumberOfMonth());
 				existingVisitScheduler.setDescription(visitscheduler.getDescription());
-				existingVisitScheduler.setTimeOfVisit(visitscheduler.getTimeOfVisit());
+//				existingVisitScheduler.setTimeOfVisit(visitscheduler.getTimeOfVisit());
 			}
 			visitscheduler = visitSchedulerDAO.store(existingVisitScheduler);
 		} else {

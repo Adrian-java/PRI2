@@ -1,12 +1,12 @@
 package com.eclinic.dao;
 
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Visit;
 
 import java.util.Calendar;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -125,5 +125,12 @@ public interface VisitDAO extends JpaDao<Visit> {
 	 */
 	public Set<Visit> findVisitByDateOfVisitBefore(Calendar dateOfVisit_2,
 			int startResult, int maxRows) throws DataAccessException;
+
+	public Set<Visit> findVisitByDoctor(Doctor doctor, int startResult,
+			int maxRows) throws DataAccessException;
+	
+	public Set<Visit> findVisitByPatient(Integer id) throws DataAccessException;
+	
+	public Set<Visit> findVisitByStatus(String status) throws DataAccessException;
 
 }

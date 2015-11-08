@@ -3,20 +3,27 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
 
 /**
  */
@@ -102,6 +109,11 @@ public class Doctor implements Serializable {
 	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
 
+	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	private
+	// @XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Documents> documents;
+	
 	/**
 	 */
 	public void setId(Integer id) {
@@ -340,5 +352,15 @@ public class Doctor implements Serializable {
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
+	}
+
+	public // @XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Documents> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(// @XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Documents> documents) {
+		this.documents = documents;
 	}
 }
