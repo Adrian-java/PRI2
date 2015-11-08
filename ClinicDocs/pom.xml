@@ -25,12 +25,6 @@
 			<artifactId>ClinicStorage</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>com.eclinic</groupId>
-			<artifactId>ClinicWeb</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<type>war</type>
-		</dependency>
 		
 		<dependency>
 			<groupId>junit</groupId>

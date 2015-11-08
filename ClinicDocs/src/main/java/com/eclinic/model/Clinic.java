@@ -11,5 +11,4 @@ public class Clinic {
 	private String regon;
 	
 	
-	
 }

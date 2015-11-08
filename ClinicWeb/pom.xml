@@ -21,6 +21,11 @@
 			<artifactId>ClinicCore</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.eclinic</groupId>
+			<artifactId>ClinicDocs</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

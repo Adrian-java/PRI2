@@ -1,5 +1,7 @@
 package com.eclinic.model;
 
+import java.util.Calendar;
+
 import com.eclinic.domain.Patient;
 
 public class Prescription {
@@ -11,4 +13,7 @@ public class Prescription {
 	
 	private String department;
 	
+	private Calendar issuedDate;
+	
+	private Calendar executionDate;
 }
