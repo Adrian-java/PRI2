@@ -67,31 +67,6 @@ public class DocumentsMappingDAOImpl extends AbstractJpaDao<DocumentsMapping>
 	}
 
 	/**
-	 * JPQL Query - findDocumentsMappingById
-	 *
-	 */
-	@Transactional
-	public DocumentsMapping findDocumentsMappingById(Integer id) throws DataAccessException {
-
-		return findDocumentsMappingById(id, -1, -1);
-	}
-
-	/**
-	 * JPQL Query - findDocumentsMappingById
-	 *
-	 */
-
-	@Transactional
-	public DocumentsMapping findDocumentsMappingById(Integer id, int startResult, int maxRows) throws DataAccessException {
-		try {
-			Query query = createNamedQuery("findDocumentsMappingById", startResult, maxRows, id);
-			return (com.eclinic.domain.DocumentsMapping) query.getSingleResult();
-		} catch (NoResultException nre) {
-			return null;
-		}
-	}
-
-	/**
 	 * JPQL Query - findAllDocumentsMappings
 	 *
 	 */
@@ -132,6 +107,31 @@ public class DocumentsMappingDAOImpl extends AbstractJpaDao<DocumentsMapping>
 	public DocumentsMapping findDocumentsMappingByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findDocumentsMappingByPrimaryKey", startResult, maxRows, id);
+			return (com.eclinic.domain.DocumentsMapping) query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
+
+	/**
+	 * JPQL Query - findDocumentsMappingById
+	 *
+	 */
+	@Transactional
+	public DocumentsMapping findDocumentsMappingById(Integer id) throws DataAccessException {
+
+		return findDocumentsMappingById(id, -1, -1);
+	}
+
+	/**
+	 * JPQL Query - findDocumentsMappingById
+	 *
+	 */
+
+	@Transactional
+	public DocumentsMapping findDocumentsMappingById(Integer id, int startResult, int maxRows) throws DataAccessException {
+		try {
+			Query query = createNamedQuery("findDocumentsMappingById", startResult, maxRows, id);
 			return (com.eclinic.domain.DocumentsMapping) query.getSingleResult();
 		} catch (NoResultException nre) {
 			return null;

@@ -5,11 +5,14 @@ import java.io.Serializable;
 import java.lang.StringBuilder;
 
 import java.util.Calendar;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.xml.bind.annotation.*;
 
@@ -31,6 +34,7 @@ import javax.persistence.*;
 @Table(catalog = "eclinic", name = "Documents")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "Web/com/eclinic/domain", name = "Documents")
+@XmlRootElement(namespace = "Web/com/eclinic/domain")
 public class Documents implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -82,15 +86,14 @@ public class Documents implements Serializable {
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({ @JoinColumn(name = "id_documents_mapping", referencedColumnName = "Id", nullable = false) })
-	@XmlTransient
-	DocumentsMapping documentsMapping;
-	/**
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({ @JoinColumn(name = "id_doctor", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Doctor doctor;
+	/**
+	 */
+	@OneToMany(mappedBy = "documents", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.DocumentsMapping> documentsMappings;
 
 	/**
 	 */
@@ -160,20 +163,9 @@ public class Documents implements Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public Patient getPatient() {
 		return patient;
-	}
-
-	/**
-	 */
-	public void setDocumentsMapping(DocumentsMapping documentsMapping) {
-		this.documentsMapping = documentsMapping;
-	}
-
-	/**
-	 */
-	public DocumentsMapping getDocumentsMapping() {
-		return documentsMapping;
 	}
 
 	/**
@@ -184,8 +176,25 @@ public class Documents implements Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public Doctor getDoctor() {
 		return doctor;
+	}
+
+	/**
+	 */
+	public void setDocumentsMappings(Set<DocumentsMapping> documentsMappings) {
+		this.documentsMappings = documentsMappings;
+	}
+
+	/**
+	 */
+	@JsonIgnore
+	public Set<DocumentsMapping> getDocumentsMappings() {
+		if (documentsMappings == null) {
+			documentsMappings = new java.util.LinkedHashSet<com.eclinic.domain.DocumentsMapping>();
+		}
+		return documentsMappings;
 	}
 
 	/**
@@ -204,8 +213,8 @@ public class Documents implements Serializable {
 		setTypeOfDocuments(that.getTypeOfDocuments());
 		setDataOfDocuments(that.getDataOfDocuments());
 		setPatient(that.getPatient());
-		setDocumentsMapping(that.getDocumentsMapping());
 		setDoctor(that.getDoctor());
+		setDocumentsMappings(new java.util.LinkedHashSet<com.eclinic.domain.DocumentsMapping>(that.getDocumentsMappings()));
 	}
 
 	/**

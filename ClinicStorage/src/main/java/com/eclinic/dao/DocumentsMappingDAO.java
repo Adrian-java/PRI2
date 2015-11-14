@@ -15,18 +15,6 @@ import org.springframework.dao.DataAccessException;
 public interface DocumentsMappingDAO extends JpaDao<DocumentsMapping> {
 
 	/**
-	 * JPQL Query - findDocumentsMappingById
-	 *
-	 */
-	public DocumentsMapping findDocumentsMappingById(Integer id) throws DataAccessException;
-
-	/**
-	 * JPQL Query - findDocumentsMappingById
-	 *
-	 */
-	public DocumentsMapping findDocumentsMappingById(Integer id, int startResult, int maxRows) throws DataAccessException;
-
-	/**
 	 * JPQL Query - findAllDocumentsMappings
 	 *
 	 */
@@ -42,12 +30,24 @@ public interface DocumentsMappingDAO extends JpaDao<DocumentsMapping> {
 	 * JPQL Query - findDocumentsMappingByPrimaryKey
 	 *
 	 */
-	public DocumentsMapping findDocumentsMappingByPrimaryKey(Integer id_1) throws DataAccessException;
+	public DocumentsMapping findDocumentsMappingByPrimaryKey(Integer id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findDocumentsMappingByPrimaryKey
 	 *
 	 */
-	public DocumentsMapping findDocumentsMappingByPrimaryKey(Integer id_1, int startResult, int maxRows) throws DataAccessException;
+	public DocumentsMapping findDocumentsMappingByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException;
+
+	/**
+	 * JPQL Query - findDocumentsMappingById
+	 *
+	 */
+	public DocumentsMapping findDocumentsMappingById(Integer id_1) throws DataAccessException;
+
+	/**
+	 * JPQL Query - findDocumentsMappingById
+	 *
+	 */
+	public DocumentsMapping findDocumentsMappingById(Integer id_1, int startResult, int maxRows) throws DataAccessException;
 
 }

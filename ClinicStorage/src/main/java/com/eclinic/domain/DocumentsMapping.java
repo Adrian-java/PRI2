@@ -4,12 +4,13 @@ import java.io.Serializable;
 
 import java.lang.StringBuilder;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.xml.bind.annotation.*;
 
@@ -26,7 +27,6 @@ import javax.persistence.*;
 @Table(catalog = "eclinic", name = "Documents_Mapping")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "Web/com/eclinic/domain", name = "DocumentsMapping")
-@XmlRootElement(namespace = "Web/com/eclinic/domain")
 public class DocumentsMapping implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -41,6 +41,12 @@ public class DocumentsMapping implements Serializable {
 
 	/**
 	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({ @JoinColumn(name = "id_documents", referencedColumnName = "Id", nullable = false) })
+	@XmlTransient
+	Documents documents;
+	/**
+	 */
 	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.LAZY)
 	@XmlElement(name = "", namespace = "")
 	History history;
@@ -49,11 +55,6 @@ public class DocumentsMapping implements Serializable {
 	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.LAZY)
 	@XmlElement(name = "", namespace = "")
 	Certificate certificate;
-	/**
-	 */
-	@OneToMany(mappedBy = "documentsMapping", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	@XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Documents> documentses;
 	/**
 	 */
 	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.LAZY)
@@ -79,12 +80,26 @@ public class DocumentsMapping implements Serializable {
 
 	/**
 	 */
+	public void setDocuments(Documents documents) {
+		this.documents = documents;
+	}
+
+	/**
+	 */
+	@JsonIgnore
+	public Documents getDocuments() {
+		return documents;
+	}
+
+	/**
+	 */
 	public void setHistory(History history) {
 		this.history = history;
 	}
 
 	/**
 	 */
+	@JsonIgnore
 	public History getHistory() {
 		return history;
 	}
@@ -97,23 +112,9 @@ public class DocumentsMapping implements Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public Certificate getCertificate() {
 		return certificate;
-	}
-
-	/**
-	 */
-	public void setDocumentses(Set<Documents> documentses) {
-		this.documentses = documentses;
-	}
-
-	/**
-	 */
-	public Set<Documents> getDocumentses() {
-		if (documentses == null) {
-			documentses = new java.util.LinkedHashSet<com.eclinic.domain.Documents>();
-		}
-		return documentses;
 	}
 
 	/**
@@ -124,6 +125,7 @@ public class DocumentsMapping implements Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public Prescription getPrescription() {
 		return prescription;
 	}
@@ -136,6 +138,7 @@ public class DocumentsMapping implements Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public Referral getReferral() {
 		return referral;
 	}
@@ -151,9 +154,9 @@ public class DocumentsMapping implements Serializable {
 	 */
 	public void copy(DocumentsMapping that) {
 		setId(that.getId());
+		setDocuments(that.getDocuments());
 		setHistory(that.getHistory());
 		setCertificate(that.getCertificate());
-		setDocumentses(new java.util.LinkedHashSet<com.eclinic.domain.Documents>(that.getDocumentses()));
 		setPrescription(that.getPrescription());
 		setReferral(that.getReferral());
 	}

@@ -20,10 +20,6 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * DAO to manage History entities.
- * 
- */
 @Repository("HistoryDAO")
 @Transactional
 public class HistoryDAOImpl extends AbstractJpaDao<History> implements
