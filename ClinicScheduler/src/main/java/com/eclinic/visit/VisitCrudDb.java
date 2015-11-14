@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.ReceptionistDAO;
+import com.eclinic.dao.SevenDaysDAO;
 import com.eclinic.dao.SpecializationDAO;
 import com.eclinic.dao.StatusOfVisitDAO;
 import com.eclinic.dao.TypeOfVisitDAO;
@@ -46,6 +47,8 @@ public class VisitCrudDb implements VisitCrud {
     private StatusOfVisitDAO statusOfVisitDao;
     @Autowired
     private TypeOfVisitDAO typeOfVisitDao;
+    @Autowired
+    private SevenDaysDAO sevenDaysDao;
 
     public Set<Visit> findVisitByDate(Date date) {
 	Calendar calendar = new GregorianCalendar();
@@ -158,7 +161,7 @@ public class VisitCrudDb implements VisitCrud {
     public VisitScheduler addVisitScheduler(NewVisitSchedulerMapper vsm) {
 	VisitScheduler vs = new VisitScheduler();
 	vs.setDoctor(doctorDao.findDoctorById(vsm.getIdDoctor()));
-	vs.setDescription(vsm.getDescription().getBytes());
+	vs.setDescription((vsm.getDescription()!=null?vsm.getDescription().getBytes():null));
 	Set<Specialization> findSpecializationByName = specializationDao
 		.findSpecializationByName(vsm.getSpecialization());
 	Specialization specialization = null;
@@ -172,8 +175,7 @@ public class VisitCrudDb implements VisitCrud {
 	vs.setTimeFrom(vsm.getTimeFrom());
 	vs.setTimeTo(vsm.getTimeTo());
 	SevenDays convertDaysToSevenDays = visitHelper.convertDaysToSevenDays(vsm.getDaysOfWeek());
-	
-//	vs.setSevenDays();
+	vs.setSevenDays(sevenDaysDao.merge(convertDaysToSevenDays));
 	return visitSchedulerDao.merge(vs);
     }
 
