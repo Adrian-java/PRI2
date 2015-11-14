@@ -91,6 +91,12 @@ public class VisitScheduler implements Serializable {
 	@XmlElement
 	private
 	Time timeTo;
+	
+	@Column(name = "duration")
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	private
+	Integer duration;
 
 	/**
 	 */
@@ -264,5 +270,12 @@ public class VisitScheduler implements Serializable {
 
 	public void setTimeTo(Time timeTo) {
 		this.timeTo = timeTo;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 }

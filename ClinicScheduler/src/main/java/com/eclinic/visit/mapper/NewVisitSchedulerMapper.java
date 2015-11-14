@@ -18,6 +18,9 @@ public class NewVisitSchedulerMapper {
     private String description;
 
     private Set<String> daysOfWeek;
+    
+    private Integer duration;
+    
 
     public Time getTimeFrom() {
         return timeFrom;
@@ -66,5 +69,13 @@ public class NewVisitSchedulerMapper {
     public void setDaysOfWeek(Set<String> daysOfWeek) {
 	this.daysOfWeek = daysOfWeek;
     }
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
 
 }
