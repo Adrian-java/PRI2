@@ -1,33 +1,24 @@
 package com.eclinic.service;
 
-import com.eclinic.dao.DoctorDAO;
-import com.eclinic.dao.GraphicDAO;
-import com.eclinic.dao.PatientCardDAO;
-import com.eclinic.dao.RecipeDAO;
-import com.eclinic.dao.SickLeaveDAO;
-import com.eclinic.dao.SpecializationDAO;
-import com.eclinic.dao.VisitDAO;
-import com.eclinic.dao.VisitSchedulerDAO;
-import com.eclinic.dao.WorkerDAO;
-
-import com.eclinic.domain.Doctor;
-import com.eclinic.domain.Graphic;
-import com.eclinic.domain.PatientCard;
-import com.eclinic.domain.Recipe;
-import com.eclinic.domain.SickLeave;
-import com.eclinic.domain.Specialization;
-import com.eclinic.domain.Visit;
-import com.eclinic.domain.VisitScheduler;
-import com.eclinic.domain.Worker;
-
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
+import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.GraphicDAO;
+import com.eclinic.dao.SpecializationDAO;
+import com.eclinic.dao.VisitDAO;
+import com.eclinic.dao.VisitSchedulerDAO;
+import com.eclinic.dao.WorkerDAO;
+import com.eclinic.domain.Doctor;
+import com.eclinic.domain.Graphic;
+import com.eclinic.domain.Specialization;
+import com.eclinic.domain.Visit;
+import com.eclinic.domain.VisitScheduler;
+import com.eclinic.domain.Worker;
 
 /**
  * Spring service that handles CRUD requests for Doctor entities
@@ -52,26 +43,6 @@ public class DoctorServiceImpl implements DoctorService {
 	@Autowired
 	private GraphicDAO graphicDAO;
 
-	/**
-	 * DAO injected by Spring that manages PatientCard entities
-	 * 
-	 */
-	@Autowired
-	private PatientCardDAO patientCardDAO;
-
-	/**
-	 * DAO injected by Spring that manages Recipe entities
-	 * 
-	 */
-	@Autowired
-	private RecipeDAO recipeDAO;
-
-	/**
-	 * DAO injected by Spring that manages SickLeave entities
-	 * 
-	 */
-	@Autowired
-	private SickLeaveDAO sickLeaveDAO;
 
 	/**
 	 * DAO injected by Spring that manages Specialization entities
@@ -245,24 +216,6 @@ public class DoctorServiceImpl implements DoctorService {
 		return doctor.getId();
 	}
 
-	/**
-	 * Delete an existing Recipe entity
-	 * 
-	 */
-	@Transactional
-	public Doctor deleteDoctorRecipes(Integer doctor_id, Integer related_recipes_idr) {
-		Recipe related_recipes = recipeDAO.findRecipeByPrimaryKey(related_recipes_idr, -1, -1);
-
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
-
-		related_recipes.setDoctor(null);
-		doctor.getRecipes().remove(related_recipes);
-
-		recipeDAO.remove(related_recipes);
-		recipeDAO.flush();
-
-		return doctor;
-	}
 
 	/**
 	 * Delete an existing Worker entity
@@ -312,33 +265,6 @@ public class DoctorServiceImpl implements DoctorService {
 		return doctor;
 	}
 
-	/**
-	 * Save an existing SickLeave entity
-	 * 
-	 */
-	@Transactional
-	public Doctor saveDoctorSickLeaves(Integer id, SickLeave related_sickleaves) {
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		SickLeave existingsickLeaves = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingsickLeaves != null) {
-			existingsickLeaves.setId(related_sickleaves.getId());
-			existingsickLeaves.setDateFrom(related_sickleaves.getDateFrom());
-			existingsickLeaves.setDateTo(related_sickleaves.getDateTo());
-			related_sickleaves = existingsickLeaves;
-		}
-
-		related_sickleaves.setDoctor(doctor);
-		doctor.getSickLeaves().add(related_sickleaves);
-		related_sickleaves = sickLeaveDAO.store(related_sickleaves);
-		sickLeaveDAO.flush();
-
-		doctor = doctorDAO.store(doctor);
-		doctorDAO.flush();
-
-		return doctor;
-	}
 
 	/**
 	 * Save an existing VisitScheduler entity
@@ -370,36 +296,6 @@ public class DoctorServiceImpl implements DoctorService {
 		return doctor;
 	}
 
-	/**
-	 * Save an existing Recipe entity
-	 * 
-	 */
-	@Transactional
-	public Doctor saveDoctorRecipes(Integer id, Recipe related_recipes) {
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		Recipe existingrecipes = recipeDAO.findRecipeByPrimaryKey(related_recipes.getIdr());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingrecipes != null) {
-			existingrecipes.setIdr(related_recipes.getIdr());
-			existingrecipes.setDate(related_recipes.getDate());
-			existingrecipes.setDrug(related_recipes.getDrug());
-			related_recipes = existingrecipes;
-		} else {
-			related_recipes = recipeDAO.store(related_recipes);
-			recipeDAO.flush();
-		}
-
-		related_recipes.setDoctor(doctor);
-		doctor.getRecipes().add(related_recipes);
-		related_recipes = recipeDAO.store(related_recipes);
-		recipeDAO.flush();
-
-		doctor = doctorDAO.store(doctor);
-		doctorDAO.flush();
-
-		return doctor;
-	}
 
 	/**
 	 * Return a count of all Doctor entity
@@ -455,43 +351,7 @@ public class DoctorServiceImpl implements DoctorService {
 		return doctor;
 	}
 
-	/**
-	 * Delete an existing SickLeave entity
-	 * 
-	 */
-	@Transactional
-	public Doctor deleteDoctorSickLeaves(Integer doctor_id, Integer related_sickleaves_id) {
-		SickLeave related_sickleaves = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id, -1, -1);
 
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
-
-		related_sickleaves.setDoctor(null);
-		doctor.getSickLeaves().remove(related_sickleaves);
-
-		sickLeaveDAO.remove(related_sickleaves);
-		sickLeaveDAO.flush();
-
-		return doctor;
-	}
-
-	/**
-	 * Delete an existing PatientCard entity
-	 * 
-	 */
-	@Transactional
-	public Doctor deleteDoctorPatientCards(Integer doctor_id, Integer related_patientcards_id) {
-		PatientCard related_patientcards = patientCardDAO.findPatientCardByPrimaryKey(related_patientcards_id, -1, -1);
-
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
-
-		related_patientcards.setDoctor(null);
-		doctor.getPatientCards().remove(related_patientcards);
-
-		patientCardDAO.remove(related_patientcards);
-		patientCardDAO.flush();
-
-		return doctor;
-	}
 
 	/**
 	 * Save an existing Graphic entity
@@ -521,32 +381,6 @@ public class DoctorServiceImpl implements DoctorService {
 		return doctor;
 	}
 
-	/**
-	 * Save an existing PatientCard entity
-	 * 
-	 */
-	@Transactional
-	public Doctor saveDoctorPatientCards(Integer id, PatientCard related_patientcards) {
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		PatientCard existingpatientCards = patientCardDAO.findPatientCardByPrimaryKey(related_patientcards.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingpatientCards != null) {
-			existingpatientCards.setId(related_patientcards.getId());
-			existingpatientCards.setRegisterDate(related_patientcards.getRegisterDate());
-			related_patientcards = existingpatientCards;
-		}
-
-		related_patientcards.setDoctor(doctor);
-		doctor.getPatientCards().add(related_patientcards);
-		related_patientcards = patientCardDAO.store(related_patientcards);
-		patientCardDAO.flush();
-
-		doctor = doctorDAO.store(doctor);
-		doctorDAO.flush();
-
-		return doctor;
-	}
 
 	/**
 	 * Load an existing Doctor entity

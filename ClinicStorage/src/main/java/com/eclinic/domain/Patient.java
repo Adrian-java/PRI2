@@ -3,22 +3,34 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
 import java.util.Calendar;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
 
 /**
  */
@@ -118,27 +130,19 @@ public class Patient implements Serializable {
 	 */
 	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.PatientCard> patientCards;
-	/**
-	 */
-	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Recipe> recipes;
-	/**
-	 */
-	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Worker> workers;
-	/**
-	 */
-	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
 	
 	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Documents> documents;
 
+	/**
+	 */
+	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	private
+	//@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Visit> visits;
+	
 	/**
 	 */
 	public void setId(Integer id) {
@@ -253,37 +257,7 @@ public class Patient implements Serializable {
 		return address;
 	}
 
-	/**
-	 */
-	public void setPatientCards(Set<PatientCard> patientCards) {
-		this.patientCards = patientCards;
-	}
 
-	/**
-	 */
-	@JsonIgnore
-	public Set<PatientCard> getPatientCards() {
-		if (patientCards == null) {
-			patientCards = new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>();
-		}
-		return patientCards;
-	}
-
-	/**
-	 */
-	public void setRecipes(Set<Recipe> recipes) {
-		this.recipes = recipes;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<Recipe> getRecipes() {
-		if (recipes == null) {
-			recipes = new java.util.LinkedHashSet<com.eclinic.domain.Recipe>();
-		}
-		return recipes;
-	}
 
 	/**
 	 */
@@ -301,21 +275,6 @@ public class Patient implements Serializable {
 		return workers;
 	}
 
-	/**
-	 */
-	public void setSickLeaves(Set<SickLeave> sickLeaves) {
-		this.sickLeaves = sickLeaves;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<SickLeave> getSickLeaves() {
-		if (sickLeaves == null) {
-			sickLeaves = new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>();
-		}
-		return sickLeaves;
-	}
 
 	/**
 	 */
@@ -343,14 +302,8 @@ public class Patient implements Serializable {
 			setConfirmed(that.getConfirmed());
 		if (that.getAddress() != null)
 			setAddress(that.getAddress());
-		setPatientCards(new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>(
-				that.getPatientCards()));
-		setRecipes(new java.util.LinkedHashSet<com.eclinic.domain.Recipe>(
-				that.getRecipes()));
 		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(
 				that.getWorkers()));
-		setSickLeaves(new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>(
-				that.getSickLeaves()));
 	}
 
 	/**
@@ -406,5 +359,15 @@ public class Patient implements Serializable {
 	public void setDocuments(// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Documents> documents) {
 		this.documents = documents;
+	}
+
+	public //@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Visit> getVisits() {
+		return visits;
+	}
+
+	public void setVisits(//@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Visit> visits) {
+		this.visits = visits;
 	}
 }

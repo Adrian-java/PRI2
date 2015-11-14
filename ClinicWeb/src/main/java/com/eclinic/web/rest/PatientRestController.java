@@ -4,26 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.eclinic.dao.AddressDAO;
-import com.eclinic.dao.PatientCardDAO;
-import com.eclinic.dao.PatientDAO;
-import com.eclinic.dao.RecipeDAO;
-import com.eclinic.dao.SickLeaveDAO;
-import com.eclinic.dao.WorkerDAO;
-import com.eclinic.domain.Address;
-import com.eclinic.domain.Patient;
-import com.eclinic.domain.PatientCard;
-import com.eclinic.domain.Recipe;
-import com.eclinic.domain.SickLeave;
-import com.eclinic.domain.Worker;
-import com.eclinic.service.PatientService;
-
-
-
-
-
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -37,13 +17,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+
+import com.eclinic.dao.AddressDAO;
+import com.eclinic.dao.PatientDAO;
+import com.eclinic.dao.WorkerDAO;
+import com.eclinic.domain.Address;
+import com.eclinic.domain.Patient;
+import com.eclinic.domain.Worker;
+import com.eclinic.service.PatientService;
 
 
 /**
@@ -62,32 +49,12 @@ public class PatientRestController {
 	private AddressDAO addressDAO;
 
 	/**
-	 * DAO injected by Spring that manages PatientCard entities
-	 * 
-	 */
-	@Autowired
-	private PatientCardDAO patientCardDAO;
-
-	/**
 	 * DAO injected by Spring that manages Patient entities
 	 * 
 	 */
 	@Autowired
 	private PatientDAO patientDAO;
 
-	/**
-	 * DAO injected by Spring that manages Recipe entities
-	 * 
-	 */
-	@Autowired
-	private RecipeDAO recipeDAO;
-
-	/**
-	 * DAO injected by Spring that manages SickLeave entities
-	 * 
-	 */
-	@Autowired
-	private SickLeaveDAO sickLeaveDAO;
 
 	/**
 	 * DAO injected by Spring that manages Worker entities
@@ -131,41 +98,6 @@ public class PatientRestController {
 	 * 
 	 */
 	
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{patient_id}/recipes")
-	@PUT
-	public Response savePatientRecipes(@PathParam("patient_id") Integer patient_id,
-			Recipe recipes) {
-		patientService.savePatientRecipes(patient_id, recipes);
-		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipes.getIdr())).build();
-	}
-
-	/**
-	 * Show all SickLeave entities by Patient
-	 * 
-	 */
-	
-	
-	@GET
-	@Path("/{patient_id}/sickLeaves")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPatientSickLeaves(@PathParam("patient_id") Integer patient_id) {
-		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getSickLeaves()).build();
-	}
-
-	/**
-	 * Delete an existing SickLeave entity
-	 * 
-	 */
-
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{patient_id}/sickLeaves/{sickleave_id}")
-	public Response deletePatientSickLeaves(@PathParam("patient_id") Integer patient_id,
-			@PathParam("related_sickleaves_id") Integer related_sickleaves_id) {
-		return Response.ok(patientService.deletePatientSickLeaves(patient_id, related_sickleaves_id)).build();
-	}
 
 	/**
 	 * Create a new Address entity
@@ -209,35 +141,6 @@ public class PatientRestController {
 		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getWorkers()).build();
 	}
 
-	/**
-	 * Save an existing SickLeave entity
-	 * 
-	 */
-
-	
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{patient_id}/sickLeaves")
-	@PUT
-	public Response savePatientSickLeaves(@PathParam("patient_id") Integer patient_id,
-			SickLeave sickleaves) {
-		patientService.savePatientSickLeaves(patient_id, sickleaves);
-		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves.getId())).build();
-	}
-
-	/**
-	 * View an existing PatientCard entity
-	 * 
-	 */
-
-	
-	@GET
-	@Path("/{doctor_id}/patientCards/{patientcard_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadPatientPatientCards(@PathParam("patient_id") Integer patient_id,
-			@PathParam("related_patientcards_id") Integer related_patientcards_id) {
-		PatientCard patientcard = patientCardDAO.findPatientCardByPrimaryKey(related_patientcards_id, -1, -1);
-		return Response.ok(patientcard).build();
-	}
 
 	/**
 	 * Show all Patient entities
@@ -262,35 +165,6 @@ public class PatientRestController {
 		return null;
 	}
 
-	/**
-	 * View an existing SickLeave entity
-	 * 
-	 */
-
-	
-	@GET
-	@Path("/{patient_id}/sickLeaves/{sickleave_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadPatientSickLeaves(@PathParam("patient_id") Integer patient_id,
-			@PathParam("related_sickleaves_id") Integer related_sickleaves_id) {
-		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id, -1, -1);
-		return Response.ok(sickleave).build();
-	}
-
-	/**
-	 * Create a new Recipe entity
-	 * 
-	 */
-
-	
-	@Path("/{patient_id}/recipes")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newPatientRecipes(@PathParam("patient_id") Integer patient_id,
-			Recipe recipe) {
-		patientService.savePatientRecipes(patient_id, recipe);
-		return Response.ok(recipeDAO.findRecipeByPrimaryKey(recipe.getIdr())).build();
-	}
 
 	/**
 	 * Delete an existing Patient entity
@@ -355,20 +229,6 @@ public class PatientRestController {
 		patientService.savePatientWorkers(patient_id, workers);
 		return Response.ok(workerDAO.findWorkerByPrimaryKey(workers.getId())).build();
 	}
-	/**
-	 * Create a new PatientCard entity
-	 * 
-	 */
-
-	
-	@Path("/{patient_id}/patientCards")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newPatientPatientCards(@PathParam("patient_id") Integer patient_id,
-			PatientCard patientcard) {
-		patientService.savePatientPatientCards(patient_id, patientcard);
-		return Response.ok(patientCardDAO.findPatientCardByPrimaryKey(patientcard.getId())).build();
-	}
 
 
 	/**
@@ -386,49 +246,8 @@ public class PatientRestController {
 		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
 	}
 
-	/**
-	 * Create a new SickLeave entity
-	 * 
-	 */
 
-	
-	@Path("/{patient_id}/sickLeaves")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newPatientSickLeaves(@PathParam("patient_id") Integer patient_id,
-			SickLeave sickleave) {
-		patientService.savePatientSickLeaves(patient_id, sickleave);
-		return Response.ok(sickLeaveDAO.findSickLeaveByPrimaryKey(sickleave.getId())).build();
-	}
 
-	/**
-	 * Delete an existing Recipe entity
-	 * 
-	 */
-
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{patient_id}/recipes/{recipe_idr}")
-	public Response deletePatientRecipes(@PathParam("patient_id") Integer patient_id,
-			@PathParam("related_recipes_idr") Integer related_recipes_idr) {
-		return Response.ok(patientService.deletePatientRecipes(patient_id, related_recipes_idr)).build();
-	}
-
-	/**
-	 * View an existing Recipe entity
-	 * 
-	 */
-
-	@GET
-	@Path("/{patient_id}/recipes/{recipe_idr}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadPatientRecipes(@PathParam("patient_id") Integer patient_id,
-			@PathParam("related_recipes_idr") Integer related_recipes_idr) {
-		Recipe recipe = recipeDAO.findRecipeByPrimaryKey(related_recipes_idr, -1, -1);
-
-		return Response.ok(recipe).build();
-	}
 
 	/**
 	 * Save an existing Patient entity
@@ -447,20 +266,6 @@ public class PatientRestController {
 
 
 	/**
-	 * Show all Recipe entities by Patient
-	 * 
-	 */
-	
-	
-
-	@GET
-	@Path("/{patient_id}/recipes")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPatientRecipes(@PathParam("patient_id") Integer patient_id) {
-		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getRecipes()).build();
-	}
-
-	/**
 	 * Delete an existing Worker entity
 	 * 
 	 */
@@ -474,46 +279,8 @@ public class PatientRestController {
 		return Response.ok(patientService.deletePatientWorkers(patient_id, related_workers_id)).build();
 	}
 
-	/**
-	 * Show all PatientCard entities by Patient
-	 * 
-	 */
-	
-	
-	@GET
-	@Path("/{patient_id}/patientCards")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPatientPatientCards(@PathParam("patient_id") Integer patient_id) {
-		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id).getPatientCards()).build();
-	}
 
-	/**
-	 * Save an existing PatientCard entity
-	 * 
-	 */
-	
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{patient_id}/patientCards")
-	@PUT
-	public Response savePatientWorkers(@PathParam("patient_id") Integer patient_id,
-			PatientCard patientcards) {
-		patientService.savePatientPatientCards(patient_id, patientcards);
-		return Response.ok(patientCardDAO.findPatientCardByPrimaryKey(patientcards.getId())).build();
-	}
 
-	/**
-	 * Delete an existing PatientCard entity
-	 * 
-	 */
-
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{patient_id}/patientCards/{patientcard_id}")
-	public Response deletePatientPatientCards(@PathParam("patient_id") Integer patient_id,
-			@PathParam("related_patientcards_id") Integer related_patientcards_id) {
-		return Response.ok(patientService.deletePatientPatientCards(patient_id, related_patientcards_id)).build();
-	}
 
 
 	/**

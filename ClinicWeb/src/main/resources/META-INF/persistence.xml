@@ -10,12 +10,10 @@
 		<class>com.eclinic.domain.Specialization</class>
 		<class>com.eclinic.domain.Graphic</class>
 		<class>com.eclinic.domain.TypeOfUser</class>
-		<class>com.eclinic.domain.Recipe</class>
 		<class>com.eclinic.domain.LoginHistory</class>
 		<class>com.eclinic.domain.Worker</class>
 		<class>com.eclinic.domain.Address</class>
 		<class>com.eclinic.domain.Receptionist</class>
-		<class>com.eclinic.domain.PatientCard</class>
 		<class>com.eclinic.domain.TypeOfVisit</class>
 		<class>com.eclinic.domain.Module</class>
 		<class>com.eclinic.domain.SpecalVisitField</class>
@@ -27,7 +25,6 @@
 		<class>com.eclinic.domain.SystemError</class>
 		<class>com.eclinic.domain.Permission</class>
 		<class>com.eclinic.domain.ApplicationParameter</class>
-		<class>com.eclinic.domain.SickLeave</class>
 		<class>com.eclinic.domain.SystemUser</class>
 		<class>com.eclinic.domain.Visit</class>
 		<class>com.eclinic.domain.Admin</class>
@@ -35,6 +32,13 @@
 		<class>com.eclinic.domain.SevenDays</class>
 		<class>com.eclinic.domain.DayOfWeek</class>
 		<class>com.eclinic.domain.Documents</class>
+
+		<class>com.eclinic.domain.Prescription</class>
+		<class>com.eclinic.domain.Referral</class>
+		<class>com.eclinic.domain.Clinic</class>
+		<class>com.eclinic.domain.DocumentsMapping</class>
+		<class>com.eclinic.domain.Certificate</class>
+		<class>com.eclinic.domain.History</class>
 
 		<class>com.eclinic.domain.view.PatientView</class>
 		<class>com.eclinic.domain.view.DoctorView</class>

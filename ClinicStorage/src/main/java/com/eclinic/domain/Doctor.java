@@ -70,19 +70,9 @@ public class Doctor implements Serializable {
 
 	/**
 	 */
-	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Specialization> specializations;
-	/**
-	 */
-	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.PatientCard> patientCards;
-	/**
-	 */
-	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Recipe> recipes;
 	/**
 	 */
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
@@ -103,11 +93,6 @@ public class Doctor implements Serializable {
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	// @XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.VisitScheduler> visitSchedulers;
-	/**
-	 */
-	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
 
 	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
 	private
@@ -167,37 +152,6 @@ public class Doctor implements Serializable {
 		return specializations;
 	}
 
-	/**
-	 */
-	public void setPatientCards(Set<PatientCard> patientCards) {
-		this.patientCards = patientCards;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<PatientCard> getPatientCards() {
-		if (patientCards == null) {
-			patientCards = new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>();
-		}
-		return patientCards;
-	}
-
-	/**
-	 */
-	public void setRecipes(Set<Recipe> recipes) {
-		this.recipes = recipes;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<Recipe> getRecipes() {
-		if (recipes == null) {
-			recipes = new java.util.LinkedHashSet<com.eclinic.domain.Recipe>();
-		}
-		return recipes;
-	}
 
 	/**
 	 */
@@ -263,21 +217,6 @@ public class Doctor implements Serializable {
 		return visitSchedulers;
 	}
 
-	/**
-	 */
-	public void setSickLeaves(Set<SickLeave> sickLeaves) {
-		this.sickLeaves = sickLeaves;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<SickLeave> getSickLeaves() {
-		if (sickLeaves == null) {
-			sickLeaves = new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>();
-		}
-		return sickLeaves;
-	}
 
 	/**
 	 */
@@ -297,10 +236,6 @@ public class Doctor implements Serializable {
 			setSurname(that.getSurname());
 		setSpecializations(new java.util.LinkedHashSet<com.eclinic.domain.Specialization>(
 				that.getSpecializations()));
-		setPatientCards(new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>(
-				that.getPatientCards()));
-		setRecipes(new java.util.LinkedHashSet<com.eclinic.domain.Recipe>(
-				that.getRecipes()));
 		setGraphics(new java.util.LinkedHashSet<com.eclinic.domain.Graphic>(
 				that.getGraphics()));
 		setVisits(new java.util.LinkedHashSet<com.eclinic.domain.Visit>(
@@ -309,8 +244,6 @@ public class Doctor implements Serializable {
 				that.getWorkers()));
 		setVisitSchedulers(new java.util.LinkedHashSet<com.eclinic.domain.VisitScheduler>(
 				that.getVisitSchedulers()));
-		setSickLeaves(new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>(
-				that.getSickLeaves()));
 	}
 
 	/**

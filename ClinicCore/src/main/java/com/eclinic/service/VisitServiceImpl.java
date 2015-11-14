@@ -1,29 +1,22 @@
 package com.eclinic.service;
 
-import com.eclinic.dao.DoctorDAO;
-import com.eclinic.dao.PatientCardDAO;
-import com.eclinic.dao.ReceptionistDAO;
-import com.eclinic.dao.SickLeaveDAO;
-import com.eclinic.dao.StatusOfVisitDAO;
-import com.eclinic.dao.TypeOfVisitDAO;
-import com.eclinic.dao.VisitDAO;
-
-import com.eclinic.domain.Doctor;
-import com.eclinic.domain.PatientCard;
-import com.eclinic.domain.Receptionist;
-import com.eclinic.domain.SickLeave;
-import com.eclinic.domain.StatusOfVisit;
-import com.eclinic.domain.TypeOfVisit;
-import com.eclinic.domain.Visit;
-
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
+import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.ReceptionistDAO;
+import com.eclinic.dao.StatusOfVisitDAO;
+import com.eclinic.dao.TypeOfVisitDAO;
+import com.eclinic.dao.VisitDAO;
+import com.eclinic.domain.Doctor;
+import com.eclinic.domain.Receptionist;
+import com.eclinic.domain.StatusOfVisit;
+import com.eclinic.domain.TypeOfVisit;
+import com.eclinic.domain.Visit;
 
 /**
  * Spring service that handles CRUD requests for Visit entities
@@ -42,25 +35,12 @@ public class VisitServiceImpl implements VisitService {
 	private DoctorDAO doctorDAO;
 
 	/**
-	 * DAO injected by Spring that manages PatientCard entities
-	 * 
-	 */
-	@Autowired
-	private PatientCardDAO patientCardDAO;
-
-	/**
 	 * DAO injected by Spring that manages Receptionist entities
 	 * 
 	 */
 	@Autowired
 	private ReceptionistDAO receptionistDAO;
 
-	/**
-	 * DAO injected by Spring that manages SickLeave entities
-	 * 
-	 */
-	@Autowired
-	private SickLeaveDAO sickLeaveDAO;
 
 	/**
 	 * DAO injected by Spring that manages StatusOfVisit entities
@@ -130,29 +110,6 @@ public class VisitServiceImpl implements VisitService {
 	public void deleteVisit(Visit visit) {
 		visitDAO.remove(visit);
 		visitDAO.flush();
-	}
-
-	/**
-	 * Delete an existing PatientCard entity
-	 * 
-	 */
-	@Transactional
-	public Visit deleteVisitPatientCard(Integer visit_id, Integer related_patientcard_id) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
-		PatientCard related_patientcard = patientCardDAO.findPatientCardByPrimaryKey(related_patientcard_id, -1, -1);
-
-		visit.setPatientCard(null);
-		related_patientcard.getVisits().remove(visit);
-		visit = visitDAO.store(visit);
-		visitDAO.flush();
-
-		related_patientcard = patientCardDAO.store(related_patientcard);
-		patientCardDAO.flush();
-
-		patientCardDAO.remove(related_patientcard);
-		patientCardDAO.flush();
-
-		return visit;
 	}
 
 	/**
@@ -311,24 +268,6 @@ public class VisitServiceImpl implements VisitService {
 		return visitDAO.findVisitByPrimaryKey(id);
 	}
 
-	/**
-	 * Delete an existing SickLeave entity
-	 * 
-	 */
-	@Transactional
-	public Visit deleteVisitSickLeaves(Integer visit_id, Integer related_sickleaves_id) {
-		SickLeave related_sickleaves = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id, -1, -1);
-
-		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
-
-		related_sickleaves.setVisit(null);
-		visit.getSickLeaves().remove(related_sickleaves);
-
-		sickLeaveDAO.remove(related_sickleaves);
-		sickLeaveDAO.flush();
-
-		return visit;
-	}
 
 	/**
 	 * Delete an existing StatusOfVisit entity
@@ -353,33 +292,6 @@ public class VisitServiceImpl implements VisitService {
 		return visit;
 	}
 
-	/**
-	 * Save an existing SickLeave entity
-	 * 
-	 */
-	@Transactional
-	public Visit saveVisitSickLeaves(Integer id, SickLeave related_sickleaves) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(id, -1, -1);
-		SickLeave existingsickLeaves = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingsickLeaves != null) {
-			existingsickLeaves.setId(related_sickleaves.getId());
-			existingsickLeaves.setDateFrom(related_sickleaves.getDateFrom());
-			existingsickLeaves.setDateTo(related_sickleaves.getDateTo());
-			related_sickleaves = existingsickLeaves;
-		}
-
-		related_sickleaves.setVisit(visit);
-		visit.getSickLeaves().add(related_sickleaves);
-		related_sickleaves = sickLeaveDAO.store(related_sickleaves);
-		sickLeaveDAO.flush();
-
-		visit = visitDAO.store(visit);
-		visitDAO.flush();
-
-		return visit;
-	}
 
 	/**
 	 * Delete an existing Doctor entity
@@ -404,32 +316,6 @@ public class VisitServiceImpl implements VisitService {
 		return visit;
 	}
 
-	/**
-	 * Save an existing PatientCard entity
-	 * 
-	 */
-	@Transactional
-	public Visit saveVisitPatientCard(Integer id, PatientCard related_patientcard) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(id, -1, -1);
-		PatientCard existingpatientCard = patientCardDAO.findPatientCardByPrimaryKey(related_patientcard.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingpatientCard != null) {
-			existingpatientCard.setId(related_patientcard.getId());
-			existingpatientCard.setRegisterDate(related_patientcard.getRegisterDate());
-			related_patientcard = existingpatientCard;
-		}
-
-		visit.setPatientCard(related_patientcard);
-		related_patientcard.getVisits().add(visit);
-		visit = visitDAO.store(visit);
-		visitDAO.flush();
-
-		related_patientcard = patientCardDAO.store(related_patientcard);
-		patientCardDAO.flush();
-
-		return visit;
-	}
 
 	/**
 	 * Save an existing Receptionist entity

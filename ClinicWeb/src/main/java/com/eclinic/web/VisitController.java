@@ -1,38 +1,28 @@
 package com.eclinic.web;
 
-import com.eclinic.dao.DoctorDAO;
-import com.eclinic.dao.PatientCardDAO;
-import com.eclinic.dao.ReceptionistDAO;
-import com.eclinic.dao.SickLeaveDAO;
-import com.eclinic.dao.StatusOfVisitDAO;
-import com.eclinic.dao.TypeOfVisitDAO;
-import com.eclinic.dao.VisitDAO;
-
-import com.eclinic.domain.Doctor;
-import com.eclinic.domain.PatientCard;
-import com.eclinic.domain.Receptionist;
-import com.eclinic.domain.SickLeave;
-import com.eclinic.domain.StatusOfVisit;
-import com.eclinic.domain.TypeOfVisit;
-import com.eclinic.domain.Visit;
-
-import com.eclinic.service.VisitService;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import org.springframework.web.servlet.ModelAndView;
+
+import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.ReceptionistDAO;
+import com.eclinic.dao.StatusOfVisitDAO;
+import com.eclinic.dao.TypeOfVisitDAO;
+import com.eclinic.dao.VisitDAO;
+import com.eclinic.domain.Doctor;
+import com.eclinic.domain.Receptionist;
+import com.eclinic.domain.StatusOfVisit;
+import com.eclinic.domain.TypeOfVisit;
+import com.eclinic.domain.Visit;
+import com.eclinic.service.VisitService;
 
 /**
  * Spring MVC controller that handles CRUD requests for Visit entities
@@ -49,12 +39,6 @@ public class VisitController {
 	@Autowired
 	private DoctorDAO doctorDAO;
 
-	/**
-	 * DAO injected by Spring that manages PatientCard entities
-	 * 
-	 */
-	@Autowired
-	private PatientCardDAO patientCardDAO;
 
 	/**
 	 * DAO injected by Spring that manages Receptionist entities
@@ -63,12 +47,6 @@ public class VisitController {
 	@Autowired
 	private ReceptionistDAO receptionistDAO;
 
-	/**
-	 * DAO injected by Spring that manages SickLeave entities
-	 * 
-	 */
-	@Autowired
-	private SickLeaveDAO sickLeaveDAO;
 
 	/**
 	 * DAO injected by Spring that manages StatusOfVisit entities
@@ -126,22 +104,6 @@ public class VisitController {
 		return mav;
 	}
 
-	/**
-	 * Delete an existing PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/deleteVisitPatientCard")
-	public ModelAndView deleteVisitPatientCard(@RequestParam Integer visit_id, @RequestParam Integer related_patientcard_id) {
-		ModelAndView mav = new ModelAndView();
-
-		Visit visit = visitService.deleteVisitPatientCard(visit_id, related_patientcard_id);
-
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("visit", visit);
-		mav.setViewName("visit/viewVisit.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Entry point to show all Visit entities
@@ -229,22 +191,6 @@ public class VisitController {
 	}
 
 	/**
-	 * Save an existing PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/saveVisitPatientCard")
-	public ModelAndView saveVisitPatientCard(@RequestParam Integer visit_id, @ModelAttribute PatientCard patientcard) {
-		Visit parent_visit = visitService.saveVisitPatientCard(visit_id, patientcard);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("visit", parent_visit);
-		mav.setViewName("visit/viewVisit.jsp");
-
-		return mav;
-	}
-
-	/**
 	 * Delete an existing Visit entity
 	 * 
 	 */
@@ -271,36 +217,7 @@ public class VisitController {
 		return mav;
 	}
 
-	/**
-	 * Create a new PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/newVisitPatientCard")
-	public ModelAndView newVisitPatientCard(@RequestParam Integer visit_id) {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("patientcard", new PatientCard());
-		mav.addObject("newFlag", true);
-		mav.setViewName("visit/patientcard/editPatientCard.jsp");
 
-		return mav;
-	}
-
-	/**
-	 * View an existing PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/selectVisitPatientCard")
-	public ModelAndView selectVisitPatientCard(@RequestParam Integer visit_id, @RequestParam Integer patientcard_id) {
-		PatientCard patientcard = patientCardDAO.findPatientCardByPrimaryKey(patientcard_id, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("patientcard", patientcard);
-		mav.setViewName("visit/patientcard/viewPatientCard.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Show all PatientCard entities by Visit
@@ -331,20 +248,6 @@ public class VisitController {
 		return mav;
 	}
 
-	/**
-	 * Select the child PatientCard entity for display allowing the user to confirm that they would like to delete the entity
-	 * 
-	 */
-	@RequestMapping("/confirmDeleteVisitPatientCard")
-	public ModelAndView confirmDeleteVisitPatientCard(@RequestParam Integer visit_id, @RequestParam Integer related_patientcard_id) {
-		ModelAndView mav = new ModelAndView();
-
-		mav.addObject("patientcard", patientCardDAO.findPatientCardByPrimaryKey(related_patientcard_id));
-		mav.addObject("visit_id", visit_id);
-		mav.setViewName("visit/patientcard/deletePatientCard.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Create a new TypeOfVisit entity
@@ -402,21 +305,6 @@ public class VisitController {
 		return "forward:/indexVisit";
 	}
 
-	/**
-	 * Edit an existing PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/editVisitPatientCard")
-	public ModelAndView editVisitPatientCard(@RequestParam Integer visit_id, @RequestParam Integer patientcard_id) {
-		PatientCard patientcard = patientCardDAO.findPatientCardByPrimaryKey(patientcard_id, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("patientcard", patientcard);
-		mav.setViewName("visit/patientcard/editPatientCard.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Register custom, context-specific property editors
@@ -484,22 +372,6 @@ public class VisitController {
 		return mav;
 	}
 
-	/**
-	 * Delete an existing SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/deleteVisitSickLeaves")
-	public ModelAndView deleteVisitSickLeaves(@RequestParam Integer visit_id, @RequestParam Integer related_sickleaves_id) {
-		ModelAndView mav = new ModelAndView();
-
-		Visit visit = visitService.deleteVisitSickLeaves(visit_id, related_sickleaves_id);
-
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("visit", visit);
-		mav.setViewName("visit/viewVisit.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Create a new StatusOfVisit entity
@@ -549,36 +421,7 @@ public class VisitController {
 		return mav;
 	}
 
-	/**
-	 * Select the child SickLeave entity for display allowing the user to confirm that they would like to delete the entity
-	 * 
-	 */
-	@RequestMapping("/confirmDeleteVisitSickLeaves")
-	public ModelAndView confirmDeleteVisitSickLeaves(@RequestParam Integer visit_id, @RequestParam Integer related_sickleaves_id) {
-		ModelAndView mav = new ModelAndView();
 
-		mav.addObject("sickleave", sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id));
-		mav.addObject("visit_id", visit_id);
-		mav.setViewName("visit/sickleaves/deleteSickLeaves.jsp");
-
-		return mav;
-	}
-
-	/**
-	 * View an existing SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/selectVisitSickLeaves")
-	public ModelAndView selectVisitSickLeaves(@RequestParam Integer visit_id, @RequestParam Integer sickleaves_id) {
-		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves_id, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("sickleave", sickleave);
-		mav.setViewName("visit/sickleaves/viewSickLeaves.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Select the Visit entity for display allowing the user to confirm that they would like to delete the entity
@@ -608,20 +451,6 @@ public class VisitController {
 		return mav;
 	}
 
-	/**
-	 * Create a new SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/newVisitSickLeaves")
-	public ModelAndView newVisitSickLeaves(@RequestParam Integer visit_id) {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("sickleave", new SickLeave());
-		mav.addObject("newFlag", true);
-		mav.setViewName("visit/sickleaves/editSickLeaves.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * View an existing StatusOfVisit entity
@@ -670,21 +499,6 @@ public class VisitController {
 		return mav;
 	}
 
-	/**
-	 * Edit an existing SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/editVisitSickLeaves")
-	public ModelAndView editVisitSickLeaves(@RequestParam Integer visit_id, @RequestParam Integer sickleaves_id) {
-		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves_id, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("sickleave", sickleave);
-		mav.setViewName("visit/sickleaves/editSickLeaves.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Save an existing Doctor entity
@@ -702,21 +516,6 @@ public class VisitController {
 		return mav;
 	}
 
-	/**
-	 * Save an existing SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/saveVisitSickLeaves")
-	public ModelAndView saveVisitSickLeaves(@RequestParam Integer visit_id, @ModelAttribute SickLeave sickleaves) {
-		Visit parent_visit = visitService.saveVisitSickLeaves(visit_id, sickleaves);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("visit_id", visit_id);
-		mav.addObject("visit", parent_visit);
-		mav.setViewName("visit/viewVisit.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Show all SickLeave entities by Visit

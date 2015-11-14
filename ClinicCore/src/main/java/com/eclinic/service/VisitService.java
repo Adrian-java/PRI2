@@ -1,15 +1,14 @@
 package com.eclinic.service;
 
+import java.util.List;
+import java.util.Set;
+
 import com.eclinic.domain.Doctor;
-import com.eclinic.domain.PatientCard;
+import com.eclinic.domain.Patient;
 import com.eclinic.domain.Receptionist;
-import com.eclinic.domain.SickLeave;
 import com.eclinic.domain.StatusOfVisit;
 import com.eclinic.domain.TypeOfVisit;
 import com.eclinic.domain.Visit;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Spring service that handles CRUD requests for Visit entities
@@ -35,11 +34,6 @@ public interface VisitService {
 	 */
 	public void deleteVisit(Visit visit);
 
-	/**
-	 * Delete an existing PatientCard entity
-	 * 
-	 */
-	public Visit deleteVisitPatientCard(Integer visit_id_1, Integer related_patientcard_id);
 
 	/**
 	 * Return all Visit entity
@@ -87,11 +81,6 @@ public interface VisitService {
 	 */
 	public Visit findVisitByPrimaryKey(Integer id_3);
 
-	/**
-	 * Delete an existing SickLeave entity
-	 * 
-	 */
-	public Visit deleteVisitSickLeaves(Integer visit_id_3, Integer related_sickleaves_id);
 
 	/**
 	 * Delete an existing StatusOfVisit entity
@@ -99,23 +88,12 @@ public interface VisitService {
 	 */
 	public Visit deleteVisitStatusOfVisit(Integer visit_id_4, Integer related_statusofvisit_id);
 
-	/**
-	 * Save an existing SickLeave entity
-	 * 
-	 */
-	public Visit saveVisitSickLeaves(Integer id_4, SickLeave related_sickleaves);
 
 	/**
 	 * Delete an existing Doctor entity
 	 * 
 	 */
 	public Visit deleteVisitDoctor(Integer visit_id_5, Integer related_doctor_id);
-
-	/**
-	 * Save an existing PatientCard entity
-	 * 
-	 */
-	public Visit saveVisitPatientCard(Integer id_5, PatientCard related_patientcard);
 
 	/**
 	 * Save an existing Receptionist entity

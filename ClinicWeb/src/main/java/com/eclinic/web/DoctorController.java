@@ -1,42 +1,30 @@
 package com.eclinic.web;
 
-import com.eclinic.dao.DoctorDAO;
-import com.eclinic.dao.GraphicDAO;
-import com.eclinic.dao.PatientCardDAO;
-import com.eclinic.dao.RecipeDAO;
-import com.eclinic.dao.SickLeaveDAO;
-import com.eclinic.dao.SpecializationDAO;
-import com.eclinic.dao.VisitDAO;
-import com.eclinic.dao.VisitSchedulerDAO;
-import com.eclinic.dao.WorkerDAO;
-
-import com.eclinic.domain.Doctor;
-import com.eclinic.domain.Graphic;
-import com.eclinic.domain.PatientCard;
-import com.eclinic.domain.Recipe;
-import com.eclinic.domain.SickLeave;
-import com.eclinic.domain.Specialization;
-import com.eclinic.domain.Visit;
-import com.eclinic.domain.VisitScheduler;
-import com.eclinic.domain.Worker;
-
-import com.eclinic.service.DoctorService;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.WebDataBinder;
-
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import org.springframework.web.servlet.ModelAndView;
+
+import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.GraphicDAO;
+import com.eclinic.dao.SpecializationDAO;
+import com.eclinic.dao.VisitDAO;
+import com.eclinic.dao.VisitSchedulerDAO;
+import com.eclinic.dao.WorkerDAO;
+import com.eclinic.domain.Doctor;
+import com.eclinic.domain.Graphic;
+import com.eclinic.domain.Specialization;
+import com.eclinic.domain.Visit;
+import com.eclinic.domain.VisitScheduler;
+import com.eclinic.domain.Worker;
+import com.eclinic.service.DoctorService;
 
 /**
  * Spring MVC controller that handles CRUD requests for Doctor entities
@@ -60,26 +48,6 @@ public class DoctorController {
 	@Autowired
 	private GraphicDAO graphicDAO;
 
-	/**
-	 * DAO injected by Spring that manages PatientCard entities
-	 * 
-	 */
-	@Autowired
-	private PatientCardDAO patientCardDAO;
-
-	/**
-	 * DAO injected by Spring that manages Recipe entities
-	 * 
-	 */
-	@Autowired
-	private RecipeDAO recipeDAO;
-
-	/**
-	 * DAO injected by Spring that manages SickLeave entities
-	 * 
-	 */
-	@Autowired
-	private SickLeaveDAO sickLeaveDAO;
 
 	/**
 	 * DAO injected by Spring that manages Specialization entities
@@ -110,55 +78,28 @@ public class DoctorController {
 	private WorkerDAO workerDAO;
 
 	/**
-	 * Service injected by Spring that provides CRUD operations for Doctor entities
+	 * Service injected by Spring that provides CRUD operations for Doctor
+	 * entities
 	 * 
 	 */
 	@Autowired
 	private DoctorService doctorService;
 
 	/**
-	 * Select the child Visit entity for display allowing the user to confirm that they would like to delete the entity
+	 * Select the child Visit entity for display allowing the user to confirm
+	 * that they would like to delete the entity
 	 * 
 	 */
 	@RequestMapping("/confirmDeleteDoctorVisits")
-	public ModelAndView confirmDeleteDoctorVisits(@RequestParam Integer doctor_id, @RequestParam Integer related_visits_id) {
+	public ModelAndView confirmDeleteDoctorVisits(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer related_visits_id) {
 		ModelAndView mav = new ModelAndView();
 
-		mav.addObject("visit", visitDAO.findVisitByPrimaryKey(related_visits_id));
+		mav.addObject("visit",
+				visitDAO.findVisitByPrimaryKey(related_visits_id));
 		mav.addObject("doctor_id", doctor_id);
 		mav.setViewName("doctor/visits/deleteVisits.jsp");
-
-		return mav;
-	}
-
-	/**
-	 * Edit an existing SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/editDoctorSickLeaves")
-	public ModelAndView editDoctorSickLeaves(@RequestParam Integer doctor_id, @RequestParam Integer sickleaves_id) {
-		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves_id, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("sickleave", sickleave);
-		mav.setViewName("doctor/sickleaves/editSickLeaves.jsp");
-
-		return mav;
-	}
-
-	/**
-	 * Save an existing Recipe entity
-	 * 
-	 */
-	@RequestMapping("/saveDoctorRecipes")
-	public ModelAndView saveDoctorRecipes(@RequestParam Integer doctor_id, @ModelAttribute Recipe recipes) {
-		Doctor parent_doctor = doctorService.saveDoctorRecipes(doctor_id, recipes);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("doctor", parent_doctor);
-		mav.setViewName("doctor/viewDoctor.jsp");
 
 		return mav;
 	}
@@ -171,7 +112,6 @@ public class DoctorController {
 	public ModelAndView newDoctorRecipes(@RequestParam Integer doctor_id) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("recipe", new Recipe());
 		mav.addObject("newFlag", true);
 		mav.setViewName("doctor/recipes/editRecipes.jsp");
 
@@ -194,7 +134,8 @@ public class DoctorController {
 	}
 
 	/**
-	 * Select the Doctor entity for display allowing the user to confirm that they would like to delete the entity
+	 * Select the Doctor entity for display allowing the user to confirm that
+	 * they would like to delete the entity
 	 * 
 	 */
 	@RequestMapping("/confirmDeleteDoctor")
@@ -212,7 +153,8 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/editDoctorVisits")
-	public ModelAndView editDoctorVisits(@RequestParam Integer doctor_id, @RequestParam Integer visits_id) {
+	public ModelAndView editDoctorVisits(@RequestParam Integer doctor_id,
+			@RequestParam Integer visits_id) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(visits_id, -1, -1);
 
 		ModelAndView mav = new ModelAndView();
@@ -223,29 +165,16 @@ public class DoctorController {
 		return mav;
 	}
 
-	/**
-	 * Save an existing PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/saveDoctorPatientCards")
-	public ModelAndView saveDoctorPatientCards(@RequestParam Integer doctor_id, @ModelAttribute PatientCard patientcards) {
-		Doctor parent_doctor = doctorService.saveDoctorPatientCards(doctor_id, patientcards);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("doctor", parent_doctor);
-		mav.setViewName("doctor/viewDoctor.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Edit an existing Graphic entity
 	 * 
 	 */
 	@RequestMapping("/editDoctorGraphics")
-	public ModelAndView editDoctorGraphics(@RequestParam Integer doctor_id, @RequestParam Integer graphics_id) {
-		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(graphics_id, -1, -1);
+	public ModelAndView editDoctorGraphics(@RequestParam Integer doctor_id,
+			@RequestParam Integer graphics_id) {
+		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(graphics_id, -1,
+				-1);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -269,53 +198,26 @@ public class DoctorController {
 		return mav;
 	}
 
-	/**
-	 * View an existing PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/selectDoctorPatientCards")
-	public ModelAndView selectDoctorPatientCards(@RequestParam Integer doctor_id, @RequestParam Integer patientcards_id) {
-		PatientCard patientcard = patientCardDAO.findPatientCardByPrimaryKey(patientcards_id, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("patientcard", patientcard);
-		mav.setViewName("doctor/patientcards/viewPatientCards.jsp");
-
-		return mav;
-	}
 
 	/**
-	 * Select the child Graphic entity for display allowing the user to confirm that they would like to delete the entity
+	 * Select the child Graphic entity for display allowing the user to confirm
+	 * that they would like to delete the entity
 	 * 
 	 */
 	@RequestMapping("/confirmDeleteDoctorGraphics")
-	public ModelAndView confirmDeleteDoctorGraphics(@RequestParam Integer doctor_id, @RequestParam Integer related_graphics_id) {
+	public ModelAndView confirmDeleteDoctorGraphics(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer related_graphics_id) {
 		ModelAndView mav = new ModelAndView();
 
-		mav.addObject("graphic", graphicDAO.findGraphicByPrimaryKey(related_graphics_id));
+		mav.addObject("graphic",
+				graphicDAO.findGraphicByPrimaryKey(related_graphics_id));
 		mav.addObject("doctor_id", doctor_id);
 		mav.setViewName("doctor/graphics/deleteGraphics.jsp");
 
 		return mav;
 	}
 
-	/**
-	 * Delete an existing PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/deleteDoctorPatientCards")
-	public ModelAndView deleteDoctorPatientCards(@RequestParam Integer doctor_id, @RequestParam Integer related_patientcards_id) {
-		ModelAndView mav = new ModelAndView();
-
-		Doctor doctor = doctorService.deleteDoctorPatientCards(doctor_id, related_patientcards_id);
-
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("doctor", doctor);
-		mav.setViewName("doctor/viewDoctor.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Entry point to show all Doctor entities
@@ -344,10 +246,13 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/deleteDoctorSpecializations")
-	public ModelAndView deleteDoctorSpecializations(@RequestParam Integer doctor_id, @RequestParam Integer related_specializations_id) {
+	public ModelAndView deleteDoctorSpecializations(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer related_specializations_id) {
 		ModelAndView mav = new ModelAndView();
 
-		Doctor doctor = doctorService.deleteDoctorSpecializations(doctor_id, related_specializations_id);
+		Doctor doctor = doctorService.deleteDoctorSpecializations(doctor_id,
+				related_specializations_id);
 
 		mav.addObject("doctor_id", doctor_id);
 		mav.addObject("doctor", doctor);
@@ -361,8 +266,11 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/editDoctorVisitSchedulers")
-	public ModelAndView editDoctorVisitSchedulers(@RequestParam Integer doctor_id, @RequestParam Integer visitschedulers_id) {
-		VisitScheduler visitscheduler = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitschedulers_id, -1, -1);
+	public ModelAndView editDoctorVisitSchedulers(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer visitschedulers_id) {
+		VisitScheduler visitscheduler = visitSchedulerDAO
+				.findVisitSchedulerByPrimaryKey(visitschedulers_id, -1, -1);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -390,7 +298,9 @@ public class DoctorController {
 	/**
 	 */
 	@RequestMapping("/doctorController/binary.action")
-	public ModelAndView streamBinary(@ModelAttribute HttpServletRequest request, @ModelAttribute HttpServletResponse response) {
+	public ModelAndView streamBinary(
+			@ModelAttribute HttpServletRequest request,
+			@ModelAttribute HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("streamedBinaryContentView");
 		return mav;
@@ -405,7 +315,6 @@ public class DoctorController {
 	public ModelAndView newDoctorSickLeaves(@RequestParam Integer doctor_id) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("sickleave", new SickLeave());
 		mav.addObject("newFlag", true);
 		mav.setViewName("doctor/sickleaves/editSickLeaves.jsp");
 
@@ -417,10 +326,12 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/deleteDoctorWorkers")
-	public ModelAndView deleteDoctorWorkers(@RequestParam Integer doctor_id, @RequestParam Integer related_workers_id) {
+	public ModelAndView deleteDoctorWorkers(@RequestParam Integer doctor_id,
+			@RequestParam Integer related_workers_id) {
 		ModelAndView mav = new ModelAndView();
 
-		Doctor doctor = doctorService.deleteDoctorWorkers(doctor_id, related_workers_id);
+		Doctor doctor = doctorService.deleteDoctorWorkers(doctor_id,
+				related_workers_id);
 
 		mav.addObject("doctor_id", doctor_id);
 		mav.addObject("doctor", doctor);
@@ -434,8 +345,11 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/saveDoctorVisitSchedulers")
-	public ModelAndView saveDoctorVisitSchedulers(@RequestParam Integer doctor_id, @ModelAttribute VisitScheduler visitschedulers) {
-		Doctor parent_doctor = doctorService.saveDoctorVisitSchedulers(doctor_id, visitschedulers);
+	public ModelAndView saveDoctorVisitSchedulers(
+			@RequestParam Integer doctor_id,
+			@ModelAttribute VisitScheduler visitschedulers) {
+		Doctor parent_doctor = doctorService.saveDoctorVisitSchedulers(
+				doctor_id, visitschedulers);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -464,10 +378,12 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/deleteDoctorVisits")
-	public ModelAndView deleteDoctorVisits(@RequestParam Integer doctor_id, @RequestParam Integer related_visits_id) {
+	public ModelAndView deleteDoctorVisits(@RequestParam Integer doctor_id,
+			@RequestParam Integer related_visits_id) {
 		ModelAndView mav = new ModelAndView();
 
-		Doctor doctor = doctorService.deleteDoctorVisits(doctor_id, related_visits_id);
+		Doctor doctor = doctorService.deleteDoctorVisits(doctor_id,
+				related_visits_id);
 
 		mav.addObject("doctor_id", doctor_id);
 		mav.addObject("doctor", doctor);
@@ -485,22 +401,6 @@ public class DoctorController {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(idKey);
 		doctorService.deleteDoctor(doctor);
 		return "forward:/indexDoctor";
-	}
-
-	/**
-	 * Save an existing SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/saveDoctorSickLeaves")
-	public ModelAndView saveDoctorSickLeaves(@RequestParam Integer doctor_id, @ModelAttribute SickLeave sickleaves) {
-		Doctor parent_doctor = doctorService.saveDoctorSickLeaves(doctor_id, sickleaves);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("doctor", parent_doctor);
-		mav.setViewName("doctor/viewDoctor.jsp");
-
-		return mav;
 	}
 
 	/**
@@ -538,29 +438,15 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/saveDoctorGraphics")
-	public ModelAndView saveDoctorGraphics(@RequestParam Integer doctor_id, @ModelAttribute Graphic graphics) {
-		Doctor parent_doctor = doctorService.saveDoctorGraphics(doctor_id, graphics);
+	public ModelAndView saveDoctorGraphics(@RequestParam Integer doctor_id,
+			@ModelAttribute Graphic graphics) {
+		Doctor parent_doctor = doctorService.saveDoctorGraphics(doctor_id,
+				graphics);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
 		mav.addObject("doctor", parent_doctor);
 		mav.setViewName("doctor/viewDoctor.jsp");
-
-		return mav;
-	}
-
-	/**
-	 * Edit an existing Recipe entity
-	 * 
-	 */
-	@RequestMapping("/editDoctorRecipes")
-	public ModelAndView editDoctorRecipes(@RequestParam Integer doctor_id, @RequestParam Integer recipes_idr) {
-		Recipe recipe = recipeDAO.findRecipeByPrimaryKey(recipes_idr, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("recipe", recipe);
-		mav.setViewName("doctor/recipes/editRecipes.jsp");
 
 		return mav;
 	}
@@ -581,14 +467,18 @@ public class DoctorController {
 	}
 
 	/**
-	 * Select the child Specialization entity for display allowing the user to confirm that they would like to delete the entity
+	 * Select the child Specialization entity for display allowing the user to
+	 * confirm that they would like to delete the entity
 	 * 
 	 */
 	@RequestMapping("/confirmDeleteDoctorSpecializations")
-	public ModelAndView confirmDeleteDoctorSpecializations(@RequestParam Integer doctor_id, @RequestParam Integer related_specializations_id) {
+	public ModelAndView confirmDeleteDoctorSpecializations(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer related_specializations_id) {
 		ModelAndView mav = new ModelAndView();
 
-		mav.addObject("specialization", specializationDAO.findSpecializationByPrimaryKey(related_specializations_id));
+		mav.addObject("specialization", specializationDAO
+				.findSpecializationByPrimaryKey(related_specializations_id));
 		mav.addObject("doctor_id", doctor_id);
 		mav.setViewName("doctor/specializations/deleteSpecializations.jsp");
 
@@ -614,45 +504,17 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/deleteDoctorVisitSchedulers")
-	public ModelAndView deleteDoctorVisitSchedulers(@RequestParam Integer doctor_id, @RequestParam Integer related_visitschedulers_id) {
+	public ModelAndView deleteDoctorVisitSchedulers(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer related_visitschedulers_id) {
 		ModelAndView mav = new ModelAndView();
 
-		Doctor doctor = doctorService.deleteDoctorVisitSchedulers(doctor_id, related_visitschedulers_id);
+		Doctor doctor = doctorService.deleteDoctorVisitSchedulers(doctor_id,
+				related_visitschedulers_id);
 
 		mav.addObject("doctor_id", doctor_id);
 		mav.addObject("doctor", doctor);
 		mav.setViewName("doctor/viewDoctor.jsp");
-
-		return mav;
-	}
-
-	/**
-	 * Select the child SickLeave entity for display allowing the user to confirm that they would like to delete the entity
-	 * 
-	 */
-	@RequestMapping("/confirmDeleteDoctorSickLeaves")
-	public ModelAndView confirmDeleteDoctorSickLeaves(@RequestParam Integer doctor_id, @RequestParam Integer related_sickleaves_id) {
-		ModelAndView mav = new ModelAndView();
-
-		mav.addObject("sickleave", sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id));
-		mav.addObject("doctor_id", doctor_id);
-		mav.setViewName("doctor/sickleaves/deleteSickLeaves.jsp");
-
-		return mav;
-	}
-
-	/**
-	 * View an existing Recipe entity
-	 * 
-	 */
-	@RequestMapping("/selectDoctorRecipes")
-	public ModelAndView selectDoctorRecipes(@RequestParam Integer doctor_id, @RequestParam Integer recipes_idr) {
-		Recipe recipe = recipeDAO.findRecipeByPrimaryKey(recipes_idr, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("recipe", recipe);
-		mav.setViewName("doctor/recipes/viewRecipes.jsp");
 
 		return mav;
 	}
@@ -690,8 +552,10 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/saveDoctorWorkers")
-	public ModelAndView saveDoctorWorkers(@RequestParam Integer doctor_id, @ModelAttribute Worker workers) {
-		Doctor parent_doctor = doctorService.saveDoctorWorkers(doctor_id, workers);
+	public ModelAndView saveDoctorWorkers(@RequestParam Integer doctor_id,
+			@ModelAttribute Worker workers) {
+		Doctor parent_doctor = doctorService.saveDoctorWorkers(doctor_id,
+				workers);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -706,8 +570,11 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/saveDoctorSpecializations")
-	public ModelAndView saveDoctorSpecializations(@RequestParam Integer doctor_id, @ModelAttribute Specialization specializations) {
-		Doctor parent_doctor = doctorService.saveDoctorSpecializations(doctor_id, specializations);
+	public ModelAndView saveDoctorSpecializations(
+			@RequestParam Integer doctor_id,
+			@ModelAttribute Specialization specializations) {
+		Doctor parent_doctor = doctorService.saveDoctorSpecializations(
+				doctor_id, specializations);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -722,7 +589,8 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/selectDoctorVisits")
-	public ModelAndView selectDoctorVisits(@RequestParam Integer doctor_id, @RequestParam Integer visits_id) {
+	public ModelAndView selectDoctorVisits(@RequestParam Integer doctor_id,
+			@RequestParam Integer visits_id) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(visits_id, -1, -1);
 
 		ModelAndView mav = new ModelAndView();
@@ -748,14 +616,18 @@ public class DoctorController {
 	}
 
 	/**
-	 * Select the child Worker entity for display allowing the user to confirm that they would like to delete the entity
+	 * Select the child Worker entity for display allowing the user to confirm
+	 * that they would like to delete the entity
 	 * 
 	 */
 	@RequestMapping("/confirmDeleteDoctorWorkers")
-	public ModelAndView confirmDeleteDoctorWorkers(@RequestParam Integer doctor_id, @RequestParam Integer related_workers_id) {
+	public ModelAndView confirmDeleteDoctorWorkers(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer related_workers_id) {
 		ModelAndView mav = new ModelAndView();
 
-		mav.addObject("worker", workerDAO.findWorkerByPrimaryKey(related_workers_id));
+		mav.addObject("worker",
+				workerDAO.findWorkerByPrimaryKey(related_workers_id));
 		mav.addObject("doctor_id", doctor_id);
 		mav.setViewName("doctor/workers/deleteWorkers.jsp");
 
@@ -767,7 +639,8 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/selectDoctorWorkers")
-	public ModelAndView selectDoctorWorkers(@RequestParam Integer doctor_id, @RequestParam Integer workers_id) {
+	public ModelAndView selectDoctorWorkers(@RequestParam Integer doctor_id,
+			@RequestParam Integer workers_id) {
 		Worker worker = workerDAO.findWorkerByPrimaryKey(workers_id, -1, -1);
 
 		ModelAndView mav = new ModelAndView();
@@ -778,38 +651,7 @@ public class DoctorController {
 		return mav;
 	}
 
-	/**
-	 * Edit an existing PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/editDoctorPatientCards")
-	public ModelAndView editDoctorPatientCards(@RequestParam Integer doctor_id, @RequestParam Integer patientcards_id) {
-		PatientCard patientcard = patientCardDAO.findPatientCardByPrimaryKey(patientcards_id, -1, -1);
 
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("patientcard", patientcard);
-		mav.setViewName("doctor/patientcards/editPatientCards.jsp");
-
-		return mav;
-	}
-
-	/**
-	 * Delete an existing SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/deleteDoctorSickLeaves")
-	public ModelAndView deleteDoctorSickLeaves(@RequestParam Integer doctor_id, @RequestParam Integer related_sickleaves_id) {
-		ModelAndView mav = new ModelAndView();
-
-		Doctor doctor = doctorService.deleteDoctorSickLeaves(doctor_id, related_sickleaves_id);
-
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("doctor", doctor);
-		mav.setViewName("doctor/viewDoctor.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Create a new Worker entity
@@ -831,8 +673,10 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/saveDoctorVisits")
-	public ModelAndView saveDoctorVisits(@RequestParam Integer doctor_id, @ModelAttribute Visit visits) {
-		Doctor parent_doctor = doctorService.saveDoctorVisits(doctor_id, visits);
+	public ModelAndView saveDoctorVisits(@RequestParam Integer doctor_id,
+			@ModelAttribute Visit visits) {
+		Doctor parent_doctor = doctorService
+				.saveDoctorVisits(doctor_id, visits);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -847,8 +691,11 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/selectDoctorSpecializations")
-	public ModelAndView selectDoctorSpecializations(@RequestParam Integer doctor_id, @RequestParam Integer specializations_id) {
-		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(specializations_id, -1, -1);
+	public ModelAndView selectDoctorSpecializations(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer specializations_id) {
+		Specialization specialization = specializationDAO
+				.findSpecializationByPrimaryKey(specializations_id, -1, -1);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -863,8 +710,11 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/selectDoctorVisitSchedulers")
-	public ModelAndView selectDoctorVisitSchedulers(@RequestParam Integer doctor_id, @RequestParam Integer visitschedulers_id) {
-		VisitScheduler visitscheduler = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitschedulers_id, -1, -1);
+	public ModelAndView selectDoctorVisitSchedulers(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer visitschedulers_id) {
+		VisitScheduler visitscheduler = visitSchedulerDAO
+				.findVisitSchedulerByPrimaryKey(visitschedulers_id, -1, -1);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -879,8 +729,10 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/selectDoctorGraphics")
-	public ModelAndView selectDoctorGraphics(@RequestParam Integer doctor_id, @RequestParam Integer graphics_id) {
-		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(graphics_id, -1, -1);
+	public ModelAndView selectDoctorGraphics(@RequestParam Integer doctor_id,
+			@RequestParam Integer graphics_id) {
+		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(graphics_id, -1,
+				-1);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -904,20 +756,6 @@ public class DoctorController {
 		return mav;
 	}
 
-	/**
-	 * Select the child PatientCard entity for display allowing the user to confirm that they would like to delete the entity
-	 * 
-	 */
-	@RequestMapping("/confirmDeleteDoctorPatientCards")
-	public ModelAndView confirmDeleteDoctorPatientCards(@RequestParam Integer doctor_id, @RequestParam Integer related_patientcards_id) {
-		ModelAndView mav = new ModelAndView();
-
-		mav.addObject("patientcard", patientCardDAO.findPatientCardByPrimaryKey(related_patientcards_id));
-		mav.addObject("doctor_id", doctor_id);
-		mav.setViewName("doctor/patientcards/deletePatientCards.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Select an existing Doctor entity
@@ -938,7 +776,8 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/editDoctorWorkers")
-	public ModelAndView editDoctorWorkers(@RequestParam Integer doctor_id, @RequestParam Integer workers_id) {
+	public ModelAndView editDoctorWorkers(@RequestParam Integer doctor_id,
+			@RequestParam Integer workers_id) {
 		Worker worker = workerDAO.findWorkerByPrimaryKey(workers_id, -1, -1);
 
 		ModelAndView mav = new ModelAndView();
@@ -954,28 +793,52 @@ public class DoctorController {
 	 * 
 	 */
 	@InitBinder
-	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register static property editors.
-		binder.registerCustomEditor(java.util.Calendar.class, new org.skyway.spring.util.databinding.CustomCalendarEditor());
-		binder.registerCustomEditor(byte[].class, new org.springframework.web.multipart.support.ByteArrayMultipartFileEditor());
-		binder.registerCustomEditor(boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(false));
-		binder.registerCustomEditor(Boolean.class, new org.skyway.spring.util.databinding.EnhancedBooleanEditor(true));
-		binder.registerCustomEditor(java.math.BigDecimal.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(java.math.BigDecimal.class, true));
-		binder.registerCustomEditor(Integer.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Integer.class, true));
-		binder.registerCustomEditor(java.util.Date.class, new org.skyway.spring.util.databinding.CustomDateEditor());
-		binder.registerCustomEditor(String.class, new org.skyway.spring.util.databinding.StringEditor());
-		binder.registerCustomEditor(Long.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Long.class, true));
-		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
+	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register
+																				// static
+																				// property
+																				// editors.
+		binder.registerCustomEditor(java.util.Calendar.class,
+				new org.skyway.spring.util.databinding.CustomCalendarEditor());
+		binder.registerCustomEditor(
+				byte[].class,
+				new org.springframework.web.multipart.support.ByteArrayMultipartFileEditor());
+		binder.registerCustomEditor(boolean.class,
+				new org.skyway.spring.util.databinding.EnhancedBooleanEditor(
+						false));
+		binder.registerCustomEditor(Boolean.class,
+				new org.skyway.spring.util.databinding.EnhancedBooleanEditor(
+						true));
+		binder.registerCustomEditor(java.math.BigDecimal.class,
+				new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(
+						java.math.BigDecimal.class, true));
+		binder.registerCustomEditor(Integer.class,
+				new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(
+						Integer.class, true));
+		binder.registerCustomEditor(java.util.Date.class,
+				new org.skyway.spring.util.databinding.CustomDateEditor());
+		binder.registerCustomEditor(String.class,
+				new org.skyway.spring.util.databinding.StringEditor());
+		binder.registerCustomEditor(Long.class,
+				new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(
+						Long.class, true));
+		binder.registerCustomEditor(Double.class,
+				new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(
+						Double.class, true));
 	}
 
 	/**
-	 * Select the child VisitScheduler entity for display allowing the user to confirm that they would like to delete the entity
+	 * Select the child VisitScheduler entity for display allowing the user to
+	 * confirm that they would like to delete the entity
 	 * 
 	 */
 	@RequestMapping("/confirmDeleteDoctorVisitSchedulers")
-	public ModelAndView confirmDeleteDoctorVisitSchedulers(@RequestParam Integer doctor_id, @RequestParam Integer related_visitschedulers_id) {
+	public ModelAndView confirmDeleteDoctorVisitSchedulers(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer related_visitschedulers_id) {
 		ModelAndView mav = new ModelAndView();
 
-		mav.addObject("visitscheduler", visitSchedulerDAO.findVisitSchedulerByPrimaryKey(related_visitschedulers_id));
+		mav.addObject("visitscheduler", visitSchedulerDAO
+				.findVisitSchedulerByPrimaryKey(related_visitschedulers_id));
 		mav.addObject("doctor_id", doctor_id);
 		mav.setViewName("doctor/visitschedulers/deleteVisitSchedulers.jsp");
 
@@ -987,8 +850,11 @@ public class DoctorController {
 	 * 
 	 */
 	@RequestMapping("/editDoctorSpecializations")
-	public ModelAndView editDoctorSpecializations(@RequestParam Integer doctor_id, @RequestParam Integer specializations_id) {
-		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(specializations_id, -1, -1);
+	public ModelAndView editDoctorSpecializations(
+			@RequestParam Integer doctor_id,
+			@RequestParam Integer specializations_id) {
+		Specialization specialization = specializationDAO
+				.findSpecializationByPrimaryKey(specializations_id, -1, -1);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("doctor_id", doctor_id);
@@ -998,22 +864,6 @@ public class DoctorController {
 		return mav;
 	}
 
-	/**
-	 * Delete an existing Recipe entity
-	 * 
-	 */
-	@RequestMapping("/deleteDoctorRecipes")
-	public ModelAndView deleteDoctorRecipes(@RequestParam Integer doctor_id, @RequestParam Integer related_recipes_idr) {
-		ModelAndView mav = new ModelAndView();
-
-		Doctor doctor = doctorService.deleteDoctorRecipes(doctor_id, related_recipes_idr);
-
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("doctor", doctor);
-		mav.setViewName("doctor/viewDoctor.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Save an existing Doctor entity
@@ -1025,46 +875,18 @@ public class DoctorController {
 		return "forward:/indexDoctor";
 	}
 
-	/**
-	 * Create a new PatientCard entity
-	 * 
-	 */
-	@RequestMapping("/newDoctorPatientCards")
-	public ModelAndView newDoctorPatientCards(@RequestParam Integer doctor_id) {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("patientcard", new PatientCard());
-		mav.addObject("newFlag", true);
-		mav.setViewName("doctor/patientcards/editPatientCards.jsp");
-
-		return mav;
-	}
-
-	/**
-	 * View an existing SickLeave entity
-	 * 
-	 */
-	@RequestMapping("/selectDoctorSickLeaves")
-	public ModelAndView selectDoctorSickLeaves(@RequestParam Integer doctor_id, @RequestParam Integer sickleaves_id) {
-		SickLeave sickleave = sickLeaveDAO.findSickLeaveByPrimaryKey(sickleaves_id, -1, -1);
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("doctor_id", doctor_id);
-		mav.addObject("sickleave", sickleave);
-		mav.setViewName("doctor/sickleaves/viewSickLeaves.jsp");
-
-		return mav;
-	}
 
 	/**
 	 * Delete an existing Graphic entity
 	 * 
 	 */
 	@RequestMapping("/deleteDoctorGraphics")
-	public ModelAndView deleteDoctorGraphics(@RequestParam Integer doctor_id, @RequestParam Integer related_graphics_id) {
+	public ModelAndView deleteDoctorGraphics(@RequestParam Integer doctor_id,
+			@RequestParam Integer related_graphics_id) {
 		ModelAndView mav = new ModelAndView();
 
-		Doctor doctor = doctorService.deleteDoctorGraphics(doctor_id, related_graphics_id);
+		Doctor doctor = doctorService.deleteDoctorGraphics(doctor_id,
+				related_graphics_id);
 
 		mav.addObject("doctor_id", doctor_id);
 		mav.addObject("doctor", doctor);
@@ -1102,18 +924,4 @@ public class DoctorController {
 		return mav;
 	}
 
-	/**
-	 * Select the child Recipe entity for display allowing the user to confirm that they would like to delete the entity
-	 * 
-	 */
-	@RequestMapping("/confirmDeleteDoctorRecipes")
-	public ModelAndView confirmDeleteDoctorRecipes(@RequestParam Integer doctor_id, @RequestParam Integer related_recipes_idr) {
-		ModelAndView mav = new ModelAndView();
-
-		mav.addObject("recipe", recipeDAO.findRecipeByPrimaryKey(related_recipes_idr));
-		mav.addObject("doctor_id", doctor_id);
-		mav.setViewName("doctor/recipes/deleteRecipes.jsp");
-
-		return mav;
-	}
 }
