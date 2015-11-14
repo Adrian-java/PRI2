@@ -273,7 +273,6 @@ public class VisitScheduler implements Serializable {
 	public Integer getDuration() {
 		return duration;
 	}
-
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
