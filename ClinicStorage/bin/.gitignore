@@ -1,0 +1,10 @@
+<<<<<<< HEAD
+/target/
+/bin/
+=======
+/target/
+.settings/
+.classpath
+*~
+/.project
+>>>>>>> split
