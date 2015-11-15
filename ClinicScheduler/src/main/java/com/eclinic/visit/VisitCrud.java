@@ -42,4 +42,6 @@ public interface VisitCrud {
 
     public void deleteVisit(Integer id);
 
+	public VisitScheduler addVFreeVisit();
+
 }
