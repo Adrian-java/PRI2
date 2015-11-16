@@ -32,7 +32,7 @@ import javax.persistence.*;
 		@NamedQuery(name = "findVisitByIsLeave", query = "select myVisit from Visit myVisit where myVisit.isLeave = ?1"),
 		@NamedQuery(name = "findVisitByStatus", query = "select myVisit from Visit myVisit where myVisit.typeOfVisit.name = ?1"),
 		@NamedQuery(name = "findVisitByPrimaryKey", query = "select myVisit from Visit myVisit where myVisit.id = ?1"),
-		@NamedQuery(name = "findVisitByPesel", query = "select v from Visit v where v.patient in (select p from Patient p where  p in (select su.patient from SystemUser su where su.pesel =?1 ))))"),
+		@NamedQuery(name = "findVisitByPesel", query = "select v from Visit v where v.patient in (select p from Patient p where  p in (select su.patient from SystemUser su where su.id =?1 ))))"),
 		@NamedQuery(name = "findVisitByDateDoctor", query = "select v from Visit v where v.doctor = ?1)"),
 		@NamedQuery(name = "findVisitByPatient", query = "select v from Visit v "),
 		@NamedQuery(name = "findVisitBySpecial", query = "select myVisit from Visit myVisit where myVisit.special = ?1") })

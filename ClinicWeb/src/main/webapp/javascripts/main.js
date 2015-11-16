@@ -129,7 +129,7 @@ clinic.controller('RemoveUserController', function($scope, $http, $cookies, $sta
 clinic.controller('NewUserController', function($scope, $http, $cookies){
 	$scope.addUser = function(user){
 		var userInfo = {
-				"pesel": user.pesel,
+				"id": user.pesel,
 				"password": user.password,
 					"patient": {
 						"name": user.first_name,
@@ -199,7 +199,7 @@ clinic.controller('NewVisitController', function($scope, $http, $cookies){
 clinic.controller('NewAdminController', function($scope, $http, $cookies){
 	$scope.addUser = function(user){
 		var userInfo = {
-				"pesel": user.pesel,
+				"id": user.pesel,
 				"password": user.password,
 				"email": user.email,
 				"worker": {
@@ -224,7 +224,7 @@ clinic.controller('NewDoctorController', function($scope, $http, $cookies) {
 	$scope.addUser = function(user){
 		var userInfo = 
 		{
-			"pesel": user.pesel,
+			"id": user.pesel,
 			"password":user.password,
 			"email": user.email,
 					"doctor":
@@ -291,7 +291,7 @@ clinic.controller('NewReceptionistController', function($scope, $http, $cookies,
 	$scope.addUser = function(user){
 		var userInfo = 
 		{
-			"pesel": user.pesel,
+			"id": user.pesel,
 			"password":user.password,
 			"isActive":"true",
 			"email": user.email,
