@@ -78,7 +78,7 @@ public class AddressServiceImpl implements AddressService {
 	 * 
 	 */
 	@Transactional
-	public Address deleteAddressPatients(Integer address_id, Integer related_patients_id) {
+	public Address deleteAddressPatients(Integer address_id, String related_patients_id) {
 		Patient related_patients = patientDAO.findPatientByPrimaryKey(related_patients_id, -1, -1);
 
 		Address address = addressDAO.findAddressByPrimaryKey(address_id, -1, -1);

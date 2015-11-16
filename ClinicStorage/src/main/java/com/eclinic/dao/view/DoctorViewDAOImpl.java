@@ -178,7 +178,7 @@ public class DoctorViewDAOImpl extends AbstractJpaDao<DoctorView> implements Doc
 	 *
 	 */
 	@Transactional
-	public DoctorView findDoctorByPrimaryKey(Integer id) throws DataAccessException {
+	public DoctorView findDoctorByPrimaryKey(String id) throws DataAccessException {
 
 		return findDoctorByPrimaryKey(id, -1, -1);
 	}
@@ -189,7 +189,7 @@ public class DoctorViewDAOImpl extends AbstractJpaDao<DoctorView> implements Doc
 	 */
 
 	@Transactional
-	public DoctorView findDoctorByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public DoctorView findDoctorByPrimaryKey(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findDoctorByPrimaryKey", startResult, maxRows, id);
 			return (DoctorView) query.getSingleResult();
@@ -203,7 +203,7 @@ public class DoctorViewDAOImpl extends AbstractJpaDao<DoctorView> implements Doc
 	 *
 	 */
 	@Transactional
-	public DoctorView findDoctorById(Integer id) throws DataAccessException {
+	public DoctorView findDoctorById(String id) throws DataAccessException {
 
 		return findDoctorById(id, -1, -1);
 	}
@@ -214,7 +214,7 @@ public class DoctorViewDAOImpl extends AbstractJpaDao<DoctorView> implements Doc
 	 */
 
 	@Transactional
-	public DoctorView findDoctorById(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public DoctorView findDoctorById(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findDoctorViewById", startResult, maxRows, id);
 			return (DoctorView) query.getSingleResult();

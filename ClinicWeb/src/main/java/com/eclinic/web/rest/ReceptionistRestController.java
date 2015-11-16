@@ -139,7 +139,7 @@ public class ReceptionistRestController {
 	@GET
 	@Path("/{receptionist_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadReceptionist(@PathParam("receptionist_id") Integer receptionist_id) {
+	public Response loadReceptionist(@PathParam("receptionist_id") String receptionist_id) {
 		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist_id)).build();
 	}
 
@@ -152,7 +152,7 @@ public class ReceptionistRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{receptionist_id}")
 	@DELETE
-	public void deleteReceptionist(@PathParam("receptionist_id") Integer receptionist_id) {
+	public void deleteReceptionist(@PathParam("receptionist_id") String receptionist_id) {
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist_id);
 		receptionistService.deleteReceptionist(receptionist);
 	}
@@ -166,7 +166,7 @@ public class ReceptionistRestController {
 	@Path("/{receptionist_id}/visits")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newReceptionistVisits(@PathParam("receptionist_id") Integer receptionist_id,
+	public Response newReceptionistVisits(@PathParam("receptionist_id") String receptionist_id,
 			 Visit visit) {
 		receptionistService.saveReceptionistVisits(receptionist_id, visit);
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId())).build();
@@ -190,7 +190,7 @@ public class ReceptionistRestController {
 	@GET
 	@Path("/{receptionist_id}/visits")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getReceptionistVisits(@PathParam("receptionist_id") Integer receptionist_id) {
+	public Response getReceptionistVisits(@PathParam("receptionist_id") String receptionist_id) {
 		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist_id).getVisits()).build();
 	}
 
@@ -206,7 +206,7 @@ public class ReceptionistRestController {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{receptionist_id}/visits/{visit_id}")
-	public Response deleteReceptionistVisits(@PathParam("receptionist_id") Integer receptionist_id,
+	public Response deleteReceptionistVisits(@PathParam("receptionist_id") String receptionist_id,
 			@PathParam("related_visits_id") Integer related_visits_id) {
 		return Response.ok(receptionistService.deleteReceptionistVisits(receptionist_id, related_visits_id)).build();
 	}
@@ -220,7 +220,7 @@ public class ReceptionistRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{receptionist_id}/visits")
 	@PUT
-	public Response saveReceptionistVisits(@PathParam("receptionist_id") Integer receptionist_id,
+	public Response saveReceptionistVisits(@PathParam("receptionist_id") String receptionist_id,
 			Visit visits) {
 		receptionistService.saveReceptionistVisits(receptionist_id, visits);
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visits.getId())).build();

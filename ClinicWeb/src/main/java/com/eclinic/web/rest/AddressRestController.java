@@ -176,7 +176,7 @@ public class AddressRestController {
 	@Path("/{address_id}/patients/{patient_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadAddressPatients(@PathParam("address_id") Integer address_id,
-			@PathParam("related_patients_id") Integer related_patients_id) {
+			@PathParam("related_patients_id") String related_patients_id) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(
 				related_patients_id, -1, -1);
 
@@ -191,7 +191,7 @@ public class AddressRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{address_id}/patients/{patient_id}")
 	public Response deleteAddressPatients(@PathParam("address_id") Integer address_id,
-			@PathParam("related_patients_id") Integer related_patients_id) {
+			@PathParam("related_patients_id") String related_patients_id) {
 		return Response.ok(addressService.deleteAddressPatients(address_id, related_patients_id)).build();
 	}
 

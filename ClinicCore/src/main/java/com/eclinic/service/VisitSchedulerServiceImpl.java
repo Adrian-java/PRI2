@@ -68,7 +68,7 @@ public class VisitSchedulerServiceImpl implements VisitSchedulerService {
 	 * 
 	 */
 	@Transactional
-	public VisitScheduler deleteVisitSchedulerDoctor(Integer visitscheduler_id, Integer related_doctor_id) {
+	public VisitScheduler deleteVisitSchedulerDoctor(Integer visitscheduler_id, String related_doctor_id) {
 		VisitScheduler visitscheduler = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(visitscheduler_id, -1, -1);
 		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 

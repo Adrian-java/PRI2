@@ -1,4 +1,4 @@
-package com.eclinic.user.mangament.patient;
+package com.eclinic.user.mangament.receptionist;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -19,39 +19,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
-import com.eclinic.dao.PatientDAO;
+import com.eclinic.dao.ReceptionistDAO;
 import com.eclinic.dao.SystemUserDAO;
-import com.eclinic.dao.view.PatientViewDAO;
-import com.eclinic.domain.Patient;
+import com.eclinic.dao.view.ReceptionistViewDAO;
+import com.eclinic.domain.Receptionist;
 import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.view.PatientView;
+import com.eclinic.domain.view.ReceptionistView;
 import com.eclinic.domain.view.SystemUserPermissionView;
-import com.eclinic.service.PatientService;
+import com.eclinic.service.ReceptionistService;
 import com.eclinic.service.SystemUserService;
 import com.eclinic.user.mangament.PermissionMangament;
 
-@Component("patientCrud")
-public class PatientCrudDB implements PatientCrud {
+@Component("ReceptionistCrud")
+public class ReceptionistCrudDB implements ReceptionistCrud {
 
 	@Autowired
 	private SystemUserDAO systemUserDAO;
 	@Autowired
 	private SystemUserService systemUserService;
 	@Autowired
-	private PatientDAO patientDao;
+	private ReceptionistDAO ReceptionistDao;
 	@Autowired
-	private PatientService patientService;
+	private ReceptionistService ReceptionistService;
 	@Autowired
 	private PermissionMangament permissionMangament;
 	@Autowired
-	PatientViewDAO patientViewDao;
+	ReceptionistViewDAO ReceptionistViewDao;
 
-	public Response addPatient(SystemUser systemUser) {
+	public Response addReceptionist(SystemUser systemUser) {
 
 		if (systemUser.getEmail() == null)
 			systemUser.setEmail("em");
 		if (systemUser.getDoctor() != null || systemUser.getAdmin() != null
-				|| systemUser.getReceptionist() != null) {
+				|| systemUser.getPatient() != null) {
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		Map<String, String> map = new HashMap<String, String>();
@@ -62,17 +62,15 @@ public class PatientCrudDB implements PatientCrud {
 			map.put("status", "Podany pesel/login istnieje");
 			return Response.ok(map).build();
 		}
-		// systemUser.setIsActive(true);
-		// wysylka maila automatycznie
-		systemUser.getPatient().setConfirmed(0);
 		systemUser.setChangedPassword(false);
 		systemUser.setIsActive(true);
 		systemUser.setRole("patient");
+		systemUser.getReceptionist().setAccess(new String("access").getBytes());
 		Calendar c = new GregorianCalendar();
 		c.setTime(new Date());
 		systemUser.setRegisterDate(c);
 		try {
-			String i = systemUserService.saveSystemUserPatient(systemUser);
+			String i = systemUserService.saveSystemUserReceptionist(systemUser);
 			systemUser.setId(i);
 			// permissionMangament.setUserPermission(systemUser);
 			map.put("status", "ok");
@@ -86,23 +84,23 @@ public class PatientCrudDB implements PatientCrud {
 		return permissionMangament.showPermissionById(pesel);
 	}
 
-	public Response updatePatient(SystemUser systemUser, String pesel) {
+	public Response updateReceptionist(SystemUser systemUser, String pesel) {
 		SystemUser su = systemUserDAO.findSystemUserById(pesel);
-		String id = su.getPatient().getId();
-		Patient p = patientDao.findPatientById(id);
+		String id = su.getReceptionist().getId();
+		Receptionist p = ReceptionistDao.findReceptionistById(id);
 		if (p instanceof HibernateProxy) {
 			HibernateProxy proxy = (HibernateProxy) p;
 			LazyInitializer li = proxy.getHibernateLazyInitializer();
-			p = (Patient) li.getImplementation();
+			p = (Receptionist) li.getImplementation();
 		}
-		String i = patientService.savePatient(p);
+		String i = ReceptionistService.saveReceptionist(p);
 		try {
 			try {
 				return Response.ok(
 						new ObjectMapper().configure(
 								Feature.FAIL_ON_EMPTY_BEANS, false)
 								.writeValueAsString(
-										patientDao.findPatientById(i))).build();
+										ReceptionistDao.findReceptionistById(i))).build();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -112,19 +110,19 @@ public class PatientCrudDB implements PatientCrud {
 		return null;
 	}
 
-	public Response deletePatient(String pesel) {
+	public Response deleteReceptionist(String pesel) {
 		SystemUser su = systemUserDAO.findSystemUserById(pesel);
 		su.setIsActive(false);
 		systemUserService.saveSystemUser(su);
 		return null;
 	}
 
-	public Set<PatientView> getAllPatients() {
-		return patientViewDao.findAllPatients();
+	public Set<ReceptionistView> getAllReceptionists() {
+		return ReceptionistViewDao.findAllReceptionists();
 	}
 
-	public PatientView getPatientById(String pesel) {
-		return patientViewDao.findPatientByPesel(pesel);
+	public ReceptionistView getReceptionistById(String pesel) {
+		return new ReceptionistView(); //ReceptionistViewDao.findReceptionistById(pesel);
 	}
 
 }

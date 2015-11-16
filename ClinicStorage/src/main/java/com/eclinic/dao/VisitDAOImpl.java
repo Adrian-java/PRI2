@@ -267,7 +267,7 @@ public class VisitDAOImpl extends AbstractJpaDao<Visit> implements VisitDAO {
 		return new LinkedHashSet<Visit>(query.getResultList());
 	}
 
-	public Set<Visit> findVisitByPatient(Integer id) throws DataAccessException {
+	public Set<Visit> findVisitByPatient(String id) throws DataAccessException {
 	    Query query = createNamedQuery("findVisitByPatient", -1, -1, id);
 		return new LinkedHashSet<Visit>(query.getResultList());
 	}

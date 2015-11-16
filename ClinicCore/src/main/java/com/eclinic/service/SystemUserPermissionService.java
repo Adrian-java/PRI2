@@ -69,5 +69,5 @@ public interface SystemUserPermissionService {
 	 * Delete an existing SystemUser entity
 	 * 
 	 */
-	public SystemUserPermission deleteSystemUserPermissionSystemUsers(Integer systemuserpermission_id_1, Integer related_systemusers_id);
+	public SystemUserPermission deleteSystemUserPermissionSystemUsers(Integer systemuserpermission_id_1, String related_systemusers_id);
 }

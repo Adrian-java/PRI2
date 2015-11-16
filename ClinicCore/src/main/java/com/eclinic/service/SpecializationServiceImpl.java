@@ -231,7 +231,7 @@ public class SpecializationServiceImpl implements SpecializationService {
 	 * 
 	 */
 	@Transactional
-	public Specialization deleteSpecializationDoctor(Integer specialization_id, Integer related_doctor_id) {
+	public Specialization deleteSpecializationDoctor(Integer specialization_id, String related_doctor_id) {
 		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(specialization_id, -1, -1);
 		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 

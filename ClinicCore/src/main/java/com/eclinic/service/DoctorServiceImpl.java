@@ -7,7 +7,6 @@ import com.eclinic.dao.SpecializationDAO;
 import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.VisitDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
-
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Documents;
 import com.eclinic.domain.Graphic;
@@ -20,9 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -95,7 +92,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorSpecializations(Integer doctor_id, Integer related_specializations_id) {
+	public Doctor deleteDoctorSpecializations(String doctor_id, Integer related_specializations_id) {
 		Specialization related_specializations = specializationDAO.findSpecializationByPrimaryKey(related_specializations_id, -1, -1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
@@ -114,7 +111,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorGraphics(Integer doctor_id, Integer related_graphics_id) {
+	public Doctor deleteDoctorGraphics(String doctor_id, Integer related_graphics_id) {
 		Graphic related_graphics = graphicDAO.findGraphicByPrimaryKey(related_graphics_id, -1, -1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
@@ -133,7 +130,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Integer saveDoctor(Doctor doctor) {
+	public String saveDoctor(Doctor doctor) {
 		Doctor existingDoctor = doctorDAO.findDoctorByPrimaryKey(doctor.getId());
 
 		if (existingDoctor != null) {
@@ -173,7 +170,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor saveDoctorVisits(Integer id, Visit related_visits) {
+	public Doctor saveDoctorVisits(String id, Visit related_visits) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
 		Visit existingvisits = visitDAO.findVisitByPrimaryKey(related_visits.getId());
 
@@ -203,7 +200,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorVisitSchedulers(Integer doctor_id, Integer related_visitschedulers_id) {
+	public Doctor deleteDoctorVisitSchedulers(String doctor_id, Integer related_visitschedulers_id) {
 		VisitScheduler related_visitschedulers = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(related_visitschedulers_id, -1, -1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
@@ -220,7 +217,7 @@ public class DoctorServiceImpl implements DoctorService {
 	/**
 	 */
 	@Transactional
-	public Doctor findDoctorByPrimaryKey(Integer id) {
+	public Doctor findDoctorByPrimaryKey(String id) {
 		return doctorDAO.findDoctorByPrimaryKey(id);
 	}
 
@@ -239,7 +236,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor saveDoctorDocumentses(Integer id, Documents related_documentses) {
+	public Doctor saveDoctorDocumentses(String id, Documents related_documentses) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
 		Documents existingdocumentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses.getId());
 
@@ -269,7 +266,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor saveDoctorVisitSchedulers(Integer id, VisitScheduler related_visitschedulers) {
+	public Doctor saveDoctorVisitSchedulers(String id, VisitScheduler related_visitschedulers) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
 		VisitScheduler existingvisitSchedulers = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(related_visitschedulers.getId());
 
@@ -300,7 +297,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorVisits(Integer doctor_id, Integer related_visits_id) {
+	public Doctor deleteDoctorVisits(String doctor_id, Integer related_visits_id) {
 		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
@@ -319,7 +316,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor saveDoctorGraphics(Integer id, Graphic related_graphics) {
+	public Doctor saveDoctorGraphics(String id, Graphic related_graphics) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
 		Graphic existinggraphics = graphicDAO.findGraphicByPrimaryKey(related_graphics.getId());
 
@@ -348,7 +345,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorSystemUser(Integer doctor_id, Integer related_systemuser_id) {
+	public Doctor deleteDoctorSystemUser(String doctor_id, String related_systemuser_id) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
 		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
@@ -370,7 +367,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorDocumentses(Integer doctor_id, Integer related_documentses_id) {
+	public Doctor deleteDoctorDocumentses(String doctor_id, Integer related_documentses_id) {
 		Documents related_documentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses_id, -1, -1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
@@ -398,7 +395,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor saveDoctorSpecializations(Integer id, Specialization related_specializations) {
+	public Doctor saveDoctorSpecializations(String id, Specialization related_specializations) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
 		Specialization existingspecializations = specializationDAO.findSpecializationByPrimaryKey(related_specializations.getId());
 
@@ -426,7 +423,7 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor saveDoctorSystemUser(Integer id, SystemUser related_systemuser) {
+	public Doctor saveDoctorSystemUser(String id, SystemUser related_systemuser) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
 		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
 
@@ -441,7 +438,6 @@ public class DoctorServiceImpl implements DoctorService {
 			existingsystemUser.setEmail(related_systemuser.getEmail());
 			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
 			existingsystemUser.setRole(related_systemuser.getRole());
-			existingsystemUser.setPesel(related_systemuser.getPesel());
 			related_systemuser = existingsystemUser;
 		} else {
 			related_systemuser = systemUserDAO.store(related_systemuser);
@@ -457,4 +453,5 @@ public class DoctorServiceImpl implements DoctorService {
 
 		return doctor;
 	}
+
 }

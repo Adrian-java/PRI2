@@ -5,7 +5,6 @@ import com.eclinic.domain.Receptionist;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -30,13 +29,13 @@ public interface ReceptionistDAO extends JpaDao<Receptionist> {
 	 * JPQL Query - findReceptionistById
 	 *
 	 */
-	public Receptionist findReceptionistById(Integer id) throws DataAccessException;
+	public Receptionist findReceptionistById(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findReceptionistById
 	 *
 	 */
-	public Receptionist findReceptionistById(Integer id, int startResult, int maxRows) throws DataAccessException;
+	public Receptionist findReceptionistById(String id, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findReceptionistBySurname
@@ -114,12 +113,12 @@ public interface ReceptionistDAO extends JpaDao<Receptionist> {
 	 * JPQL Query - findReceptionistByPrimaryKey
 	 *
 	 */
-	public Receptionist findReceptionistByPrimaryKey(Integer id_1) throws DataAccessException;
+	public Receptionist findReceptionistByPrimaryKey(String string) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findReceptionistByPrimaryKey
 	 *
 	 */
-	public Receptionist findReceptionistByPrimaryKey(Integer id_1, int startResult, int maxRows) throws DataAccessException;
+	public Receptionist findReceptionistByPrimaryKey(String id_1, int startResult, int maxRows) throws DataAccessException;
 
 }

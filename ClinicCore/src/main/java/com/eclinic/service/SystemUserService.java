@@ -21,19 +21,19 @@ public interface SystemUserService {
 	 * Save an existing Patient entity
 	 * 
 	 */
-	public Integer saveSystemUserPatient(SystemUser su);
+	public String saveSystemUserPatient(SystemUser su);
 
 	/**
 	 * Delete an existing Receptionist entity
 	 * 
 	 */
-	public SystemUser deleteSystemUserReceptionist(Integer systemuser_id, Integer related_receptionist_id);
+	public SystemUser deleteSystemUserReceptionist(String systemuser_id, String related_receptionist_id);
 
 	/**
 	 * Save an existing Doctor entity
 	 * 
 	 */
-	public Integer saveSystemUserDoctor(SystemUser su);
+	public String saveSystemUserDoctor(SystemUser su);
 
 	/**
 	 * Save an existing SystemUserPermission entity
@@ -57,7 +57,7 @@ public interface SystemUserService {
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	public SystemUser deleteSystemUserDoctor(Integer systemuser_id_2, Integer related_doctor_id);
+	public SystemUser deleteSystemUserDoctor(String systemuser_id_2, String related_doctor_id);
 
 	/**
 	 * Save an existing LoginHistory entity
@@ -74,17 +74,17 @@ public interface SystemUserService {
 	 * Save an existing Admin entity
 	 * 
 	 */
-	public SystemUser saveSystemUserAdmin(Integer id_5, Admin related_admin);
+	public SystemUser saveSystemUserAdmin(String id_5, Admin related_admin);
 
 	/**
 	 * Delete an existing Admin entity
 	 * 
 	 */
-	public SystemUser deleteSystemUserAdmin(Integer systemuser_id_3, Integer related_admin_id);
+	public SystemUser deleteSystemUserAdmin(String systemuser_id_3, String related_admin_id);
 
 	/**
 	 */
-	public SystemUser findSystemUserByPrimaryKey(Integer id_6);
+	public SystemUser findSystemUserByPrimaryKey(String id_6);
 
 	/**
 	 * Delete an existing SystemUser entity
@@ -96,14 +96,14 @@ public interface SystemUserService {
 	 * Delete an existing Patient entity
 	 * 
 	 */
-	public SystemUser deleteSystemUserPatient(Integer systemuser_id_4, Integer related_patient_id);
+	public SystemUser deleteSystemUserPatient(String systemuser_id_4, String related_patient_id);
 
 	/**
 	 * Save an existing SystemUser entity
 	 * @return 
 	 * 
 	 */
-	public Integer saveSystemUser(SystemUser systemuser_1);
+	public String saveSystemUser(SystemUser systemuser_1);
 
 	/**
 	 * Return a count of all SystemUser entity
@@ -121,7 +121,7 @@ public interface SystemUserService {
 	 * Delete an existing LoginHistory entity
 	 * 
 	 */
-	public SystemUser deleteSystemUserLoginHistory(Integer systemuser_id_5, Integer related_loginhistory_id);
+	public SystemUser deleteSystemUserLoginHistory(String systemuser_id_5, Integer related_loginhistory_id);
 
-	public Integer saveSystemUserReceptionist(SystemUser systemuser);
+	public String saveSystemUserReceptionist(SystemUser systemuser);
 }

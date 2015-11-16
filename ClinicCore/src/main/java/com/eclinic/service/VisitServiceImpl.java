@@ -154,7 +154,7 @@ public class VisitServiceImpl implements VisitService {
 	 * 
 	 */
 	@Transactional
-	public Visit deleteVisitDoctor(Integer visit_id, Integer related_doctor_id) {
+	public Visit deleteVisitDoctor(Integer visit_id, String related_doctor_id) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
 		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
@@ -204,7 +204,7 @@ public class VisitServiceImpl implements VisitService {
 	 * 
 	 */
 	@Transactional
-	public Visit deleteVisitReceptionist(Integer visit_id, Integer related_receptionist_id) {
+	public Visit deleteVisitReceptionist(Integer visit_id, String related_receptionist_id) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
 		Receptionist related_receptionist = receptionistDAO.findReceptionistByPrimaryKey(related_receptionist_id, -1, -1);
 
@@ -336,7 +336,7 @@ public class VisitServiceImpl implements VisitService {
 	 * 
 	 */
 	@Transactional
-	public Visit deleteVisitPatient(Integer visit_id, Integer related_patient_id) {
+	public Visit deleteVisitPatient(Integer visit_id, String related_patient_id) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
 		Patient related_patient = patientDAO.findPatientByPrimaryKey(related_patient_id, -1, -1);
 

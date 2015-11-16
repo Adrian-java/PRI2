@@ -186,7 +186,7 @@ public class VisitRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}/doctor/{doctor_id}")
 	public Response deleteVisitDoctor(@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_doctor_id") Integer related_doctor_id) {
+			@PathParam("related_doctor_id") String related_doctor_id) {
 		return Response.ok(
 				visitService.deleteVisitDoctor(visit_id, related_doctor_id))
 				.build();
@@ -203,11 +203,11 @@ public class VisitRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newVisit(VisitModel visitmodel) {
 		try {
-			Doctor d = systemUserDao.findSystemUserByPesel(
+			Doctor d = systemUserDao.findSystemUserById(
 					visitmodel.getDoctorLogin()).getDoctor();
-			Patient p = systemUserDao.findSystemUserByPesel(
+			Patient p = systemUserDao.findSystemUserById(
 					visitmodel.getPatientPesel()).getPatient();
-			Receptionist r = systemUserDao.findSystemUserByPesel(
+			Receptionist r = systemUserDao.findSystemUserById(
 					visitmodel.getRecepcionistLogin()).getReceptionist();
 			StatusOfVisit sov = statusOfVisitDAO
 					.findStatusOfVisitByType(visitmodel.getStatusOfVisit())
@@ -270,7 +270,7 @@ public class VisitRestController {
 	@Path("/{visit_id}/receptionist/{receptionist_id}")
 	public Response deleteTypeOfUserPermission(
 			@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_receptionist_id") Integer related_receptionist_id) {
+			@PathParam("related_receptionist_id") String related_receptionist_id) {
 		return Response.ok(
 				visitService.deleteVisitReceptionist(visit_id,
 						related_receptionist_id)).build();
@@ -301,7 +301,7 @@ public class VisitRestController {
 	@Path("/{visit_id}/doctor/{doctor_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadVisitDoctor(@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_doctor_id") Integer related_doctor_id) {
+			@PathParam("related_doctor_id") String related_doctor_id) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1,
 				-1);
 		return Response.ok(doctor).build();
@@ -530,7 +530,7 @@ public class VisitRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadVisitReceptionist(
 			@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_receptionist_id") Integer related_receptionist_id) {
+			@PathParam("related_receptionist_id") String related_receptionist_id) {
 		Receptionist receptionist = receptionistDAO
 				.findReceptionistByPrimaryKey(related_receptionist_id, -1, -1);
 		return Response.ok(receptionist).build();

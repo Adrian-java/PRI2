@@ -17,17 +17,17 @@ public interface VisitCrud {
 
     public Set<Visit> findVisitByDoctor(Doctor doctor);
 
-    public Set<Visit> findVisitByPatient(Integer id);
+    public Set<Visit> findVisitByPatient(String id);
 
     public Set<Visit> findVisitBySpecialization(String specialization);
 
     public Set<Visit> findVisitByStatus(String status);
 
-    public VisitProposal findFirstFreeTermByDoctor(Integer id);
+    public VisitProposal findFirstFreeTermByDoctor(String id);
 
     public VisitProposal findFirstFreeTermBySpecialization(String specialization);
 
-    public Set<VisitProposal> findFreeTermsByDoctor(Integer id, Integer resultCounterMonth);
+    public Set<VisitProposal> findFreeTermsByDoctor(String id, Integer resultCounterMonth);
 
     public Set<VisitProposal> findFreeTermsBySpecialization(String specialization,
 	    Integer resultCounterMonth);

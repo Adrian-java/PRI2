@@ -238,7 +238,7 @@ public class VisitSchedulerRestController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response loadVisitSchedulerDoctor(
 	    @PathParam("visitscheduler_id") Integer visitscheduler_id,
-	    @PathParam("related_doctor_id") Integer related_doctor_id) {
+	    @PathParam("related_doctor_id") String related_doctor_id) {
 	Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
 	return Response.ok(doctor).build();
@@ -254,7 +254,7 @@ public class VisitSchedulerRestController {
     @Path("/{visitscheduler_id}/doctor/{doctor_id}")
     public Response deleteVisitSchedulerDoctor(
 	    @PathParam("visitscheduler_id") Integer visitscheduler_id,
-	    @PathParam("related_doctor_id") Integer related_doctor_id) {
+	    @PathParam("related_doctor_id") String related_doctor_id) {
 	return Response.ok(
 		visitSchedulerService.deleteVisitSchedulerDoctor(visitscheduler_id,
 			related_doctor_id)).build();
@@ -351,7 +351,7 @@ public class VisitSchedulerRestController {
     @GET
     @Path("/free/first/doctor/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFirstVisitSchedulerByDoctor(@PathParam("id") Integer id) {
+    public Response getFirstVisitSchedulerByDoctor(@PathParam("id") String id) {
 	return Response.ok(visitCrud.findFirstFreeTermByDoctor(id)).build();
     }
 

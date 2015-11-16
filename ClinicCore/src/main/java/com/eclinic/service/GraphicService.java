@@ -51,7 +51,7 @@ public interface GraphicService {
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	public Graphic deleteGraphicDoctor(Integer graphic_id_1, Integer related_doctor_id);
+	public Graphic deleteGraphicDoctor(Integer graphic_id_1, String related_doctor_id);
 
 	/**
 	 * Delete an existing Graphic entity

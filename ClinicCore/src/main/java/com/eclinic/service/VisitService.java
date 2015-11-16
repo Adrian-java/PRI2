@@ -38,7 +38,7 @@ public interface VisitService {
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	public Visit deleteVisitDoctor(Integer visit_id, Integer related_doctor_id);
+	public Visit deleteVisitDoctor(Integer visit_id, String related_doctor_id);
 
 	/**
 	 * Save an existing StatusOfVisit entity
@@ -50,7 +50,7 @@ public interface VisitService {
 	 * Delete an existing Receptionist entity
 	 * 
 	 */
-	public Visit deleteVisitReceptionist(Integer visit_id_1, Integer related_receptionist_id);
+	public Visit deleteVisitReceptionist(Integer visit_id_1, String related_receptionist_id);
 
 	/**
 	 * Delete an existing TypeOfVisit entity
@@ -96,7 +96,7 @@ public interface VisitService {
 	 * Delete an existing Patient entity
 	 * 
 	 */
-	public Visit deleteVisitPatient(Integer visit_id_4, Integer related_patient_id);
+	public Visit deleteVisitPatient(Integer visit_id_4, String related_patient_id);
 
 	/**
 	 * Save an existing Patient entity

@@ -58,7 +58,7 @@ public class PermissionMangament {
 		}
 	}
 
-	public Set<SystemUserPermissionView> showPermissionByPesel(String pesel) {
+	public Set<SystemUserPermissionView> showPermissionById(String pesel) {
 
 		return systemUserPermissionViewDao
 				.findSystemUserPermissionByPesel(pesel);

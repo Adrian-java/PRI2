@@ -16,7 +16,7 @@ public interface AdminService {
 	 * Save an existing SystemUser entity
 	 * 
 	 */
-	public Admin saveAdminSystemUser(Integer id, SystemUser related_systemuser);
+	public Admin saveAdminSystemUser(String id, SystemUser related_systemuser);
 
 	/**
 	 * Return a count of all Admin entity
@@ -26,7 +26,7 @@ public interface AdminService {
 
 	/**
 	 */
-	public Admin findAdminByPrimaryKey(Integer id_1);
+	public Admin findAdminByPrimaryKey(String id_1);
 
 	/**
 	 * Save an existing Admin entity
@@ -44,7 +44,7 @@ public interface AdminService {
 	 * Delete an existing SystemUser entity
 	 * 
 	 */
-	public Admin deleteAdminSystemUser(Integer admin_id, Integer related_systemuser_id);
+	public Admin deleteAdminSystemUser(String admin_id, String related_systemuser_id);
 
 	/**
 	 * Return all Admin entity

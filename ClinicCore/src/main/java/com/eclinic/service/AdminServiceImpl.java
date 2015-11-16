@@ -50,7 +50,7 @@ public class AdminServiceImpl implements AdminService {
 	 * 
 	 */
 	@Transactional
-	public Admin saveAdminSystemUser(Integer id, SystemUser related_systemuser) {
+	public Admin saveAdminSystemUser(String id, SystemUser related_systemuser) {
 		Admin admin = adminDAO.findAdminByPrimaryKey(id, -1, -1);
 		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
 
@@ -65,7 +65,6 @@ public class AdminServiceImpl implements AdminService {
 			existingsystemUser.setEmail(related_systemuser.getEmail());
 			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
 			existingsystemUser.setRole(related_systemuser.getRole());
-			existingsystemUser.setPesel(related_systemuser.getPesel());
 			related_systemuser = existingsystemUser;
 		} else {
 			related_systemuser = systemUserDAO.store(related_systemuser);
@@ -94,7 +93,7 @@ public class AdminServiceImpl implements AdminService {
 	/**
 	 */
 	@Transactional
-	public Admin findAdminByPrimaryKey(Integer id) {
+	public Admin findAdminByPrimaryKey(String id) {
 		return adminDAO.findAdminByPrimaryKey(id);
 	}
 
@@ -132,7 +131,7 @@ public class AdminServiceImpl implements AdminService {
 	 * 
 	 */
 	@Transactional
-	public Admin deleteAdminSystemUser(Integer admin_id, Integer related_systemuser_id) {
+	public Admin deleteAdminSystemUser(String admin_id, String related_systemuser_id) {
 		Admin admin = adminDAO.findAdminByPrimaryKey(admin_id, -1, -1);
 		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 

@@ -156,7 +156,7 @@ public class GraphicServiceImpl implements GraphicService {
 	 * 
 	 */
 	@Transactional
-	public Graphic deleteGraphicDoctor(Integer graphic_id, Integer related_doctor_id) {
+	public Graphic deleteGraphicDoctor(Integer graphic_id, String related_doctor_id) {
 		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(graphic_id, -1, -1);
 		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 

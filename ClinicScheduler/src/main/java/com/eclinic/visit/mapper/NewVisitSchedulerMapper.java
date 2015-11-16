@@ -11,7 +11,7 @@ public class NewVisitSchedulerMapper {
     
     private Time timeTo;
     
-    private Integer idDoctor;
+    private String idDoctor;
     
     private String specialization;
     
@@ -38,11 +38,11 @@ public class NewVisitSchedulerMapper {
         this.timeTo = timeTo;
     }
 
-    public Integer getIdDoctor() {
+    public String getIdDoctor() {
         return idDoctor;
     }
 
-    public void setIdDoctor(Integer idDoctor) {
+    public void setIdDoctor(String idDoctor) {
         this.idDoctor = idDoctor;
     }
 

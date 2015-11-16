@@ -93,7 +93,7 @@ public class ReceptionistDAOImpl extends AbstractJpaDao<Receptionist> implements
 	 *
 	 */
 	@Transactional
-	public Receptionist findReceptionistById(Integer id) throws DataAccessException {
+	public Receptionist findReceptionistById(String id) throws DataAccessException {
 
 		return findReceptionistById(id, -1, -1);
 	}
@@ -104,7 +104,7 @@ public class ReceptionistDAOImpl extends AbstractJpaDao<Receptionist> implements
 	 */
 
 	@Transactional
-	public Receptionist findReceptionistById(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public Receptionist findReceptionistById(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findReceptionistById", startResult, maxRows, id);
 			return (com.eclinic.domain.Receptionist) query.getSingleResult();
@@ -250,7 +250,7 @@ public class ReceptionistDAOImpl extends AbstractJpaDao<Receptionist> implements
 	 *
 	 */
 	@Transactional
-	public Receptionist findReceptionistByPrimaryKey(Integer id) throws DataAccessException {
+	public Receptionist findReceptionistByPrimaryKey(String id) throws DataAccessException {
 
 		return findReceptionistByPrimaryKey(id, -1, -1);
 	}
@@ -261,7 +261,7 @@ public class ReceptionistDAOImpl extends AbstractJpaDao<Receptionist> implements
 	 */
 
 	@Transactional
-	public Receptionist findReceptionistByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public Receptionist findReceptionistByPrimaryKey(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findReceptionistByPrimaryKey", startResult, maxRows, id);
 			return (com.eclinic.domain.Receptionist) query.getSingleResult();

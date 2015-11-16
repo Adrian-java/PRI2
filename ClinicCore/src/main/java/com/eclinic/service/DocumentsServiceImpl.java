@@ -195,7 +195,7 @@ public class DocumentsServiceImpl implements DocumentsService {
 	 * 
 	 */
 	@Transactional
-	public Documents deleteDocumentsPatient(Integer documents_id, Integer related_patient_id) {
+	public Documents deleteDocumentsPatient(Integer documents_id, String related_patient_id) {
 		Documents documents = documentsDAO.findDocumentsByPrimaryKey(documents_id, -1, -1);
 		Patient related_patient = patientDAO.findPatientByPrimaryKey(related_patient_id, -1, -1);
 
@@ -244,7 +244,7 @@ public class DocumentsServiceImpl implements DocumentsService {
 	 * 
 	 */
 	@Transactional
-	public Documents deleteDocumentsDoctor(Integer documents_id, Integer related_doctor_id) {
+	public Documents deleteDocumentsDoctor(Integer documents_id, String related_doctor_id) {
 		Documents documents = documentsDAO.findDocumentsByPrimaryKey(documents_id, -1, -1);
 		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 

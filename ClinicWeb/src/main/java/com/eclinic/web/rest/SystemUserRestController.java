@@ -49,6 +49,7 @@ import com.eclinic.service.ReceptionistService;
 import com.eclinic.service.SystemUserService;
 import com.eclinic.user.mangament.doctor.DoctorCrud;
 import com.eclinic.user.mangament.patient.PatientCrud;
+import com.eclinic.user.mangament.receptionist.ReceptionistCrud;
 
 /**
  * Spring Rest controller that handles CRUD requests for SystemUser entities
@@ -63,6 +64,9 @@ public class SystemUserRestController {
 
 	@Autowired
 	private DoctorCrud doctorCrud;
+	
+	@Autowired 
+	private ReceptionistCrud receptonistCrud;
 	/**
 	 * DAO injected by Spring that manages Permission entities
 	 * 
@@ -148,8 +152,8 @@ public class SystemUserRestController {
 	@GET
 	@Path("/role/{pesel}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getRoleByPesel(@PathParam("pesel") String pesel) {
-		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
+	public Response getRoleById(@PathParam("pesel") String pesel) {
+		SystemUser s = systemUserDAO.findSystemUserById(pesel);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("role", s.getRole());
 		return Response.ok(map).build();
@@ -167,9 +171,9 @@ public class SystemUserRestController {
 	@GET
 	@Path("/get/{pesel}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSystemUserByPesel(@PathParam("pesel") String pesel)
+	public Response getSystemUserById(@PathParam("pesel") String pesel)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
+		SystemUser s = systemUserDAO.findSystemUserById(pesel);
 		return Response.ok(
 				new ObjectMapper()
 						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
@@ -196,11 +200,11 @@ public class SystemUserRestController {
 	@GET
 	@Path("/permissions/{pesel}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadSystemUserPermissionsByPesel(
+	public Response loadSystemUserPermissionsById(
 			@PathParam("pesel") String pesel) {
-		Set<SystemUserPermissionView> showPermissionByPesel = patientCrud
-				.showPermissionByPesel(pesel);
-		return Response.ok(showPermissionByPesel).build();
+		Set<SystemUserPermissionView> showPermissionById = patientCrud
+				.showPermissionById(pesel);
+		return Response.ok(showPermissionById).build();
 	}
 
 
@@ -231,7 +235,7 @@ public class SystemUserRestController {
 	@Path("/{systemuser_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadSystemUser(
-			@PathParam("systemuser_id") Integer systemuser_id) {
+			@PathParam("systemuser_id") String systemuser_id) {
 		return Response.ok(
 				systemUserDAO.findSystemUserByPrimaryKey(systemuser_id))
 				.build();
@@ -246,7 +250,7 @@ public class SystemUserRestController {
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response saveSystemUser(SystemUser systemuser) {
-		Integer i = systemUserService.saveSystemUser(systemuser);
+		String i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
 
@@ -267,8 +271,8 @@ public class SystemUserRestController {
 	public Response saveSystemUserPatient(Patient patient,
 			@PathParam("pesel") String pesel) throws JsonGenerationException,
 			JsonMappingException, DataAccessException, IOException {
-		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getPatient().getId();
+		SystemUser su = systemUserDAO.findSystemUserById(pesel);
+		String id = su.getPatient().getId();
 		Patient p = patientDao.findPatientById(id);
 		if (p instanceof HibernateProxy) {
 			// Unwrap Proxy;
@@ -278,7 +282,7 @@ public class SystemUserRestController {
 			p = (Patient) li.getImplementation();
 		}
 		p.copy(patient);
-		Integer i = patientService.savePatient(p);
+		String i = patientService.savePatient(p);
 		return Response.ok(
 				new ObjectMapper()
 						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
@@ -293,8 +297,8 @@ public class SystemUserRestController {
 	public Response saveSystemUserDoctor(Doctor doctor,
 			@PathParam("pesel") String pesel) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getDoctor().getId();
+		SystemUser su = systemUserDAO.findSystemUserById(pesel);
+		String id = su.getDoctor().getId();
 		Doctor d = doctorDao.findDoctorById(id);
 		if (d instanceof HibernateProxy) {
 			// Unwrap Proxy;
@@ -304,7 +308,7 @@ public class SystemUserRestController {
 			d = (Doctor) li.getImplementation();
 		}
 		d.copy(doctor);
-		Integer i = doctorService.saveDoctor(d);
+		String i = doctorService.saveDoctor(d);
 		return Response.ok(
 				new ObjectMapper()
 						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
@@ -318,8 +322,8 @@ public class SystemUserRestController {
 	public Response saveSystemUserReceptionist(Receptionist receptionist,
 			@PathParam("pesel") String pesel) throws JsonGenerationException,
 			JsonMappingException, DataAccessException, IOException {
-		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getReceptionist().getId();
+		SystemUser su = systemUserDAO.findSystemUserById(pesel);
+		String id = su.getReceptionist().getId();
 		Receptionist r = receptionistDao.findReceptionistById(id);
 
 		if (r instanceof HibernateProxy) {
@@ -331,7 +335,7 @@ public class SystemUserRestController {
 		}
 
 		r.copy(receptionist);
-		Integer i = receptionistService.saveReceptionist(r);
+		String i = receptionistService.saveReceptionist(r);
 		return Response
 				.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
 						false).writeValueAsString(
@@ -349,7 +353,7 @@ public class SystemUserRestController {
 				|| systemuser.getReceptionist() != null) {
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
+		String i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
 
@@ -360,10 +364,10 @@ public class SystemUserRestController {
 	public Response confirmedPatient(@PathParam("pesel") String pesel)
 			throws JsonGenerationException, JsonMappingException,
 			DataAccessException, IOException {
-		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
+		SystemUser s = systemUserDAO.findSystemUserById(pesel);
 		if (s != null && s.getPatient() != null) {
 			s.getPatient().setConfirmed(1);
-			Integer i = systemUserService.saveSystemUser(s);
+			String i = systemUserService.saveSystemUser(s);
 
 			return Response.ok(
 					new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
@@ -392,7 +396,7 @@ public class SystemUserRestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newDoctor(SystemUser systemUser) {
-		return doctorCrud.addDoctor(systemUser);
+ 		return doctorCrud.addDoctor(systemUser);
 	}
 
 	@POST
@@ -400,19 +404,7 @@ public class SystemUserRestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newSystemUserReceptionist(SystemUser systemuser) {
-			if (systemuser.getDoctor() != null || systemuser.getAdmin() != null
-					|| systemuser.getPatient() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
-		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser
-				.getPesel());
-		if (s != null) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("status", "Podany pesel/login istnieje");
-			return Response.ok(map).build();
-		}
-		Integer i = systemUserService.saveSystemUserReceptionist(systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+			return receptonistCrud.addReceptionist(systemuser);
 	}
 
 	@POST
@@ -424,14 +416,14 @@ public class SystemUserRestController {
 					|| systemuser.getReceptionist() != null) {
 				return Response.status(Status.NOT_ACCEPTABLE).build();
 			}
-		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser
-				.getPesel());
+		SystemUser s = systemUserDAO.findSystemUserById(systemuser
+				.getId());
 		if (s != null) {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("status", "Podany pesel/login istnieje");
 			return Response.ok(map).build();
 		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
+		String i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
 
@@ -445,7 +437,7 @@ public class SystemUserRestController {
 	@DELETE
 	public void deleteSystemUser(@PathParam("pesel") String systemuser_id) {
 		SystemUser systemuser = systemUserDAO
-				.findSystemUserByPesel(systemuser_id);
+				.findSystemUserById(systemuser_id);
 		systemUserService.deleteSystemUser(systemuser);
 	}
 
@@ -517,8 +509,8 @@ public class SystemUserRestController {
 	@Path("/patient/{pesel}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPatientByPesel(@PathParam("pesel") String pesel) {
-		PatientView patient = patientCrud.getPatientByPesel(pesel);
+	public Response getPatientById(@PathParam("pesel") String pesel) {
+		PatientView patient = patientCrud.getPatientById(pesel);
 		return Response.ok(patient).build();
 	}
 
@@ -533,8 +525,8 @@ public class SystemUserRestController {
 	@Path("/doctor/{pesel}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDoctorByPesel(@PathParam("pesel") String pesel) {
-		DoctorView doctor = doctorCrud.getDoctorByPesel(pesel);
+	public Response getDoctorById(@PathParam("pesel") String pesel) {
+		DoctorView doctor = doctorCrud.getDoctorById(pesel);
 		return Response.ok(doctor).build();
 	}
 

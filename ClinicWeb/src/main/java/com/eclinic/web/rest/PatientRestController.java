@@ -115,7 +115,7 @@ public class PatientRestController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newPatientAddress(
-			@PathParam("patient_id") Integer patient_id, Address address) {
+			@PathParam("patient_id") String patient_id, Address address) {
 		patientService.savePatientAddress(patient_id, address);
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId()))
 				.build();
@@ -129,7 +129,7 @@ public class PatientRestController {
 	@GET
 	@Path("/{patient_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadPatient(@PathParam("patient_id") Integer patient_id) {
+	public Response loadPatient(@PathParam("patient_id") String patient_id) {
 		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id))
 				.build();
 	}
@@ -166,7 +166,7 @@ public class PatientRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{patient_id}")
 	@DELETE
-	public void deletePatient(@PathParam("patient_id") Integer patient_id) {
+	public void deletePatient(@PathParam("patient_id") String patient_id) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id);
 		patientService.deletePatient(patient);
 	}
@@ -212,7 +212,7 @@ public class PatientRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{patient_id}/address/{address_id}")
 	public Response deletePatientAddress(
-			@PathParam("patient_id") Integer patient_id,
+			@PathParam("patient_id") String patient_id,
 			@PathParam("related_address_id") Integer related_address_id) {
 		return Response.ok(
 				patientService.deletePatientAddress(patient_id,
@@ -228,7 +228,7 @@ public class PatientRestController {
 	@Path("/{patient_id}/address")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPatientAddress(
-			@PathParam("patient_id") Integer patient_id) {
+			@PathParam("patient_id") String patient_id) {
 		return Response.ok(
 				patientDAO.findPatientByPrimaryKey(patient_id).getAddress())
 				.build();
@@ -258,7 +258,7 @@ public class PatientRestController {
 	@Path("/{patient_id}/address")
 	@PUT
 	public Response savePatientAddress(
-			@PathParam("patient_id") Integer patient_id, Address address) {
+			@PathParam("patient_id") String patient_id, Address address) {
 		patientService.savePatientAddress(patient_id, address);
 		return Response.ok(addressDAO.findAddressByPrimaryKey(address.getId()))
 				.build();
@@ -267,7 +267,7 @@ public class PatientRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{patient_id}/address")
 	@PUT
-	public Response confirmedPatient(@PathParam("id") Integer id) {
+	public Response confirmedPatient(@PathParam("id") String id) {
 		Patient p = patientDAO.findPatientByPrimaryKey(id);
 		p.setConfirmed(1);
 		patientService.savePatient(p);

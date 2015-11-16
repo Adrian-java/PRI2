@@ -96,7 +96,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public Integer saveSystemUserPatient(SystemUser systemuser) {
+	public String saveSystemUserPatient(SystemUser systemuser) {
 		systemuser.getPatient().setSystemUser(systemuser);
 		systemuser
 				.setPassword(passwordEncoder.encode(systemuser.getPassword()));
@@ -111,8 +111,8 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public SystemUser deleteSystemUserReceptionist(Integer systemuser_id,
-			Integer related_receptionist_id) {
+	public SystemUser deleteSystemUserReceptionist(String systemuser_id,
+			String related_receptionist_id) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
 				systemuser_id, -1, -1);
 		Receptionist related_receptionist = receptionistDAO
@@ -136,7 +136,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public Integer saveSystemUserDoctor(SystemUser systemuser) {
+	public String saveSystemUserDoctor(SystemUser systemuser) {
 		systemuser
 		.setPassword(passwordEncoder.encode(systemuser.getPassword()));
 		systemuser.getDoctor().setSystemUser(systemuser);
@@ -221,8 +221,8 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public SystemUser deleteSystemUserDoctor(Integer systemuser_id,
-			Integer related_doctor_id) {
+	public SystemUser deleteSystemUserDoctor(String systemuser_id,
+			String related_doctor_id) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
 				systemuser_id, -1, -1);
 		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(
@@ -281,7 +281,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public Integer saveSystemUserReceptionist(SystemUser systemuser) {
+	public String saveSystemUserReceptionist(SystemUser systemuser) {
 		systemuser
 		.setPassword(passwordEncoder.encode(systemuser.getPassword()));
 		systemuser.getReceptionist().setSystemUser(systemuser);
@@ -295,7 +295,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public SystemUser saveSystemUserAdmin(Integer id, Admin related_admin) {
+	public SystemUser saveSystemUserAdmin(String id, Admin related_admin) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(id,
 				-1, -1);
 		Admin existingadmin = adminDAO.findAdminByPrimaryKey(related_admin
@@ -326,8 +326,8 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public SystemUser deleteSystemUserAdmin(Integer systemuser_id,
-			Integer related_admin_id) {
+	public SystemUser deleteSystemUserAdmin(String systemuser_id,
+			String related_admin_id) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
 				systemuser_id, -1, -1);
 		Admin related_admin = adminDAO.findAdminByPrimaryKey(related_admin_id,
@@ -349,7 +349,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 	/**
 	 */
 	@Transactional
-	public SystemUser findSystemUserByPrimaryKey(Integer id) {
+	public SystemUser findSystemUserByPrimaryKey(String id) {
 		return systemUserDAO.findSystemUserByPrimaryKey(id);
 	}
 
@@ -368,8 +368,8 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public SystemUser deleteSystemUserPatient(Integer systemuser_id,
-			Integer related_patient_id) {
+	public SystemUser deleteSystemUserPatient(String systemuser_id,
+			String related_patient_id) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
 				systemuser_id, -1, -1);
 		Patient related_patient = patientDAO.findPatientByPrimaryKey(
@@ -393,7 +393,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public Integer saveSystemUser(SystemUser systemuser) {
+	public String saveSystemUser(SystemUser systemuser) {
 		SystemUser existingSystemUser = systemUserDAO
 				.findSystemUserByPrimaryKey(systemuser.getId());
 		SystemUser su = null;
@@ -411,7 +411,6 @@ public class SystemUserServiceImpl implements SystemUserService {
 				existingSystemUser.setUnregisterDate(systemuser
 						.getUnregisterDate());
 				existingSystemUser.setRole(systemuser.getRole());
-				existingSystemUser.setPesel(systemuser.getPesel());
 			}
 			systemuser = systemUserDAO.store(existingSystemUser);
 		} else {
@@ -449,7 +448,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public SystemUser deleteSystemUserLoginHistory(Integer systemuser_id,
+	public SystemUser deleteSystemUserLoginHistory(String systemuser_id,
 			Integer related_loginhistory_id) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
 				systemuser_id, -1, -1);

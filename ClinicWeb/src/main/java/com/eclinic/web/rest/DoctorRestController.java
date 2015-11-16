@@ -137,7 +137,7 @@ public class DoctorRestController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newDoctorGraphics(
-			@PathParam("doctor_id") Integer doctor_id, Graphic graphic) {
+			@PathParam("doctor_id") String doctor_id, Graphic graphic) {
 		doctorService.saveDoctorGraphics(doctor_id, graphic);
 		return Response.ok(graphicDAO.findGraphicByPrimaryKey(graphic.getId()))
 				.build();
@@ -151,7 +151,7 @@ public class DoctorRestController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newDoctorVisitSchedulers(
-			@PathParam("doctor_id") Integer doctor_id,
+			@PathParam("doctor_id") String doctor_id,
 			VisitScheduler visitScheduler) {
 		doctorService.saveDoctorVisitSchedulers(doctor_id, visitScheduler);
 		return Response.ok(
@@ -168,7 +168,7 @@ public class DoctorRestController {
 	@Path("/{address_id}/patients")
 	@PUT
 	public Response saveDoctorGraphics(
-			@PathParam("doctor_id") Integer doctor_id, Graphic graphics) {
+			@PathParam("doctor_id") String doctor_id, Graphic graphics) {
 		doctorService.saveDoctorGraphics(doctor_id, graphics);
 		return Response
 				.ok(graphicDAO.findGraphicByPrimaryKey(graphics.getId()))
@@ -183,7 +183,7 @@ public class DoctorRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}")
 	@DELETE
-	public void deleteDoctor(@PathParam("doctor_id") Integer doctor_id) {
+	public void deleteDoctor(@PathParam("doctor_id") String doctor_id) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id);
 		doctorService.deleteDoctor(doctor);
 	}
@@ -196,7 +196,7 @@ public class DoctorRestController {
 	@GET
 	@Path("/{doctor_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadDoctor(@PathParam("doctor_id") Integer doctor_id) {
+	public Response loadDoctor(@PathParam("doctor_id") String doctor_id) {
 		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor_id)).build();
 	}
 
@@ -208,7 +208,7 @@ public class DoctorRestController {
 	@Path("/{doctor_id}/visitSchedulers")
 	@PUT
 	public Response saveDoctorVisitSchedulers(
-			@PathParam("doctor_id") Integer doctor_id,
+			@PathParam("doctor_id") String doctor_id,
 			VisitScheduler visitSchedulers) {
 		doctorService.saveDoctorVisitSchedulers(doctor_id, visitSchedulers);
 		return Response
@@ -262,7 +262,7 @@ public class DoctorRestController {
 	@Path("/{doctor_id}/specializations")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDoctorSpecializations(
-			@PathParam("doctor_id") Integer doctor_id) {
+			@PathParam("doctor_id") String doctor_id) {
 		return Response.ok(
 				doctorDAO.findDoctorByPrimaryKey(doctor_id)
 						.getSpecializations()).build();
@@ -277,7 +277,7 @@ public class DoctorRestController {
 	@GET
 	@Path("/{doctor_id}/graphics")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDoctorGraphics(@PathParam("doctor_id") Integer doctor_id) {
+	public Response getDoctorGraphics(@PathParam("doctor_id") String doctor_id) {
 		return Response.ok(
 				doctorDAO.findDoctorByPrimaryKey(doctor_id).getGraphics())
 				.build();
@@ -308,7 +308,7 @@ public class DoctorRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/visits")
 	@PUT
-	public Response saveDoctorVisits(@PathParam("doctor_id") Integer doctor_id,
+	public Response saveDoctorVisits(@PathParam("doctor_id") String doctor_id,
 			Visit visits) {
 		doctorService.saveDoctorVisits(doctor_id, visits);
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visits.getId()))
@@ -324,7 +324,7 @@ public class DoctorRestController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newDoctorSpecializations(
-			@PathParam("doctor_id") Integer doctor_id,
+			@PathParam("doctor_id") String doctor_id,
 			Specialization specialization) {
 		doctorService.saveDoctorSpecializations(doctor_id, specialization);
 		return Response.ok(
@@ -376,7 +376,7 @@ public class DoctorRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/specializations/{specialization_id}")
 	public Response deleteDoctorSpecializations(
-			@PathParam("doctor_id") Integer doctor_id,
+			@PathParam("doctor_id") String doctor_id,
 			@PathParam("related_specializations_id") Integer related_specializations_id) {
 		return Response.ok(
 				doctorService.deleteDoctorSpecializations(doctor_id,
@@ -392,7 +392,7 @@ public class DoctorRestController {
 	@Path("/{doctor_id}/specializations")
 	@PUT
 	public Response saveDoctorSpecializations(
-			@PathParam("doctor_id") Integer doctor_id,
+			@PathParam("doctor_id") String doctor_id,
 			Specialization specializations) {
 		doctorService.saveDoctorSpecializations(doctor_id, specializations);
 		return Response
@@ -410,7 +410,7 @@ public class DoctorRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/visits/{visit_id}")
 	public Response deleteDoctorVisits(
-			@PathParam("doctor_id") Integer doctor_id,
+			@PathParam("doctor_id") String doctor_id,
 			@PathParam("related_visits_id") Integer related_visits_id) {
 		return Response.ok(
 				doctorService.deleteDoctorVisits(doctor_id, related_visits_id))
@@ -441,7 +441,7 @@ public class DoctorRestController {
 	@Path("/{doctor_id}/visits")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newDoctorVisits(@PathParam("doctor_id") Integer doctor_id,
+	public Response newDoctorVisits(@PathParam("doctor_id") String doctor_id,
 			Visit visit) {
 		doctorService.saveDoctorVisits(doctor_id, visit);
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId()))
@@ -472,7 +472,7 @@ public class DoctorRestController {
 	@Path("/{doctor_id}/visitSchedulers")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDoctorVisitSchedulers(
-			@PathParam("doctor_id") Integer doctor_id) {
+			@PathParam("doctor_id") String doctor_id) {
 		return Response.ok(
 				doctorDAO.findDoctorByPrimaryKey(doctor_id)
 						.getVisitSchedulers()).build();
@@ -490,7 +490,7 @@ public class DoctorRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/graphics/{graphic_id}")
 	public Response deleteDoctorGraphics(
-			@PathParam("doctor_id") Integer doctor_id,
+			@PathParam("doctor_id") String doctor_id,
 			@PathParam("related_graphics_id") Integer related_graphics_id) {
 		return Response.ok(
 				doctorService.deleteDoctorGraphics(doctor_id,
@@ -506,7 +506,7 @@ public class DoctorRestController {
 	@GET
 	@Path("/{doctor_id}/visits")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDoctorVisits(@PathParam("doctor_id") Integer doctor_id) {
+	public Response getDoctorVisits(@PathParam("doctor_id") String doctor_id) {
 		return Response.ok(
 				doctorDAO.findDoctorByPrimaryKey(doctor_id).getVisits())
 				.build();
@@ -520,7 +520,7 @@ public class DoctorRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{doctor_id}/visitSchedulers/{visitscheduler_id}")
 	public Response deleteDoctorVisitSchedulers(
-			@PathParam("doctor_id") Integer doctor_id,
+			@PathParam("doctor_id") String doctor_id,
 			@PathParam("related_visitschedulers_id") Integer related_visitschedulers_id) {
 		return Response.ok(
 				doctorService.deleteDoctorVisitSchedulers(doctor_id,

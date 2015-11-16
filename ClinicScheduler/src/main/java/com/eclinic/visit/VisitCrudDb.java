@@ -61,7 +61,7 @@ public class VisitCrudDb implements VisitCrud {
 		return visitDao.findVisitByDoctor(doctor, -1, -1);
 	}
 
-	public Set<Visit> findVisitByPatient(Integer id) {
+	public Set<Visit> findVisitByPatient(String id) {
 		return visitDao.findVisitByPatient(id);
 	}
 
@@ -75,7 +75,7 @@ public class VisitCrudDb implements VisitCrud {
 		return findVisitByStatus;
 	}
 
-	public VisitProposal findFirstFreeTermByDoctor(Integer id) {
+	public VisitProposal findFirstFreeTermByDoctor(String id) {
 		Set<VisitProposal> findFreeTermsByDoctor = findFreeTermsByDoctor(id,
 				null);
 		return (findFreeTermsByDoctor.isEmpty() ? null : findFreeTermsByDoctor
@@ -89,7 +89,7 @@ public class VisitCrudDb implements VisitCrud {
 				: findFreeTermsBySpecialization.iterator().next());
 	}
 
-	public Set<VisitProposal> findFreeTermsByDoctor(Integer id,
+	public Set<VisitProposal> findFreeTermsByDoctor(String id,
 			Integer resultCounterMonth) {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(new Date());
@@ -202,5 +202,7 @@ public class VisitCrudDb implements VisitCrud {
 		visitsOfScheduler.createFreeVisits(visitSchedulers, visits);
 		return null;
 	}
+
+
 
 }

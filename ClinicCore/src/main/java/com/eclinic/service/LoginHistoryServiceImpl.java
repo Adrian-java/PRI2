@@ -50,7 +50,7 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
 	 * 
 	 */
 	@Transactional
-	public LoginHistory deleteLoginHistorySystemUser(Integer loginhistory_id, Integer related_systemuser_id) {
+	public LoginHistory deleteLoginHistorySystemUser(Integer loginhistory_id, String related_systemuser_id) {
 		LoginHistory loginhistory = loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id, -1, -1);
 		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
@@ -86,7 +86,6 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
 			existingsystemUser.setEmail(related_systemuser.getEmail());
 			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
 			existingsystemUser.setRole(related_systemuser.getRole());
-			existingsystemUser.setPesel(related_systemuser.getPesel());
 			related_systemuser = existingsystemUser;
 		} else {
 			related_systemuser = systemUserDAO.store(related_systemuser);

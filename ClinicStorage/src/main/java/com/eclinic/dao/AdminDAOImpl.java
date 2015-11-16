@@ -92,7 +92,7 @@ public class AdminDAOImpl extends AbstractJpaDao<Admin> implements AdminDAO {
 	 *
 	 */
 	@Transactional
-	public Admin findAdminById(Integer id) throws DataAccessException {
+	public Admin findAdminById(String id) throws DataAccessException {
 
 		return findAdminById(id, -1, -1);
 	}
@@ -103,7 +103,7 @@ public class AdminDAOImpl extends AbstractJpaDao<Admin> implements AdminDAO {
 	 */
 
 	@Transactional
-	public Admin findAdminById(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public Admin findAdminById(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findAdminById", startResult, maxRows, id);
 			return (com.eclinic.domain.Admin) query.getSingleResult();
@@ -117,7 +117,7 @@ public class AdminDAOImpl extends AbstractJpaDao<Admin> implements AdminDAO {
 	 *
 	 */
 	@Transactional
-	public Admin findAdminByPrimaryKey(Integer id) throws DataAccessException {
+	public Admin findAdminByPrimaryKey(String id) throws DataAccessException {
 
 		return findAdminByPrimaryKey(id, -1, -1);
 	}
@@ -128,7 +128,7 @@ public class AdminDAOImpl extends AbstractJpaDao<Admin> implements AdminDAO {
 	 */
 
 	@Transactional
-	public Admin findAdminByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public Admin findAdminByPrimaryKey(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findAdminByPrimaryKey", startResult, maxRows, id);
 			return (com.eclinic.domain.Admin) query.getSingleResult();

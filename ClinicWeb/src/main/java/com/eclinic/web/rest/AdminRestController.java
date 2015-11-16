@@ -121,7 +121,7 @@ public class AdminRestController {
 	@GET
 	@Path("/{admin_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadAdmin(@PathParam("admin_id") Integer admin_id) {
+	public Response loadAdmin(@PathParam("admin_id") String admin_id) {
 		return Response.ok(adminDAO.findAdminByPrimaryKey(admin_id)).build();
 	}
 
@@ -162,7 +162,7 @@ public class AdminRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{admin_id}")
 	@DELETE
-	public void deleteAdmin(@PathParam("admin_id") Integer admin_id) {
+	public void deleteAdmin(@PathParam("admin_id") String admin_id) {
 		Admin admin = adminDAO.findAdminByPrimaryKey(admin_id);
 		adminService.deleteAdmin(admin);
 	}

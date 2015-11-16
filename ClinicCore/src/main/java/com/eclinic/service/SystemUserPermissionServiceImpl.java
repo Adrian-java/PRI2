@@ -142,7 +142,6 @@ public class SystemUserPermissionServiceImpl implements
 			existingsystemUsers.setEmail(related_systemusers.getEmail());
 			existingsystemUsers.setUnregisterDate(related_systemusers.getUnregisterDate());
 			existingsystemUsers.setRole(related_systemusers.getRole());
-			existingsystemUsers.setPesel(related_systemusers.getPesel());
 			related_systemusers = existingsystemUsers;
 		} else {
 			related_systemusers = systemUserDAO.store(related_systemusers);
@@ -216,7 +215,7 @@ public class SystemUserPermissionServiceImpl implements
 	 * 
 	 */
 	@Transactional
-	public SystemUserPermission deleteSystemUserPermissionSystemUsers(Integer systemuserpermission_id, Integer related_systemusers_id) {
+	public SystemUserPermission deleteSystemUserPermissionSystemUsers(Integer systemuserpermission_id, String related_systemusers_id) {
 		SystemUser related_systemusers = systemUserDAO.findSystemUserByPrimaryKey(related_systemusers_id, -1, -1);
 
 		SystemUserPermission systemuserpermission = systemUserPermissionDAO.findSystemUserPermissionByPrimaryKey(systemuserpermission_id);

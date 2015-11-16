@@ -30,25 +30,25 @@ public interface AdminDAO extends JpaDao<Admin> {
 	 * JPQL Query - findAdminById
 	 *
 	 */
-	public Admin findAdminById(Integer id) throws DataAccessException;
+	public Admin findAdminById(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findAdminById
 	 *
 	 */
-	public Admin findAdminById(Integer id, int startResult, int maxRows) throws DataAccessException;
+	public Admin findAdminById(String id, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findAdminByPrimaryKey
 	 *
 	 */
-	public Admin findAdminByPrimaryKey(Integer id_1) throws DataAccessException;
+	public Admin findAdminByPrimaryKey(String id_1) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findAdminByPrimaryKey
 	 *
 	 */
-	public Admin findAdminByPrimaryKey(Integer id_1, int startResult, int maxRows) throws DataAccessException;
+	public Admin findAdminByPrimaryKey(String id_1, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findAllAdmins

@@ -77,7 +77,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient savePatientAddress(Integer id, Address related_address) {
+	public Patient savePatientAddress(String id, Address related_address) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
 		Address existingaddress = addressDAO.findAddressByPrimaryKey(related_address.getId());
 
@@ -109,7 +109,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientVisits(Integer patient_id, Integer related_visits_id) {
+	public Patient deletePatientVisits(String patient_id, Integer related_visits_id) {
 		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
 
 		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
@@ -128,7 +128,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient savePatientVisits(Integer id, Visit related_visits) {
+	public Patient savePatientVisits(String id, Visit related_visits) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
 		Visit existingvisits = visitDAO.findVisitByPrimaryKey(related_visits.getId());
 
@@ -168,7 +168,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient savePatientDocumentses(Integer id, Documents related_documentses) {
+	public Patient savePatientDocumentses(String id, Documents related_documentses) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
 		Documents existingdocumentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses.getId());
 
@@ -198,7 +198,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientAddress(Integer patient_id, Integer related_address_id) {
+	public Patient deletePatientAddress(String patient_id, Integer related_address_id) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
 		Address related_address = addressDAO.findAddressByPrimaryKey(related_address_id, -1, -1);
 
@@ -228,7 +228,7 @@ public class PatientServiceImpl implements PatientService {
 	/**
 	 */
 	@Transactional
-	public Patient findPatientByPrimaryKey(Integer id) {
+	public Patient findPatientByPrimaryKey(String id) {
 		return patientDAO.findPatientByPrimaryKey(id);
 	}
 
@@ -237,7 +237,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientSystemUser(Integer patient_id, Integer related_systemuser_id) {
+	public Patient deletePatientSystemUser(String patient_id, String related_systemuser_id) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
 		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
@@ -259,7 +259,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Integer savePatient(Patient patient) {
+	public String savePatient(Patient patient) {
 		Patient existingPatient = patientDAO.findPatientByPrimaryKey(patient.getId());
 
 		if (existingPatient != null) {
@@ -293,7 +293,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientDocumentses(Integer patient_id, Integer related_documentses_id) {
+	public Patient deletePatientDocumentses(String patient_id, Integer related_documentses_id) {
 		Documents related_documentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses_id, -1, -1);
 
 		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
@@ -312,7 +312,7 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient savePatientSystemUser(Integer id, SystemUser related_systemuser) {
+	public Patient savePatientSystemUser(String id, SystemUser related_systemuser) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
 		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
 
@@ -327,7 +327,6 @@ public class PatientServiceImpl implements PatientService {
 			existingsystemUser.setEmail(related_systemuser.getEmail());
 			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
 			existingsystemUser.setRole(related_systemuser.getRole());
-			existingsystemUser.setPesel(related_systemuser.getPesel());
 			related_systemuser = existingsystemUser;
 		} else {
 			related_systemuser = systemUserDAO.store(related_systemuser);

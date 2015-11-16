@@ -16,7 +16,7 @@ public interface LoginHistoryService {
 	 * Delete an existing SystemUser entity
 	 * 
 	 */
-	public LoginHistory deleteLoginHistorySystemUser(Integer loginhistory_id, Integer related_systemuser_id);
+	public LoginHistory deleteLoginHistorySystemUser(Integer loginhistory_id, String related_systemuser_id);
 
 	/**
 	 * Save an existing SystemUser entity

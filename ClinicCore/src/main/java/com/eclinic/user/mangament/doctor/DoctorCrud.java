@@ -13,7 +13,7 @@ public interface DoctorCrud {
 	
 	public Set<DoctorView> getAllDoctors();
 	
-	public DoctorView getDoctorByPesel(String pesel);
+	public DoctorView getDoctorById(String pesel);
 	
 	public Set<DoctorView> getDoctorsBySpecialization(String specialization);
 }

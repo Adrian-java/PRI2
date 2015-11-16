@@ -78,25 +78,25 @@ public interface DoctorViewDAO extends JpaDao<DoctorView> {
 	 * JPQL Query - findDoctorByPrimaryKey
 	 *
 	 */
-	public DoctorView findDoctorByPrimaryKey(Integer id) throws DataAccessException;
+	public DoctorView findDoctorByPrimaryKey(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findDoctorByPrimaryKey
 	 *
 	 */
-	public DoctorView findDoctorByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException;
+	public DoctorView findDoctorByPrimaryKey(String id, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findDoctorById
 	 *
 	 */
-	public DoctorView findDoctorById(Integer id_1) throws DataAccessException;
+	public DoctorView findDoctorById(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findDoctorById
 	 *
 	 */
-	public DoctorView findDoctorById(Integer id_1, int startResult, int maxRows) throws DataAccessException;
+	public DoctorView findDoctorById(String id_1, int startResult, int maxRows) throws DataAccessException;
 
 	public DoctorView findDoctorByPesel(String pesel) throws DataAccessException;
 	

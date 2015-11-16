@@ -58,7 +58,7 @@ public interface DocumentsService {
 	 * Delete an existing Patient entity
 	 * 
 	 */
-	public Documents deleteDocumentsPatient(Integer documents_id_1, Integer related_patient_id);
+	public Documents deleteDocumentsPatient(Integer documents_id_1, String related_patient_id);
 
 	/**
 	 * Save an existing DocumentsMapping entity
@@ -70,7 +70,7 @@ public interface DocumentsService {
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	public Documents deleteDocumentsDoctor(Integer documents_id_2, Integer related_doctor_id);
+	public Documents deleteDocumentsDoctor(Integer documents_id_2, String related_doctor_id);
 
 	/**
 	 * Return a count of all Documents entity

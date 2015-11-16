@@ -297,7 +297,7 @@ public class PermissionRestController {
 	@Path("/{permission_id}/systemUser/{systemuser_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadPermissionSystemUser(@PathParam("permission_id") Integer permission_id,
-			@PathParam("related_systemuser_id") Integer related_systemuser_id) {
+			@PathParam("related_systemuser_id") String related_systemuser_id) {
 		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
 		return Response.ok(systemuser).build();

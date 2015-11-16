@@ -59,7 +59,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	 * 
 	 */
 	@Transactional
-	public Receptionist deleteReceptionistVisits(Integer receptionist_id, Integer related_visits_id) {
+	public Receptionist deleteReceptionistVisits(String receptionist_id, Integer related_visits_id) {
 		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
 
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist_id, -1, -1);
@@ -106,7 +106,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	 * 
 	 */
 	@Transactional
-	public Receptionist saveReceptionistVisits(Integer id, Visit related_visits) {
+	public Receptionist saveReceptionistVisits(String id, Visit related_visits) {
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(id, -1, -1);
 		Visit existingvisits = visitDAO.findVisitByPrimaryKey(related_visits.getId());
 
@@ -136,7 +136,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	 * 
 	 */
 	@Transactional
-	public Receptionist saveReceptionistSystemUser(Integer id, SystemUser related_systemuser) {
+	public Receptionist saveReceptionistSystemUser(String id, SystemUser related_systemuser) {
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(id, -1, -1);
 		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
 
@@ -151,7 +151,6 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 			existingsystemUser.setEmail(related_systemuser.getEmail());
 			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
 			existingsystemUser.setRole(related_systemuser.getRole());
-			existingsystemUser.setPesel(related_systemuser.getPesel());
 			related_systemuser = existingsystemUser;
 		} else {
 			related_systemuser = systemUserDAO.store(related_systemuser);
@@ -182,7 +181,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	 * 
 	 */
 	@Transactional
-	public Integer saveReceptionist(Receptionist receptionist) {
+	public String saveReceptionist(Receptionist receptionist) {
 		Receptionist existingReceptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId());
 
 		if (existingReceptionist != null) {
@@ -206,7 +205,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	 * 
 	 */
 	@Transactional
-	public Receptionist deleteReceptionistSystemUser(Integer receptionist_id, Integer related_systemuser_id) {
+	public Receptionist deleteReceptionistSystemUser(String receptionist_id, String related_systemuser_id) {
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist_id, -1, -1);
 		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
@@ -226,7 +225,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	/**
 	 */
 	@Transactional
-	public Receptionist findReceptionistByPrimaryKey(Integer id) {
+	public Receptionist findReceptionistByPrimaryKey(String id) {
 		return receptionistDAO.findReceptionistByPrimaryKey(id);
 	}
 }

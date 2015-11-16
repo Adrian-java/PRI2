@@ -68,9 +68,9 @@ public class SystemUser implements UserDetails, Serializable {
 	@Column(name = "Id", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
+//	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
-	Integer id;
+	String id;
 	/**
 	 */
 
@@ -131,10 +131,6 @@ public class SystemUser implements UserDetails, Serializable {
 	/**
 	 */
 
-	@Column(name = "pesel", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	String pesel;
 
 	/**
 	 */
@@ -169,13 +165,13 @@ public class SystemUser implements UserDetails, Serializable {
 	java.util.Set<com.eclinic.domain.LoginHistory> loginHistory;
 	/**
 	 */
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
 	/**
 	 */
-	public Integer getId() {
+	public String getId() {
 		return this.id;
 	}
 
@@ -277,15 +273,15 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
-	}
-
-	/**
-	 */
-	public String getPesel() {
-		return this.pesel;
-	}
+//	public void setPesel(String pesel) {
+//		this.pesel = pesel;
+//	}
+//
+//	/**
+//	 */
+//	public String getPesel() {
+//		return this.pesel;
+//	}
 
 	/**
 	 */
@@ -371,7 +367,7 @@ public class SystemUser implements UserDetails, Serializable {
 		setEmail(that.getEmail());
 		setUnregisterDate(that.getUnregisterDate());
 		setRole(that.getRole());
-		setPesel(that.getPesel());
+//		setPesel(that.getsPesel());
 		setSystemUserPermission(that.getSystemUserPermission());
 		setPatient(that.getPatient());
 		setDoctor(that.getDoctor());
@@ -396,7 +392,6 @@ public class SystemUser implements UserDetails, Serializable {
 		buffer.append("email=[").append(email).append("] ");
 		buffer.append("unregisterDate=[").append(unregisterDate).append("] ");
 		buffer.append("role=[").append(role).append("] ");
-		buffer.append("pesel=[").append(pesel).append("] ");
 
 		return buffer.toString();
 	}
@@ -446,7 +441,7 @@ public class SystemUser implements UserDetails, Serializable {
 	@JsonIgnore
 	@Transient
 	public String getUsername() {
-		return pesel;
+		return id;
 	}
 
 	@JsonIgnore

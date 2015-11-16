@@ -18,7 +18,7 @@ public interface VisitSchedulerService {
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	public VisitScheduler deleteVisitSchedulerDoctor(Integer visitscheduler_id, Integer related_doctor_id);
+	public VisitScheduler deleteVisitSchedulerDoctor(Integer visitscheduler_id, String related_doctor_id);
 
 	/**
 	 * Delete an existing Specialization entity

@@ -29,7 +29,7 @@ public interface AddressService {
 	 * Delete an existing Patient entity
 	 * 
 	 */
-	public Address deleteAddressPatients(Integer address_id, Integer related_patients_id);
+	public Address deleteAddressPatients(Integer address_id, String related_patients_id);
 
 	/**
 	 * Load an existing Address entity

@@ -76,7 +76,7 @@ public interface SpecializationService {
 	 * Delete an existing Doctor entity
 	 * 
 	 */
-	public Specialization deleteSpecializationDoctor(Integer specialization_id_2, Integer related_doctor_id);
+	public Specialization deleteSpecializationDoctor(Integer specialization_id_2, String related_doctor_id);
 
 	/**
 	 * Save an existing Doctor entity
