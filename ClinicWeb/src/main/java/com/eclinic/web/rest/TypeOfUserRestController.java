@@ -138,7 +138,7 @@ public class TypeOfUserRestController {
 	@Path("/{typeofuser_id}/permission/{permission_id}")
 	public Response deleteTypeOfUserPermission(@PathParam("typeofuser_id") Integer typeofuser_id,
 			@PathParam("related_permission_id") Integer related_permission_id) {
-		return Response.ok(typeOfUserService.deleteTypeOfUserPermission(typeofuser_id, related_permission_id)).build();
+		return Response.ok(typeOfUserService.deleteTypeOfUserPermissions(typeofuser_id, related_permission_id)).build();
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class TypeOfUserRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newTypeOfUserPermission(@PathParam("typeofuser_id") Integer typeofuser_id,
 			Permission permission) {
-		typeOfUserService.saveTypeOfUserPermission(typeofuser_id, permission);
+		typeOfUserService.saveTypeOfUserPermissions(typeofuser_id, permission);
 		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission.getId())).build();
 	}
 
@@ -166,7 +166,7 @@ public class TypeOfUserRestController {
 	@PUT
 	public Response saveTypeOfUserPermission(@PathParam("typeofuser_id") Integer typeofuser_id,
 			Permission permission) {
-		typeOfUserService.saveTypeOfUserPermission(typeofuser_id, permission);
+		typeOfUserService.saveTypeOfUserPermissions(typeofuser_id, permission);
 		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission.getId())).build();
 	}
 

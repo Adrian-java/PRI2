@@ -3,41 +3,34 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.lang.StringBuilder;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import org.hibernate.annotations.Parameter;
+
+
+import javax.xml.bind.annotation.*;
+import javax.persistence.*;
 
 /**
  */
@@ -49,28 +42,30 @@ import org.springframework.security.core.userdetails.UserDetails;
 		@NamedQuery(name = "findSystemUserByEmail", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.email = ?1"),
 		@NamedQuery(name = "findSystemUserByEmailContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.email like ?1"),
 		@NamedQuery(name = "findSystemUserById", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.id = ?1"),
-		@NamedQuery(name = "findSystemUserByPesel", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.pesel = ?1"),
 		@NamedQuery(name = "findSystemUserByIsActive", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.isActive = ?1"),
 		@NamedQuery(name = "findSystemUserByPassword", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.password = ?1"),
 		@NamedQuery(name = "findSystemUserByPasswordContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.password like ?1"),
+		@NamedQuery(name = "findSystemUserByPesel", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.pesel = ?1"),
+		@NamedQuery(name = "findSystemUserByPeselContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.pesel like ?1"),
 		@NamedQuery(name = "findSystemUserByPrimaryKey", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.id = ?1"),
 		@NamedQuery(name = "findSystemUserByRegisterDate", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate = ?1"),
 		@NamedQuery(name = "findSystemUserByRegisterDateAfter", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate > ?1"),
 		@NamedQuery(name = "findSystemUserByRegisterDateBefore", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.registerDate < ?1"),
+		@NamedQuery(name = "findSystemUserByRole", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.role = ?1"),
+		@NamedQuery(name = "findSystemUserByRoleContaining", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.role like ?1"),
 		@NamedQuery(name = "findSystemUserByUnregisterDate", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate = ?1"),
 		@NamedQuery(name = "findSystemUserByUnregisterDateAfter", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate > ?1"),
 		@NamedQuery(name = "findSystemUserByUnregisterDateBefore", query = "select mySystemUser from SystemUser mySystemUser where mySystemUser.unregisterDate < ?1") })
 @Table(catalog = "eclinic", name = "System_User")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "wee/com/eclinic/domain", name = "SystemUser")
-@XmlRootElement(namespace = "wee/com/eclinic/domain")
+@XmlType(namespace = "Web/com/eclinic/domain", name = "SystemUser")
 public class SystemUser implements UserDetails, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 */
 
-	@Column(name = "Id", nullable = false)
+	@Column(name = "Id", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -80,19 +75,13 @@ public class SystemUser implements UserDetails, Serializable {
 	 */
 
 	@Column(name = "password", length = 20000, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
+	@Basic(fetch = FetchType.LAZY)
 	@XmlElement
 	String password;
-	
-	@Column(name = "pesel", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	private
-	String pesel;
 	/**
 	 */
 
-	@Column(name = "description", columnDefinition = "BLOB")
+	@Column(name = "description")
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
@@ -125,11 +114,6 @@ public class SystemUser implements UserDetails, Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String email;
-	
-	@Column(name = "role", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	String role;
 	/**
 	 */
 	@Temporal(TemporalType.DATE)
@@ -137,21 +121,52 @@ public class SystemUser implements UserDetails, Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	Calendar unregisterDate;
+	/**
+	 */
+
+	@Column(name = "role", length = 20)
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	String role;
+	/**
+	 */
+
+	@Column(name = "pesel", length = 20, nullable = false)
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	String pesel;
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumns({ @JoinColumn(name = "id_worker", referencedColumnName = "Id", nullable = false) })
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({ @JoinColumn(name = "id_system_user_permission", referencedColumnName = "Id") })
 	@XmlTransient
-	Worker worker;
+	SystemUserPermission systemUserPermission;
 	/**
 	 */
+	@OneToOne(mappedBy = "systemUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@XmlElement(name = "", namespace = "")
+	Patient patient;
+	/**
+	 */
+	@OneToOne(mappedBy = "systemUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@XmlElement(name = "", namespace = "")
+	Doctor doctor;
+	/**
+	 */
+	@OneToOne(mappedBy = "systemUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@XmlElement(name = "", namespace = "")
+	Receptionist receptionist;
+	/**
+	 */
+	@OneToOne(mappedBy = "systemUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@XmlElement(name = "", namespace = "")
+	Admin admin;
 
-	
 	@OneToMany(mappedBy = "systemUser", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@XmlElement(name = "", namespace = "")
 	private
-//	@XmlElement(name = "", namespace = "")
-	java.util.Set<SystemUserPermission> systemUserPermission;
+	java.util.Set<com.eclinic.domain.LoginHistory> loginHistory;
 	/**
 	 */
 	public void setId(Integer id) {
@@ -164,7 +179,6 @@ public class SystemUser implements UserDetails, Serializable {
 		return this.id;
 	}
 
-
 	/**
 	 */
 	public void setPassword(String password) {
@@ -173,7 +187,6 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
-	@JsonIgnore
 	public String getPassword() {
 		return this.password;
 	}
@@ -222,7 +235,6 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
-	@JsonIgnore
 	public Boolean getChangedPassword() {
 		return this.changedPassword;
 	}
@@ -247,25 +259,98 @@ public class SystemUser implements UserDetails, Serializable {
 
 	/**
 	 */
-	@JsonIgnore	
 	public Calendar getUnregisterDate() {
 		return this.unregisterDate;
 	}
 
 	/**
 	 */
-	public void setWorker(Worker worker) {
-		this.worker = worker;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	/**
 	 */
-	//@JsonIgnore
-	@JsonProperty("worker")
-	public Worker getWorker() {
-		return worker;
+	public String getRole() {
+		return this.role;
 	}
 
+	/**
+	 */
+	public void setPesel(String pesel) {
+		this.pesel = pesel;
+	}
+
+	/**
+	 */
+	public String getPesel() {
+		return this.pesel;
+	}
+
+	/**
+	 */
+	public void setSystemUserPermission(SystemUserPermission systemUserPermission) {
+		this.systemUserPermission = systemUserPermission;
+	}
+
+	/**
+	 */
+	@JsonIgnore
+	public SystemUserPermission getSystemUserPermission() {
+		return systemUserPermission;
+	}
+
+	/**
+	 */
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	/**
+	 */
+	@JsonIgnore
+	public Patient getPatient() {
+		return patient;
+	}
+
+	/**
+	 */
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+	}
+
+	/**
+	 */
+	@JsonIgnore
+	public Doctor getDoctor() {
+		return doctor;
+	}
+
+	/**
+	 */
+	public void setReceptionist(Receptionist receptionist) {
+		this.receptionist = receptionist;
+	}
+
+	/**
+	 */
+	@JsonIgnore
+	public Receptionist getReceptionist() {
+		return receptionist;
+	}
+
+	/**
+	 */
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	/**
+	 */
+	@JsonIgnore
+	public Admin getAdmin() {
+		return admin;
+	}
 
 	/**
 	 */
@@ -285,7 +370,13 @@ public class SystemUser implements UserDetails, Serializable {
 		setChangedPassword(that.getChangedPassword());
 		setEmail(that.getEmail());
 		setUnregisterDate(that.getUnregisterDate());
-		setWorker(that.getWorker());
+		setRole(that.getRole());
+		setPesel(that.getPesel());
+		setSystemUserPermission(that.getSystemUserPermission());
+		setPatient(that.getPatient());
+		setDoctor(that.getDoctor());
+		setReceptionist(that.getReceptionist());
+		setAdmin(that.getAdmin());
 	}
 
 	/**
@@ -304,6 +395,8 @@ public class SystemUser implements UserDetails, Serializable {
 		buffer.append("changedPassword=[").append(changedPassword).append("] ");
 		buffer.append("email=[").append(email).append("] ");
 		buffer.append("unregisterDate=[").append(unregisterDate).append("] ");
+		buffer.append("role=[").append(role).append("] ");
+		buffer.append("pesel=[").append(pesel).append("] ");
 
 		return buffer.toString();
 	}
@@ -326,14 +419,21 @@ public class SystemUser implements UserDetails, Serializable {
 		if (!(obj instanceof SystemUser))
 			return false;
 		SystemUser equalCheck = (SystemUser) obj;
-		if ((id == null && equalCheck.id != null)
-				|| (id != null && equalCheck.id == null))
+		if ((id == null && equalCheck.id != null) || (id != null && equalCheck.id == null))
 			return false;
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
 	}
 
+	public java.util.Set<com.eclinic.domain.LoginHistory> getLoginHistory() {
+		return loginHistory;
+	}
+
+	public void setLoginHistory(java.util.Set<com.eclinic.domain.LoginHistory> loginHistory) {
+		this.loginHistory = loginHistory;
+	}
+	
 	@JsonIgnore
 	@Transient
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -375,30 +475,4 @@ public class SystemUser implements UserDetails, Serializable {
 	}
 
 	
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public String getPesel() {
-		return pesel;
-	}
-
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
-	}
-
-	public //	@XmlElement(name = "", namespace = "")
-	java.util.Set<SystemUserPermission> getSystemUserPermission() {
-		return systemUserPermission;
-	}
-
-	public void setSystemUserPermission(//	@XmlElement(name = "", namespace = "")
-	java.util.Set<SystemUserPermission> systemUserPermission) {
-		this.systemUserPermission = systemUserPermission;
-	}
-
 }

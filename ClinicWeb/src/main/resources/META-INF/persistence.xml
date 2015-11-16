@@ -11,7 +11,6 @@
 		<class>com.eclinic.domain.Graphic</class>
 		<class>com.eclinic.domain.TypeOfUser</class>
 		<class>com.eclinic.domain.LoginHistory</class>
-		<class>com.eclinic.domain.Worker</class>
 		<class>com.eclinic.domain.Address</class>
 		<class>com.eclinic.domain.Receptionist</class>
 		<class>com.eclinic.domain.TypeOfVisit</class>

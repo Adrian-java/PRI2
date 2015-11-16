@@ -1,16 +1,20 @@
 package com.eclinic.service;
 
 import com.eclinic.dao.AddressDAO;
+import com.eclinic.dao.ClinicDAO;
 import com.eclinic.dao.PatientDAO;
+
 import com.eclinic.domain.Address;
+import com.eclinic.domain.Clinic;
 import com.eclinic.domain.Patient;
 
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -30,6 +34,13 @@ public class AddressServiceImpl implements AddressService {
 	private AddressDAO addressDAO;
 
 	/**
+	 * DAO injected by Spring that manages Clinic entities
+	 * 
+	 */
+	@Autowired
+	private ClinicDAO clinicDAO;
+
+	/**
 	 * DAO injected by Spring that manages Patient entities
 	 * 
 	 */
@@ -44,30 +55,22 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	/**
-	 * Save an existing Address entity
+	 * Return all Address entity
 	 * 
 	 */
 	@Transactional
-	@PreAuthorize("hasRole('admin')")
-	public Integer saveAddress(Address address) {
-		Address existingAddress = addressDAO.findAddressByPrimaryKey(address.getId());
+	public List<Address> findAllAddresss(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<Address>(addressDAO.findAllAddresss(startResult, maxRows));
+	}
 
-		if (existingAddress != null) {
-			if (existingAddress != address) {
-				existingAddress.setId(address.getId());
-				existingAddress.setCity(address.getCity());
-				existingAddress.setCountryCode(address.getCountryCode());
-				existingAddress.setProvince(address.getProvince());
-				existingAddress.setCountry(address.getCountry());
-				existingAddress.setCountryCodeCity(address.getCountryCodeCity());
-				existingAddress.setHomeNr(address.getHomeNr());
-			}
-			address = addressDAO.store(existingAddress);
-		} else {
-			address = addressDAO.store(address);
-		}
+	/**
+	 * Delete an existing Address entity
+	 * 
+	 */
+	@Transactional
+	public void deleteAddress(Address address) {
+		addressDAO.remove(address);
 		addressDAO.flush();
-		return address.getId();
 	}
 
 	/**
@@ -90,12 +93,12 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	/**
-	 * Return all Address entity
+	 * Load an existing Address entity
 	 * 
 	 */
 	@Transactional
-	public List<Address> findAllAddresss(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Address>(addressDAO.findAllAddresss(startResult, maxRows));
+	public Set<Address> loadAddresss() {
+		return addressDAO.findAllAddresss();
 	}
 
 	/**
@@ -108,22 +111,30 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	/**
-	 * Delete an existing Address entity
+	 * Save an existing Clinic entity
 	 * 
 	 */
 	@Transactional
-	public void deleteAddress(Address address) {
-		addressDAO.remove(address);
-		addressDAO.flush();
-	}
+	public Address saveAddressClinics(Integer id, Clinic related_clinics) {
+		Address address = addressDAO.findAddressByPrimaryKey(id, -1, -1);
+		Clinic existingclinics = clinicDAO.findClinicByPrimaryKey(related_clinics.getId());
 
-	/**
-	 * Load an existing Address entity
-	 * 
-	 */
-	@Transactional
-	public Set<Address> loadAddresss() {
-		return addressDAO.findAllAddresss();
+		// copy into the existing record to preserve existing relationships
+		if (existingclinics != null) {
+			existingclinics.setId(related_clinics.getId());
+			existingclinics.setName(related_clinics.getName());
+			related_clinics = existingclinics;
+		}
+
+		related_clinics.setAddress(address);
+		address.getClinics().add(related_clinics);
+		related_clinics = clinicDAO.store(related_clinics);
+		clinicDAO.flush();
+
+		address = addressDAO.store(address);
+		addressDAO.flush();
+
+		return address;
 	}
 
 	/**
@@ -141,7 +152,6 @@ public class AddressServiceImpl implements AddressService {
 			existingpatients.setName(related_patients.getName());
 			existingpatients.setSurname(related_patients.getSurname());
 			existingpatients.setDateOfBirth(related_patients.getDateOfBirth());
-//			existingpatients.setEMail(related_patients.getEMail());
 			existingpatients.setPhoneNr(related_patients.getPhoneNr());
 			existingpatients.setConfirmed(related_patients.getConfirmed());
 			related_patients = existingpatients;
@@ -154,6 +164,51 @@ public class AddressServiceImpl implements AddressService {
 
 		address = addressDAO.store(address);
 		addressDAO.flush();
+
+		return address;
+	}
+
+	/**
+	 * Save an existing Address entity
+	 * 
+	 */
+	@Transactional
+	public Integer saveAddress(Address address) {
+		Address existingAddress = addressDAO.findAddressByPrimaryKey(address.getId());
+
+		if (existingAddress != null) {
+			if (existingAddress != address) {
+				existingAddress.setId(address.getId());
+				existingAddress.setCity(address.getCity());
+				existingAddress.setCountryCode(address.getCountryCode());
+				existingAddress.setProvince(address.getProvince());
+				existingAddress.setCountry(address.getCountry());
+				existingAddress.setCountryCodeCity(address.getCountryCodeCity());
+				existingAddress.setHomeNr(address.getHomeNr());
+			}
+			address = addressDAO.store(existingAddress);
+		} else {
+			address = addressDAO.store(address);
+		}
+		addressDAO.flush();
+		return address.getId();
+	}
+
+	/**
+	 * Delete an existing Clinic entity
+	 * 
+	 */
+	@Transactional
+	public Address deleteAddressClinics(Integer address_id, Integer related_clinics_id) {
+		Clinic related_clinics = clinicDAO.findClinicByPrimaryKey(related_clinics_id, -1, -1);
+
+		Address address = addressDAO.findAddressByPrimaryKey(address_id, -1, -1);
+
+		related_clinics.setAddress(null);
+		address.getClinics().remove(related_clinics);
+
+		clinicDAO.remove(related_clinics);
+		clinicDAO.flush();
 
 		return address;
 	}

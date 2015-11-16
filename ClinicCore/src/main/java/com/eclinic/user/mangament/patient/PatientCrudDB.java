@@ -1,6 +1,9 @@
 package com.eclinic.user.mangament.patient;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +24,6 @@ import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.view.PatientViewDAO;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.Worker;
 import com.eclinic.domain.view.PatientView;
 import com.eclinic.domain.view.SystemUserPermissionView;
 import com.eclinic.service.PatientService;
@@ -46,29 +48,38 @@ public class PatientCrudDB implements PatientCrud {
 
 	public Response addPatient(SystemUser systemUser) {
 
-		if (systemUser.getWorker() != null) {
-			if (systemUser.getEmail() == null)
-				systemUser.setEmail("em");
-			Worker w = systemUser.getWorker();
-			if (w.getDoctor() != null || w.getAdmin() != null
-					|| w.getReceptionist() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
+		if (systemUser.getEmail() == null)
+			systemUser.setEmail("em");
+		if (systemUser.getDoctor() != null || systemUser.getAdmin() != null
+				|| systemUser.getReceptionist() != null) {
+			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
-
+		Map<String, String> map = new HashMap<String, String>();
 		SystemUser s = systemUserDAO.findSystemUserByPesel(systemUser
 				.getPesel());
 		if (s != null) {
-			Map<String, String> map = new HashMap<String, String>();
+
 			map.put("status", "Podany pesel/login istnieje");
 			return Response.ok(map).build();
 		}
 		// systemUser.setIsActive(true);
 		// wysylka maila automatycznie
-		Integer i = systemUserService.saveSystemUser(systemUser);
-		systemUser.setId(i);
-		permissionMangament.setUserPermission(systemUser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+		systemUser.getPatient().setConfirmed(0);
+		systemUser.setChangedPassword(false);
+		systemUser.setIsActive(true);
+		systemUser.setRole("doctor");
+		Calendar c = new GregorianCalendar();
+		c.setTime(new Date());
+		systemUser.setRegisterDate(c);
+		try {
+			Integer i = systemUserService.saveSystemUserPatient(systemUser);
+			systemUser.setId(i);
+			// permissionMangament.setUserPermission(systemUser);
+			map.put("status", "ok");
+			return Response.ok(map).build();
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
 	}
 
 	public Set<SystemUserPermissionView> showPermissionByPesel(String pesel) {
@@ -77,7 +88,7 @@ public class PatientCrudDB implements PatientCrud {
 
 	public Response updatePatient(SystemUser systemUser, String pesel) {
 		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getWorker().getPatient().getId();
+		Integer id = su.getPatient().getId();
 		Patient p = patientDao.findPatientById(id);
 		if (p instanceof HibernateProxy) {
 			HibernateProxy proxy = (HibernateProxy) p;

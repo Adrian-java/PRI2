@@ -2,6 +2,9 @@ package com.eclinic.user.mangament.doctor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,7 +30,6 @@ import com.eclinic.dao.view.DoctorViewDAO;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.Worker;
 import com.eclinic.domain.view.DoctorView;
 import com.eclinic.domain.view.SystemUserPermissionView;
 import com.eclinic.service.DoctorService;
@@ -52,25 +54,33 @@ public class DoctorCrudDB implements DoctorCrud {
 	@Autowired
 	private SpecializationDAO specializationDao;
 
-	public Response AddDoctor(SystemUser systemUser) {
-		if (systemUser.getWorker() != null) {
-			Worker w = systemUser.getWorker();
-			if (w.getPatient() != null || w.getAdmin() != null
-					|| w.getReceptionist() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
+	public Response addDoctor(SystemUser systemUser) {
+		if (systemUser.getPatient() != null || systemUser.getAdmin() != null
+				|| systemUser.getReceptionist() != null) {
+			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
+		Map<String, String> map = new HashMap<String, String>();
 		SystemUser s = systemUserDAO.findSystemUserByPesel(systemUser
 				.getPesel());
 		if (s != null) {
-			Map<String, String> map = new HashMap<String, String>();
+
 			map.put("status", "Podany pesel/login istnieje");
 			return Response.ok(map).build();
 		}
-		Integer i = systemUserService.saveSystemUser(systemUser);
-		systemUser.setId(i);
-		permissionMangament.setUserPermission(systemUser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+		systemUser.setChangedPassword(false);
+		systemUser.setIsActive(true);
+		systemUser.setRole("doctor");
+		Calendar c = new GregorianCalendar();
+		c.setTime(new Date());
+		systemUser.setRegisterDate(c);
+		try {
+			map.put("status","ok");
+			Integer i = systemUserService.saveSystemUserDoctor(systemUser);
+			return Response.ok(map)
+					.build();
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
 	}
 
 	public Set<SystemUserPermissionView> showPermissionByPesel(String pesel) {
@@ -79,7 +89,7 @@ public class DoctorCrudDB implements DoctorCrud {
 
 	public Response updatePatient(SystemUser systemUser, String pesel) {
 		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getWorker().getPatient().getId();
+		Integer id = su.getPatient().getId();
 		Doctor d = doctorDao.findDoctorById(id);
 		if (d instanceof HibernateProxy) {
 			HibernateProxy proxy = (HibernateProxy) d;
@@ -119,11 +129,12 @@ public class DoctorCrudDB implements DoctorCrud {
 	}
 
 	public Set<DoctorView> getDoctorsBySpecialization(String specialization) {
-		Set<Specialization> sp = specializationDao.findSpecializationByName(specialization);
+		Set<Specialization> sp = specializationDao
+				.findSpecializationByName(specialization);
 		List<DoctorView> dv = new ArrayList<DoctorView>();
 		Set<DoctorView> set = new HashSet<DoctorView>();
 		Iterator<Specialization> i = sp.iterator();
-		while(i.hasNext()){
+		while (i.hasNext()) {
 			Integer id = i.next().getDoctor().getId();
 			DoctorView findDoctorById = doctorViewDao.findDoctorById(id);
 			dv.add(findDoctorById);

@@ -1,18 +1,20 @@
 package com.eclinic.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.io.Serializable;
 import java.lang.StringBuilder;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.xml.bind.annotation.*;
 import javax.persistence.*;
@@ -33,8 +35,9 @@ import javax.persistence.*;
 		@NamedQuery(name = "findReceptionistBySurnameContaining", query = "select myReceptionist from Receptionist myReceptionist where myReceptionist.surname like ?1") })
 @Table(catalog = "eclinic", name = "Receptionist")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "wee/com/eclinic/domain", name = "Receptionist")
-@XmlRootElement(namespace = "wee/com/eclinic/domain")
+@XmlType(namespace = "Web/com/eclinic/domain", name = "Receptionist")
+@XmlRootElement(namespace = "Web/com/eclinic/domain")
+@GenericGenerator(name = "foreign", strategy = "foreign", parameters = { @Parameter(name = "property", value = "systemUser") })
 public class Receptionist implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -44,8 +47,8 @@ public class Receptionist implements Serializable {
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
+	@GeneratedValue(generator = "foreign")
 	Integer id;
 	/**
 	 */
@@ -71,22 +74,23 @@ public class Receptionist implements Serializable {
 	/**
 	 */
 
-	@Column(name = "access", nullable = false, columnDefinition = "BLOB")
+	@Column(name = "access", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	String access;
+	byte[] access;
 
 	/**
 	 */
-	@OneToMany(mappedBy = "receptionist", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Visit> visits;
+	@PrimaryKeyJoinColumn
+	@OneToOne(fetch = FetchType.LAZY, optional=false)
+	@XmlElement(name = "", namespace = "")
+	SystemUser systemUser;
 	/**
 	 */
 	@OneToMany(mappedBy = "receptionist", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Worker> workers;
+	@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Visit> visits;
 
 	/**
 	 */
@@ -138,14 +142,27 @@ public class Receptionist implements Serializable {
 
 	/**
 	 */
-	public void setAccess(String access) {
+	public void setAccess(byte[] access) {
 		this.access = access;
 	}
 
 	/**
 	 */
-	public String getAccess() {
+	public byte[] getAccess() {
 		return this.access;
+	}
+
+	/**
+	 */
+	public void setSystemUser(SystemUser systemUser) {
+		this.systemUser = systemUser;
+	}
+
+	/**
+	 */
+	@JsonIgnore
+	public SystemUser getSystemUser() {
+		return systemUser;
 	}
 
 	/**
@@ -166,22 +183,6 @@ public class Receptionist implements Serializable {
 
 	/**
 	 */
-	public void setWorkers(Set<Worker> workers) {
-		this.workers = workers;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<Worker> getWorkers() {
-		if (workers == null) {
-			workers = new java.util.LinkedHashSet<com.eclinic.domain.Worker>();
-		}
-		return workers;
-	}
-
-	/**
-	 */
 	public Receptionist() {
 	}
 
@@ -190,20 +191,13 @@ public class Receptionist implements Serializable {
 	 *
 	 */
 	public void copy(Receptionist that) {
-		if (that.getId() != null)
-			setId(that.getId());
-		if (that.getName() != null)
-			setName(that.getName());
-		if (that.getSurname() != null)
-			setSurname(that.getSurname());
-		if (that.getPhoneNr() != null)
-			setPhoneNr(that.getPhoneNr());
-		if (that.getAccess() != null)
-			setAccess(that.getAccess());
-		setVisits(new java.util.LinkedHashSet<com.eclinic.domain.Visit>(
-				that.getVisits()));
-		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(
-				that.getWorkers()));
+		setId(that.getId());
+		setName(that.getName());
+		setSurname(that.getSurname());
+		setPhoneNr(that.getPhoneNr());
+		setAccess(that.getAccess());
+		setSystemUser(that.getSystemUser());
+		setVisits(new java.util.LinkedHashSet<com.eclinic.domain.Visit>(that.getVisits()));
 	}
 
 	/**
@@ -241,8 +235,7 @@ public class Receptionist implements Serializable {
 		if (!(obj instanceof Receptionist))
 			return false;
 		Receptionist equalCheck = (Receptionist) obj;
-		if ((id == null && equalCheck.id != null)
-				|| (id != null && equalCheck.id == null))
+		if ((id == null && equalCheck.id != null) || (id != null && equalCheck.id == null))
 			return false;
 		if (id != null && !id.equals(equalCheck.id))
 			return false;

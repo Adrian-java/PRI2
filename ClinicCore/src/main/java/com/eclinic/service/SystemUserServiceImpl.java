@@ -1,11 +1,19 @@
 package com.eclinic.service;
 
-import com.eclinic.dao.PermissionDAO;
+import com.eclinic.dao.AdminDAO;
+import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.LoginHistoryDAO;
+import com.eclinic.dao.PatientDAO;
+import com.eclinic.dao.ReceptionistDAO;
 import com.eclinic.dao.SystemUserDAO;
-import com.eclinic.dao.WorkerDAO;
-import com.eclinic.domain.Permission;
+import com.eclinic.dao.SystemUserPermissionDAO;
+import com.eclinic.domain.Admin;
+import com.eclinic.domain.Doctor;
+import com.eclinic.domain.LoginHistory;
+import com.eclinic.domain.Patient;
+import com.eclinic.domain.Receptionist;
 import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.Worker;
+import com.eclinic.domain.SystemUserPermission;
 
 import java.util.List;
 import java.util.Set;
@@ -24,18 +32,54 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SystemUserServiceImpl implements SystemUserService {
 
+	/**
+	 * DAO injected by Spring that manages Admin entities
+	 * 
+	 */
 	@Autowired
-	private PermissionDAO permissionDAO;
+	private AdminDAO adminDAO;
 
+	/**
+	 * DAO injected by Spring that manages Doctor entities
+	 * 
+	 */
+	@Autowired
+	private DoctorDAO doctorDAO;
+
+	/**
+	 * DAO injected by Spring that manages LoginHistory entities
+	 * 
+	 */
+	@Autowired
+	private LoginHistoryDAO loginHistoryDAO;
+
+	/**
+	 * DAO injected by Spring that manages Patient entities
+	 * 
+	 */
+	@Autowired
+	private PatientDAO patientDAO;
+
+	/**
+	 * DAO injected by Spring that manages Receptionist entities
+	 * 
+	 */
+	@Autowired
+	private ReceptionistDAO receptionistDAO;
+
+	/**
+	 * DAO injected by Spring that manages SystemUser entities
+	 * 
+	 */
 	@Autowired
 	private SystemUserDAO systemUserDAO;
 
+	/**
+	 * DAO injected by Spring that manages SystemUserPermission entities
+	 * 
+	 */
 	@Autowired
-	private WorkerDAO workerDAO;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
+	private SystemUserPermissionDAO systemUserPermissionDAO;
 
 	/**
 	 * Instantiates a new SystemUserServiceImpl.
@@ -44,110 +88,262 @@ public class SystemUserServiceImpl implements SystemUserService {
 	public SystemUserServiceImpl() {
 	}
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	/**
-	 * Save an existing Worker entity
+	 * Save an existing Patient entity
 	 * 
 	 */
 	@Transactional
-	public SystemUser saveSystemUserWorker(Integer id, Worker related_worker) {
-		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(id, -1, -1);
-		Worker existingworker = workerDAO.findWorkerByPrimaryKey(related_worker.getId());
+	public Integer saveSystemUserPatient(SystemUser systemuser) {
+		systemuser.getPatient().setSystemUser(systemuser);
+		systemuser
+				.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+		SystemUser su = systemUserDAO.store(systemuser);
+		systemUserDAO.flush();
+		return su.getId();
+
+	}
+
+	/**
+	 * Delete an existing Receptionist entity
+	 * 
+	 */
+	@Transactional
+	public SystemUser deleteSystemUserReceptionist(Integer systemuser_id,
+			Integer related_receptionist_id) {
+		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
+				systemuser_id, -1, -1);
+		Receptionist related_receptionist = receptionistDAO
+				.findReceptionistByPrimaryKey(related_receptionist_id, -1, -1);
+
+		systemuser.setReceptionist(null);
+		systemuser = systemUserDAO.store(systemuser);
+		systemUserDAO.flush();
+
+		related_receptionist = receptionistDAO.store(related_receptionist);
+		receptionistDAO.flush();
+
+		receptionistDAO.remove(related_receptionist);
+		receptionistDAO.flush();
+
+		return systemuser;
+	}
+
+	/**
+	 * Save an existing Doctor entity
+	 * 
+	 */
+	@Transactional
+	public Integer saveSystemUserDoctor(SystemUser systemuser) {
+		systemuser
+		.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+		systemuser.getDoctor().setSystemUser(systemuser);
+		SystemUser su = systemUserDAO.store(systemuser);
+		systemUserDAO.flush();
+		return su.getId();
+	}
+
+	// /**
+	// * Save an existing SystemUserPermission entity
+	// *
+	// */
+	// @Transactional
+	// public SystemUser saveSystemUserSystemUserPermission(Integer id,
+	// SystemUserPermission related_systemuserpermission) {
+	// SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(id, -1,
+	// -1);
+	// SystemUserPermission existingsystemUserPermission =
+	// systemUserPermissionDAO.findSystemUserPermissionByI(related_systemuserpermission.getId());
+	//
+	// // copy into the existing record to preserve existing relationships
+	// if (existingsystemUserPermission != null) {
+	// existingsystemUserPermission.setId(related_systemuserpermission.getId());
+	// related_systemuserpermission = existingsystemUserPermission;
+	// } else {
+	// related_systemuserpermission =
+	// systemUserPermissionDAO.store(related_systemuserpermission);
+	// systemUserPermissionDAO.flush();
+	// }
+	//
+	// systemuser.setSystemUserPermission(related_systemuserpermission);
+	// related_systemuserpermission.getSystemUser().add(systemuser);
+	// systemuser = systemUserDAO.store(systemuser);
+	// systemUserDAO.flush();
+	//
+	// related_systemuserpermission =
+	// systemUserPermissionDAO.store(related_systemuserpermission);
+	// systemUserPermissionDAO.flush();
+	//
+	// return systemuser;
+	// }
+
+	/**
+	 * Load an existing SystemUser entity
+	 * 
+	 */
+	@Transactional
+	public Set<SystemUser> loadSystemUsers() {
+		return systemUserDAO.findAllSystemUsers();
+	}
+
+	// /**
+	// * Delete an existing SystemUserPermission entity
+	// *
+	// */
+	// @Transactional
+	// public SystemUser deleteSystemUserSystemUserPermission(Integer
+	// systemuser_id, Integer related_systemuserpermission_id) {
+	// SystemUser systemuser =
+	// systemUserDAO.findSystemUserByPrimaryKey(systemuser_id, -1, -1);
+	// SystemUserPermission related_systemuserpermission =
+	// systemUserPermissionDAO.findSystemUserPermissionByPrimaryKey(related_systemuserpermission_id,
+	// -1, -1);
+	//
+	// systemuser.setSystemUserPermission(null);
+	// related_systemuserpermission.getSystemUser().remove(systemuser);
+	// systemuser = systemUserDAO.store(systemuser);
+	// systemUserDAO.flush();
+	//
+	// related_systemuserpermission =
+	// systemUserPermissionDAO.store(related_systemuserpermission);
+	// systemUserPermissionDAO.flush();
+	//
+	// systemUserPermissionDAO.remove(related_systemuserpermission);
+	// systemUserPermissionDAO.flush();
+	//
+	// return systemuser;
+	// }
+
+	/**
+	 * Delete an existing Doctor entity
+	 * 
+	 */
+	@Transactional
+	public SystemUser deleteSystemUserDoctor(Integer systemuser_id,
+			Integer related_doctor_id) {
+		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
+				systemuser_id, -1, -1);
+		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(
+				related_doctor_id, -1, -1);
+
+		systemuser.setDoctor(null);
+		systemuser = systemUserDAO.store(systemuser);
+		systemUserDAO.flush();
+
+		related_doctor = doctorDAO.store(related_doctor);
+		doctorDAO.flush();
+
+		doctorDAO.remove(related_doctor);
+		doctorDAO.flush();
+
+		return systemuser;
+	}
+
+	// /**
+	// * Save an existing LoginHistory entity
+	// *
+	// */
+	// @Transactional
+	// public SystemUser saveSystemUserLoginHistory(Integer id, LoginHistory
+	// related_loginhistory) {
+	// SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(id, -1,
+	// -1);
+	// LoginHistory existingloginHistory =
+	// loginHistoryDAO.findLoginHistoryByPrimaryKey(related_loginhistory.getId());
+	//
+	// // copy into the existing record to preserve existing relationships
+	// if (existingloginHistory != null) {
+	// existingloginHistory.setId(related_loginhistory.getId());
+	// existingloginHistory.setIdWorker(related_loginhistory.getIdWorker());
+	// existingloginHistory.setDateLogin(related_loginhistory.getDateLogin());
+	// existingloginHistory.setSessionNumber(related_loginhistory.getSessionNumber());
+	// existingloginHistory.setDateLogout(related_loginhistory.getDateLogout());
+	// related_loginhistory = existingloginHistory;
+	// } else {
+	// related_loginhistory = loginHistoryDAO.store(related_loginhistory);
+	// loginHistoryDAO.flush();
+	// }
+	//
+	// systemuser.setLoginHistory(related_loginhistory);
+	// systemuser = systemUserDAO.store(systemuser);
+	// systemUserDAO.flush();
+	//
+	// related_loginhistory = loginHistoryDAO.store(related_loginhistory);
+	// loginHistoryDAO.flush();
+	//
+	// return systemuser;
+	// }
+
+	/**
+	 * Save an existing Receptionist entity
+	 * 
+	 */
+	@Transactional
+	public Integer saveSystemUserReceptionist(SystemUser systemuser) {
+		systemuser
+		.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+		systemuser.getReceptionist().setSystemUser(systemuser);
+		SystemUser su = systemUserDAO.store(systemuser);
+		systemUserDAO.flush();
+		return su.getId();
+	}
+
+	/**
+	 * Save an existing Admin entity
+	 * 
+	 */
+	@Transactional
+	public SystemUser saveSystemUserAdmin(Integer id, Admin related_admin) {
+		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(id,
+				-1, -1);
+		Admin existingadmin = adminDAO.findAdminByPrimaryKey(related_admin
+				.getId());
 
 		// copy into the existing record to preserve existing relationships
-		if (existingworker != null) {
-			existingworker.setId(related_worker.getId());
-			related_worker = existingworker;
+		if (existingadmin != null) {
+			existingadmin.setId(related_admin.getId());
+			existingadmin.setIsSuper(related_admin.getIsSuper());
+			related_admin = existingadmin;
+		} else {
+			related_admin = adminDAO.store(related_admin);
+			adminDAO.flush();
 		}
 
-		systemuser.setWorker(related_worker);
-		related_worker.getSystemUsers().add(systemuser);
+		systemuser.setAdmin(related_admin);
 		systemuser = systemUserDAO.store(systemuser);
 		systemUserDAO.flush();
 
-		related_worker = workerDAO.store(related_worker);
-		workerDAO.flush();
+		related_admin = adminDAO.store(related_admin);
+		adminDAO.flush();
 
 		return systemuser;
 	}
 
 	/**
-	 * Save an existing Permission entity
+	 * Delete an existing Admin entity
 	 * 
 	 */
 	@Transactional
-	public SystemUser saveSystemUserPermissions(Integer id, Permission related_permissions) {
-		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(id, -1, -1);
-		Permission existingpermissions = permissionDAO.findPermissionByPrimaryKey(related_permissions.getId());
+	public SystemUser deleteSystemUserAdmin(Integer systemuser_id,
+			Integer related_admin_id) {
+		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
+				systemuser_id, -1, -1);
+		Admin related_admin = adminDAO.findAdminByPrimaryKey(related_admin_id,
+				-1, -1);
 
-		// copy into the existing record to preserve existing relationships
-		if (existingpermissions != null) {
-			existingpermissions.setId(related_permissions.getId());
-			existingpermissions.setDisplay(related_permissions.getDisplay());
-			existingpermissions.setEdit(related_permissions.getEdit());
-			existingpermissions.setExecute(related_permissions.getExecute());
-			related_permissions = existingpermissions;
-		}
-
-//		related_permissions.setSystemUser(systemuser);
-	//	systemuser.getPermissions().add(related_permissions);
-		related_permissions = permissionDAO.store(related_permissions);
-		permissionDAO.flush();
-
+		systemuser.setAdmin(null);
 		systemuser = systemUserDAO.store(systemuser);
 		systemUserDAO.flush();
 
-		return systemuser;
-	}
+		related_admin = adminDAO.store(related_admin);
+		adminDAO.flush();
 
-	/**
-	 * Delete an existing Permission entity
-	 * 
-	 */
-	@Transactional
-	public SystemUser deleteSystemUserPermissions(Integer systemuser_id, Integer related_permissions_id) {
-		Permission related_permissions = permissionDAO.findPermissionByPrimaryKey(related_permissions_id, -1, -1);
-
-		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(systemuser_id, -1, -1);
-
-		related_permissions.setSystemUserPermission(null);
-		//systemuser.getPermissions().remove(related_permissions);
-
-		permissionDAO.remove(related_permissions);
-		permissionDAO.flush();
+		adminDAO.remove(related_admin);
+		adminDAO.flush();
 
 		return systemuser;
-	}
-
-	/**
-	 * Delete an existing Worker entity
-	 * 
-	 */
-	@Transactional
-	public SystemUser deleteSystemUserWorker(Integer systemuser_id, Integer related_worker_id) {
-		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(systemuser_id, -1, -1);
-		Worker related_worker = workerDAO.findWorkerByPrimaryKey(related_worker_id, -1, -1);
-
-		systemuser.setWorker(null);
-		related_worker.getSystemUsers().remove(systemuser);
-		systemuser = systemUserDAO.store(systemuser);
-		systemUserDAO.flush();
-
-		related_worker = workerDAO.store(related_worker);
-		workerDAO.flush();
-
-		workerDAO.remove(related_worker);
-		workerDAO.flush();
-
-		return systemuser;
-	}
-
-	/**
-	 * Return a count of all SystemUser entity
-	 * 
-	 */
-	@Transactional
-	public Integer countSystemUsers() {
-		return ((Long) systemUserDAO.createQuerySingleResult("select count(o) from SystemUser o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -155,33 +351,6 @@ public class SystemUserServiceImpl implements SystemUserService {
 	@Transactional
 	public SystemUser findSystemUserByPrimaryKey(Integer id) {
 		return systemUserDAO.findSystemUserByPrimaryKey(id);
-	}
-
-	/**
-	 * Save an existing SystemUser entity
-	 * 
-	 */
-	@Transactional
-	public Integer saveSystemUser(SystemUser systemuser) {
-		SystemUser existingSystemUser = systemUserDAO.findSystemUserByPesel(systemuser.getPesel());
-		if (existingSystemUser != null) {
-			if (existingSystemUser != systemuser) {
-				existingSystemUser.setId(systemuser.getId());
-				existingSystemUser.setPassword(systemuser.getPassword());
-				existingSystemUser.setDescription(systemuser.getDescription());
-				existingSystemUser.setRegisterDate(systemuser.getRegisterDate());
-				existingSystemUser.setIsActive(systemuser.getIsActive());
-				existingSystemUser.setChangedPassword(systemuser.getChangedPassword());
-				existingSystemUser.setEmail(systemuser.getEmail());
-				existingSystemUser.setUnregisterDate(systemuser.getUnregisterDate());
-			}
-			systemuser = systemUserDAO.store(existingSystemUser);
-		} else {
-			systemuser.setPassword(passwordEncoder.encode(systemuser.getPassword()));
-			systemuser = systemUserDAO.store(systemuser);
-		}
-		systemUserDAO.flush();
-		return systemuser.getId();
 	}
 
 	/**
@@ -195,12 +364,73 @@ public class SystemUserServiceImpl implements SystemUserService {
 	}
 
 	/**
-	 * Load an existing SystemUser entity
+	 * Delete an existing Patient entity
 	 * 
 	 */
 	@Transactional
-	public Set<SystemUser> loadSystemUsers() {
-		return systemUserDAO.findAllSystemUsers();
+	public SystemUser deleteSystemUserPatient(Integer systemuser_id,
+			Integer related_patient_id) {
+		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
+				systemuser_id, -1, -1);
+		Patient related_patient = patientDAO.findPatientByPrimaryKey(
+				related_patient_id, -1, -1);
+
+		systemuser.setPatient(null);
+		systemuser = systemUserDAO.store(systemuser);
+		systemUserDAO.flush();
+
+		related_patient = patientDAO.store(related_patient);
+		patientDAO.flush();
+
+		patientDAO.remove(related_patient);
+		patientDAO.flush();
+
+		return systemuser;
+	}
+
+	/**
+	 * Save an existing SystemUser entity
+	 * 
+	 */
+	@Transactional
+	public Integer saveSystemUser(SystemUser systemuser) {
+		SystemUser existingSystemUser = systemUserDAO
+				.findSystemUserByPrimaryKey(systemuser.getId());
+		SystemUser su = null;
+		if (existingSystemUser != null) {
+			if (existingSystemUser != systemuser) {
+				existingSystemUser.setId(systemuser.getId());
+				existingSystemUser.setPassword(systemuser.getPassword());
+				existingSystemUser.setDescription(systemuser.getDescription());
+				existingSystemUser
+						.setRegisterDate(systemuser.getRegisterDate());
+				existingSystemUser.setIsActive(systemuser.getIsActive());
+				existingSystemUser.setChangedPassword(systemuser
+						.getChangedPassword());
+				existingSystemUser.setEmail(systemuser.getEmail());
+				existingSystemUser.setUnregisterDate(systemuser
+						.getUnregisterDate());
+				existingSystemUser.setRole(systemuser.getRole());
+				existingSystemUser.setPesel(systemuser.getPesel());
+			}
+			systemuser = systemUserDAO.store(existingSystemUser);
+		} else {
+			systemuser.getDoctor().setSystemUser(systemuser);
+			su = systemUserDAO.store(systemuser);
+		}
+		systemUserDAO.flush();
+		return su.getId();
+	}
+
+	/**
+	 * Return a count of all SystemUser entity
+	 * 
+	 */
+	@Transactional
+	public Integer countSystemUsers() {
+		return ((Long) systemUserDAO.createQuerySingleResult(
+				"select count(o) from SystemUser o").getSingleResult())
+				.intValue();
 	}
 
 	/**
@@ -208,7 +438,35 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public List<SystemUser> findAllSystemUsers(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<SystemUser>(systemUserDAO.findAllSystemUsers(startResult, maxRows));
+	public List<SystemUser> findAllSystemUsers(Integer startResult,
+			Integer maxRows) {
+		return new java.util.ArrayList<SystemUser>(
+				systemUserDAO.findAllSystemUsers(startResult, maxRows));
 	}
+
+	/**
+	 * Delete an existing LoginHistory entity
+	 * 
+	 */
+	@Transactional
+	public SystemUser deleteSystemUserLoginHistory(Integer systemuser_id,
+			Integer related_loginhistory_id) {
+		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(
+				systemuser_id, -1, -1);
+		LoginHistory related_loginhistory = loginHistoryDAO
+				.findLoginHistoryByPrimaryKey(related_loginhistory_id, -1, -1);
+
+		systemuser.setLoginHistory(null);
+		systemuser = systemUserDAO.store(systemuser);
+		systemUserDAO.flush();
+
+		related_loginhistory = loginHistoryDAO.store(related_loginhistory);
+		loginHistoryDAO.flush();
+
+		loginHistoryDAO.remove(related_loginhistory);
+		loginHistoryDAO.flush();
+
+		return systemuser;
+	}
+
 }

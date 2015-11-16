@@ -41,10 +41,10 @@ import com.eclinic.domain.StatusOfVisit;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.TypeOfVisit;
 import com.eclinic.domain.Visit;
-import com.eclinic.model.VisitModel;
-import com.eclinic.model.VisitUser;
 import com.eclinic.service.VisitService;
 import com.eclinic.visit.VisitCrud;
+import com.eclinic.visit.mapper.VisitModel;
+import com.eclinic.visit.mapper.VisitUser;
 
 /**
  * Spring Rest controller that handles CRUD requests for Visit entities
@@ -203,15 +203,12 @@ public class VisitRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newVisit(VisitModel visitmodel) {
 		try {
-			Doctor d = systemUserDao
-					.findSystemUserByPesel(visitmodel.getDoctorLogin())
-					.getWorker().getDoctor();
-			Patient p = systemUserDao
-					.findSystemUserByPesel(visitmodel.getPatientPesel())
-					.getWorker().getPatient();
-			Receptionist r = systemUserDao
-					.findSystemUserByPesel(visitmodel.getRecepcionistLogin())
-					.getWorker().getReceptionist();
+			Doctor d = systemUserDao.findSystemUserByPesel(
+					visitmodel.getDoctorLogin()).getDoctor();
+			Patient p = systemUserDao.findSystemUserByPesel(
+					visitmodel.getPatientPesel()).getPatient();
+			Receptionist r = systemUserDao.findSystemUserByPesel(
+					visitmodel.getRecepcionistLogin()).getReceptionist();
 			StatusOfVisit sov = statusOfVisitDAO
 					.findStatusOfVisitByType(visitmodel.getStatusOfVisit())
 					.iterator().next();
@@ -230,7 +227,7 @@ public class VisitRestController {
 			Integer i = visitService.saveVisit(visit);
 			return Response.ok(visitDAO.findVisitByPrimaryKey(i)).build();
 		} catch (Exception e) {
-			return Response.status(Status.NOT_ACCEPTABLE).build();
+			return Response.serverError().build();
 		}
 	}
 
@@ -431,7 +428,7 @@ public class VisitRestController {
 		Set<SystemUser> sys = systemUserDao.findAllSystemUsers();
 		for (Visit v : visit) {
 			for (SystemUser su : sys) {
-				if (su.getWorker().getPatient() != null) {
+				if (su.getPatient() != null) {
 					VisitUser vu = new VisitUser();
 					vu.setSystemUser(su);
 					vu.setVisit(v);
@@ -461,7 +458,6 @@ public class VisitRestController {
 				.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit
 						.getId())).build();
 	}
-
 
 	/**
 	 * Get Receptionist entity by Visit
@@ -554,7 +550,6 @@ public class VisitRestController {
 		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId()))
 				.build();
 	}
-
 
 	/**
 	 * Get Doctor entity by Visit

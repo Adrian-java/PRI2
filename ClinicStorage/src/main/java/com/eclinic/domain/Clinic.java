@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.xml.bind.annotation.*;
 
 import javax.persistence.*;
@@ -92,6 +94,7 @@ public class Clinic implements Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public Address getAddress() {
 		return address;
 	}
@@ -104,6 +107,7 @@ public class Clinic implements Serializable {
 
 	/**
 	 */
+	@JsonIgnore
 	public Set<Prescription> getPrescriptions() {
 		if (prescriptions == null) {
 			prescriptions = new java.util.LinkedHashSet<com.eclinic.domain.Prescription>();

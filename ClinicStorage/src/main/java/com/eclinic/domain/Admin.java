@@ -1,21 +1,26 @@
 package com.eclinic.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.io.Serializable;
-import java.lang.StringBuilder;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 /**
  */
@@ -28,8 +33,8 @@ import javax.persistence.*;
 		@NamedQuery(name = "findAllAdmins", query = "select myAdmin from Admin myAdmin") })
 @Table(catalog = "eclinic", name = "Admin")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "wee/com/eclinic/domain", name = "Admin")
-@XmlRootElement(namespace = "wee/com/eclinic/domain")
+@XmlType(namespace = "Web/com/eclinic/domain", name = "Admin")
+@GenericGenerator(name = "foreign", strategy = "foreign", parameters = { @Parameter(name = "property", value = "systemUser") })
 public class Admin implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -39,8 +44,8 @@ public class Admin implements Serializable {
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
+	@GeneratedValue(generator = "foreign")
 	Integer id;
 	/**
 	 */
@@ -52,9 +57,10 @@ public class Admin implements Serializable {
 
 	/**
 	 */
-	@OneToMany(mappedBy = "admin", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	//@XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Worker> workers;
+	@PrimaryKeyJoinColumn
+	@OneToOne(fetch = FetchType.LAZY, optional=false)
+	@XmlElement(name = "", namespace = "")
+	SystemUser systemUser;
 
 	/**
 	 */
@@ -82,18 +88,15 @@ public class Admin implements Serializable {
 
 	/**
 	 */
-	public void setWorkers(Set<Worker> workers) {
-		this.workers = workers;
+	public void setSystemUser(SystemUser systemUser) {
+		this.systemUser = systemUser;
 	}
 
 	/**
 	 */
 	@JsonIgnore
-	public Set<Worker> getWorkers() {
-		if (workers == null) {
-			workers = new java.util.LinkedHashSet<com.eclinic.domain.Worker>();
-		}
-		return workers;
+	public SystemUser getSystemUser() {
+		return systemUser;
 	}
 
 	/**
@@ -108,7 +111,7 @@ public class Admin implements Serializable {
 	public void copy(Admin that) {
 		setId(that.getId());
 		setIsSuper(that.getIsSuper());
-		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(that.getWorkers()));
+		setSystemUser(that.getSystemUser());
 	}
 
 	/**

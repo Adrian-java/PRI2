@@ -46,29 +46,21 @@ public class TypeOfVisitServiceImpl implements TypeOfVisitService {
 	}
 
 	/**
-	 * Delete an existing TypeOfVisit entity
-	 * 
-	 */
-	@Transactional
-	public void deleteTypeOfVisit(TypeOfVisit typeofvisit) {
-		typeOfVisitDAO.remove(typeofvisit);
-		typeOfVisitDAO.flush();
-	}
-
-	/**
-	 */
-	@Transactional
-	public TypeOfVisit findTypeOfVisitByPrimaryKey(Integer id) {
-		return typeOfVisitDAO.findTypeOfVisitByPrimaryKey(id);
-	}
-
-	/**
 	 * Load an existing TypeOfVisit entity
 	 * 
 	 */
 	@Transactional
 	public Set<TypeOfVisit> loadTypeOfVisits() {
 		return typeOfVisitDAO.findAllTypeOfVisits();
+	}
+
+	/**
+	 * Return a count of all TypeOfVisit entity
+	 * 
+	 */
+	@Transactional
+	public Integer countTypeOfVisits() {
+		return ((Long) typeOfVisitDAO.createQuerySingleResult("select count(o) from TypeOfVisit o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -102,22 +94,12 @@ public class TypeOfVisitServiceImpl implements TypeOfVisitService {
 	}
 
 	/**
-	 * Delete an existing Visit entity
+	 * Return all TypeOfVisit entity
 	 * 
 	 */
 	@Transactional
-	public TypeOfVisit deleteTypeOfVisitVisits(Integer typeofvisit_id, Integer related_visits_id) {
-		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
-
-		TypeOfVisit typeofvisit = typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id, -1, -1);
-
-		related_visits.setTypeOfVisit(null);
-		typeofvisit.getVisits().remove(related_visits);
-
-		visitDAO.remove(related_visits);
-		visitDAO.flush();
-
-		return typeofvisit;
+	public List<TypeOfVisit> findAllTypeOfVisits(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<TypeOfVisit>(typeOfVisitDAO.findAllTypeOfVisits(startResult, maxRows));
 	}
 
 	/**
@@ -143,20 +125,38 @@ public class TypeOfVisitServiceImpl implements TypeOfVisitService {
 	}
 
 	/**
-	 * Return a count of all TypeOfVisit entity
-	 * 
 	 */
 	@Transactional
-	public Integer countTypeOfVisits() {
-		return ((Long) typeOfVisitDAO.createQuerySingleResult("select count(o) from TypeOfVisit o").getSingleResult()).intValue();
+	public TypeOfVisit findTypeOfVisitByPrimaryKey(Integer id) {
+		return typeOfVisitDAO.findTypeOfVisitByPrimaryKey(id);
 	}
 
 	/**
-	 * Return all TypeOfVisit entity
+	 * Delete an existing TypeOfVisit entity
 	 * 
 	 */
 	@Transactional
-	public List<TypeOfVisit> findAllTypeOfVisits(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<TypeOfVisit>(typeOfVisitDAO.findAllTypeOfVisits(startResult, maxRows));
+	public void deleteTypeOfVisit(TypeOfVisit typeofvisit) {
+		typeOfVisitDAO.remove(typeofvisit);
+		typeOfVisitDAO.flush();
+	}
+
+	/**
+	 * Delete an existing Visit entity
+	 * 
+	 */
+	@Transactional
+	public TypeOfVisit deleteTypeOfVisitVisits(Integer typeofvisit_id, Integer related_visits_id) {
+		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
+
+		TypeOfVisit typeofvisit = typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit_id, -1, -1);
+
+		related_visits.setTypeOfVisit(null);
+		typeofvisit.getVisits().remove(related_visits);
+
+		visitDAO.remove(related_visits);
+		visitDAO.flush();
+
+		return typeofvisit;
 	}
 }

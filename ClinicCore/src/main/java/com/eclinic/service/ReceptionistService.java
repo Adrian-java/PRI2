@@ -1,8 +1,8 @@
 package com.eclinic.service;
 
 import com.eclinic.domain.Receptionist;
+import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Visit;
-import com.eclinic.domain.Worker;
 
 import java.util.List;
 import java.util.Set;
@@ -14,10 +14,22 @@ import java.util.Set;
 public interface ReceptionistService {
 
 	/**
-	 * Load an existing Receptionist entity
+	 * Delete an existing Visit entity
 	 * 
 	 */
-	public Set<Receptionist> loadReceptionists();
+	public Receptionist deleteReceptionistVisits(Integer receptionist_id, Integer related_visits_id);
+
+	/**
+	 * Return a count of all Receptionist entity
+	 * 
+	 */
+	public Integer countReceptionists();
+
+	/**
+	 * Return all Receptionist entity
+	 * 
+	 */
+	public List<Receptionist> findAllReceptionists(Integer startResult, Integer maxRows);
 
 	/**
 	 * Delete an existing Receptionist entity
@@ -32,42 +44,31 @@ public interface ReceptionistService {
 	public Receptionist saveReceptionistVisits(Integer id, Visit related_visits);
 
 	/**
-	 */
-	public Receptionist findReceptionistByPrimaryKey(Integer id_1);
-
-	/**
-	 * Save an existing Worker entity
+	 * Save an existing SystemUser entity
 	 * 
 	 */
-	public Receptionist saveReceptionistWorkers(Integer id_2, Worker related_workers);
+	public Receptionist saveReceptionistSystemUser(Integer id_1, SystemUser related_systemuser);
 
 	/**
-	 * Delete an existing Visit entity
+	 * Load an existing Receptionist entity
 	 * 
 	 */
-	public Receptionist deleteReceptionistVisits(Integer receptionist_id, Integer related_visits_id);
+	public Set<Receptionist> loadReceptionists();
 
 	/**
 	 * Save an existing Receptionist entity
+	 * @return 
 	 * 
 	 */
 	public Integer saveReceptionist(Receptionist receptionist_1);
 
 	/**
-	 * Delete an existing Worker entity
+	 * Delete an existing SystemUser entity
 	 * 
 	 */
-	public Receptionist deleteReceptionistWorkers(Integer receptionist_id_1, Integer related_workers_id);
+	public Receptionist deleteReceptionistSystemUser(Integer receptionist_id_1, Integer related_systemuser_id);
 
 	/**
-	 * Return all Receptionist entity
-	 * 
 	 */
-	public List<Receptionist> findAllReceptionists(Integer startResult, Integer maxRows);
-
-	/**
-	 * Return a count of all Receptionist entity
-	 * 
-	 */
-	public Integer countReceptionists();
+	public Receptionist findReceptionistByPrimaryKey(Integer id_2);
 }

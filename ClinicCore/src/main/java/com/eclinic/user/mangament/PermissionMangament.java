@@ -1,7 +1,6 @@
 package com.eclinic.user.mangament;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +36,13 @@ public class PermissionMangament {
 
 	public void setUserPermission(SystemUser systemUser) {
 		String type = "";
-		if (systemUser.getWorker().getDoctor() != null)
+		if (systemUser.getDoctor() != null)
 			type = "Doctor";
-		if (systemUser.getWorker().getReceptionist() != null)
+		if (systemUser.getReceptionist() != null)
 			type = "Receptionist";
-		if (systemUser.getWorker().getAdmin() != null)
+		if (systemUser.getAdmin() != null)
 			type = "Admin";
-		if (systemUser.getWorker().getPatient() != null)
+		if (systemUser.getPatient() != null)
 			type = "Patient";
 		TypeOfUser userType = typeOfUserDao.findTypeOfUserByType(type)
 				.iterator().next();

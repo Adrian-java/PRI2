@@ -133,19 +133,6 @@ public class PermissionRestController {
 		return  Response.ok(new ObjectMapper().writeValueAsString(permissionService.loadPermissions())).build();
 	}
 
-	/**
-	 * Delete an existing SystemUser entity
-	 * 
-	 */
-
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{permission_id}/systemUser/{systemuser_id}")
-	public Response deletePermissionSystemUser(@PathParam("permission_id") Integer permission_id,
-			@PathParam("related_systemuser_id") Integer related_systemuser_id) {
-		return Response.ok(permissionService.deletePermissionSystemUser(permission_id, related_systemuser_id)).build();
-	}
 
 	/**
 	 * Show all TypeOfUser entities by Permission
@@ -190,20 +177,6 @@ public class PermissionRestController {
 	}
 
 
-	/**
-	 * Create a new SystemUser entity
-	 * 
-	 */
-
-	
-	@Path("/{permission_id}/systemUser")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newPermissionSystemUser(@PathParam("permission_id") Integer permission_id,
-			SystemUser systemuser) {
-		permissionService.savePermissionSystemUser(permission_id, systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
-	}
 
 	/**
 	 * Delete an existing Permission entity
@@ -254,35 +227,7 @@ public class PermissionRestController {
 		return Response.ok(moduleDAO.findModuleByPrimaryKey(module.getId())).build();
 	}
 
-	/**
-	 * Delete an existing TypeOfUser entity
-	 * 
-	 */
 
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{permission_id}/typeOfUsers/{typeofuser_id}")
-	public Response deletePermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id,
-			@PathParam("related_typeofusers_id") Integer related_typeofusers_id) {
-		return Response.ok(permissionService.deletePermissionTypeOfUsers(permission_id, related_typeofusers_id)).build();
-	}
-
-	/**
-	 * Create a new TypeOfUser entity
-	 * 
-	 */
-
-
-	
-	@Path("/{permission_id}/typeOfUsers")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newPermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id,
-			TypeOfUser typeofuser) {
-		permissionService.savePermissionTypeOfUsers(permission_id, typeofuser);
-		return Response.ok(typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser.getId())).build();
-	}
 	/**
 	 * Get SystemUser entity by Permission
 	 * 
@@ -325,20 +270,6 @@ public class PermissionRestController {
 		return Response.ok(permissionService.deletePermissionModule(permission_id, related_module_id)).build();
 	}
 
-	/**
-	 * Save an existing SystemUser entity
-	 * 
-	 */
-
-	
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{permission_id}/systemUser")
-	@PUT
-	public Response savePermissionSystemUser(@PathParam("permission_id") Integer permission_id,
-			SystemUser systemuser) {
-		permissionService.savePermissionSystemUser(permission_id, systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(systemuser.getId())).build();
-	}
 
 	/**
 	 * Save an existing Module entity
@@ -385,18 +316,4 @@ public class PermissionRestController {
 		return Response.ok(permissionDAO.findPermissionByPrimaryKey(permission_id).getModule()).build();
 	}
 
-	/**
-	 * Save an existing TypeOfUser entity
-	 * 
-	 */
-
-	
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{doctor_id}/typeOfUsers")
-	@PUT
-	public Response savePermissionTypeOfUsers(@PathParam("permission_id") Integer permission_id,
-			TypeOfUser typeofusers) {
-		permissionService.savePermissionTypeOfUsers(permission_id, typeofusers);
-		return Response.ok(typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofusers.getId())).build();
-	}
 }

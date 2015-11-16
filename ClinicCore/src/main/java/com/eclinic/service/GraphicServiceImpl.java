@@ -1,8 +1,10 @@
 package com.eclinic.service;
 
+import com.eclinic.dao.DayOfWeekDAO;
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.GraphicDAO;
 
+import com.eclinic.domain.DayOfWeek;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Graphic;
 
@@ -23,6 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("GraphicService")
 @Transactional
 public class GraphicServiceImpl implements GraphicService {
+
+	/**
+	 * DAO injected by Spring that manages DayOfWeek entities
+	 * 
+	 */
+	@Autowired
+	private DayOfWeekDAO dayOfWeekDAO;
 
 	/**
 	 * DAO injected by Spring that manages Doctor entities
@@ -46,13 +55,100 @@ public class GraphicServiceImpl implements GraphicService {
 	}
 
 	/**
-	 * Delete an existing Graphic entity
+	 * Load an existing Graphic entity
 	 * 
 	 */
 	@Transactional
-	public void deleteGraphic(Graphic graphic) {
-		graphicDAO.remove(graphic);
+	public Set<Graphic> loadGraphics() {
+		return graphicDAO.findAllGraphics();
+	}
+
+	/**
+	 * Delete an existing DayOfWeek entity
+	 * 
+	 */
+	@Transactional
+	public Graphic deleteGraphicDayOfWeek(Integer graphic_id, Integer related_dayofweek_id) {
+		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(graphic_id, -1, -1);
+		DayOfWeek related_dayofweek = dayOfWeekDAO.findDayOfWeekById(related_dayofweek_id);
+
+		graphic.setDayOfWeek(null);
+		related_dayofweek.getGraphics().remove(graphic);
+		graphic = graphicDAO.store(graphic);
 		graphicDAO.flush();
+
+		related_dayofweek = dayOfWeekDAO.store(related_dayofweek);
+		dayOfWeekDAO.flush();
+
+		dayOfWeekDAO.remove(related_dayofweek);
+		dayOfWeekDAO.flush();
+
+		return graphic;
+	}
+
+	/**
+	 * Save an existing Graphic entity
+	 * 
+	 */
+	@Transactional
+	public void saveGraphic(Graphic graphic) {
+		Graphic existingGraphic = graphicDAO.findGraphicByPrimaryKey(graphic.getId());
+
+		if (existingGraphic != null) {
+			if (existingGraphic != graphic) {
+				existingGraphic.setId(graphic.getId());
+				existingGraphic.setAbsence(graphic.getAbsence());
+				existingGraphic.setTimeFrom(graphic.getTimeFrom());
+				existingGraphic.setTimeTo(graphic.getTimeTo());
+			}
+			graphic = graphicDAO.store(existingGraphic);
+		} else {
+			graphic = graphicDAO.store(graphic);
+		}
+		graphicDAO.flush();
+	}
+
+	/**
+	 */
+	@Transactional
+	public Graphic findGraphicByPrimaryKey(Integer id) {
+		return graphicDAO.findGraphicByPrimaryKey(id);
+	}
+
+	/**
+	 * Save an existing DayOfWeek entity
+	 * 
+	 */
+	@Transactional
+	public Graphic saveGraphicDayOfWeek(Integer id, DayOfWeek related_dayofweek) {
+		Graphic graphic = graphicDAO.findGraphicByPrimaryKey(id, -1, -1);
+		DayOfWeek existingdayOfWeek = dayOfWeekDAO.findDayOfWeekById(related_dayofweek.getId());
+
+		// copy into the existing record to preserve existing relationships
+		if (existingdayOfWeek != null) {
+			existingdayOfWeek.setId(related_dayofweek.getId());
+			existingdayOfWeek.setName(related_dayofweek.getName());
+			related_dayofweek = existingdayOfWeek;
+		}
+
+		graphic.setDayOfWeek(related_dayofweek);
+		related_dayofweek.getGraphics().add(graphic);
+		graphic = graphicDAO.store(graphic);
+		graphicDAO.flush();
+
+		related_dayofweek = dayOfWeekDAO.store(related_dayofweek);
+		dayOfWeekDAO.flush();
+
+		return graphic;
+	}
+
+	/**
+	 * Return all Graphic entity
+	 * 
+	 */
+	@Transactional
+	public List<Graphic> findAllGraphics(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<Graphic>(graphicDAO.findAllGraphics(startResult, maxRows));
 	}
 
 	/**
@@ -76,6 +172,16 @@ public class GraphicServiceImpl implements GraphicService {
 		doctorDAO.flush();
 
 		return graphic;
+	}
+
+	/**
+	 * Delete an existing Graphic entity
+	 * 
+	 */
+	@Transactional
+	public void deleteGraphic(Graphic graphic) {
+		graphicDAO.remove(graphic);
+		graphicDAO.flush();
 	}
 
 	/**
@@ -107,57 +213,11 @@ public class GraphicServiceImpl implements GraphicService {
 	}
 
 	/**
-	 * Return all Graphic entity
-	 * 
-	 */
-	@Transactional
-	public List<Graphic> findAllGraphics(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Graphic>(graphicDAO.findAllGraphics(startResult, maxRows));
-	}
-
-	/**
-	 */
-	@Transactional
-	public Graphic findGraphicByPrimaryKey(Integer id) {
-		return graphicDAO.findGraphicByPrimaryKey(id);
-	}
-
-	/**
 	 * Return a count of all Graphic entity
 	 * 
 	 */
 	@Transactional
 	public Integer countGraphics() {
 		return ((Long) graphicDAO.createQuerySingleResult("select count(o) from Graphic o").getSingleResult()).intValue();
-	}
-
-	/**
-	 * Save an existing Graphic entity
-	 * 
-	 */
-	@Transactional
-	public void saveGraphic(Graphic graphic) {
-		Graphic existingGraphic = graphicDAO.findGraphicByPrimaryKey(graphic.getId());
-
-		if (existingGraphic != null) {
-			if (existingGraphic != graphic) {
-				existingGraphic.setId(graphic.getId());
-				existingGraphic.setAbsence(graphic.getAbsence());
-//				existingGraphic.setDay(graphic.getDay());
-			}
-			graphic = graphicDAO.store(existingGraphic);
-		} else {
-			graphic = graphicDAO.store(graphic);
-		}
-		graphicDAO.flush();
-	}
-
-	/**
-	 * Load an existing Graphic entity
-	 * 
-	 */
-	@Transactional
-	public Set<Graphic> loadGraphics() {
-		return graphicDAO.findAllGraphics();
 	}
 }

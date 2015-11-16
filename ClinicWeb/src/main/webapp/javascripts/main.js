@@ -88,7 +88,7 @@ clinic.config(function($stateProvider, $urlRouterProvider) {
 clinic.controller('DoctorsListDetailsController', function($scope, $http, $cookies, $stateParams){
 	$http({
 		method: 'GET',
-		url: "http://localhost:8080/rest/SystemUser/get/"+$stateParams.pesel,
+		url: "http://localhost:9000/rest/SystemUser/get/"+$stateParams.pesel,
 		headers: {'XToken': $cookies.get('token')}
 	}).success(function(result){
 		$scope.user = result;
@@ -102,7 +102,7 @@ clinic.controller('DoctorsListDetailsController', function($scope, $http, $cooki
 clinic.controller('PatientsListDetailsController', function($scope, $http, $cookies, $stateParams){
 	$http({
 		method: 'GET',
-		url: "http://localhost:8080/rest/SystemUser/get/"+$stateParams.pesel,
+		url: "http://localhost:9000/rest/SystemUser/get/"+$stateParams.pesel,
 		headers: {'XToken': $cookies.get('token')}
 	}).success(function(result){
 		$scope.user = result;
@@ -115,7 +115,7 @@ clinic.controller('PatientsListDetailsController', function($scope, $http, $cook
 clinic.controller('RemoveUserController', function($scope, $http, $cookies, $stateParams, $state){
 	$http({
 		method: 'DELETE',
-		url: "http://localhost:8080/rest/SystemUser/"+$stateParams.pesel,
+		url: "http://localhost:9000/rest/SystemUser/"+$stateParams.pesel,
 		headers: {'XToken': $cookies.get('token')}
 	}).success(function(result){
 		$scope.user = result;
@@ -129,18 +129,13 @@ clinic.controller('RemoveUserController', function($scope, $http, $cookies, $sta
 clinic.controller('NewUserController', function($scope, $http, $cookies){
 	$scope.addUser = function(user){
 		var userInfo = {
-				"role": "patient",
 				"pesel": user.pesel,
-				"changedPassword": "false",
 				"password": user.password,
-				"worker": {
 					"patient": {
 						"name": user.first_name,
 						"surname": user.last_name,
 						"dateOfBirth": user.birth_date,
-						"EMail": user.email,
 						"phoneNr": user.phone,
-						"confirmed": "0",
 						"address": {
 							"city": user.city,
 							"countryCode": user.county_code,
@@ -149,16 +144,13 @@ clinic.controller('NewUserController', function($scope, $http, $cookies){
 							"countryCodeCity": user.county_code,
 							"homeNr": user.home_nr,
 						}
-					}
-				},
-				"registerDate": "2015-01-01",
-				"isActive": "true",
+					},
 				"email": user.email				
 			};
 		console.log(userInfo);
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/rest/SystemUser/newPatient",
+			url: "http://localhost:9000/rest/SystemUser/newPatient",
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -193,7 +185,7 @@ clinic.controller('NewVisitController', function($scope, $http, $cookies){
 			};
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/rest/Visit/new",
+			url: "http://localhost:9000/rest/Visit/new",
 			data: visit,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -207,12 +199,8 @@ clinic.controller('NewVisitController', function($scope, $http, $cookies){
 clinic.controller('NewAdminController', function($scope, $http, $cookies){
 	$scope.addUser = function(user){
 		var userInfo = {
-				"role": "admin",
 				"pesel": user.pesel,
-				"changedPassword": "false",
 				"password": user.password,
-				"registerDate": "2015-01-01",
-				"isActive": "true",
 				"email": user.email,
 				"worker": {
 					"admin": {
@@ -222,7 +210,7 @@ clinic.controller('NewAdminController', function($scope, $http, $cookies){
 			};
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/rest/SystemUser/newAdmin",
+			url: "http://localhost:9000/rest/SystemUser/newAdmin",
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -236,25 +224,18 @@ clinic.controller('NewDoctorController', function($scope, $http, $cookies) {
 	$scope.addUser = function(user){
 		var userInfo = 
 		{
-			"role":"doctor",
 			"pesel": user.pesel,
-			"changedPassword":"false",
 			"password":user.password,
-			"registerDate":"2015-05-04",
-			"isActive":"true",
 			"email": user.email,
-			"worker":
-				  {
 					"doctor":
 						{
 						"name": user.first_name,
 						"surname": user.last_name 
 						}
-				}			
 		};
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/rest/SystemUser/newDoctor",
+			url: "http://localhost:9000/rest/SystemUser/newDoctor",
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -274,7 +255,7 @@ clinic.controller('EditDoctorController', function($scope, $http, $cookies, $sta
 		}
 		$http({
 			method: 'PUT',
-			url: "http://localhost:8080/rest/SystemUser/saveDoctor/"+$scope.user.pesel,
+			url: "http://localhost:9000/rest/SystemUser/saveDoctor/"+$scope.user.pesel,
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -295,7 +276,7 @@ clinic.controller('EditUserController', function($scope, $http, $cookies, $state
 		}
 		$http({
 			method: 'PUT',
-			url: "http://localhost:8080/rest/SystemUser/savePatient/"+$scope.user.pesel,
+			url: "http://localhost:9000/rest/SystemUser/savePatient/"+$scope.user.pesel,
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -310,11 +291,8 @@ clinic.controller('NewReceptionistController', function($scope, $http, $cookies,
 	$scope.addUser = function(user){
 		var userInfo = 
 		{
-			"role":"receptionist",
 			"pesel": user.pesel,
-			"changedPassword":"false",
 			"password":user.password,
-			"registerDate":"2015-05-04",
 			"isActive":"true",
 			"email": user.email,
 			"worker":
@@ -330,7 +308,7 @@ clinic.controller('NewReceptionistController', function($scope, $http, $cookies,
 		};
 		$http({
 			method: 'POST',
-			url: "http://localhost:8080/rest/SystemUser/newReceptionist",
+			url: "http://localhost:9000/rest/SystemUser/newReceptionist",
 			data: userInfo,
 			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
 		}).success(function(result){
@@ -346,7 +324,7 @@ clinic.controller('PanelController', function($scope, $http, $cookies) {
 	
 	$http({
 			method: 'GET',
-			url: "http://localhost:8080/rest/SystemUser/role/"+$scope.pesel,
+			url: "http://localhost:9000/rest/SystemUser/role/"+$scope.pesel,
 			headers: {'XToken': $cookies.get('token')}
 		}).success(function(result){
 			$scope.role = result.role;
@@ -360,7 +338,7 @@ clinic.controller('PatientsListController', function($scope, $http, $cookies) {
 	var patientsList = [];
 	$http({
 		method: 'GET',
-		url: "http://localhost:8080/rest/SystemUser/list",
+		url: "http://localhost:9000/rest/SystemUser/list",
 		headers: {'XToken': $cookies.get('token')}
 	}).success(function(result){
 		$scope.patientsList = result;
@@ -409,7 +387,7 @@ clinic.controller('igCtrl', function ($scope, $http, $cookies) {
     	$http({
     		method: 'POST',
     		isArray: false,
-    		url: "http://localhost:8080/rest/auth/token",
+    		url: "http://localhost:9000/rest/auth/token",
     		data: $.param({
     			username: $scope.email,
     			password: $scope.pwd

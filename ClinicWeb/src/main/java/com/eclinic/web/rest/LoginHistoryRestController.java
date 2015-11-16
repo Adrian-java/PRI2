@@ -2,15 +2,6 @@ package com.eclinic.web.rest;
 
 import java.io.IOException;
 
-import com.eclinic.dao.LoginHistoryDAO;
-import com.eclinic.dao.WorkerDAO;
-import com.eclinic.domain.LoginHistory;
-import com.eclinic.domain.Worker;
-import com.eclinic.service.LoginHistoryService;
-
-
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -31,6 +22,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.eclinic.dao.LoginHistoryDAO;
+import com.eclinic.domain.LoginHistory;
+import com.eclinic.service.LoginHistoryService;
+
 
 /**
  * Spring Rest controller that handles CRUD requests for LoginHistory entities
@@ -47,12 +42,6 @@ public class LoginHistoryRestController {
 	@Autowired
 	private LoginHistoryDAO loginHistoryDAO;
 
-	/**
-	 * DAO injected by Spring that manages Worker entities
-	 * 
-	 */
-	@Autowired
-	private WorkerDAO workerDAO;
 
 	/**
 	 * Service injected by Spring that provides CRUD operations for LoginHistory entities
@@ -81,31 +70,7 @@ public class LoginHistoryRestController {
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
 
-	/**
-	 * Get Worker entity by LoginHistory
-	 * 
-	 */
 
-	
-	@GET
-	@Path("/{loginhistory_id}/worker")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getLoginHistoryWorker(@PathParam("loginhistory_id") Integer loginhistory_id) {
-		return Response.ok(loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id).getWorker()).build();
-	}
-
-	/**
-	 * Save an existing Worker entity
-	 * 
-	 */
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{loginhistory_id}/worker")
-	@PUT
-	public Response saveLoginHistoryWorker(@PathParam("loginhistory_id") Integer loginhistory_id,
-			Worker worker) {
-		loginHistoryService.saveLoginHistoryWorker(loginhistory_id, worker);
-		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
-	}
 
 	/**
 	 * Select an existing LoginHistory entity
@@ -133,36 +98,7 @@ public class LoginHistoryRestController {
 		loginHistoryService.saveLoginHistory(loginhistory);
 		return Response.ok(loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory.getId())).build();
 	}
-	/**
-	 * View an existing Worker entity
-	 * 
-	 */
 
-	
-	@GET
-	@Path("/{loginhistory_id}/worker/{worker_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadDoctorGraphics(@PathParam("loginhistory_id") Integer loginhistory_id,
-			@PathParam("related_worker_id") Integer related_worker_id) {
-		Worker worker = workerDAO.findWorkerByPrimaryKey(related_worker_id, -1, -1);
-
-		return Response.ok(worker).build();
-	}
-
-	/**
-	 * Create a new Worker entity
-	 * 
-	 */
-
-	
-	@Path("/{loginhistory_id}/worker")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newLoginHistoryWorker(@PathParam("loginhistory_id") Integer loginhistory_id,
-			Worker worker) {
-		loginHistoryService.saveLoginHistoryWorker(loginhistory_id, worker);
-		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
-	}
 
 	/**
 	 * Save an existing LoginHistory entity
@@ -176,18 +112,6 @@ public class LoginHistoryRestController {
 	public Response saveLoginHistory(LoginHistory loginhistory) {
 		loginHistoryService.saveLoginHistory(loginhistory);
 		return Response.ok(loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory.getId())).build();
-	}
-	/**
-	 * Delete an existing Worker entity
-	 * 
-	 */
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{loginhistory_id}/worker/{worker_id}")
-	public Response deleteLoginHistoryWorker(@PathParam("loginhistory_id") Integer loginhistory_id,
-			@PathParam("related_worker_id") Integer related_worker_id) {
-		return Response.ok(loginHistoryService.deleteLoginHistoryWorker(loginhistory_id, related_worker_id)).build();
 	}
 
 	/**

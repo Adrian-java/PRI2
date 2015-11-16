@@ -46,39 +46,6 @@ public class SpecalVisitFieldServiceImpl implements SpecalVisitFieldService {
 	}
 
 	/**
-	 * Delete an existing SpecalVisitField entity
-	 * 
-	 */
-	@Transactional
-	public void deleteSpecalVisitField(SpecalVisitField specalvisitfield) {
-		specalVisitFieldDAO.remove(specalvisitfield);
-		specalVisitFieldDAO.flush();
-	}
-
-	/**
-	 * Delete an existing Specialization entity
-	 * 
-	 */
-	@Transactional
-	public SpecalVisitField deleteSpecalVisitFieldSpecialization(Integer specalvisitfield_id, Integer related_specialization_id) {
-		SpecalVisitField specalvisitfield = specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield_id, -1, -1);
-		Specialization related_specialization = specializationDAO.findSpecializationByPrimaryKey(related_specialization_id, -1, -1);
-
-		specalvisitfield.setSpecialization(null);
-		related_specialization.getSpecalVisitFields().remove(specalvisitfield);
-		specalvisitfield = specalVisitFieldDAO.store(specalvisitfield);
-		specalVisitFieldDAO.flush();
-
-		related_specialization = specializationDAO.store(related_specialization);
-		specializationDAO.flush();
-
-		specializationDAO.remove(related_specialization);
-		specializationDAO.flush();
-
-		return specalvisitfield;
-	}
-
-	/**
 	 */
 	@Transactional
 	public SpecalVisitField findSpecalVisitFieldByPrimaryKey(Integer id) {
@@ -86,12 +53,13 @@ public class SpecalVisitFieldServiceImpl implements SpecalVisitFieldService {
 	}
 
 	/**
-	 * Return a count of all SpecalVisitField entity
+	 * Delete an existing SpecalVisitField entity
 	 * 
 	 */
 	@Transactional
-	public Integer countSpecalVisitFields() {
-		return ((Long) specalVisitFieldDAO.createQuerySingleResult("select count(o) from SpecalVisitField o").getSingleResult()).intValue();
+	public void deleteSpecalVisitField(SpecalVisitField specalvisitfield) {
+		specalVisitFieldDAO.remove(specalvisitfield);
+		specalVisitFieldDAO.flush();
 	}
 
 	/**
@@ -117,12 +85,35 @@ public class SpecalVisitFieldServiceImpl implements SpecalVisitFieldService {
 	}
 
 	/**
-	 * Return all SpecalVisitField entity
+	 * Return a count of all SpecalVisitField entity
 	 * 
 	 */
 	@Transactional
-	public List<SpecalVisitField> findAllSpecalVisitFields(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<SpecalVisitField>(specalVisitFieldDAO.findAllSpecalVisitFields(startResult, maxRows));
+	public Integer countSpecalVisitFields() {
+		return ((Long) specalVisitFieldDAO.createQuerySingleResult("select count(o) from SpecalVisitField o").getSingleResult()).intValue();
+	}
+
+	/**
+	 * Delete an existing Specialization entity
+	 * 
+	 */
+	@Transactional
+	public SpecalVisitField deleteSpecalVisitFieldSpecialization(Integer specalvisitfield_id, Integer related_specialization_id) {
+		SpecalVisitField specalvisitfield = specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(specalvisitfield_id, -1, -1);
+		Specialization related_specialization = specializationDAO.findSpecializationByPrimaryKey(related_specialization_id, -1, -1);
+
+		specalvisitfield.setSpecialization(null);
+		related_specialization.getSpecalVisitFields().remove(specalvisitfield);
+		specalvisitfield = specalVisitFieldDAO.store(specalvisitfield);
+		specalVisitFieldDAO.flush();
+
+		related_specialization = specializationDAO.store(related_specialization);
+		specializationDAO.flush();
+
+		specializationDAO.remove(related_specialization);
+		specializationDAO.flush();
+
+		return specalvisitfield;
 	}
 
 	/**
@@ -160,5 +151,14 @@ public class SpecalVisitFieldServiceImpl implements SpecalVisitFieldService {
 		specializationDAO.flush();
 
 		return specalvisitfield;
+	}
+
+	/**
+	 * Return all SpecalVisitField entity
+	 * 
+	 */
+	@Transactional
+	public List<SpecalVisitField> findAllSpecalVisitFields(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<SpecalVisitField>(specalVisitFieldDAO.findAllSpecalVisitFields(startResult, maxRows));
 	}
 }

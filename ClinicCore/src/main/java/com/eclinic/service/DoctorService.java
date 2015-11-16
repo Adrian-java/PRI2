@@ -1,14 +1,15 @@
 package com.eclinic.service;
 
-import java.util.List;
-import java.util.Set;
-
 import com.eclinic.domain.Doctor;
+import com.eclinic.domain.Documents;
 import com.eclinic.domain.Graphic;
 import com.eclinic.domain.Specialization;
+import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
-import com.eclinic.domain.Worker;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Spring service that handles CRUD requests for Doctor entities
@@ -17,10 +18,23 @@ import com.eclinic.domain.Worker;
 public interface DoctorService {
 
 	/**
-	 * Delete an existing Doctor entity
+	 * Delete an existing Specialization entity
 	 * 
 	 */
-	public void deleteDoctor(Doctor doctor);
+	public Doctor deleteDoctorSpecializations(Integer doctor_id, Integer related_specializations_id);
+
+	/**
+	 * Delete an existing Graphic entity
+	 * 
+	 */
+	public Doctor deleteDoctorGraphics(Integer doctor_id_1, Integer related_graphics_id);
+
+	/**
+	 * Save an existing Doctor entity
+	 * @return 
+	 * 
+	 */
+	public Integer saveDoctor(Doctor doctor);
 
 	/**
 	 * Return all Doctor entity
@@ -29,56 +43,68 @@ public interface DoctorService {
 	public List<Doctor> findAllDoctors(Integer startResult, Integer maxRows);
 
 	/**
-	 * Save an existing Specialization entity
+	 * Load an existing Doctor entity
 	 * 
 	 */
-	public Doctor saveDoctorSpecializations(Integer id, Specialization related_specializations);
+	public Set<Doctor> loadDoctors();
 
 	/**
 	 * Save an existing Visit entity
 	 * 
 	 */
-	public Doctor saveDoctorVisits(Integer id_1, Visit related_visits);
+	public Doctor saveDoctorVisits(Integer id, Visit related_visits);
 
 	/**
-	 * Delete an existing Graphic entity
+	 * Delete an existing VisitScheduler entity
 	 * 
 	 */
-	public Doctor deleteDoctorGraphics(Integer doctor_id, Integer related_graphics_id);
+	public Doctor deleteDoctorVisitSchedulers(Integer doctor_id_2, Integer related_visitschedulers_id);
 
 	/**
-	 * Delete an existing Visit entity
-	 * 
 	 */
-	public Doctor deleteDoctorVisits(Integer doctor_id_1, Integer related_visits_id);
+	public Doctor findDoctorByPrimaryKey(Integer id_1);
 
 	/**
-	 * Save an existing Doctor entity
-	 * @return 
+	 * Delete an existing Doctor entity
 	 * 
 	 */
-	public Integer saveDoctor(Doctor doctor_1);
-
+	public void deleteDoctor(Doctor doctor_1);
 
 	/**
-	 * Delete an existing Worker entity
+	 * Save an existing Documents entity
 	 * 
 	 */
-	public Doctor deleteDoctorWorkers(Integer doctor_id_3, Integer related_workers_id);
-
-	/**
-	 * Save an existing Worker entity
-	 * 
-	 */
-	public Doctor saveDoctorWorkers(Integer id_2, Worker related_workers);
-
+	public Doctor saveDoctorDocumentses(Integer id_2, Documents related_documentses);
 
 	/**
 	 * Save an existing VisitScheduler entity
 	 * 
 	 */
-	public Doctor saveDoctorVisitSchedulers(Integer id_4, VisitScheduler related_visitschedulers);
+	public Doctor saveDoctorVisitSchedulers(Integer id_3, VisitScheduler related_visitschedulers);
 
+	/**
+	 * Delete an existing Visit entity
+	 * 
+	 */
+	public Doctor deleteDoctorVisits(Integer doctor_id_3, Integer related_visits_id);
+
+	/**
+	 * Save an existing Graphic entity
+	 * 
+	 */
+	public Doctor saveDoctorGraphics(Integer id_4, Graphic related_graphics);
+
+	/**
+	 * Delete an existing SystemUser entity
+	 * 
+	 */
+	public Doctor deleteDoctorSystemUser(Integer doctor_id_4, Integer related_systemuser_id);
+
+	/**
+	 * Delete an existing Documents entity
+	 * 
+	 */
+	public Doctor deleteDoctorDocumentses(Integer doctor_id_5, Integer related_documentses_id);
 
 	/**
 	 * Return a count of all Doctor entity
@@ -87,32 +113,14 @@ public interface DoctorService {
 	public Integer countDoctors();
 
 	/**
-	 * Delete an existing Specialization entity
+	 * Save an existing Specialization entity
 	 * 
 	 */
-	public Doctor deleteDoctorSpecializations(Integer doctor_id_4, Integer related_specializations_id);
+	public Doctor saveDoctorSpecializations(Integer id_5, Specialization related_specializations);
 
 	/**
-	 */
-	public Doctor findDoctorByPrimaryKey(Integer id_6);
-
-	/**
-	 * Delete an existing VisitScheduler entity
+	 * Save an existing SystemUser entity
 	 * 
 	 */
-	public Doctor deleteDoctorVisitSchedulers(Integer doctor_id_5, Integer related_visitschedulers_id);
-
-
-	/**
-	 * Save an existing Graphic entity
-	 * 
-	 */
-	public Doctor saveDoctorGraphics(Integer id_7, Graphic related_graphics);
-
-
-	/**
-	 * Load an existing Doctor entity
-	 * 
-	 */
-	public Set<Doctor> loadDoctors();
+	public Doctor saveDoctorSystemUser(Integer id_6, SystemUser related_systemuser);
 }

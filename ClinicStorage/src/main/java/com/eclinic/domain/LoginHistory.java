@@ -3,19 +3,29 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
 import java.util.Calendar;
-import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  */
@@ -69,13 +79,14 @@ public class LoginHistory implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	Calendar dateLogout;
-
-	/**
-	 */
+	
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({ @JoinColumn(name = "id_worker", referencedColumnName = "Id", nullable = false) })
+	@JoinColumns({ @JoinColumn(name = "id_system_user", referencedColumnName = "Id") })
 	@XmlTransient
-	Worker worker;
+	private
+	SystemUser systemUser;
+
 
 	/**
 	 */
@@ -125,18 +136,6 @@ public class LoginHistory implements Serializable {
 		return this.dateLogout;
 	}
 
-	/**
-	 */
-	public void setWorker(Worker worker) {
-		this.worker = worker;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Worker getWorker() {
-		return worker;
-	}
 
 	/**
 	 */
@@ -152,7 +151,6 @@ public class LoginHistory implements Serializable {
 		setDateLogin(that.getDateLogin());
 		setSessionNumber(that.getSessionNumber());
 		setDateLogout(that.getDateLogout());
-		setWorker(that.getWorker());
 	}
 
 	/**
@@ -195,4 +193,13 @@ public class LoginHistory implements Serializable {
 			return false;
 		return true;
 	}
+
+	public SystemUser getSystemUser() {
+		return systemUser;
+	}
+
+	public void setSystemUser(SystemUser systemUser) {
+		this.systemUser = systemUser;
+	}
+
 }

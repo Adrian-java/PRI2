@@ -1,12 +1,12 @@
 package com.eclinic.service;
 
 import com.eclinic.dao.ReceptionistDAO;
+import com.eclinic.dao.SystemUserDAO;
 import com.eclinic.dao.VisitDAO;
-import com.eclinic.dao.WorkerDAO;
 
 import com.eclinic.domain.Receptionist;
+import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Visit;
-import com.eclinic.domain.Worker;
 
 import java.util.List;
 import java.util.Set;
@@ -34,18 +34,18 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	private ReceptionistDAO receptionistDAO;
 
 	/**
+	 * DAO injected by Spring that manages SystemUser entities
+	 * 
+	 */
+	@Autowired
+	private SystemUserDAO systemUserDAO;
+
+	/**
 	 * DAO injected by Spring that manages Visit entities
 	 * 
 	 */
 	@Autowired
 	private VisitDAO visitDAO;
-
-	/**
-	 * DAO injected by Spring that manages Worker entities
-	 * 
-	 */
-	@Autowired
-	private WorkerDAO workerDAO;
 
 	/**
 	 * Instantiates a new ReceptionistServiceImpl.
@@ -55,12 +55,40 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	}
 
 	/**
-	 * Load an existing Receptionist entity
+	 * Delete an existing Visit entity
 	 * 
 	 */
 	@Transactional
-	public Set<Receptionist> loadReceptionists() {
-		return receptionistDAO.findAllReceptionists();
+	public Receptionist deleteReceptionistVisits(Integer receptionist_id, Integer related_visits_id) {
+		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
+
+		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist_id, -1, -1);
+
+		related_visits.setReceptionist(null);
+		receptionist.getVisits().remove(related_visits);
+
+		visitDAO.remove(related_visits);
+		visitDAO.flush();
+
+		return receptionist;
+	}
+
+	/**
+	 * Return a count of all Receptionist entity
+	 * 
+	 */
+	@Transactional
+	public Integer countReceptionists() {
+		return ((Long) receptionistDAO.createQuerySingleResult("select count(o) from Receptionist o").getSingleResult()).intValue();
+	}
+
+	/**
+	 * Return all Receptionist entity
+	 * 
+	 */
+	@Transactional
+	public List<Receptionist> findAllReceptionists(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<Receptionist>(receptionistDAO.findAllReceptionists(startResult, maxRows));
 	}
 
 	/**
@@ -104,58 +132,49 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	}
 
 	/**
-	 */
-	@Transactional
-	public Receptionist findReceptionistByPrimaryKey(Integer id) {
-		return receptionistDAO.findReceptionistByPrimaryKey(id);
-	}
-
-	/**
-	 * Save an existing Worker entity
+	 * Save an existing SystemUser entity
 	 * 
 	 */
 	@Transactional
-	public Receptionist saveReceptionistWorkers(Integer id, Worker related_workers) {
+	public Receptionist saveReceptionistSystemUser(Integer id, SystemUser related_systemuser) {
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(id, -1, -1);
-		Worker existingworkers = workerDAO.findWorkerByPrimaryKey(related_workers.getId());
+		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
 
 		// copy into the existing record to preserve existing relationships
-		if (existingworkers != null) {
-			existingworkers.setId(related_workers.getId());
-			related_workers = existingworkers;
+		if (existingsystemUser != null) {
+			existingsystemUser.setId(related_systemuser.getId());
+			existingsystemUser.setPassword(related_systemuser.getPassword());
+			existingsystemUser.setDescription(related_systemuser.getDescription());
+			existingsystemUser.setRegisterDate(related_systemuser.getRegisterDate());
+			existingsystemUser.setIsActive(related_systemuser.getIsActive());
+			existingsystemUser.setChangedPassword(related_systemuser.getChangedPassword());
+			existingsystemUser.setEmail(related_systemuser.getEmail());
+			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
+			existingsystemUser.setRole(related_systemuser.getRole());
+			existingsystemUser.setPesel(related_systemuser.getPesel());
+			related_systemuser = existingsystemUser;
 		} else {
-			related_workers = workerDAO.store(related_workers);
-			workerDAO.flush();
+			related_systemuser = systemUserDAO.store(related_systemuser);
+			systemUserDAO.flush();
 		}
 
-		related_workers.setReceptionist(receptionist);
-		receptionist.getWorkers().add(related_workers);
-		related_workers = workerDAO.store(related_workers);
-		workerDAO.flush();
-
+		receptionist.setSystemUser(related_systemuser);
 		receptionist = receptionistDAO.store(receptionist);
 		receptionistDAO.flush();
 
+		related_systemuser = systemUserDAO.store(related_systemuser);
+		systemUserDAO.flush();
+
 		return receptionist;
 	}
 
 	/**
-	 * Delete an existing Visit entity
+	 * Load an existing Receptionist entity
 	 * 
 	 */
 	@Transactional
-	public Receptionist deleteReceptionistVisits(Integer receptionist_id, Integer related_visits_id) {
-		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
-
-		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist_id, -1, -1);
-
-		related_visits.setReceptionist(null);
-		receptionist.getVisits().remove(related_visits);
-
-		visitDAO.remove(related_visits);
-		visitDAO.flush();
-
-		return receptionist;
+	public Set<Receptionist> loadReceptionists() {
+		return receptionistDAO.findAllReceptionists();
 	}
 
 	/**
@@ -183,39 +202,31 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 	}
 
 	/**
-	 * Delete an existing Worker entity
+	 * Delete an existing SystemUser entity
 	 * 
 	 */
 	@Transactional
-	public Receptionist deleteReceptionistWorkers(Integer receptionist_id, Integer related_workers_id) {
-		Worker related_workers = workerDAO.findWorkerByPrimaryKey(related_workers_id, -1, -1);
-
+	public Receptionist deleteReceptionistSystemUser(Integer receptionist_id, Integer related_systemuser_id) {
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist_id, -1, -1);
+		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
-		related_workers.setReceptionist(null);
-		receptionist.getWorkers().remove(related_workers);
+		receptionist.setSystemUser(null);
+		receptionist = receptionistDAO.store(receptionist);
+		receptionistDAO.flush();
 
-		workerDAO.remove(related_workers);
-		workerDAO.flush();
+		related_systemuser = systemUserDAO.store(related_systemuser);
+		systemUserDAO.flush();
+
+		systemUserDAO.remove(related_systemuser);
+		systemUserDAO.flush();
 
 		return receptionist;
 	}
 
 	/**
-	 * Return all Receptionist entity
-	 * 
 	 */
 	@Transactional
-	public List<Receptionist> findAllReceptionists(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Receptionist>(receptionistDAO.findAllReceptionists(startResult, maxRows));
-	}
-
-	/**
-	 * Return a count of all Receptionist entity
-	 * 
-	 */
-	@Transactional
-	public Integer countReceptionists() {
-		return ((Long) receptionistDAO.createQuerySingleResult("select count(o) from Receptionist o").getSingleResult()).intValue();
+	public Receptionist findReceptionistByPrimaryKey(Integer id) {
+		return receptionistDAO.findReceptionistByPrimaryKey(id);
 	}
 }

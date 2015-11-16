@@ -64,25 +64,6 @@ public class SpecializationServiceImpl implements SpecializationService {
 	}
 
 	/**
-	 * Delete an existing SpecalVisitField entity
-	 * 
-	 */
-	@Transactional
-	public Specialization deleteSpecializationSpecalVisitFields(Integer specialization_id, Integer related_specalvisitfields_id) {
-		SpecalVisitField related_specalvisitfields = specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(related_specalvisitfields_id, -1, -1);
-
-		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(specialization_id, -1, -1);
-
-		related_specalvisitfields.setSpecialization(null);
-		specialization.getSpecalVisitFields().remove(related_specalvisitfields);
-
-		specalVisitFieldDAO.remove(related_specalvisitfields);
-		specalVisitFieldDAO.flush();
-
-		return specialization;
-	}
-
-	/**
 	 * Save an existing Specialization entity
 	 * 
 	 */
@@ -120,6 +101,34 @@ public class SpecializationServiceImpl implements SpecializationService {
 	}
 
 	/**
+	 * Delete an existing SpecalVisitField entity
+	 * 
+	 */
+	@Transactional
+	public Specialization deleteSpecializationSpecalVisitFields(Integer specialization_id, Integer related_specalvisitfields_id) {
+		SpecalVisitField related_specalvisitfields = specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(related_specalvisitfields_id, -1, -1);
+
+		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(specialization_id, -1, -1);
+
+		related_specalvisitfields.setSpecialization(null);
+		specialization.getSpecalVisitFields().remove(related_specalvisitfields);
+
+		specalVisitFieldDAO.remove(related_specalvisitfields);
+		specalVisitFieldDAO.flush();
+
+		return specialization;
+	}
+
+	/**
+	 * Load an existing Specialization entity
+	 * 
+	 */
+	@Transactional
+	public Set<Specialization> loadSpecializations() {
+		return specializationDAO.findAllSpecializations();
+	}
+
+	/**
 	 * Save an existing VisitScheduler entity
 	 * 
 	 */
@@ -131,10 +140,11 @@ public class SpecializationServiceImpl implements SpecializationService {
 		// copy into the existing record to preserve existing relationships
 		if (existingvisitSchedulers != null) {
 			existingvisitSchedulers.setId(related_visitschedulers.getId());
-//			existingvisitSchedulers.setNumberOfDay(related_visitschedulers.getNumberOfDay());
 			existingvisitSchedulers.setNumberOfMonth(related_visitschedulers.getNumberOfMonth());
 			existingvisitSchedulers.setDescription(related_visitschedulers.getDescription());
-//			existingvisitSchedulers.setTimeOfVisit(related_visitschedulers.getTimeOfVisit());
+			existingvisitSchedulers.setTimeFrom(related_visitschedulers.getTimeFrom());
+			existingvisitSchedulers.setTimeTo(related_visitschedulers.getTimeTo());
+			existingvisitSchedulers.setDuration(related_visitschedulers.getDuration());
 			related_visitschedulers = existingvisitSchedulers;
 		}
 
@@ -150,12 +160,12 @@ public class SpecializationServiceImpl implements SpecializationService {
 	}
 
 	/**
-	 * Load an existing Specialization entity
+	 * Return a count of all Specialization entity
 	 * 
 	 */
 	@Transactional
-	public Set<Specialization> loadSpecializations() {
-		return specializationDAO.findAllSpecializations();
+	public Integer countSpecializations() {
+		return ((Long) specializationDAO.createQuerySingleResult("select count(o) from Specialization o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -173,6 +183,45 @@ public class SpecializationServiceImpl implements SpecializationService {
 
 		visitSchedulerDAO.remove(related_visitschedulers);
 		visitSchedulerDAO.flush();
+
+		return specialization;
+	}
+
+	/**
+	 * Delete an existing Specialization entity
+	 * 
+	 */
+	@Transactional
+	public void deleteSpecialization(Specialization specialization) {
+		specializationDAO.remove(specialization);
+		specializationDAO.flush();
+	}
+
+	/**
+	 * Save an existing SpecalVisitField entity
+	 * 
+	 */
+	@Transactional
+	public Specialization saveSpecializationSpecalVisitFields(Integer id, SpecalVisitField related_specalvisitfields) {
+		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(id, -1, -1);
+		SpecalVisitField existingspecalVisitFields = specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(related_specalvisitfields.getId());
+
+		// copy into the existing record to preserve existing relationships
+		if (existingspecalVisitFields != null) {
+			existingspecalVisitFields.setId(related_specalvisitfields.getId());
+			existingspecalVisitFields.setName(related_specalvisitfields.getName());
+			existingspecalVisitFields.setValue(related_specalvisitfields.getValue());
+			existingspecalVisitFields.setTypeOfValue(related_specalvisitfields.getTypeOfValue());
+			related_specalvisitfields = existingspecalVisitFields;
+		}
+
+		related_specalvisitfields.setSpecialization(specialization);
+		specialization.getSpecalVisitFields().add(related_specalvisitfields);
+		related_specalvisitfields = specalVisitFieldDAO.store(related_specalvisitfields);
+		specalVisitFieldDAO.flush();
+
+		specialization = specializationDAO.store(specialization);
+		specializationDAO.flush();
 
 		return specialization;
 	}
@@ -201,25 +250,6 @@ public class SpecializationServiceImpl implements SpecializationService {
 	}
 
 	/**
-	 * Delete an existing Specialization entity
-	 * 
-	 */
-	@Transactional
-	public void deleteSpecialization(Specialization specialization) {
-		specializationDAO.remove(specialization);
-		specializationDAO.flush();
-	}
-
-	/**
-	 * Return a count of all Specialization entity
-	 * 
-	 */
-	@Transactional
-	public Integer countSpecializations() {
-		return ((Long) specializationDAO.createQuerySingleResult("select count(o) from Specialization o").getSingleResult()).intValue();
-	}
-
-	/**
 	 * Save an existing Doctor entity
 	 * 
 	 */
@@ -243,35 +273,6 @@ public class SpecializationServiceImpl implements SpecializationService {
 
 		related_doctor = doctorDAO.store(related_doctor);
 		doctorDAO.flush();
-
-		return specialization;
-	}
-
-	/**
-	 * Save an existing SpecalVisitField entity
-	 * 
-	 */
-	@Transactional
-	public Specialization saveSpecializationSpecalVisitFields(Integer id, SpecalVisitField related_specalvisitfields) {
-		Specialization specialization = specializationDAO.findSpecializationByPrimaryKey(id, -1, -1);
-		SpecalVisitField existingspecalVisitFields = specalVisitFieldDAO.findSpecalVisitFieldByPrimaryKey(related_specalvisitfields.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingspecalVisitFields != null) {
-			existingspecalVisitFields.setId(related_specalvisitfields.getId());
-			existingspecalVisitFields.setName(related_specalvisitfields.getName());
-			existingspecalVisitFields.setValue(related_specalvisitfields.getValue());
-			existingspecalVisitFields.setTypeOfValue(related_specalvisitfields.getTypeOfValue());
-			related_specalvisitfields = existingspecalVisitFields;
-		}
-
-		related_specalvisitfields.setSpecialization(specialization);
-		specialization.getSpecalVisitFields().add(related_specalvisitfields);
-		related_specalvisitfields = specalVisitFieldDAO.store(related_specalvisitfields);
-		specalVisitFieldDAO.flush();
-
-		specialization = specializationDAO.store(specialization);
-		specializationDAO.flush();
 
 		return specialization;
 	}

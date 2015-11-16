@@ -1,7 +1,6 @@
-package com.eclinic.model;
+package com.eclinic.visit.mapper;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class VisitModel {
 
@@ -94,7 +93,4 @@ public class VisitModel {
 	public void setPatientPesel(String patientPesel) {
 		this.patientPesel = patientPesel;
 	}
-	
-	
-
 }

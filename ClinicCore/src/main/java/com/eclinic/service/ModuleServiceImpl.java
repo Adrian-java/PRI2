@@ -46,21 +46,12 @@ public class ModuleServiceImpl implements ModuleService {
 	}
 
 	/**
-	 * Load an existing Module entity
+	 * Return a count of all Module entity
 	 * 
 	 */
 	@Transactional
-	public Set<Module> loadModules() {
-		return moduleDAO.findAllModules();
-	}
-
-	/**
-	 * Return all Module entity
-	 * 
-	 */
-	@Transactional
-	public List<Module> findAllModules(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Module>(moduleDAO.findAllModules(startResult, maxRows));
+	public Integer countModules() {
+		return ((Long) moduleDAO.createQuerySingleResult("select count(o) from Module o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -76,8 +67,8 @@ public class ModuleServiceImpl implements ModuleService {
 		if (existingpermissions != null) {
 			existingpermissions.setId(related_permissions.getId());
 			existingpermissions.setDisplay(related_permissions.getDisplay());
-			existingpermissions.setEdit(related_permissions.getEdit());
 			existingpermissions.setExecute(related_permissions.getExecute());
+			existingpermissions.setEdit(related_permissions.getEdit());
 			related_permissions = existingpermissions;
 		}
 
@@ -119,15 +110,6 @@ public class ModuleServiceImpl implements ModuleService {
 	}
 
 	/**
-	 * Return a count of all Module entity
-	 * 
-	 */
-	@Transactional
-	public Integer countModules() {
-		return ((Long) moduleDAO.createQuerySingleResult("select count(o) from Module o").getSingleResult()).intValue();
-	}
-
-	/**
 	 * Delete an existing Module entity
 	 * 
 	 */
@@ -135,6 +117,15 @@ public class ModuleServiceImpl implements ModuleService {
 	public void deleteModule(Module module) {
 		moduleDAO.remove(module);
 		moduleDAO.flush();
+	}
+
+	/**
+	 * Return all Module entity
+	 * 
+	 */
+	@Transactional
+	public List<Module> findAllModules(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<Module>(moduleDAO.findAllModules(startResult, maxRows));
 	}
 
 	/**
@@ -156,5 +147,14 @@ public class ModuleServiceImpl implements ModuleService {
 			module = moduleDAO.store(module);
 		}
 		moduleDAO.flush();
+	}
+
+	/**
+	 * Load an existing Module entity
+	 * 
+	 */
+	@Transactional
+	public Set<Module> loadModules() {
+		return moduleDAO.findAllModules();
 	}
 }

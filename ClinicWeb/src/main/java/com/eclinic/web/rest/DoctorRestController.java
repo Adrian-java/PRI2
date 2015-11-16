@@ -27,13 +27,11 @@ import com.eclinic.dao.GraphicDAO;
 import com.eclinic.dao.SpecializationDAO;
 import com.eclinic.dao.VisitDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
-import com.eclinic.dao.WorkerDAO;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Graphic;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
-import com.eclinic.domain.Worker;
 import com.eclinic.service.DoctorService;
 
 /**
@@ -81,12 +79,6 @@ public class DoctorRestController {
 	@Autowired
 	private VisitSchedulerDAO visitSchedulerDAO;
 
-	/**
-	 * DAO injected by Spring that manages Worker entities
-	 * 
-	 */
-	@Autowired
-	private WorkerDAO workerDAO;
 
 	/**
 	 * Service injected by Spring that provides CRUD operations for Doctor
@@ -260,20 +252,6 @@ public class DoctorRestController {
 		return Response.ok(visit).build();
 	}
 
-	/**
-	 * Save an existing Worker entity
-	 * 
-	 */
-
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{doctor_id}/workers")
-	@PUT
-	public Response saveDoctorWorkers(
-			@PathParam("doctor_id") Integer doctor_id, Worker workers) {
-		doctorService.saveDoctorWorkers(doctor_id, workers);
-		return Response.ok(workerDAO.findWorkerByPrimaryKey(workers.getId()))
-				.build();
-	}
 
 	/**
 	 * Show all Specialization entities by Doctor
@@ -500,37 +478,8 @@ public class DoctorRestController {
 						.getVisitSchedulers()).build();
 	}
 
-	/**
-	 * View an existing Worker entity
-	 * 
-	 */
-
-	@GET
-	@Path("/{doctor_id}/workers/{worker_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadDoctorWorkers(
-			@PathParam("doctor_id") Integer doctor_id,
-			@PathParam("related_workers_id") Integer related_workers_id) {
-		Worker worker = workerDAO.findWorkerByPrimaryKey(related_workers_id,
-				-1, -1);
-		return Response.ok(worker).build();
-	}
 
 
-	/**
-	 * Create a new Worker entity
-	 * 
-	 */
-
-	@Path("/{doctor_id}/workers")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newDoctorWorkers(@PathParam("doctor_id") Integer doctor_id,
-			Worker worker) {
-		doctorService.saveDoctorWorkers(doctor_id, worker);
-		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId()))
-				.build();
-	}
 
 	/**
 	 * Delete an existing Graphic entity
@@ -548,22 +497,6 @@ public class DoctorRestController {
 						related_graphics_id)).build();
 	}
 
-	/**
-	 * Delete an existing Worker entity
-	 * 
-	 */
-
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{doctor_id}/workers/{worker_id}")
-	public Response deleteDoctorWorkers(
-			@PathParam("doctor_id") Integer doctor_id,
-			@PathParam("related_workers_id") Integer related_workers_id) {
-		return Response.ok(
-				doctorService
-						.deleteDoctorWorkers(doctor_id, related_workers_id))
-				.build();
-	}
 
 	/**
 	 * Show all Visit entities by Doctor
@@ -576,20 +509,6 @@ public class DoctorRestController {
 	public Response getDoctorVisits(@PathParam("doctor_id") Integer doctor_id) {
 		return Response.ok(
 				doctorDAO.findDoctorByPrimaryKey(doctor_id).getVisits())
-				.build();
-	}
-
-	/**
-	 * Show all Worker entities by Doctor
-	 * 
-	 */
-
-	@GET
-	@Path("/{doctor_id}/workers")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDoctorWorkers(@PathParam("doctor_id") Integer doctor_id) {
-		return Response.ok(
-				doctorDAO.findDoctorByPrimaryKey(doctor_id).getWorkers())
 				.build();
 	}
 

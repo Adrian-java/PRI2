@@ -1,4 +1,4 @@
-package com.eclinic.model;
+package com.eclinic.visit.mapper;
 
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.Visit;
