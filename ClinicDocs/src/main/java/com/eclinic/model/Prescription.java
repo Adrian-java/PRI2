@@ -1,6 +1,7 @@
 package com.eclinic.model;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
@@ -21,9 +22,9 @@ public class Prescription {
 	
 	private String remedy;
 	
-	private Calendar issuedDate;
+	private Date issuedDate;
 	
-	private Calendar executionDate;
+	private Date executionDate;
 	
 	private Doctor doctor;
 	
@@ -51,19 +52,19 @@ public class Prescription {
 		this.department = department;
 	}
 
-	public Calendar getIssuedDate() {
+	public Date getIssuedDate() {
 		return issuedDate;
 	}
 
-	public void setIssuedDate(Calendar issuedDate) {
+	public void setIssuedDate(Date issuedDate) {
 		this.issuedDate = issuedDate;
 	}
 
-	public Calendar getExecutionDate() {
+	public Date getExecutionDate() {
 		return executionDate;
 	}
 
-	public void setExecutionDate(Calendar executionDate) {
+	public void setExecutionDate(Date executionDate) {
 		this.executionDate = executionDate;
 	}
 

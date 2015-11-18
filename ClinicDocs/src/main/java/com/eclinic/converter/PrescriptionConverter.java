@@ -52,9 +52,9 @@ public class PrescriptionConverter {
 		return data;
 	}
 	
-	public Map<String, String> convertToMap(Prescription prescription) {
+	public Map<String, Object> convertToMap(Prescription prescription) {
 		
-		HashMap<String, String> map = new HashMap<String, String>();
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		Patient patient = prescription.getPatient();
 		Clinic clinic = prescription.getClinic();
