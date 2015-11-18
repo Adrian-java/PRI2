@@ -2,17 +2,6 @@ package com.eclinic.web.rest;
 
 import java.io.IOException;
 
-import com.eclinic.dao.ReceptionistDAO;
-import com.eclinic.dao.VisitDAO;
-import com.eclinic.dao.WorkerDAO;
-import com.eclinic.domain.Receptionist;
-import com.eclinic.domain.Visit;
-import com.eclinic.domain.Worker;
-import com.eclinic.service.ReceptionistService;
-
-
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,6 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+
+import com.eclinic.dao.ReceptionistDAO;
+import com.eclinic.dao.VisitDAO;
+import com.eclinic.domain.Receptionist;
+import com.eclinic.domain.Visit;
+import com.eclinic.service.ReceptionistService;
 
 
 /**
@@ -56,12 +51,6 @@ public class ReceptionistRestController {
 	@Autowired
 	private VisitDAO visitDAO;
 
-	/**
-	 * DAO injected by Spring that manages Worker entities
-	 * 
-	 */
-	@Autowired
-	private WorkerDAO workerDAO;
 
 	/**
 	 * Service injected by Spring that provides CRUD operations for Receptionist entities
@@ -91,21 +80,6 @@ public class ReceptionistRestController {
 		binder.registerCustomEditor(Double.class, new org.skyway.spring.util.databinding.NaNHandlingNumberEditor(Double.class, true));
 	}
 	
-	/**
-	 * Create a new Worker entity
-	 * 
-	 */
-	
-	
-	
-	@Path("/{doctor_id}/workers")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newReceptionistWorkers(@PathParam("receptionist_id") Integer receptionist_id,
-			Worker worker) {
-		receptionistService.saveReceptionistWorkers(receptionist_id, worker);
-		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId())).build();
-	}
 
 	/**
 	 * View an existing Visit entity
@@ -139,19 +113,6 @@ public class ReceptionistRestController {
 		return  Response.ok(new ObjectMapper().writeValueAsString(receptionistService.loadReceptionists())).build();
 	}
 
-	/**
-	 * Delete an existing Worker entity
-	 * 
-	 */
-
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{receptionist_id}/workers/{worker_id}")
-	public Response deleteReceptionistWorkers(@PathParam("receptionist_id") Integer receptionist_id,
-			@PathParam("related_workers_id") Integer related_workers_id) {
-		return Response.ok(receptionistService.deleteReceptionistWorkers(receptionist_id, related_workers_id)).build();
-	}
 
 	/**
 	 * Create a new Receptionist entity
@@ -178,7 +139,7 @@ public class ReceptionistRestController {
 	@GET
 	@Path("/{receptionist_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadReceptionist(@PathParam("receptionist_id") Integer receptionist_id) {
+	public Response loadReceptionist(@PathParam("receptionist_id") String receptionist_id) {
 		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist_id)).build();
 	}
 
@@ -191,7 +152,7 @@ public class ReceptionistRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{receptionist_id}")
 	@DELETE
-	public void deleteReceptionist(@PathParam("receptionist_id") Integer receptionist_id) {
+	public void deleteReceptionist(@PathParam("receptionist_id") String receptionist_id) {
 		Receptionist receptionist = receptionistDAO.findReceptionistByPrimaryKey(receptionist_id);
 		receptionistService.deleteReceptionist(receptionist);
 	}
@@ -205,7 +166,7 @@ public class ReceptionistRestController {
 	@Path("/{receptionist_id}/visits")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newReceptionistVisits(@PathParam("receptionist_id") Integer receptionist_id,
+	public Response newReceptionistVisits(@PathParam("receptionist_id") String receptionist_id,
 			 Visit visit) {
 		receptionistService.saveReceptionistVisits(receptionist_id, visit);
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId())).build();
@@ -224,31 +185,12 @@ public class ReceptionistRestController {
 		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist.getId())).build();
 	}
 
-	/**
-	 * Save an existing Worker entity
-	 * 
-	 */
-
-	
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{receptionist_id}/workers")
-	@PUT
-	public Response saveReceptionistWorkers(@PathParam("receptionist_id") Integer receptionist_id,
-			Worker workers) {
-		receptionistService.saveReceptionistWorkers(receptionist_id, workers);
-		return Response.ok(workerDAO.findWorkerByPrimaryKey(workers.getId())).build();
-	}
-
-	/**
-	 * Show all Visit entities by Receptionist
-	 * 
-	 */
 
 	
 	@GET
 	@Path("/{receptionist_id}/visits")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getReceptionistVisits(@PathParam("receptionist_id") Integer receptionist_id) {
+	public Response getReceptionistVisits(@PathParam("receptionist_id") String receptionist_id) {
 		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist_id).getVisits()).build();
 	}
 
@@ -264,7 +206,7 @@ public class ReceptionistRestController {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{receptionist_id}/visits/{visit_id}")
-	public Response deleteReceptionistVisits(@PathParam("receptionist_id") Integer receptionist_id,
+	public Response deleteReceptionistVisits(@PathParam("receptionist_id") String receptionist_id,
 			@PathParam("related_visits_id") Integer related_visits_id) {
 		return Response.ok(receptionistService.deleteReceptionistVisits(receptionist_id, related_visits_id)).build();
 	}
@@ -278,37 +220,11 @@ public class ReceptionistRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{receptionist_id}/visits")
 	@PUT
-	public Response saveReceptionistVisits(@PathParam("receptionist_id") Integer receptionist_id,
+	public Response saveReceptionistVisits(@PathParam("receptionist_id") String receptionist_id,
 			Visit visits) {
 		receptionistService.saveReceptionistVisits(receptionist_id, visits);
 		return Response.ok(visitDAO.findVisitByPrimaryKey(visits.getId())).build();
 	}
 
-	/**
-	 * Show all Worker entities by Receptionist
-	 * 
-	 */
 
-	
-	@GET
-	@Path("/{receptionist_id}/workers")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getReceptionistWorkers(@PathParam("receptionist_id") Integer receptionist_id) {
-		return Response.ok(receptionistDAO.findReceptionistByPrimaryKey(receptionist_id).getWorkers()).build();
-	}
-
-	/**
-	 * View an existing Worker entity
-	 * 
-	 */
-
-	
-	@GET
-	@Path("/{receptionist_id}/workers/{worker_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadReceptionistWorkers(@PathParam("receptionist_id") Integer receptionist_id,
-			@PathParam("related_workers_id") Integer related_workers_id) {
-		Worker worker = workerDAO.findWorkerByPrimaryKey(related_workers_id, -1, -1);
-		return Response.ok(worker).build();
-	}
 }

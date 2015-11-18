@@ -16,6 +16,18 @@ public interface ApplicationParameterService {
 	public ApplicationParameter findApplicationParameterByPrimaryKey(Integer id);
 
 	/**
+	 * Load an existing ApplicationParameter entity
+	 * 
+	 */
+	public Set<ApplicationParameter> loadApplicationParameters();
+
+	/**
+	 * Return a count of all ApplicationParameter entity
+	 * 
+	 */
+	public Integer countApplicationParameters();
+
+	/**
 	 * Save an existing ApplicationParameter entity
 	 * 
 	 */
@@ -32,16 +44,4 @@ public interface ApplicationParameterService {
 	 * 
 	 */
 	public void deleteApplicationParameter(ApplicationParameter applicationparameter_1);
-
-	/**
-	 * Return a count of all ApplicationParameter entity
-	 * 
-	 */
-	public Integer countApplicationParameters();
-
-	/**
-	 * Load an existing ApplicationParameter entity
-	 * 
-	 */
-	public Set<ApplicationParameter> loadApplicationParameters();
 }

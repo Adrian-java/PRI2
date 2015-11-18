@@ -13,22 +13,20 @@ import java.util.Set;
 public interface TypeOfUserService {
 
 	/**
+	 */
+	public TypeOfUser findTypeOfUserByPrimaryKey(Integer id);
+
+	/**
 	 * Save an existing Permission entity
 	 * 
 	 */
-	public TypeOfUser saveTypeOfUserPermission(Integer id, Permission related_permission);
+	public TypeOfUser saveTypeOfUserPermissions(Integer id_1, Permission related_permissions);
 
 	/**
-	 * Return a count of all TypeOfUser entity
+	 * Save an existing TypeOfUser entity
 	 * 
 	 */
-	public Integer countTypeOfUsers();
-
-	/**
-	 * Return all TypeOfUser entity
-	 * 
-	 */
-	public List<TypeOfUser> findAllTypeOfUsers(Integer startResult, Integer maxRows);
+	public TypeOfUser saveTypeOfUserTypeOfUsers(Integer id_2, TypeOfUser related_typeofusers);
 
 	/**
 	 * Load an existing TypeOfUser entity
@@ -37,10 +35,10 @@ public interface TypeOfUserService {
 	public Set<TypeOfUser> loadTypeOfUsers();
 
 	/**
-	 * Delete an existing Permission entity
+	 * Delete an existing TypeOfUser entity
 	 * 
 	 */
-	public TypeOfUser deleteTypeOfUserPermission(Integer typeofuser_id, Integer related_permission_id);
+	public TypeOfUser deleteTypeOfUserTypeOfUsers(Integer typeofuser_id, Integer related_typeofusers_id);
 
 	/**
 	 * Delete an existing TypeOfUser entity
@@ -49,12 +47,38 @@ public interface TypeOfUserService {
 	public void deleteTypeOfUser(TypeOfUser typeofuser);
 
 	/**
+	 * Delete an existing Permission entity
+	 * 
+	 */
+	public TypeOfUser deleteTypeOfUserPermissions(Integer typeofuser_id_1, Integer related_permissions_id);
+
+	/**
+	 * Return all TypeOfUser entity
+	 * 
+	 */
+	public List<TypeOfUser> findAllTypeOfUsers(Integer startResult, Integer maxRows);
+
+	/**
 	 * Save an existing TypeOfUser entity
 	 * 
 	 */
 	public void saveTypeOfUser(TypeOfUser typeofuser_1);
 
 	/**
+	 * Delete an existing TypeOfUser entity
+	 * 
 	 */
-	public TypeOfUser findTypeOfUserByPrimaryKey(Integer id_1);
+	public TypeOfUser deleteTypeOfUserTypeOfUser(Integer typeofuser_id_2, Integer related_typeofuser_id);
+
+	/**
+	 * Return a count of all TypeOfUser entity
+	 * 
+	 */
+	public Integer countTypeOfUsers();
+
+	/**
+	 * Save an existing TypeOfUser entity
+	 * 
+	 */
+	public TypeOfUser saveTypeOfUserTypeOfUser(Integer id_3, TypeOfUser related_typeofuser);
 }

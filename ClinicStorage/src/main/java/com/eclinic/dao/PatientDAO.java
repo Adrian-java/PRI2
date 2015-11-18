@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -79,13 +78,13 @@ public interface PatientDAO extends JpaDao<Patient> {
 	 * JPQL Query - findPatientById
 	 *
 	 */
-	public Patient findPatientById(Integer id) throws DataAccessException;
+	public Patient findPatientById(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findPatientById
 	 *
 	 */
-	public Patient findPatientById(Integer id, int startResult, int maxRows) throws DataAccessException;
+	public Patient findPatientById(String id, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findPatientByEMailContaining
@@ -164,13 +163,13 @@ public interface PatientDAO extends JpaDao<Patient> {
 	 * JPQL Query - findPatientByPrimaryKey
 	 *
 	 */
-	public Patient findPatientByPrimaryKey(Integer id_1) throws DataAccessException;
+	public Patient findPatientByPrimaryKey(String string) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findPatientByPrimaryKey
 	 *
 	 */
-	public Patient findPatientByPrimaryKey(Integer id_1, int startResult, int maxRows) throws DataAccessException;
+	public Patient findPatientByPrimaryKey(String id_1, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findPatientByName

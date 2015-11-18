@@ -13,26 +13,20 @@ import java.util.Set;
 public interface StatusOfVisitService {
 
 	/**
-	 * Delete an existing StatusOfVisit entity
-	 * 
-	 */
-	public void deleteStatusOfVisit(StatusOfVisit statusofvisit);
-
-	/**
-	 * Delete an existing Visit entity
-	 * 
-	 */
-	public StatusOfVisit deleteStatusOfVisitVisits(Integer statusofvisit_id, Integer related_visits_id);
-
-	/**
 	 * Return a count of all StatusOfVisit entity
 	 * 
 	 */
 	public Integer countStatusOfVisits();
 
 	/**
+	 * Save an existing Visit entity
+	 * 
 	 */
-	public StatusOfVisit findStatusOfVisitByPrimaryKey(Integer id);
+	public StatusOfVisit saveStatusOfVisitVisits(Integer id, Visit related_visits);
+
+	/**
+	 */
+	public StatusOfVisit findStatusOfVisitByPrimaryKey(Integer id_1);
 
 	/**
 	 * Return all StatusOfVisit entity
@@ -41,10 +35,16 @@ public interface StatusOfVisitService {
 	public List<StatusOfVisit> findAllStatusOfVisits(Integer startResult, Integer maxRows);
 
 	/**
-	 * Save an existing Visit entity
+	 * Delete an existing Visit entity
 	 * 
 	 */
-	public StatusOfVisit saveStatusOfVisitVisits(Integer id_1, Visit related_visits);
+	public StatusOfVisit deleteStatusOfVisitVisits(Integer statusofvisit_id, Integer related_visits_id);
+
+	/**
+	 * Delete an existing StatusOfVisit entity
+	 * 
+	 */
+	public void deleteStatusOfVisit(StatusOfVisit statusofvisit);
 
 	/**
 	 * Load an existing StatusOfVisit entity

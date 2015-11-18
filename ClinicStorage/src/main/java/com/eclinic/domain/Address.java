@@ -105,9 +105,14 @@ public class Address implements Serializable {
 
 	/**
 	 */
-	@OneToMany(mappedBy = "address", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "address", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	//@XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Patient> patients;
+	
+	@OneToMany(mappedBy = "address", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@XmlElement(name = "", namespace = "")
+	private
+	java.util.Set<com.eclinic.domain.Clinic> clinics;
 
 	/**
 	 */
@@ -271,5 +276,13 @@ public class Address implements Serializable {
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
+	}
+
+	public java.util.Set<com.eclinic.domain.Clinic> getClinics() {
+		return clinics;
+	}
+
+	public void setClinics(java.util.Set<com.eclinic.domain.Clinic> clinics) {
+		this.clinics = clinics;
 	}
 }

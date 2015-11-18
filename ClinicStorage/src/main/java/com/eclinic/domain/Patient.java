@@ -1,24 +1,38 @@
 package com.eclinic.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.io.Serializable;
-import java.lang.StringBuilder;
 import java.util.Calendar;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 /**
  */
@@ -30,8 +44,6 @@ import javax.persistence.*;
 		@NamedQuery(name = "findPatientByDateOfBirth", query = "select myPatient from Patient myPatient where myPatient.dateOfBirth = ?1"),
 		@NamedQuery(name = "findPatientByDateOfBirthAfter", query = "select myPatient from Patient myPatient where myPatient.dateOfBirth > ?1"),
 		@NamedQuery(name = "findPatientByDateOfBirthBefore", query = "select myPatient from Patient myPatient where myPatient.dateOfBirth < ?1"),
-		@NamedQuery(name = "findPatientByEMail", query = "select myPatient from Patient myPatient"),
-		@NamedQuery(name = "findPatientByEMailContaining", query = "select myPatient from Patient myPatient"),
 		@NamedQuery(name = "findPatientById", query = "select myPatient from Patient myPatient where myPatient.id = ?1"),
 		@NamedQuery(name = "findPatientByName", query = "select myPatient from Patient myPatient where myPatient.name = ?1"),
 		@NamedQuery(name = "findPatientByNameContaining", query = "select myPatient from Patient myPatient where myPatient.name like ?1"),
@@ -42,8 +54,9 @@ import javax.persistence.*;
 		@NamedQuery(name = "findPatientBySurnameContaining", query = "select myPatient from Patient myPatient where myPatient.surname like ?1") })
 @Table(catalog = "eclinic", name = "Patient")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "wee/com/eclinic/domain", name = "Patient")
-@XmlRootElement(namespace = "wee/com/eclinic/domain")
+@XmlType(namespace = "Web/com/eclinic/domain", name = "Patient")
+@XmlRootElement(namespace = "Web/com/eclinic/domain")
+@GenericGenerator(name = "foreign", strategy = "foreign", parameters = { @Parameter(name = "property", value = "systemUser") })
 public class Patient implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -53,9 +66,9 @@ public class Patient implements Serializable {
 	@Column(name = "id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
-	Integer id;
+	@GeneratedValue(generator = "foreign")
+	String id;
 	/**
 	 */
 
@@ -72,7 +85,6 @@ public class Patient implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String surname;
-
 	/**
 	 * data urodzenia
 	 * 
@@ -82,15 +94,6 @@ public class Patient implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	Calendar dateOfBirth;
-	/**
-	 * email
-	 * 
-	 */
-
-//	@Column(name = "e_mail", length = 20, nullable = true)
-//	@Basic(fetch = FetchType.EAGER)
-//	@XmlElement
-//	String EMail;
 	/**
 	 * telefon
 	 * 
@@ -110,44 +113,36 @@ public class Patient implements Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumns({ @JoinColumn(name = "id_address", referencedColumnName = "Id", nullable = false) })
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@JoinColumns({ @JoinColumn(name = "id_address", referencedColumnName = "Id", nullable = false)})
 	@XmlTransient
 	Address address;
 	/**
 	 */
-	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.PatientCard> patientCards;
+	@PrimaryKeyJoinColumn
+	@OneToOne(fetch = FetchType.LAZY, optional=false)
+	@XmlElement(name = "", namespace = "")
+	SystemUser systemUser;
 	/**
 	 */
 	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Recipe> recipes;
+	@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Visit> visits;
 	/**
 	 */
 	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Worker> workers;
-	/**
-	 */
-	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
-	
-	@OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-	// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Documents> documents;
+	@XmlElement(name = "", namespace = "")
+	java.util.Set<com.eclinic.domain.Documents> documentses;
 
 	/**
 	 */
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
 	/**
 	 */
-	public Integer getId() {
+	public String getId() {
 		return this.id;
 	}
 
@@ -196,22 +191,6 @@ public class Patient implements Serializable {
 	}
 
 	/**
-	 * email
-	 * 
-	 */
-//	public void setEMail(String EMail) {
-//		this.EMail = EMail;
-//	}
-//
-//	/**
-//	 * email
-//	 * 
-//	 */
-//	public String getEMail() {
-//		return this.EMail;
-//	}
-
-	/**
 	 * telefon
 	 * 
 	 */
@@ -247,7 +226,7 @@ public class Patient implements Serializable {
 
 	/**
 	 */
-	// @JsonIgnore
+//	@JsonIgnore
 	@JsonProperty("address")
 	public Address getAddress() {
 		return address;
@@ -255,66 +234,47 @@ public class Patient implements Serializable {
 
 	/**
 	 */
-	public void setPatientCards(Set<PatientCard> patientCards) {
-		this.patientCards = patientCards;
+	public void setSystemUser(SystemUser systemUser) {
+		this.systemUser = systemUser;
 	}
 
 	/**
 	 */
 	@JsonIgnore
-	public Set<PatientCard> getPatientCards() {
-		if (patientCards == null) {
-			patientCards = new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>();
-		}
-		return patientCards;
+	public SystemUser getSystemUser() {
+		return systemUser;
 	}
 
 	/**
 	 */
-	public void setRecipes(Set<Recipe> recipes) {
-		this.recipes = recipes;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<Recipe> getRecipes() {
-		if (recipes == null) {
-			recipes = new java.util.LinkedHashSet<com.eclinic.domain.Recipe>();
-		}
-		return recipes;
-	}
-
-	/**
-	 */
-	public void setWorkers(Set<Worker> workers) {
-		this.workers = workers;
+	public void setVisits(Set<Visit> visits) {
+		this.visits = visits;
 	}
 
 	/**
 	 */
 	@JsonIgnore
-	public Set<Worker> getWorkers() {
-		if (workers == null) {
-			workers = new java.util.LinkedHashSet<com.eclinic.domain.Worker>();
+	public Set<Visit> getVisits() {
+		if (visits == null) {
+			visits = new java.util.LinkedHashSet<com.eclinic.domain.Visit>();
 		}
-		return workers;
+		return visits;
 	}
 
 	/**
 	 */
-	public void setSickLeaves(Set<SickLeave> sickLeaves) {
-		this.sickLeaves = sickLeaves;
+	public void setDocumentses(Set<Documents> documentses) {
+		this.documentses = documentses;
 	}
 
 	/**
 	 */
 	@JsonIgnore
-	public Set<SickLeave> getSickLeaves() {
-		if (sickLeaves == null) {
-			sickLeaves = new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>();
+	public Set<Documents> getDocumentses() {
+		if (documentses == null) {
+			documentses = new java.util.LinkedHashSet<com.eclinic.domain.Documents>();
 		}
-		return sickLeaves;
+		return documentses;
 	}
 
 	/**
@@ -327,30 +287,16 @@ public class Patient implements Serializable {
 	 *
 	 */
 	public void copy(Patient that) {
-		if (that.getId() != null)
-			setId(that.getId());
-		if (that.getName() != null)
-			setName(that.getName());
-		if (that.getSurname() != null)
-			setSurname(that.getSurname());
-		if (that.getDateOfBirth() != null)
-			setDateOfBirth(that.getDateOfBirth());
-//		if (that.getEMail() != null)
-//			setEMail(that.getEMail());
-		if (that.getPhoneNr() != null)
-			setPhoneNr(that.getPhoneNr());
-		if (that.getConfirmed() != null)
-			setConfirmed(that.getConfirmed());
-		if (that.getAddress() != null)
-			setAddress(that.getAddress());
-		setPatientCards(new java.util.LinkedHashSet<com.eclinic.domain.PatientCard>(
-				that.getPatientCards()));
-		setRecipes(new java.util.LinkedHashSet<com.eclinic.domain.Recipe>(
-				that.getRecipes()));
-		setWorkers(new java.util.LinkedHashSet<com.eclinic.domain.Worker>(
-				that.getWorkers()));
-		setSickLeaves(new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>(
-				that.getSickLeaves()));
+		setId(that.getId());
+		setName(that.getName());
+		setSurname(that.getSurname());
+		setDateOfBirth(that.getDateOfBirth());
+		setPhoneNr(that.getPhoneNr());
+		setConfirmed(that.getConfirmed());
+		setAddress(that.getAddress());
+		setSystemUser(that.getSystemUser());
+		setVisits(new java.util.LinkedHashSet<com.eclinic.domain.Visit>(that.getVisits()));
+		setDocumentses(new java.util.LinkedHashSet<com.eclinic.domain.Documents>(that.getDocumentses()));
 	}
 
 	/**
@@ -365,7 +311,6 @@ public class Patient implements Serializable {
 		buffer.append("name=[").append(name).append("] ");
 		buffer.append("surname=[").append(surname).append("] ");
 		buffer.append("dateOfBirth=[").append(dateOfBirth).append("] ");
-//		buffer.append("EMail=[").append(EMail).append("] ");
 		buffer.append("phoneNr=[").append(phoneNr).append("] ");
 		buffer.append("confirmed=[").append(confirmed).append("] ");
 
@@ -390,21 +335,10 @@ public class Patient implements Serializable {
 		if (!(obj instanceof Patient))
 			return false;
 		Patient equalCheck = (Patient) obj;
-		if ((id == null && equalCheck.id != null)
-				|| (id != null && equalCheck.id == null))
+		if ((id == null && equalCheck.id != null) || (id != null && equalCheck.id == null))
 			return false;
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
-	}
-
-	public // @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Documents> getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(// @XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.Documents> documents) {
-		this.documents = documents;
 	}
 }

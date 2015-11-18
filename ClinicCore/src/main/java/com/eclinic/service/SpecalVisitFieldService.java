@@ -13,26 +13,14 @@ import java.util.Set;
 public interface SpecalVisitFieldService {
 
 	/**
-	 * Delete an existing SpecalVisitField entity
-	 * 
-	 */
-	public void deleteSpecalVisitField(SpecalVisitField specalvisitfield);
-
-	/**
-	 * Delete an existing Specialization entity
-	 * 
-	 */
-	public SpecalVisitField deleteSpecalVisitFieldSpecialization(Integer specalvisitfield_id, Integer related_specialization_id);
-
-	/**
 	 */
 	public SpecalVisitField findSpecalVisitFieldByPrimaryKey(Integer id);
 
 	/**
-	 * Return a count of all SpecalVisitField entity
+	 * Delete an existing SpecalVisitField entity
 	 * 
 	 */
-	public Integer countSpecalVisitFields();
+	public void deleteSpecalVisitField(SpecalVisitField specalvisitfield);
 
 	/**
 	 * Save an existing SpecalVisitField entity
@@ -41,10 +29,16 @@ public interface SpecalVisitFieldService {
 	public void saveSpecalVisitField(SpecalVisitField specalvisitfield_1);
 
 	/**
-	 * Return all SpecalVisitField entity
+	 * Return a count of all SpecalVisitField entity
 	 * 
 	 */
-	public List<SpecalVisitField> findAllSpecalVisitFields(Integer startResult, Integer maxRows);
+	public Integer countSpecalVisitFields();
+
+	/**
+	 * Delete an existing Specialization entity
+	 * 
+	 */
+	public SpecalVisitField deleteSpecalVisitFieldSpecialization(Integer specalvisitfield_id, Integer related_specialization_id);
 
 	/**
 	 * Load an existing SpecalVisitField entity
@@ -57,4 +51,10 @@ public interface SpecalVisitFieldService {
 	 * 
 	 */
 	public SpecalVisitField saveSpecalVisitFieldSpecialization(Integer id_1, Specialization related_specialization);
+
+	/**
+	 * Return all SpecalVisitField entity
+	 * 
+	 */
+	public List<SpecalVisitField> findAllSpecalVisitFields(Integer startResult, Integer maxRows);
 }

@@ -10,9 +10,9 @@ public class NewVisitMapper {
     
     private String description;
     
-    private Integer idReceptionist;
+    private String idReceptionist;
     
-    private Integer idDoctor;
+    private String idDoctor;
     
     private String typeOfVisit;
 
@@ -40,19 +40,19 @@ public class NewVisitMapper {
         this.description = description;
     }
 
-    public Integer getIdReceptionist() {
+    public String getIdReceptionist() {
         return idReceptionist;
     }
 
-    public void setIdReceptionist(Integer idReceptionist) {
+    public void setIdReceptionist(String idReceptionist) {
         this.idReceptionist = idReceptionist;
     }
 
-    public Integer getIdDoctor() {
+    public String getIdDoctor() {
         return idDoctor;
     }
 
-    public void setIdDoctor(Integer idDoctor) {
+    public void setIdDoctor(String idDoctor) {
         this.idDoctor = idDoctor;
     }
 

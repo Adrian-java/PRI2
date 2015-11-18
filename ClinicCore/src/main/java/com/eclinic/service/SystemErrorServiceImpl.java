@@ -37,10 +37,31 @@ public class SystemErrorServiceImpl implements SystemErrorService {
 	}
 
 	/**
+	 * Delete an existing SystemError entity
+	 * 
 	 */
 	@Transactional
-	public SystemError findSystemErrorByPrimaryKey(Integer id) {
-		return systemErrorDAO.findSystemErrorByPrimaryKey(id);
+	public void deleteSystemError(SystemError systemerror) {
+		systemErrorDAO.remove(systemerror);
+		systemErrorDAO.flush();
+	}
+
+	/**
+	 * Return all SystemError entity
+	 * 
+	 */
+	@Transactional
+	public List<SystemError> findAllSystemErrors(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<SystemError>(systemErrorDAO.findAllSystemErrors(startResult, maxRows));
+	}
+
+	/**
+	 * Return a count of all SystemError entity
+	 * 
+	 */
+	@Transactional
+	public Integer countSystemErrors() {
+		return ((Long) systemErrorDAO.createQuerySingleResult("select count(o) from SystemError o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -66,13 +87,10 @@ public class SystemErrorServiceImpl implements SystemErrorService {
 	}
 
 	/**
-	 * Delete an existing SystemError entity
-	 * 
 	 */
 	@Transactional
-	public void deleteSystemError(SystemError systemerror) {
-		systemErrorDAO.remove(systemerror);
-		systemErrorDAO.flush();
+	public SystemError findSystemErrorByPrimaryKey(Integer id) {
+		return systemErrorDAO.findSystemErrorByPrimaryKey(id);
 	}
 
 	/**
@@ -82,23 +100,5 @@ public class SystemErrorServiceImpl implements SystemErrorService {
 	@Transactional
 	public Set<SystemError> loadSystemErrors() {
 		return systemErrorDAO.findAllSystemErrors();
-	}
-
-	/**
-	 * Return all SystemError entity
-	 * 
-	 */
-	@Transactional
-	public List<SystemError> findAllSystemErrors(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<SystemError>(systemErrorDAO.findAllSystemErrors(startResult, maxRows));
-	}
-
-	/**
-	 * Return a count of all SystemError entity
-	 * 
-	 */
-	@Transactional
-	public Integer countSystemErrors() {
-		return ((Long) systemErrorDAO.createQuerySingleResult("select count(o) from SystemError o").getSingleResult()).intValue();
 	}
 }

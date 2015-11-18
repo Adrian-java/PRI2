@@ -180,7 +180,7 @@ public class DoctorDAOImpl extends AbstractJpaDao<Doctor> implements DoctorDAO {
 	 *
 	 */
 	@Transactional
-	public Doctor findDoctorByPrimaryKey(Integer id) throws DataAccessException {
+	public Doctor findDoctorByPrimaryKey(String id) throws DataAccessException {
 
 		return findDoctorByPrimaryKey(id, -1, -1);
 	}
@@ -191,7 +191,7 @@ public class DoctorDAOImpl extends AbstractJpaDao<Doctor> implements DoctorDAO {
 	 */
 
 	@Transactional
-	public Doctor findDoctorByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public Doctor findDoctorByPrimaryKey(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findDoctorByPrimaryKey", startResult, maxRows, id);
 			return (com.eclinic.domain.Doctor) query.getSingleResult();
@@ -205,7 +205,7 @@ public class DoctorDAOImpl extends AbstractJpaDao<Doctor> implements DoctorDAO {
 	 *
 	 */
 	@Transactional
-	public Doctor findDoctorById(Integer id) throws DataAccessException {
+	public Doctor findDoctorById(String id) throws DataAccessException {
 
 		return findDoctorById(id, -1, -1);
 	}
@@ -216,7 +216,7 @@ public class DoctorDAOImpl extends AbstractJpaDao<Doctor> implements DoctorDAO {
 	 */
 
 	@Transactional
-	public Doctor findDoctorById(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public Doctor findDoctorById(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findDoctorById", startResult, maxRows, id);
 			return (com.eclinic.domain.Doctor) query.getSingleResult();

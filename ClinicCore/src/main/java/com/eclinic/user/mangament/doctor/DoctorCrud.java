@@ -9,11 +9,11 @@ import com.eclinic.domain.view.DoctorView;
 
 public interface DoctorCrud {
 
-	public Response AddDoctor(SystemUser systemUser);
+	public Response addDoctor(SystemUser systemUser);
 	
 	public Set<DoctorView> getAllDoctors();
 	
-	public DoctorView getDoctorByPesel(String pesel);
+	public DoctorView getDoctorById(String pesel);
 	
 	public Set<DoctorView> getDoctorsBySpecialization(String specialization);
 }

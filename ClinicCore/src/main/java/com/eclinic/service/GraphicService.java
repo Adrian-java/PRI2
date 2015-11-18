@@ -1,5 +1,6 @@
 package com.eclinic.service;
 
+import com.eclinic.domain.DayOfWeek;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Graphic;
 
@@ -13,22 +14,32 @@ import java.util.Set;
 public interface GraphicService {
 
 	/**
-	 * Delete an existing Graphic entity
+	 * Load an existing Graphic entity
 	 * 
 	 */
-	public void deleteGraphic(Graphic graphic);
+	public Set<Graphic> loadGraphics();
 
 	/**
-	 * Delete an existing Doctor entity
+	 * Delete an existing DayOfWeek entity
 	 * 
 	 */
-	public Graphic deleteGraphicDoctor(Integer graphic_id, Integer related_doctor_id);
+	public Graphic deleteGraphicDayOfWeek(Integer graphic_id, Integer related_dayofweek_id);
 
 	/**
-	 * Save an existing Doctor entity
+	 * Save an existing Graphic entity
 	 * 
 	 */
-	public Graphic saveGraphicDoctor(Integer id, Doctor related_doctor);
+	public void saveGraphic(Graphic graphic);
+
+	/**
+	 */
+	public Graphic findGraphicByPrimaryKey(Integer id);
+
+	/**
+	 * Save an existing DayOfWeek entity
+	 * 
+	 */
+	public Graphic saveGraphicDayOfWeek(Integer id_1, DayOfWeek related_dayofweek);
 
 	/**
 	 * Return all Graphic entity
@@ -37,24 +48,26 @@ public interface GraphicService {
 	public List<Graphic> findAllGraphics(Integer startResult, Integer maxRows);
 
 	/**
+	 * Delete an existing Doctor entity
+	 * 
 	 */
-	public Graphic findGraphicByPrimaryKey(Integer id_1);
+	public Graphic deleteGraphicDoctor(Integer graphic_id_1, String related_doctor_id);
+
+	/**
+	 * Delete an existing Graphic entity
+	 * 
+	 */
+	public void deleteGraphic(Graphic graphic_1);
+
+	/**
+	 * Save an existing Doctor entity
+	 * 
+	 */
+	public Graphic saveGraphicDoctor(Integer id_2, Doctor related_doctor);
 
 	/**
 	 * Return a count of all Graphic entity
 	 * 
 	 */
 	public Integer countGraphics();
-
-	/**
-	 * Save an existing Graphic entity
-	 * 
-	 */
-	public void saveGraphic(Graphic graphic_1);
-
-	/**
-	 * Load an existing Graphic entity
-	 * 
-	 */
-	public Set<Graphic> loadGraphics();
 }

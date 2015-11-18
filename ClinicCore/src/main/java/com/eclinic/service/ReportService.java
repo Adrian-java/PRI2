@@ -18,10 +18,14 @@ public interface ReportService {
 	public void saveReport(Report report);
 
 	/**
-	 * Return a count of all Report entity
+	 */
+	public Report findReportByPrimaryKey(Integer id);
+
+	/**
+	 * Load an existing Report entity
 	 * 
 	 */
-	public Integer countReports();
+	public Set<Report> loadReports();
 
 	/**
 	 * Delete an existing Report entity
@@ -30,18 +34,14 @@ public interface ReportService {
 	public void deleteReport(Report report_1);
 
 	/**
+	 * Return a count of all Report entity
+	 * 
 	 */
-	public Report findReportByPrimaryKey(Integer id);
+	public Integer countReports();
 
 	/**
 	 * Return all Report entity
 	 * 
 	 */
 	public List<Report> findAllReports(Integer startResult, Integer maxRows);
-
-	/**
-	 * Load an existing Report entity
-	 * 
-	 */
-	public Set<Report> loadReports();
 }

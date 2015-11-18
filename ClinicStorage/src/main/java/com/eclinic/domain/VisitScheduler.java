@@ -18,8 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -50,7 +48,7 @@ public class VisitScheduler implements Serializable {
 	/**
 	 */
 
-	@Column(name = "Id", nullable = false)
+	@Column(name = "Id", nullable = true)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -91,6 +89,12 @@ public class VisitScheduler implements Serializable {
 	@XmlElement
 	private
 	Time timeTo;
+	
+	@Column(name = "duration")
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	private
+	Integer duration;
 
 	/**
 	 */
@@ -264,5 +268,12 @@ public class VisitScheduler implements Serializable {
 
 	public void setTimeTo(Time timeTo) {
 		this.timeTo = timeTo;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 }

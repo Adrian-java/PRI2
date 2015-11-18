@@ -46,57 +46,12 @@ public class StatusOfVisitServiceImpl implements StatusOfVisitService {
 	}
 
 	/**
-	 * Delete an existing StatusOfVisit entity
-	 * 
-	 */
-	@Transactional
-	public void deleteStatusOfVisit(StatusOfVisit statusofvisit) {
-		statusOfVisitDAO.remove(statusofvisit);
-		statusOfVisitDAO.flush();
-	}
-
-	/**
-	 * Delete an existing Visit entity
-	 * 
-	 */
-	@Transactional
-	public StatusOfVisit deleteStatusOfVisitVisits(Integer statusofvisit_id, Integer related_visits_id) {
-		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
-
-		StatusOfVisit statusofvisit = statusOfVisitDAO.findStatusOfVisitByPrimaryKey(statusofvisit_id, -1, -1);
-
-		related_visits.setStatusOfVisit(null);
-		statusofvisit.getVisits().remove(related_visits);
-
-		visitDAO.remove(related_visits);
-		visitDAO.flush();
-
-		return statusofvisit;
-	}
-
-	/**
 	 * Return a count of all StatusOfVisit entity
 	 * 
 	 */
 	@Transactional
 	public Integer countStatusOfVisits() {
 		return ((Long) statusOfVisitDAO.createQuerySingleResult("select count(o) from StatusOfVisit o").getSingleResult()).intValue();
-	}
-
-	/**
-	 */
-	@Transactional
-	public StatusOfVisit findStatusOfVisitByPrimaryKey(Integer id) {
-		return statusOfVisitDAO.findStatusOfVisitByPrimaryKey(id);
-	}
-
-	/**
-	 * Return all StatusOfVisit entity
-	 * 
-	 */
-	@Transactional
-	public List<StatusOfVisit> findAllStatusOfVisits(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<StatusOfVisit>(statusOfVisitDAO.findAllStatusOfVisits(startResult, maxRows));
 	}
 
 	/**
@@ -127,6 +82,51 @@ public class StatusOfVisitServiceImpl implements StatusOfVisitService {
 		statusOfVisitDAO.flush();
 
 		return statusofvisit;
+	}
+
+	/**
+	 */
+	@Transactional
+	public StatusOfVisit findStatusOfVisitByPrimaryKey(Integer id) {
+		return statusOfVisitDAO.findStatusOfVisitByPrimaryKey(id);
+	}
+
+	/**
+	 * Return all StatusOfVisit entity
+	 * 
+	 */
+	@Transactional
+	public List<StatusOfVisit> findAllStatusOfVisits(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<StatusOfVisit>(statusOfVisitDAO.findAllStatusOfVisits(startResult, maxRows));
+	}
+
+	/**
+	 * Delete an existing Visit entity
+	 * 
+	 */
+	@Transactional
+	public StatusOfVisit deleteStatusOfVisitVisits(Integer statusofvisit_id, Integer related_visits_id) {
+		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
+
+		StatusOfVisit statusofvisit = statusOfVisitDAO.findStatusOfVisitByPrimaryKey(statusofvisit_id, -1, -1);
+
+		related_visits.setStatusOfVisit(null);
+		statusofvisit.getVisits().remove(related_visits);
+
+		visitDAO.remove(related_visits);
+		visitDAO.flush();
+
+		return statusofvisit;
+	}
+
+	/**
+	 * Delete an existing StatusOfVisit entity
+	 * 
+	 */
+	@Transactional
+	public void deleteStatusOfVisit(StatusOfVisit statusofvisit) {
+		statusOfVisitDAO.remove(statusofvisit);
+		statusOfVisitDAO.flush();
 	}
 
 	/**

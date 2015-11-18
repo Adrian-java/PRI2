@@ -53,8 +53,11 @@ public class VisitHelper {
 
     public Set<VisitProposal> getFreeVisitByDoctor(Set<VisitScheduler> findVisitSchedulerByDoctor,
 	    Set<Visit> findVisitByDateOfVisitAfter) {
+    	
+    	for(VisitScheduler v:findVisitSchedulerByDoctor){
+    		
+    	}
 	Set<VisitProposal> visitProposal = new HashSet<VisitProposal>();
-
 	return visitProposal;
     }
 

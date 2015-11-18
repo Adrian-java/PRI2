@@ -1,6 +1,7 @@
 package com.eclinic.dao;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -74,5 +75,15 @@ public class SevenDaysDAOImpl extends AbstractJpaDao<SevenDays> implements
 	public boolean canBeMerged(SevenDays o) {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public Collection<? extends SevenDays> findAllSevenDayss() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public SevenDays findSevenDaysByPrimaryKey(Integer id, int i, int j) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

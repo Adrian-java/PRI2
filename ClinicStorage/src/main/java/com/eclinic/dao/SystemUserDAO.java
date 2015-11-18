@@ -42,13 +42,13 @@ public interface SystemUserDAO extends JpaDao<SystemUser> {
 	 * JPQL Query - findSystemUserByPrimaryKey
 	 *
 	 */
-	public SystemUser findSystemUserByPrimaryKey(Integer id) throws DataAccessException;
+	public SystemUser findSystemUserByPrimaryKey(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findSystemUserByPrimaryKey
 	 *
 	 */
-	public SystemUser findSystemUserByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException;
+	public SystemUser findSystemUserByPrimaryKey(String id, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findSystemUserByPasswordContaining
@@ -78,15 +78,14 @@ public interface SystemUserDAO extends JpaDao<SystemUser> {
 	 * JPQL Query - findSystemUserById
 	 *
 	 */
-	public SystemUser findSystemUserById(Integer id_1) throws DataAccessException;
+	public SystemUser findSystemUserById(String string) throws DataAccessException;
 	
-	public SystemUser findSystemUserByPesel(String pesel) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findSystemUserById
 	 *
 	 */
-	public SystemUser findSystemUserById(Integer id_1, int startResult, int maxRows) throws DataAccessException;
+	public SystemUser findSystemUserById(String id_1, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findAllSystemUsers

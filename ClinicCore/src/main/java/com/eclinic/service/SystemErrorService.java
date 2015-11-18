@@ -12,26 +12,10 @@ import java.util.Set;
 public interface SystemErrorService {
 
 	/**
-	 */
-	public SystemError findSystemErrorByPrimaryKey(Integer id);
-
-	/**
-	 * Save an existing SystemError entity
-	 * 
-	 */
-	public void saveSystemError(SystemError systemerror);
-
-	/**
 	 * Delete an existing SystemError entity
 	 * 
 	 */
-	public void deleteSystemError(SystemError systemerror_1);
-
-	/**
-	 * Load an existing SystemError entity
-	 * 
-	 */
-	public Set<SystemError> loadSystemErrors();
+	public void deleteSystemError(SystemError systemerror);
 
 	/**
 	 * Return all SystemError entity
@@ -44,4 +28,20 @@ public interface SystemErrorService {
 	 * 
 	 */
 	public Integer countSystemErrors();
+
+	/**
+	 * Save an existing SystemError entity
+	 * 
+	 */
+	public void saveSystemError(SystemError systemerror_1);
+
+	/**
+	 */
+	public SystemError findSystemErrorByPrimaryKey(Integer id);
+
+	/**
+	 * Load an existing SystemError entity
+	 * 
+	 */
+	public Set<SystemError> loadSystemErrors();
 }

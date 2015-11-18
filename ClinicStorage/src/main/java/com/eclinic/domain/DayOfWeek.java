@@ -59,4 +59,10 @@ public class DayOfWeek {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public Set<Graphic> getGraphics() {
+		return graphic;
+	}
+	public void setGraphics(Set<Graphic> graphic) {
+		this.graphic = graphic;
+	}
 }

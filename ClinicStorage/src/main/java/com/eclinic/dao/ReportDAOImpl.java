@@ -35,7 +35,7 @@ public class ReportDAOImpl extends AbstractJpaDao<Report> implements ReportDAO {
 	private final static Set<Class<?>> dataTypes = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { Report.class }));
 
 	/**
-	 * EntityManager injected by Spring for persistence unit mysql1
+	 * EntityManager injected by Spring for persistence unit local
 	 *
 	 */
 	@PersistenceContext(unitName = "mysql1")
@@ -66,24 +66,68 @@ public class ReportDAOImpl extends AbstractJpaDao<Report> implements ReportDAO {
 	}
 
 	/**
-	 * JPQL Query - findReportByDateTo
+	 * JPQL Query - findReportByDateFromBefore
 	 *
 	 */
 	@Transactional
-	public Set<Report> findReportByDateTo(java.util.Calendar dateTo) throws DataAccessException {
+	public Set<Report> findReportByDateFromBefore(java.util.Calendar dateFrom) throws DataAccessException {
 
-		return findReportByDateTo(dateTo, -1, -1);
+		return findReportByDateFromBefore(dateFrom, -1, -1);
 	}
 
 	/**
-	 * JPQL Query - findReportByDateTo
+	 * JPQL Query - findReportByDateFromBefore
 	 *
 	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public Set<Report> findReportByDateTo(java.util.Calendar dateTo, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findReportByDateTo", startResult, maxRows, dateTo);
+	public Set<Report> findReportByDateFromBefore(java.util.Calendar dateFrom, int startResult, int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findReportByDateFromBefore", startResult, maxRows, dateFrom);
+		return new LinkedHashSet<Report>(query.getResultList());
+	}
+
+	/**
+	 * JPQL Query - findAllReports
+	 *
+	 */
+	@Transactional
+	public Set<Report> findAllReports() throws DataAccessException {
+
+		return findAllReports(-1, -1);
+	}
+
+	/**
+	 * JPQL Query - findAllReports
+	 *
+	 */
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public Set<Report> findAllReports(int startResult, int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findAllReports", startResult, maxRows);
+		return new LinkedHashSet<Report>(query.getResultList());
+	}
+
+	/**
+	 * JPQL Query - findReportByDateToBefore
+	 *
+	 */
+	@Transactional
+	public Set<Report> findReportByDateToBefore(java.util.Calendar dateTo) throws DataAccessException {
+
+		return findReportByDateToBefore(dateTo, -1, -1);
+	}
+
+	/**
+	 * JPQL Query - findReportByDateToBefore
+	 *
+	 */
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public Set<Report> findReportByDateToBefore(java.util.Calendar dateTo, int startResult, int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findReportByDateToBefore", startResult, maxRows, dateTo);
 		return new LinkedHashSet<Report>(query.getResultList());
 	}
 
@@ -132,28 +176,6 @@ public class ReportDAOImpl extends AbstractJpaDao<Report> implements ReportDAO {
 	}
 
 	/**
-	 * JPQL Query - findReportByDescription
-	 *
-	 */
-	@Transactional
-	public Set<Report> findReportByDescription(String description) throws DataAccessException {
-
-		return findReportByDescription(description, -1, -1);
-	}
-
-	/**
-	 * JPQL Query - findReportByDescription
-	 *
-	 */
-
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public Set<Report> findReportByDescription(String description, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findReportByDescription", startResult, maxRows, description);
-		return new LinkedHashSet<Report>(query.getResultList());
-	}
-
-	/**
 	 * JPQL Query - findReportByPrimaryKey
 	 *
 	 */
@@ -179,68 +201,24 @@ public class ReportDAOImpl extends AbstractJpaDao<Report> implements ReportDAO {
 	}
 
 	/**
-	 * JPQL Query - findReportByDescriptionContaining
+	 * JPQL Query - findReportByDescription
 	 *
 	 */
 	@Transactional
-	public Set<Report> findReportByDescriptionContaining(String description) throws DataAccessException {
+	public Set<Report> findReportByDescription(String description) throws DataAccessException {
 
-		return findReportByDescriptionContaining(description, -1, -1);
+		return findReportByDescription(description, -1, -1);
 	}
 
 	/**
-	 * JPQL Query - findReportByDescriptionContaining
+	 * JPQL Query - findReportByDescription
 	 *
 	 */
 
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public Set<Report> findReportByDescriptionContaining(String description, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findReportByDescriptionContaining", startResult, maxRows, description);
-		return new LinkedHashSet<Report>(query.getResultList());
-	}
-
-	/**
-	 * JPQL Query - findReportByDateToBefore
-	 *
-	 */
-	@Transactional
-	public Set<Report> findReportByDateToBefore(java.util.Calendar dateTo) throws DataAccessException {
-
-		return findReportByDateToBefore(dateTo, -1, -1);
-	}
-
-	/**
-	 * JPQL Query - findReportByDateToBefore
-	 *
-	 */
-
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public Set<Report> findReportByDateToBefore(java.util.Calendar dateTo, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findReportByDateToBefore", startResult, maxRows, dateTo);
-		return new LinkedHashSet<Report>(query.getResultList());
-	}
-
-	/**
-	 * JPQL Query - findAllReports
-	 *
-	 */
-	@Transactional
-	public Set<Report> findAllReports() throws DataAccessException {
-
-		return findAllReports(-1, -1);
-	}
-
-	/**
-	 * JPQL Query - findAllReports
-	 *
-	 */
-
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public Set<Report> findAllReports(int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findAllReports", startResult, maxRows);
+	public Set<Report> findReportByDescription(String description, int startResult, int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findReportByDescription", startResult, maxRows, description);
 		return new LinkedHashSet<Report>(query.getResultList());
 	}
 
@@ -267,6 +245,50 @@ public class ReportDAOImpl extends AbstractJpaDao<Report> implements ReportDAO {
 	}
 
 	/**
+	 * JPQL Query - findReportByDescriptionContaining
+	 *
+	 */
+	@Transactional
+	public Set<Report> findReportByDescriptionContaining(String description) throws DataAccessException {
+
+		return findReportByDescriptionContaining(description, -1, -1);
+	}
+
+	/**
+	 * JPQL Query - findReportByDescriptionContaining
+	 *
+	 */
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public Set<Report> findReportByDescriptionContaining(String description, int startResult, int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findReportByDescriptionContaining", startResult, maxRows, description);
+		return new LinkedHashSet<Report>(query.getResultList());
+	}
+
+	/**
+	 * JPQL Query - findReportByDateTo
+	 *
+	 */
+	@Transactional
+	public Set<Report> findReportByDateTo(java.util.Calendar dateTo) throws DataAccessException {
+
+		return findReportByDateTo(dateTo, -1, -1);
+	}
+
+	/**
+	 * JPQL Query - findReportByDateTo
+	 *
+	 */
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public Set<Report> findReportByDateTo(java.util.Calendar dateTo, int startResult, int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findReportByDateTo", startResult, maxRows, dateTo);
+		return new LinkedHashSet<Report>(query.getResultList());
+	}
+
+	/**
 	 * JPQL Query - findReportById
 	 *
 	 */
@@ -289,28 +311,6 @@ public class ReportDAOImpl extends AbstractJpaDao<Report> implements ReportDAO {
 		} catch (NoResultException nre) {
 			return null;
 		}
-	}
-
-	/**
-	 * JPQL Query - findReportByDateFromBefore
-	 *
-	 */
-	@Transactional
-	public Set<Report> findReportByDateFromBefore(java.util.Calendar dateFrom) throws DataAccessException {
-
-		return findReportByDateFromBefore(dateFrom, -1, -1);
-	}
-
-	/**
-	 * JPQL Query - findReportByDateFromBefore
-	 *
-	 */
-
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public Set<Report> findReportByDateFromBefore(java.util.Calendar dateFrom, int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findReportByDateFromBefore", startResult, maxRows, dateFrom);
-		return new LinkedHashSet<Report>(query.getResultList());
 	}
 
 	/**
