@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
+<!-- 2015-11-18T17:57:03 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prescription" pageWidth="431" pageHeight="790" columnWidth="391" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="97ae5efb-e890-4a3e-9c5e-7758104beff7">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="PrescriptionNumber" class="java.lang.String"/>
+	<parameter name="ClinicName" class="java.lang.String"/>
+	<parameter name="ClinicAddress" class="java.lang.String"/>
+	<parameter name="ClinicContact" class="java.lang.String"/>
+	<parameter name="ClinicRegon" class="java.lang.String"/>
+	<parameter name="PatientName" class="java.lang.String"/>
+	<parameter name="PatientAddress" class="java.lang.String"/>
+	<parameter name="PatientPesel" class="java.lang.String"/>
+	<parameter name="Department" class="java.lang.String"/>
+	<parameter name="Permissions" class="java.lang.String"/>
+	<parameter name="IssuedDate" class="java.lang.String"/>
+	<parameter name="ExecutionDate" class="java.lang.String"/>
+	<parameter name="DoctorName" class="java.lang.String"/>
+	<parameter name="DoctorSpecialization" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="145" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="30" uuid="594bc8de-e87a-4bb4-8431-94146489f403"/>
+				<text><![CDATA[Recepta]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="0" width="300" height="30" uuid="3ac31612-dadd-4c0e-b762-e3d6f4c0e7a1"/>
+				<textFieldExpression><![CDATA[$P{PrescriptionNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="20" width="200" height="20" uuid="9c82fe92-9f45-4106-b8a3-f3f179a23118"/>
+				<textFieldExpression><![CDATA[$P{ClinicName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="40" width="200" height="30" uuid="5682a5c4-a515-4882-949f-3d2c21529a77"/>
+				<textFieldExpression><![CDATA[$P{ClinicAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="70" width="200" height="20" uuid="8470eb6f-dd60-4a61-ac68-4929e00ff8d4"/>
+				<textFieldExpression><![CDATA[$P{ClinicContact}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="90" width="200" height="20" uuid="cd376554-c93b-49ac-b32c-c72fc0e0b425"/>
+				<textFieldExpression><![CDATA[$P{ClinicRegon}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="110" width="100" height="30" uuid="dacac042-682e-4f6c-94ee-65de4674af32"/>
+				<text><![CDATA[Świadczeniodawca]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="130" y="110" width="250" height="30" uuid="386d3a0c-792d-4bc3-ae03-0ffe1def2fc0">
+					<property name="com.jaspersoft.studio.unit.barWidth" value="pixel"/>
+				</reportElement>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[2342]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="30" uuid="7d9ada74-805b-47c5-a291-1830577691f9"/>
+				<text><![CDATA[Pacjent]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="100" width="80" height="30" uuid="4c73eafc-54f7-4905-80a3-68ebcada4ef5"/>
+				<text><![CDATA[PESEL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="100" height="20" uuid="ecda142f-336e-4202-a620-9b450749cfea"/>
+				<text><![CDATA[Oddział NFZ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="60" width="100" height="30" uuid="b8671462-2c89-4550-bc94-12178b915c97"/>
+				<text><![CDATA[Uprawnienia dodatkowe]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="10" width="200" height="40" uuid="39659cf3-0b31-4a1e-96e4-f8eb9cab742f"/>
+				<textFieldExpression><![CDATA[$P{PatientName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="100" width="200" height="30" uuid="c4549729-1e00-44f6-b600-86f8951b07e5"/>
+				<textFieldExpression><![CDATA[$P{PatientPesel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="20" width="100" height="30" uuid="6d100be1-6bf9-4d61-8d6f-72c05fa7ce0b"/>
+				<textFieldExpression><![CDATA[$P{Department}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="90" width="100" height="30" uuid="201633d6-43a3-4ef5-805a-f6c8237516ed"/>
+				<textFieldExpression><![CDATA[$P{Permissions}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="50" width="200" height="50" uuid="8e060f3f-390d-4eb8-94fe-8cc62b40878b"/>
+				<textFieldExpression><![CDATA[$P{PatientAddress}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="251" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

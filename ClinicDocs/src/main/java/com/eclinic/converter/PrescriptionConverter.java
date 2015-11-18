@@ -1,7 +1,9 @@
 package com.eclinic.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.eclinic.domain.Address;
@@ -48,6 +50,38 @@ public class PrescriptionConverter {
 		data.setDoctorSpecialization(getDoctorSpecialization(doctor));
 		
 		return data;
+	}
+	
+	public Map<String, String> convertToMap(Prescription prescription) {
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		Patient patient = prescription.getPatient();
+		Clinic clinic = prescription.getClinic();
+		Doctor doctor = prescription.getDoctor();
+		
+		map.put("PrescriptionNumber", Long.toString(prescription.getNumber()));
+		map.put("ClinicName", clinic.getName());
+		map.put("ClinicAddress", getClinicAddress(clinic));
+		map.put("ClinicContact", getClinicContact(clinic));
+		map.put("ClinicRegon", getClinicRegon(clinic));
+		map.put("PatientName", getPatientName(patient));
+		map.put("PatientAddress", getPatientAddress(patient));
+		
+//		TODO - add pesel to patient model data.setPesel(patient.getPesel());
+		map.put("PatientPesel", "01010122393");
+
+		map.put("Department", prescription.getDepartment());
+		map.put("Permissions", prescription.getPermissions());
+
+//		TODO - add filling report with collection of Remedies
+
+		map.put("IssuedDate", prescription.getIssuedDate().toString());
+		map.put("ExecutionDate", prescription.getExecutionDate().toString());
+		map.put("DoctorName", getDoctorName(doctor));
+		map.put("DoctorSpecialization", getDoctorSpecialization(doctor));
+		
+		return map;
 	}
 	
 	private String getClinicAddress(Clinic clinic) {
