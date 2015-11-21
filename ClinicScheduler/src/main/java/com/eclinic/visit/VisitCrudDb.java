@@ -1,14 +1,18 @@
 package com.eclinic.visit;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.ReceptionistDAO;
 import com.eclinic.dao.SevenDaysDAO;
 import com.eclinic.dao.SpecializationDAO;
@@ -16,20 +20,20 @@ import com.eclinic.dao.StatusOfVisitDAO;
 import com.eclinic.dao.TypeOfVisitDAO;
 import com.eclinic.dao.VisitDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
-import com.eclinic.domain.Doctor;
+import com.eclinic.dao.view.VisitSchedulerViewDAO;
+import com.eclinic.dao.view.VisitViewDAO;
+import com.eclinic.domain.Patient;
 import com.eclinic.domain.SevenDays;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.StatusOfVisit;
-import com.eclinic.domain.TypeOfVisit;
 import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
-import com.eclinic.visit.mapper.NewVisitMapper;
+import com.eclinic.domain.view.VisitSchedulerView;
+import com.eclinic.domain.view.VisitView;
 import com.eclinic.visit.mapper.NewVisitSchedulerMapper;
-import com.eclinic.visit.mapper.VisitProposal;
-import com.eclinic.visit.mapper.VisitsOfScheduler;
 import com.eclinic.visit.planner.VisitHelper;
 
-@Component("VisitCrudDb")
+@Component("VisitCrud")
 public class VisitCrudDb implements VisitCrud {
 
 	@Autowired
@@ -50,101 +54,65 @@ public class VisitCrudDb implements VisitCrud {
 	private TypeOfVisitDAO typeOfVisitDao;
 	@Autowired
 	private SevenDaysDAO sevenDaysDao;
+	@Autowired
+	private VisitViewDAO visitViewDao;
+	@Autowired
+	private PatientDAO patientDao;
+	@Autowired
+	private VisitSchedulerViewDAO visitSchedulerViewDao;
 
-	public Set<Visit> findVisitByDate(Date date) {
+	public Set<VisitView> findVisitByDate(Date date) {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
-		return visitDao.findVisitByDateOfVisit(calendar);
+		return visitViewDao.findVisitByDateOfVisit(calendar);
 	}
 
-	public Set<Visit> findVisitByDoctor(Doctor doctor) {
-		return visitDao.findVisitByDoctor(doctor, -1, -1);
+	public Set<VisitView> findVisitByDoctor(String doctorId) {
+		return visitViewDao.findVisitByDoctor(doctorId, -1, -1);
 	}
 
-	public Set<Visit> findVisitByPatient(String id) {
-		return visitDao.findVisitByPatient(id);
+	public Set<VisitView> findVisitByPatient(String id) {
+		return visitViewDao.findVisitByPatient(id);
 	}
 
-	public Set<Visit> findVisitBySpecialization(String specialization) {
-
-		return null;
+	public Set<VisitView> findVisitBySpecialization(String specialization) {
+		return visitViewDao.findVisitBySpecialization(specialization);
 	}
 
-	public Set<Visit> findVisitByStatus(String status) {
-		Set<Visit> findVisitByStatus = visitDao.findVisitByStatus(status);
+	public Set<VisitView> findVisitByStatus(String status) {
+		Set<VisitView> findVisitByStatus = visitViewDao
+				.findVisitByStatus(status);
 		return findVisitByStatus;
 	}
 
-	public VisitProposal findFirstFreeTermByDoctor(String id) {
-		Set<VisitProposal> findFreeTermsByDoctor = findFreeTermsByDoctor(id,
-				null);
-		return (findFreeTermsByDoctor.isEmpty() ? null : findFreeTermsByDoctor
-				.iterator().next());
+	public VisitView findFirstFreeTermByDoctor(String id) {
+		return findFreeTermsByDoctor(id, 1).iterator().next();
 	}
 
-	public VisitProposal findFirstFreeTermBySpecialization(String specialization) {
-		Set<VisitProposal> findFreeTermsBySpecialization = findFreeTermsBySpecialization(
-				specialization, null);
-		return (findFreeTermsBySpecialization.isEmpty() ? null
-				: findFreeTermsBySpecialization.iterator().next());
+	public VisitView findFirstFreeTermBySpecialization(String specialization) {
+		return findFreeTermsBySpecialization(specialization, 1).iterator()
+				.next();
 	}
 
-	public Set<VisitProposal> findFreeTermsByDoctor(String id,
+	public Set<VisitView> findFreeTermsByDoctor(String id, Integer numberOfVisit) {
+		return visitViewDao.findFreeVisitByDoctor(id, numberOfVisit);
+	}
+
+	public Set<VisitView> findFreeTermsBySpecialization(String specialization,
 			Integer resultCounterMonth) {
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(new Date());
-		Set<Visit> findVisitByDateOfVisitAfter = visitDao
-				.findVisitByDateOfVisitAfter(calendar);
-
-		Doctor findDoctorById = doctorDao.findDoctorById(id);
-
-		Set<VisitScheduler> findVisitSchedulerByDoctor = visitSchedulerDao
-				.findVisitSchedulerByDoctor(findDoctorById);
-
-		Set<VisitProposal> visitByDoctor = visitHelper.getFreeVisitByDoctor(
-				findVisitSchedulerByDoctor, findVisitByDateOfVisitAfter);
-		return (visitByDoctor.isEmpty() ? null : visitByDoctor);
+		return visitViewDao.findFreeVisitBySpecialization(specialization, 10);
 	}
 
-	public Set<VisitProposal> findFreeTermsBySpecialization(
-			String specialization, Integer resultCounterMonth) {
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(new Date());
-		Set<Visit> findVisitByDateOfVisitAfter = visitDao
-				.findVisitByDateOfVisitAfter(calendar);
-
-		Set<VisitScheduler> findVisitSchedulerBySpecialization = visitSchedulerDao
-				.findVisitSchedulerBySpecialization(specialization);
-
-		Set<VisitProposal> visitBySpecialization = visitHelper
-				.getFreeVisitBySpecialization(
-						findVisitSchedulerBySpecialization,
-						findVisitByDateOfVisitAfter);
-		return (visitBySpecialization.isEmpty() ? null : visitBySpecialization);
-	}
-
-	public Visit addVisit(NewVisitMapper newVisit) {
-		doctorDao.findDoctorById(newVisit.getIdDoctor());
-		Calendar c = new GregorianCalendar();
-		c.setTime(newVisit.getDate());
-		Visit v = new Visit();
-		v.setDateOfVisit(c.getTime());
-		v.setDescriptionOfVisit(newVisit.getDescription());
-		v.setDoctor(doctorDao.findDoctorById(newVisit.getIdDoctor()));
-		v.setIsLeave(false);
-		// v.setPatientCard(patientCard);
-		v.setReceptionist(receptionistDao.findReceptionistById(newVisit
-				.getIdReceptionist()));
-		v.setSpecial(visitHelper.isSpecialVisit(newVisit));
-		Set<StatusOfVisit> findStatusOfVisitByType = statusOfVisitDao
-				.findStatusOfVisitByType("Zarejestrowany");
-		v.setStatusOfVisit((findStatusOfVisitByType == null ? null
-				: findStatusOfVisitByType.iterator().next()));
-		Set<TypeOfVisit> findTypeOfVisitByName = typeOfVisitDao
-				.findTypeOfVisitByName(newVisit.getTypeOfVisit());
-		v.setTypeOfVisit((findTypeOfVisitByName == null ? null
-				: findTypeOfVisitByName.iterator().next()));
-		return visitDao.merge(v);
+	public Visit addVisit(String patientId, Integer visitId) {
+		Visit visitById = visitDao.findVisitById(visitId);
+		Patient patient = patientDao.findPatientById(patientId);
+		visitById.setPatient(patient);
+		visitById.setStatusOfVisit(statusOfVisitDao
+				.findStatusOfVisitByType("niepotwierdzona").iterator().next());
+		Visit merge = visitDao.merge(visitById);
+		// wysylka maila
+		visitDao.flush();
+		return merge;
 	}
 
 	public void changeStatusOfVisit(Integer id, String status) {
@@ -156,15 +124,12 @@ public class VisitCrudDb implements VisitCrud {
 					.setStatusOfVisit((findStatusOfVisitByType != null ? findStatusOfVisitByType
 							.iterator().next() : null));
 			visitDao.merge(findVisitById);
+			visitDao.flush();
 		}
 	}
 
 	public void deleteVisit(Integer id) {
-		Visit findVisitById = visitDao.findVisitById(id);
-		Set<StatusOfVisit> findStatusOfVisitByType = statusOfVisitDao
-				.findStatusOfVisitByType("Deleted");
-		findVisitById.setStatusOfVisit((findStatusOfVisitByType == null ? null
-				: findStatusOfVisitByType.iterator().next()));
+		changeStatusOfVisit(id, "wolna");
 	}
 
 	public VisitScheduler addVisitScheduler(NewVisitSchedulerMapper vsm) {
@@ -191,18 +156,57 @@ public class VisitCrudDb implements VisitCrud {
 	}
 
 	public void deleteVisitScheduler(VisitScheduler visitScheduler) {
-		// TODO Auto-generated method stub
 
 	}
 
-	public VisitScheduler addVFreeVisit() {
-		VisitsOfScheduler visitsOfScheduler = new VisitsOfScheduler();
-		Set<VisitScheduler> visitSchedulers = visitSchedulerDao.findAllVisitSchedulers();
-		Set<Visit> visits = visitDao.findAllVisits();
-		visitsOfScheduler.createFreeVisits(visitSchedulers, visits);
+	public VisitScheduler addFreeVisit() {
+		Set<VisitSchedulerView> allVisitSchedulerView = visitSchedulerViewDao
+				.findAllVisitScheduler();
+		try {
+			setVisit(allVisitSchedulerView);
+		} catch (ParseException e) {
+		}
 		return null;
 	}
 
+	public void setVisit(Set<VisitSchedulerView> allVisitSchedulerView)
+			throws ParseException {
+		int z = 0;
+		for (VisitSchedulerView vsv : allVisitSchedulerView) {
+			List<Boolean> days = visitHelper.addAllDays(vsv);
+			System.out.println("Progress:" + (++z) + "/"
+					+ allVisitSchedulerView.size());
+			long minutes = visitHelper.getMinutes(vsv.getTimeFrom(),
+					vsv.getTimeTo());
+			int numberVisitInDay = (int) (minutes / vsv.getDuration());
+			Calendar actualCalendar = vsv.getTimeFrom();
+			int hour = actualCalendar.get(Calendar.HOUR_OF_DAY);
+			int minute = actualCalendar.get(Calendar.MINUTE);
 
-
+			Calendar calendar = Calendar.getInstance();
+			int dayinMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+			for (int singleDayInMonth = 1; singleDayInMonth <= dayinMonth; singleDayInMonth++) {
+				System.out.println("Day: " + singleDayInMonth + " for doctor: "
+						+ vsv.getIdDoctor());
+				String pattern = "dd/MM/yyyy HH:mm:ss";
+				SimpleDateFormat format = new SimpleDateFormat(pattern);
+				String day = singleDayInMonth + "";
+				Date date = format.parse(day + "/12/2015 " + hour + ":"
+						+ minute + ":00");
+				calendar.setTime(date);
+				if (visitHelper.isDayVisit(
+						calendar.get(Calendar.DAY_OF_WEEK) - 1, days)) {
+					for (int i = 1; i <= numberVisitInDay; i++) {
+						Calendar actD = visitHelper.computeStartTime(calendar,
+								i - 1, vsv.getDuration());
+						Calendar startDate = visitHelper.getStartDate(
+								singleDayInMonth, actD, 0);
+						Visit v = visitHelper.fillVisitData(vsv, startDate);
+						visitDao.store(v);
+						actualCalendar = actD;
+					}
+				}
+			}
+		}
+	}
 }
