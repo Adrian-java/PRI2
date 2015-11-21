@@ -1,0 +1,82 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,300,700)
+$white: #fff
+$dark-blue: #3399cc
+
+html
+  overflow: -moz-scrollbars-vertical
+  overflow-y: scroll
+
+body
+  font-family: Lato
+  font-weight: 300
+
+a
+  cursor: pointer
+
+@font-face
+  font-family: 'Glyphicons Halflings'
+  src: url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot')
+  src: url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg')
+
+
+.navbar-default
+  height: 100px
+  background: $white
+  border: none
+  .navbar-brand
+    padding: 5px
+  .navbar-nav
+    > li
+      > a
+        font-size: 18px
+        color: $dark-blue
+        border-bottom: 3px solid transparent
+        margin-top: 20px
+        padding: 15px 0px 10px
+        margin-left: 15px
+        &:hover
+          border-color: $dark-blue
+
+.main-container
+  margin-top: 100px
+
+header
+  min-height: 600px
+  background: url('../assets/img/header.jpg') no-repeat
+  background-size: cover
+  background-position: right top
+form.search-visit
+  background: url('../assets/img/gradient_background.jpg') no-repeat
+  background-size: 100% 100%
+  button
+    line-height: 0
+  input, button
+    width: 100%
+    border-radius: 0
+    -webkit-border-radius: 0
+    -webkit-appearance: none
+    border: none
+  input:hover
+    outline: none
+  .input-group
+    border: none
+    button
+      padding: 19px 15px
+  .form-control
+    margin: 26px auto
+    padding: 26px 15px
+
+.feature-box
+  margin-top: 15px
+  margin-bottom: 15px
+  > img
+    float: left
+  .feature-box-content
+    margin: 15px
+    float: left
+    h2
+      margin-top: 0
+      margin-bottom: 0
+    p
+      margin-top: 15px
+      margin-bottom: 15px

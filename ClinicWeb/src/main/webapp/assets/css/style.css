@@ -1,0 +1,77 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
+html {
+  overflow: -moz-scrollbars-vertical;
+  overflow-y: scroll; }
+
+body {
+  font-family: Lato;
+  font-weight: 300; }
+
+a {
+  cursor: pointer; }
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url("../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot");
+  src: url("../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff") format("woff"), url("../bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular") format("svg"); }
+
+.navbar-default {
+  height: 100px;
+  background: #fff;
+  border: none; }
+  .navbar-default .navbar-brand {
+    padding: 5px; }
+  .navbar-default .navbar-nav > li > a {
+    font-size: 18px;
+    color: #3399cc;
+    border-bottom: 3px solid transparent;
+    margin-top: 20px;
+    padding: 15px 0px 10px;
+    margin-left: 15px; }
+    .navbar-default .navbar-nav > li > a:hover {
+      border-color: #3399cc; }
+
+.main-container {
+  margin-top: 100px; }
+
+header {
+  min-height: 600px;
+  background: url("../assets/img/header.jpg") no-repeat;
+  background-size: cover;
+  background-position: right top; }
+
+form.search-visit {
+  background: url("../assets/img/gradient_background.jpg") no-repeat;
+  background-size: 100% 100%; }
+  form.search-visit button {
+    line-height: 0; }
+  form.search-visit input, form.search-visit button {
+    width: 100%;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+    border: none; }
+  form.search-visit input:hover {
+    outline: none; }
+  form.search-visit .input-group {
+    border: none; }
+    form.search-visit .input-group button {
+      padding: 19px 15px; }
+  form.search-visit .form-control {
+    margin: 26px auto;
+    padding: 26px 15px; }
+
+.feature-box {
+  margin-top: 15px;
+  margin-bottom: 15px; }
+  .feature-box > img {
+    float: left; }
+  .feature-box .feature-box-content {
+    margin: 15px;
+    float: left; }
+    .feature-box .feature-box-content h2 {
+      margin-top: 0;
+      margin-bottom: 0; }
+    .feature-box .feature-box-content p {
+      margin-top: 15px;
+      margin-bottom: 15px; }
