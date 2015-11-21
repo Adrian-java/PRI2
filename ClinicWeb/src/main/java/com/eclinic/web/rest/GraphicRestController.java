@@ -144,7 +144,7 @@ public class GraphicRestController {
 	@Path("/{graphic_id}/doctor/{doctor_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadGraphicDoctor(@PathParam("graphic_id") Integer graphic_id,
-			@PathParam("related_doctor_id") Integer related_doctor_id) {
+			@PathParam("related_doctor_id") String related_doctor_id) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
 		return Response.ok(doctor).build();
@@ -159,7 +159,7 @@ public class GraphicRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{graphic_id}/doctor/{doctor_id}")
 	public Response deleteDoctorSickLeaves(@PathParam("graphic_id") Integer graphic_id,
-			@PathParam("related_doctor_id") Integer related_doctor_id) {
+			@PathParam("related_doctor_id") String related_doctor_id) {
 		return Response.ok(graphicService.deleteGraphicDoctor(graphic_id, related_doctor_id)).build();
 	}
 	/**

@@ -45,6 +45,24 @@ public class ApplicationParameterServiceImpl implements
 	}
 
 	/**
+	 * Load an existing ApplicationParameter entity
+	 * 
+	 */
+	@Transactional
+	public Set<ApplicationParameter> loadApplicationParameters() {
+		return applicationParameterDAO.findAllApplicationParameters();
+	}
+
+	/**
+	 * Return a count of all ApplicationParameter entity
+	 * 
+	 */
+	@Transactional
+	public Integer countApplicationParameters() {
+		return ((Long) applicationParameterDAO.createQuerySingleResult("select count(o) from ApplicationParameter o").getSingleResult()).intValue();
+	}
+
+	/**
 	 * Save an existing ApplicationParameter entity
 	 * 
 	 */
@@ -83,23 +101,5 @@ public class ApplicationParameterServiceImpl implements
 	public void deleteApplicationParameter(ApplicationParameter applicationparameter) {
 		applicationParameterDAO.remove(applicationparameter);
 		applicationParameterDAO.flush();
-	}
-
-	/**
-	 * Return a count of all ApplicationParameter entity
-	 * 
-	 */
-	@Transactional
-	public Integer countApplicationParameters() {
-		return ((Long) applicationParameterDAO.createQuerySingleResult("select count(o) from ApplicationParameter o").getSingleResult()).intValue();
-	}
-
-	/**
-	 * Load an existing ApplicationParameter entity
-	 * 
-	 */
-	@Transactional
-	public Set<ApplicationParameter> loadApplicationParameters() {
-		return applicationParameterDAO.findAllApplicationParameters();
 	}
 }

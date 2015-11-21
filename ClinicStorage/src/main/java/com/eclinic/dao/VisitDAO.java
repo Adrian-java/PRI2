@@ -129,7 +129,7 @@ public interface VisitDAO extends JpaDao<Visit> {
 	public Set<Visit> findVisitByDoctor(Doctor doctor, int startResult,
 			int maxRows) throws DataAccessException;
 	
-	public Set<Visit> findVisitByPatient(Integer id) throws DataAccessException;
+	public Set<Visit> findVisitByPatient(String id) throws DataAccessException;
 	
 	public Set<Visit> findVisitByStatus(String status) throws DataAccessException;
 

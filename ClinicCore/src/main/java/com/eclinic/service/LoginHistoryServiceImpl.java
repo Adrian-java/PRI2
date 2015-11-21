@@ -1,10 +1,10 @@
 package com.eclinic.service;
 
 import com.eclinic.dao.LoginHistoryDAO;
-import com.eclinic.dao.WorkerDAO;
+import com.eclinic.dao.SystemUserDAO;
 
 import com.eclinic.domain.LoginHistory;
-import com.eclinic.domain.Worker;
+import com.eclinic.domain.SystemUser;
 
 import java.util.List;
 import java.util.Set;
@@ -32,11 +32,11 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
 	private LoginHistoryDAO loginHistoryDAO;
 
 	/**
-	 * DAO injected by Spring that manages Worker entities
+	 * DAO injected by Spring that manages SystemUser entities
 	 * 
 	 */
 	@Autowired
-	private WorkerDAO workerDAO;
+	private SystemUserDAO systemUserDAO;
 
 	/**
 	 * Instantiates a new LoginHistoryServiceImpl.
@@ -46,71 +46,66 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
 	}
 
 	/**
-	 * Load an existing LoginHistory entity
+	 * Delete an existing SystemUser entity
 	 * 
 	 */
 	@Transactional
-	public Set<LoginHistory> loadLoginHistorys() {
-		return loginHistoryDAO.findAllLoginHistorys();
-	}
-
-	/**
-	 * Delete an existing Worker entity
-	 * 
-	 */
-	@Transactional
-	public LoginHistory deleteLoginHistoryWorker(Integer loginhistory_id, Integer related_worker_id) {
+	public LoginHistory deleteLoginHistorySystemUser(Integer loginhistory_id, String related_systemuser_id) {
 		LoginHistory loginhistory = loginHistoryDAO.findLoginHistoryByPrimaryKey(loginhistory_id, -1, -1);
-		Worker related_worker = workerDAO.findWorkerByPrimaryKey(related_worker_id, -1, -1);
+		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
-		loginhistory.setWorker(null);
-		related_worker.getLoginHistories().remove(loginhistory);
 		loginhistory = loginHistoryDAO.store(loginhistory);
 		loginHistoryDAO.flush();
 
-		related_worker = workerDAO.store(related_worker);
-		workerDAO.flush();
+		related_systemuser = systemUserDAO.store(related_systemuser);
+		systemUserDAO.flush();
 
-		workerDAO.remove(related_worker);
-		workerDAO.flush();
+		systemUserDAO.remove(related_systemuser);
+		systemUserDAO.flush();
 
 		return loginhistory;
 	}
 
 	/**
-	 * Save an existing Worker entity
+	 * Save an existing SystemUser entity
 	 * 
 	 */
 	@Transactional
-	public LoginHistory saveLoginHistoryWorker(Integer id, Worker related_worker) {
+	public LoginHistory saveLoginHistorySystemUser(Integer id, SystemUser related_systemuser) {
 		LoginHistory loginhistory = loginHistoryDAO.findLoginHistoryByPrimaryKey(id, -1, -1);
-		Worker existingworker = workerDAO.findWorkerByPrimaryKey(related_worker.getId());
+		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
 
 		// copy into the existing record to preserve existing relationships
-		if (existingworker != null) {
-			existingworker.setId(related_worker.getId());
-			related_worker = existingworker;
+		if (existingsystemUser != null) {
+			existingsystemUser.setId(related_systemuser.getId());
+			existingsystemUser.setPassword(related_systemuser.getPassword());
+			existingsystemUser.setDescription(related_systemuser.getDescription());
+			existingsystemUser.setRegisterDate(related_systemuser.getRegisterDate());
+			existingsystemUser.setIsActive(related_systemuser.getIsActive());
+			existingsystemUser.setChangedPassword(related_systemuser.getChangedPassword());
+			existingsystemUser.setEmail(related_systemuser.getEmail());
+			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
+			existingsystemUser.setRole(related_systemuser.getRole());
+			related_systemuser = existingsystemUser;
+		} else {
+			related_systemuser = systemUserDAO.store(related_systemuser);
+			systemUserDAO.flush();
 		}
 
-		loginhistory.setWorker(related_worker);
-		related_worker.getLoginHistories().add(loginhistory);
 		loginhistory = loginHistoryDAO.store(loginhistory);
 		loginHistoryDAO.flush();
 
-		related_worker = workerDAO.store(related_worker);
-		workerDAO.flush();
+		related_systemuser = systemUserDAO.store(related_systemuser);
+		systemUserDAO.flush();
 
 		return loginhistory;
 	}
 
 	/**
-	 * Delete an existing LoginHistory entity
-	 * 
 	 */
 	@Transactional
-	public void deleteLoginHistory(LoginHistory loginhistory) {
-		loginHistoryDAO.remove(loginhistory);
-		loginHistoryDAO.flush();
+	public LoginHistory findLoginHistoryByPrimaryKey(Integer id) {
+		return loginHistoryDAO.findLoginHistoryByPrimaryKey(id);
 	}
 
 	/**
@@ -136,19 +131,31 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
 	}
 
 	/**
+	 * Delete an existing LoginHistory entity
+	 * 
+	 */
+	@Transactional
+	public void deleteLoginHistory(LoginHistory loginhistory) {
+		loginHistoryDAO.remove(loginhistory);
+		loginHistoryDAO.flush();
+	}
+
+	/**
+	 * Load an existing LoginHistory entity
+	 * 
+	 */
+	@Transactional
+	public Set<LoginHistory> loadLoginHistorys() {
+		return loginHistoryDAO.findAllLoginHistorys();
+	}
+
+	/**
 	 * Return a count of all LoginHistory entity
 	 * 
 	 */
 	@Transactional
 	public Integer countLoginHistorys() {
 		return ((Long) loginHistoryDAO.createQuerySingleResult("select count(o) from LoginHistory o").getSingleResult()).intValue();
-	}
-
-	/**
-	 */
-	@Transactional
-	public LoginHistory findLoginHistoryByPrimaryKey(Integer id) {
-		return loginHistoryDAO.findLoginHistoryByPrimaryKey(id);
 	}
 
 	/**

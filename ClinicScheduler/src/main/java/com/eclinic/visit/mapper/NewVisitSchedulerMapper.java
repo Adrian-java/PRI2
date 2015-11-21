@@ -11,13 +11,16 @@ public class NewVisitSchedulerMapper {
     
     private Time timeTo;
     
-    private Integer idDoctor;
+    private String idDoctor;
     
     private String specialization;
     
     private String description;
 
     private Set<String> daysOfWeek;
+    
+    private Integer duration;
+    
 
     public Time getTimeFrom() {
         return timeFrom;
@@ -35,11 +38,11 @@ public class NewVisitSchedulerMapper {
         this.timeTo = timeTo;
     }
 
-    public Integer getIdDoctor() {
+    public String getIdDoctor() {
         return idDoctor;
     }
 
-    public void setIdDoctor(Integer idDoctor) {
+    public void setIdDoctor(String idDoctor) {
         this.idDoctor = idDoctor;
     }
 
@@ -66,5 +69,13 @@ public class NewVisitSchedulerMapper {
     public void setDaysOfWeek(Set<String> daysOfWeek) {
 	this.daysOfWeek = daysOfWeek;
     }
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
 
 }

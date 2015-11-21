@@ -5,7 +5,6 @@ import com.eclinic.domain.Doctor;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -78,24 +77,24 @@ public interface DoctorDAO extends JpaDao<Doctor> {
 	 * JPQL Query - findDoctorByPrimaryKey
 	 *
 	 */
-	public Doctor findDoctorByPrimaryKey(Integer id) throws DataAccessException;
+	public Doctor findDoctorByPrimaryKey(String string) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findDoctorByPrimaryKey
 	 *
 	 */
-	public Doctor findDoctorByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException;
+	public Doctor findDoctorByPrimaryKey(String id, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findDoctorById
 	 *
 	 */
-	public Doctor findDoctorById(Integer id_1) throws DataAccessException;
+	public Doctor findDoctorById(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findDoctorById
 	 *
 	 */
-	public Doctor findDoctorById(Integer id_1, int startResult, int maxRows) throws DataAccessException;
+	public Doctor findDoctorById(String id_1, int startResult, int maxRows) throws DataAccessException;
 
 }

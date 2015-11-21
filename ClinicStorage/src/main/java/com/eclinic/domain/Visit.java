@@ -3,21 +3,32 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
 import java.util.Calendar;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Date;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
 
 /**
  */
@@ -32,7 +43,7 @@ import javax.persistence.*;
 		@NamedQuery(name = "findVisitByIsLeave", query = "select myVisit from Visit myVisit where myVisit.isLeave = ?1"),
 		@NamedQuery(name = "findVisitByStatus", query = "select myVisit from Visit myVisit where myVisit.typeOfVisit.name = ?1"),
 		@NamedQuery(name = "findVisitByPrimaryKey", query = "select myVisit from Visit myVisit where myVisit.id = ?1"),
-		@NamedQuery(name = "findVisitByPesel", query = "select v from Visit v where v.patientCard in (select pc.id from PatientCard pc where pc.patient in (select p.id from Patient p where  p.id in (select w.patient from Worker w where w.id in (select su.worker from SystemUser su where su.pesel =?1 ))))"),
+		@NamedQuery(name = "findVisitByPesel", query = "select v from Visit v where v.patient in (select p from Patient p where  p in (select su.patient from SystemUser su where su.id =?1 ))))"),
 		@NamedQuery(name = "findVisitByDateDoctor", query = "select v from Visit v where v.doctor = ?1)"),
 		@NamedQuery(name = "findVisitByPatient", query = "select v from Visit v "),
 		@NamedQuery(name = "findVisitBySpecial", query = "select myVisit from Visit myVisit where myVisit.special = ?1") })
@@ -54,11 +65,18 @@ public class Visit implements Serializable {
 	Integer id;
 	/**
 	 */
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_visit", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
-	Calendar dateOfVisit;
+	Date dateOfVisit;
+	
+//	@Temporal(TemporalType.TIME)
+//	@Column(name = "time_of_visit", nullable = false)
+//	@Basic(fetch = FetchType.EAGER)
+//	@XmlElement
+//	private
+//	Date timeOfVisit;
 	/**
 	 */
 
@@ -85,9 +103,9 @@ public class Visit implements Serializable {
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumns({ @JoinColumn(name = "id_patient_card", referencedColumnName = "Id", nullable = false) })
+	@JoinColumns({ @JoinColumn(name = "id_patient", referencedColumnName = "Id", nullable = true) })
 	@XmlTransient
-	PatientCard patientCard;
+	Patient patient;
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -97,7 +115,7 @@ public class Visit implements Serializable {
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumns({ @JoinColumn(name = "id_receptionist", referencedColumnName = "Id", nullable = false) })
+	@JoinColumns({ @JoinColumn(name = "id_receptionist", referencedColumnName = "Id", nullable = true) })
 	@XmlTransient
 	Receptionist receptionist;
 	/**
@@ -112,11 +130,6 @@ public class Visit implements Serializable {
 	@JoinColumns({ @JoinColumn(name = "id_doctor", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Doctor doctor;
-	/**
-	 */
-	@OneToMany(mappedBy = "visit", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-//	@XmlElement(name = "", namespace = "")
-	java.util.Set<com.eclinic.domain.SickLeave> sickLeaves;
 
 	/**
 	 */
@@ -132,13 +145,13 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	public void setDateOfVisit(Calendar dateOfVisit) {
+	public void setDateOfVisit(Date dateOfVisit) {
 		this.dateOfVisit = dateOfVisit;
 	}
 
 	/**
 	 */
-	public Calendar getDateOfVisit() {
+	public Date getDateOfVisit() {
 		return this.dateOfVisit;
 	}
 
@@ -180,16 +193,16 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	public void setPatientCard(PatientCard patientCard) {
-		this.patientCard = patientCard;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 	/**
 	 */
 //	@JsonIgnore
-	@JsonProperty("patientCard")
-	public PatientCard getPatientCard() {
-		return patientCard;
+	@JsonProperty("patient")
+	public Patient getPatient() {
+		return patient;
 	}
 
 	/**
@@ -250,22 +263,6 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	public void setSickLeaves(Set<SickLeave> sickLeaves) {
-		this.sickLeaves = sickLeaves;
-	}
-
-	/**
-	 */
-	@JsonIgnore
-	public Set<SickLeave> getSickLeaves() {
-		if (sickLeaves == null) {
-			sickLeaves = new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>();
-		}
-		return sickLeaves;
-	}
-
-	/**
-	 */
 	public Visit() {
 	}
 
@@ -279,12 +276,11 @@ public class Visit implements Serializable {
 		setDescriptionOfVisit(that.getDescriptionOfVisit());
 		setIsLeave(that.getIsLeave());
 		setSpecial(that.getSpecial());
-		setPatientCard(that.getPatientCard());
+		setPatient(that.getPatient());
 		setTypeOfVisit(that.getTypeOfVisit());
 		setReceptionist(that.getReceptionist());
 		setStatusOfVisit(that.getStatusOfVisit());
 		setDoctor(that.getDoctor());
-		setSickLeaves(new java.util.LinkedHashSet<com.eclinic.domain.SickLeave>(that.getSickLeaves()));
 	}
 
 	/**
@@ -328,4 +324,5 @@ public class Visit implements Serializable {
 			return false;
 		return true;
 	}
+
 }

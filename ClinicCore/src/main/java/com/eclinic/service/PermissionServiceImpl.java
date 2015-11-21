@@ -2,21 +2,18 @@ package com.eclinic.service;
 
 import com.eclinic.dao.ModuleDAO;
 import com.eclinic.dao.PermissionDAO;
-import com.eclinic.dao.SystemUserDAO;
+import com.eclinic.dao.SystemUserPermissionDAO;
 import com.eclinic.dao.TypeOfUserDAO;
-
 import com.eclinic.domain.Module;
 import com.eclinic.domain.Permission;
-import com.eclinic.domain.SystemUser;
+import com.eclinic.domain.SystemUserPermission;
 import com.eclinic.domain.TypeOfUser;
 
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -43,11 +40,11 @@ public class PermissionServiceImpl implements PermissionService {
 	private PermissionDAO permissionDAO;
 
 	/**
-	 * DAO injected by Spring that manages SystemUser entities
+	 * DAO injected by Spring that manages SystemUserPermission entities
 	 * 
 	 */
 	@Autowired
-	private SystemUserDAO systemUserDAO;
+	private SystemUserPermissionDAO systemUserPermissionDAO;
 
 	/**
 	 * DAO injected by Spring that manages TypeOfUser entities
@@ -70,65 +67,6 @@ public class PermissionServiceImpl implements PermissionService {
 	@Transactional
 	public Integer countPermissions() {
 		return ((Long) permissionDAO.createQuerySingleResult("select count(o) from Permission o").getSingleResult()).intValue();
-	}
-
-	/**
-	 * Delete an existing Permission entity
-	 * 
-	 */
-	@Transactional
-	public void deletePermission(Permission permission) {
-		permissionDAO.remove(permission);
-		permissionDAO.flush();
-	}
-
-	/**
-	 * Delete an existing TypeOfUser entity
-	 * 
-	 */
-	@Transactional
-	public Permission deletePermissionTypeOfUsers(Integer permission_id, Integer related_typeofusers_id) {
-		TypeOfUser related_typeofusers = typeOfUserDAO.findTypeOfUserByPrimaryKey(related_typeofusers_id, -1, -1);
-
-		Permission permission = permissionDAO.findPermissionByPrimaryKey(permission_id, -1, -1);
-
-		related_typeofusers.setPermission(null);
-
-		typeOfUserDAO.remove(related_typeofusers);
-		typeOfUserDAO.flush();
-
-		return permission;
-	}
-
-	/**
-	 * Return all Permission entity
-	 * 
-	 */
-	@Transactional
-	public List<Permission> findAllPermissions(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Permission>(permissionDAO.findAllPermissions(startResult, maxRows));
-	}
-
-	/**
-	 * Save an existing Permission entity
-	 * 
-	 */
-	@Transactional
-	public void savePermission(Permission permission) {
-		Permission existingPermission = permissionDAO.findPermissionByPrimaryKey(permission.getId());
-
-		if (existingPermission != null) {
-			if (existingPermission != permission) {
-				existingPermission.setId(permission.getId());
-				existingPermission.setDisplay(permission.getDisplay());
-				existingPermission.setEdit(permission.getEdit());
-				existingPermission.setExecute(permission.getExecute());
-			}
-			permission = permissionDAO.store(existingPermission);
-		} else {
-			permission = permissionDAO.store(permission);
-		}
-		permissionDAO.flush();
 	}
 
 	/**
@@ -155,56 +93,6 @@ public class PermissionServiceImpl implements PermissionService {
 	}
 
 	/**
-	 * Save an existing TypeOfUser entity
-	 * 
-	 */
-	@Transactional
-	public Permission savePermissionTypeOfUsers(Integer id, TypeOfUser related_typeofusers) {
-		Permission permission = permissionDAO.findPermissionByPrimaryKey(id, -1, -1);
-		TypeOfUser existingtypeOfUsers = typeOfUserDAO.findTypeOfUserByPrimaryKey(related_typeofusers.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingtypeOfUsers != null) {
-			existingtypeOfUsers.setId(related_typeofusers.getId());
-			existingtypeOfUsers.setType(related_typeofusers.getType());
-			existingtypeOfUsers.setDescription(related_typeofusers.getDescription());
-			related_typeofusers = existingtypeOfUsers;
-		}
-
-//		related_typeofusers.setPermission(permission);
-		related_typeofusers = typeOfUserDAO.store(related_typeofusers);
-		typeOfUserDAO.flush();
-
-		permission = permissionDAO.store(permission);
-		permissionDAO.flush();
-
-		return permission;
-	}
-
-	/**
-	 * Delete an existing SystemUser entity
-	 * 
-	 */
-	@Transactional
-	public Permission deletePermissionSystemUser(Integer permission_id, Integer related_systemuser_id) {
-		Permission permission = permissionDAO.findPermissionByPrimaryKey(permission_id, -1, -1);
-		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
-
-		permission.setSystemUserPermission(null);
-		//related_systemuser.getPermissions().remove(permission);
-		permission = permissionDAO.store(permission);
-		permissionDAO.flush();
-
-		related_systemuser = systemUserDAO.store(related_systemuser);
-		systemUserDAO.flush();
-
-		systemUserDAO.remove(related_systemuser);
-		systemUserDAO.flush();
-
-		return permission;
-	}
-
-	/**
 	 * Load an existing Permission entity
 	 * 
 	 */
@@ -213,45 +101,13 @@ public class PermissionServiceImpl implements PermissionService {
 		return permissionDAO.findAllPermissions();
 	}
 
+
+
 	/**
 	 */
 	@Transactional
 	public Permission findPermissionByPrimaryKey(Integer id) {
 		return permissionDAO.findPermissionByPrimaryKey(id);
-	}
-
-	/**
-	 * Save an existing SystemUser entity
-	 * 
-	 */
-	@Transactional
-	public Permission savePermissionSystemUser(Integer id, SystemUser related_systemuser) {
-		Permission permission = permissionDAO.findPermissionByPrimaryKey(id, -1, -1);
-		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingsystemUser != null) {
-			existingsystemUser.setId(related_systemuser.getId());
-			existingsystemUser.setPesel(related_systemuser.getPesel());
-			existingsystemUser.setPassword(related_systemuser.getPassword());
-			existingsystemUser.setDescription(related_systemuser.getDescription());
-			existingsystemUser.setRegisterDate(related_systemuser.getRegisterDate());
-			existingsystemUser.setIsActive(related_systemuser.getIsActive());
-			existingsystemUser.setChangedPassword(related_systemuser.getChangedPassword());
-			existingsystemUser.setEmail(related_systemuser.getEmail());
-			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
-			related_systemuser = existingsystemUser;
-		}
-
-//		permission.setSystemUser(related_systemuser);
-		//related_systemuser.getPermissions().add(permission);
-		permission = permissionDAO.store(permission);
-		permissionDAO.flush();
-
-		related_systemuser = systemUserDAO.store(related_systemuser);
-		systemUserDAO.flush();
-
-		return permission;
 	}
 
 	/**
@@ -281,4 +137,47 @@ public class PermissionServiceImpl implements PermissionService {
 
 		return permission;
 	}
+
+	/**
+	 * Delete an existing Permission entity
+	 * 
+	 */
+	@Transactional
+	public void deletePermission(Permission permission) {
+		permissionDAO.remove(permission);
+		permissionDAO.flush();
+	}
+
+	/**
+	 * Return all Permission entity
+	 * 
+	 */
+	@Transactional
+	public List<Permission> findAllPermissions(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<Permission>(permissionDAO.findAllPermissions(startResult, maxRows));
+	}
+
+
+	/**
+	 * Save an existing Permission entity
+	 * 
+	 */
+	@Transactional
+	public void savePermission(Permission permission) {
+		Permission existingPermission = permissionDAO.findPermissionByPrimaryKey(permission.getId());
+
+		if (existingPermission != null) {
+			if (existingPermission != permission) {
+				existingPermission.setId(permission.getId());
+				existingPermission.setDisplay(permission.getDisplay());
+				existingPermission.setExecute(permission.getExecute());
+				existingPermission.setEdit(permission.getEdit());
+			}
+			permission = permissionDAO.store(existingPermission);
+		} else {
+			permission = permissionDAO.store(permission);
+		}
+		permissionDAO.flush();
+	}
+
 }

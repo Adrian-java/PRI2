@@ -15,12 +15,6 @@ import java.util.Set;
 public interface SpecializationService {
 
 	/**
-	 * Delete an existing SpecalVisitField entity
-	 * 
-	 */
-	public Specialization deleteSpecializationSpecalVisitFields(Integer specialization_id, Integer related_specalvisitfields_id);
-
-	/**
 	 * Save an existing Specialization entity
 	 * 
 	 */
@@ -37,10 +31,10 @@ public interface SpecializationService {
 	public List<Specialization> findAllSpecializations(Integer startResult, Integer maxRows);
 
 	/**
-	 * Save an existing VisitScheduler entity
+	 * Delete an existing SpecalVisitField entity
 	 * 
 	 */
-	public Specialization saveSpecializationVisitSchedulers(Integer id_1, VisitScheduler related_visitschedulers);
+	public Specialization deleteSpecializationSpecalVisitFields(Integer specialization_id, Integer related_specalvisitfields_id);
 
 	/**
 	 * Load an existing Specialization entity
@@ -49,22 +43,10 @@ public interface SpecializationService {
 	public Set<Specialization> loadSpecializations();
 
 	/**
-	 * Delete an existing VisitScheduler entity
+	 * Save an existing VisitScheduler entity
 	 * 
 	 */
-	public Specialization deleteSpecializationVisitSchedulers(Integer specialization_id_1, Integer related_visitschedulers_id);
-
-	/**
-	 * Delete an existing Doctor entity
-	 * 
-	 */
-	public Specialization deleteSpecializationDoctor(Integer specialization_id_2, Integer related_doctor_id);
-
-	/**
-	 * Delete an existing Specialization entity
-	 * 
-	 */
-	public void deleteSpecialization(Specialization specialization_1);
+	public Specialization saveSpecializationVisitSchedulers(Integer id_1, VisitScheduler related_visitschedulers);
 
 	/**
 	 * Return a count of all Specialization entity
@@ -73,14 +55,32 @@ public interface SpecializationService {
 	public Integer countSpecializations();
 
 	/**
-	 * Save an existing Doctor entity
+	 * Delete an existing VisitScheduler entity
 	 * 
 	 */
-	public Specialization saveSpecializationDoctor(Integer id_2, Doctor related_doctor);
+	public Specialization deleteSpecializationVisitSchedulers(Integer specialization_id_1, Integer related_visitschedulers_id);
+
+	/**
+	 * Delete an existing Specialization entity
+	 * 
+	 */
+	public void deleteSpecialization(Specialization specialization_1);
 
 	/**
 	 * Save an existing SpecalVisitField entity
 	 * 
 	 */
-	public Specialization saveSpecializationSpecalVisitFields(Integer id_3, SpecalVisitField related_specalvisitfields);
+	public Specialization saveSpecializationSpecalVisitFields(Integer id_2, SpecalVisitField related_specalvisitfields);
+
+	/**
+	 * Delete an existing Doctor entity
+	 * 
+	 */
+	public Specialization deleteSpecializationDoctor(Integer specialization_id_2, String related_doctor_id);
+
+	/**
+	 * Save an existing Doctor entity
+	 * 
+	 */
+	public Specialization saveSpecializationDoctor(Integer id_3, Doctor related_doctor);
 }

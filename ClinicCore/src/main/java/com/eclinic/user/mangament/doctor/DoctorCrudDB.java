@@ -2,6 +2,9 @@ package com.eclinic.user.mangament.doctor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,7 +30,6 @@ import com.eclinic.dao.view.DoctorViewDAO;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.Worker;
 import com.eclinic.domain.view.DoctorView;
 import com.eclinic.domain.view.SystemUserPermissionView;
 import com.eclinic.service.DoctorService;
@@ -52,41 +54,49 @@ public class DoctorCrudDB implements DoctorCrud {
 	@Autowired
 	private SpecializationDAO specializationDao;
 
-	public Response AddDoctor(SystemUser systemUser) {
-		if (systemUser.getWorker() != null) {
-			Worker w = systemUser.getWorker();
-			if (w.getPatient() != null || w.getAdmin() != null
-					|| w.getReceptionist() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
+	public Response addDoctor(SystemUser systemUser) {
+		if (systemUser.getPatient() != null || systemUser.getAdmin() != null
+				|| systemUser.getReceptionist() != null) {
+			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
-		SystemUser s = systemUserDAO.findSystemUserByPesel(systemUser
-				.getPesel());
+		Map<String, String> map = new HashMap<String, String>();
+		SystemUser s = systemUserDAO.findSystemUserById(systemUser
+				.getId());
 		if (s != null) {
-			Map<String, String> map = new HashMap<String, String>();
+
 			map.put("status", "Podany pesel/login istnieje");
 			return Response.ok(map).build();
 		}
-		Integer i = systemUserService.saveSystemUser(systemUser);
-		systemUser.setId(i);
-		permissionMangament.setUserPermission(systemUser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+		systemUser.setChangedPassword(false);
+		systemUser.setIsActive(true);
+		systemUser.setRole("doctor");
+		Calendar c = new GregorianCalendar();
+		c.setTime(new Date());
+		systemUser.setRegisterDate(c);
+		try {
+			map.put("status","ok");
+			String i = systemUserService.saveSystemUserDoctor(systemUser);
+			return Response.ok(map)
+					.build();
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
 	}
 
 	public Set<SystemUserPermissionView> showPermissionByPesel(String pesel) {
-		return permissionMangament.showPermissionByPesel(pesel);
+		return permissionMangament.showPermissionById(pesel);
 	}
 
-	public Response updatePatient(SystemUser systemUser, String pesel) {
-		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getWorker().getPatient().getId();
+	public Response updatePatient(SystemUser systemUser, String idd) {
+		SystemUser su = systemUserDAO.findSystemUserById(idd);
+		String id = su.getPatient().getId();
 		Doctor d = doctorDao.findDoctorById(id);
 		if (d instanceof HibernateProxy) {
 			HibernateProxy proxy = (HibernateProxy) d;
 			LazyInitializer li = proxy.getHibernateLazyInitializer();
 			d = (Doctor) li.getImplementation();
 		}
-		Integer i = doctorService.saveDoctor(d);
+		String i = doctorService.saveDoctor(d);
 		try {
 			try {
 				return Response
@@ -103,8 +113,8 @@ public class DoctorCrudDB implements DoctorCrud {
 		return null;
 	}
 
-	public Response deletePatient(String pesel) {
-		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
+	public Response deletePatient(String d) {
+		SystemUser su = systemUserDAO.findSystemUserById(d);
 		su.setIsActive(false);
 		systemUserService.saveSystemUser(su);
 		return null;
@@ -114,17 +124,18 @@ public class DoctorCrudDB implements DoctorCrud {
 		return doctorViewDao.findAllDoctors();
 	}
 
-	public DoctorView getDoctorByPesel(String pesel) {
+	public DoctorView getDoctorById(String pesel) {
 		return doctorViewDao.findDoctorByPesel(pesel);
 	}
 
 	public Set<DoctorView> getDoctorsBySpecialization(String specialization) {
-		Set<Specialization> sp = specializationDao.findSpecializationByName(specialization);
+		Set<Specialization> sp = specializationDao
+				.findSpecializationByName(specialization);
 		List<DoctorView> dv = new ArrayList<DoctorView>();
 		Set<DoctorView> set = new HashSet<DoctorView>();
 		Iterator<Specialization> i = sp.iterator();
-		while(i.hasNext()){
-			Integer id = i.next().getDoctor().getId();
+		while (i.hasNext()) {
+			String id = i.next().getDoctor().getId();
 			DoctorView findDoctorById = doctorViewDao.findDoctorById(id);
 			dv.add(findDoctorById);
 		}

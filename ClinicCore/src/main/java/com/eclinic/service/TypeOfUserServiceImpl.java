@@ -46,49 +46,70 @@ public class TypeOfUserServiceImpl implements TypeOfUserService {
 	}
 
 	/**
+	 */
+	@Transactional
+	public TypeOfUser findTypeOfUserByPrimaryKey(Integer id) {
+		return typeOfUserDAO.findTypeOfUserByPrimaryKey(id);
+	}
+
+	/**
 	 * Save an existing Permission entity
 	 * 
 	 */
 	@Transactional
-	public TypeOfUser saveTypeOfUserPermission(Integer id, Permission related_permission) {
+	public TypeOfUser saveTypeOfUserPermissions(Integer id, Permission related_permissions) {
 		TypeOfUser typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(id, -1, -1);
-		Permission existingpermission = permissionDAO.findPermissionByPrimaryKey(related_permission.getId());
+		Permission existingpermissions = permissionDAO.findPermissionByPrimaryKey(related_permissions.getId());
 
 		// copy into the existing record to preserve existing relationships
-		if (existingpermission != null) {
-			existingpermission.setId(related_permission.getId());
-			existingpermission.setDisplay(related_permission.getDisplay());
-			existingpermission.setEdit(related_permission.getEdit());
-			existingpermission.setExecute(related_permission.getExecute());
-			related_permission = existingpermission;
+		if (existingpermissions != null) {
+			existingpermissions.setId(related_permissions.getId());
+			existingpermissions.setDisplay(related_permissions.getDisplay());
+			existingpermissions.setExecute(related_permissions.getExecute());
+			existingpermissions.setEdit(related_permissions.getEdit());
+			related_permissions = existingpermissions;
 		}
 
-//		typeofuser.setPermission(related_permission);
+		related_permissions.setTypeOfUser(typeofuser);
+		typeofuser.getPermission().add(related_permissions);
+		related_permissions = permissionDAO.store(related_permissions);
+		permissionDAO.flush();
+
 		typeofuser = typeOfUserDAO.store(typeofuser);
 		typeOfUserDAO.flush();
-
-		related_permission = permissionDAO.store(related_permission);
-		permissionDAO.flush();
 
 		return typeofuser;
 	}
 
 	/**
-	 * Return a count of all TypeOfUser entity
+	 * Save an existing TypeOfUser entity
 	 * 
 	 */
 	@Transactional
-	public Integer countTypeOfUsers() {
-		return ((Long) typeOfUserDAO.createQuerySingleResult("select count(o) from TypeOfUser o").getSingleResult()).intValue();
-	}
+	public TypeOfUser saveTypeOfUserTypeOfUsers(Integer id, TypeOfUser related_typeofusers) {
+		TypeOfUser typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(id, -1, -1);
+		TypeOfUser existingtypeOfUsers = typeOfUserDAO.findTypeOfUserByPrimaryKey(related_typeofusers.getId());
 
-	/**
-	 * Return all TypeOfUser entity
-	 * 
-	 */
-	@Transactional
-	public List<TypeOfUser> findAllTypeOfUsers(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<TypeOfUser>(typeOfUserDAO.findAllTypeOfUsers(startResult, maxRows));
+		// copy into the existing record to preserve existing relationships
+		if (existingtypeOfUsers != null) {
+			existingtypeOfUsers.setId(related_typeofusers.getId());
+			existingtypeOfUsers.setType(related_typeofusers.getType());
+			existingtypeOfUsers.setDescription(related_typeofusers.getDescription());
+			related_typeofusers = existingtypeOfUsers;
+		} else {
+			related_typeofusers = typeOfUserDAO.store(related_typeofusers);
+			typeOfUserDAO.flush();
+		}
+
+//		typeofuser.setTypeOfUser(related_typeofusers);
+//		related_typeofusers.getTypeOfUsers().add(typeofuser);
+		typeofuser = typeOfUserDAO.store(typeofuser);
+		typeOfUserDAO.flush();
+
+		related_typeofusers = typeOfUserDAO.store(related_typeofusers);
+		typeOfUserDAO.flush();
+
+		return typeofuser;
 	}
 
 	/**
@@ -101,23 +122,20 @@ public class TypeOfUserServiceImpl implements TypeOfUserService {
 	}
 
 	/**
-	 * Delete an existing Permission entity
+	 * Delete an existing TypeOfUser entity
 	 * 
 	 */
 	@Transactional
-	public TypeOfUser deleteTypeOfUserPermission(Integer typeofuser_id, Integer related_permission_id) {
+	public TypeOfUser deleteTypeOfUserTypeOfUsers(Integer typeofuser_id, Integer related_typeofusers_id) {
+		TypeOfUser related_typeofusers = typeOfUserDAO.findTypeOfUserByPrimaryKey(related_typeofusers_id, -1, -1);
+
 		TypeOfUser typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser_id, -1, -1);
-		Permission related_permission = permissionDAO.findPermissionByPrimaryKey(related_permission_id, -1, -1);
 
-		typeofuser.setPermission(null);
-		typeofuser = typeOfUserDAO.store(typeofuser);
+//		typeofuser.setTypeOfUser(null);
+//		related_typeofusers.getTypeOfUsers().remove(typeofuser);
+
+		typeOfUserDAO.remove(related_typeofusers);
 		typeOfUserDAO.flush();
-
-		related_permission = permissionDAO.store(related_permission);
-		permissionDAO.flush();
-
-		permissionDAO.remove(related_permission);
-		permissionDAO.flush();
 
 		return typeofuser;
 	}
@@ -130,6 +148,34 @@ public class TypeOfUserServiceImpl implements TypeOfUserService {
 	public void deleteTypeOfUser(TypeOfUser typeofuser) {
 		typeOfUserDAO.remove(typeofuser);
 		typeOfUserDAO.flush();
+	}
+
+	/**
+	 * Delete an existing Permission entity
+	 * 
+	 */
+	@Transactional
+	public TypeOfUser deleteTypeOfUserPermissions(Integer typeofuser_id, Integer related_permissions_id) {
+		Permission related_permissions = permissionDAO.findPermissionByPrimaryKey(related_permissions_id, -1, -1);
+
+		TypeOfUser typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser_id, -1, -1);
+
+		related_permissions.setTypeOfUser(null);
+		typeofuser.getPermission().remove(related_permissions);
+
+		permissionDAO.remove(related_permissions);
+		permissionDAO.flush();
+
+		return typeofuser;
+	}
+
+	/**
+	 * Return all TypeOfUser entity
+	 * 
+	 */
+	@Transactional
+	public List<TypeOfUser> findAllTypeOfUsers(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<TypeOfUser>(typeOfUserDAO.findAllTypeOfUsers(startResult, maxRows));
 	}
 
 	/**
@@ -154,9 +200,65 @@ public class TypeOfUserServiceImpl implements TypeOfUserService {
 	}
 
 	/**
+	 * Delete an existing TypeOfUser entity
+	 * 
 	 */
 	@Transactional
-	public TypeOfUser findTypeOfUserByPrimaryKey(Integer id) {
-		return typeOfUserDAO.findTypeOfUserByPrimaryKey(id);
+	public TypeOfUser deleteTypeOfUserTypeOfUser(Integer typeofuser_id, Integer related_typeofuser_id) {
+		TypeOfUser typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(typeofuser_id, -1, -1);
+		TypeOfUser related_typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(related_typeofuser_id, -1, -1);
+
+//		typeofuser.setTypeOfUser(null);
+//		related_typeofuser.getTypeOfUsers().remove(typeofuser);
+		typeofuser = typeOfUserDAO.store(typeofuser);
+		typeOfUserDAO.flush();
+
+		related_typeofuser = typeOfUserDAO.store(related_typeofuser);
+		typeOfUserDAO.flush();
+
+		typeOfUserDAO.remove(related_typeofuser);
+		typeOfUserDAO.flush();
+
+		return typeofuser;
+	}
+
+	/**
+	 * Return a count of all TypeOfUser entity
+	 * 
+	 */
+	@Transactional
+	public Integer countTypeOfUsers() {
+		return ((Long) typeOfUserDAO.createQuerySingleResult("select count(o) from TypeOfUser o").getSingleResult()).intValue();
+	}
+
+	/**
+	 * Save an existing TypeOfUser entity
+	 * 
+	 */
+	@Transactional
+	public TypeOfUser saveTypeOfUserTypeOfUser(Integer id, TypeOfUser related_typeofuser) {
+		TypeOfUser typeofuser = typeOfUserDAO.findTypeOfUserByPrimaryKey(id, -1, -1);
+		TypeOfUser existingtypeOfUser = typeOfUserDAO.findTypeOfUserByPrimaryKey(related_typeofuser.getId());
+
+		// copy into the existing record to preserve existing relationships
+		if (existingtypeOfUser != null) {
+			existingtypeOfUser.setId(related_typeofuser.getId());
+			existingtypeOfUser.setType(related_typeofuser.getType());
+			existingtypeOfUser.setDescription(related_typeofuser.getDescription());
+			related_typeofuser = existingtypeOfUser;
+		} else {
+			related_typeofuser = typeOfUserDAO.store(related_typeofuser);
+			typeOfUserDAO.flush();
+		}
+
+//		typeofuser.setTypeOfUser(related_typeofuser);
+//		related_typeofuser.getTypeOfUsers().add(typeofuser);
+		typeofuser = typeOfUserDAO.store(typeofuser);
+		typeOfUserDAO.flush();
+
+		related_typeofuser = typeOfUserDAO.store(related_typeofuser);
+		typeOfUserDAO.flush();
+
+		return typeofuser;
 	}
 }

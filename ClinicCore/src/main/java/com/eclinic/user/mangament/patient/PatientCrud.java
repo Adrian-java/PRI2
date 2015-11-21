@@ -16,9 +16,9 @@ public interface PatientCrud  {
 	
 	public Response deletePatient(String pesel);
 	
-	public Set<SystemUserPermissionView> showPermissionByPesel(String pesel);
+	public Set<SystemUserPermissionView> showPermissionById(String pesel);
 	
 	public Set<PatientView> getAllPatients();
 	
-	public PatientView getPatientByPesel(String pesel);
+	public PatientView getPatientById(String pesel);
 }

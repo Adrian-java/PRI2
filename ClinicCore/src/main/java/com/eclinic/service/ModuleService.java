@@ -13,16 +13,10 @@ import java.util.Set;
 public interface ModuleService {
 
 	/**
-	 * Load an existing Module entity
+	 * Return a count of all Module entity
 	 * 
 	 */
-	public Set<Module> loadModules();
-
-	/**
-	 * Return all Module entity
-	 * 
-	 */
-	public List<Module> findAllModules(Integer startResult, Integer maxRows);
+	public Integer countModules();
 
 	/**
 	 * Save an existing Permission entity
@@ -41,20 +35,26 @@ public interface ModuleService {
 	public Module deleteModulePermissions(Integer module_id, Integer related_permissions_id);
 
 	/**
-	 * Return a count of all Module entity
-	 * 
-	 */
-	public Integer countModules();
-
-	/**
 	 * Delete an existing Module entity
 	 * 
 	 */
 	public void deleteModule(Module module);
 
 	/**
+	 * Return all Module entity
+	 * 
+	 */
+	public List<Module> findAllModules(Integer startResult, Integer maxRows);
+
+	/**
 	 * Save an existing Module entity
 	 * 
 	 */
 	public void saveModule(Module module_1);
+
+	/**
+	 * Load an existing Module entity
+	 * 
+	 */
+	public Set<Module> loadModules();
 }

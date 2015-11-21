@@ -1,7 +1,7 @@
 package com.eclinic.service;
 
 import com.eclinic.domain.Admin;
-import com.eclinic.domain.Worker;
+import com.eclinic.domain.SystemUser;
 
 import java.util.List;
 import java.util.Set;
@@ -13,28 +13,10 @@ import java.util.Set;
 public interface AdminService {
 
 	/**
-	 * Save an existing Admin entity
+	 * Save an existing SystemUser entity
 	 * 
 	 */
-	public void saveAdmin(Admin admin);
-
-	/**
-	 * Return all Admin entity
-	 * 
-	 */
-	public List<Admin> findAllAdmins(Integer startResult, Integer maxRows);
-
-	/**
-	 * Save an existing Worker entity
-	 * 
-	 */
-	public Admin saveAdminWorkers(Integer id, Worker related_workers);
-
-	/**
-	 * Delete an existing Admin entity
-	 * 
-	 */
-	public void deleteAdmin(Admin admin_1);
+	public Admin saveAdminSystemUser(String id, SystemUser related_systemuser);
 
 	/**
 	 * Return a count of all Admin entity
@@ -43,18 +25,36 @@ public interface AdminService {
 	public Integer countAdmins();
 
 	/**
-	 * Delete an existing Worker entity
-	 * 
 	 */
-	public Admin deleteAdminWorkers(Integer admin_id, Integer related_workers_id);
+	public Admin findAdminByPrimaryKey(String id_1);
 
 	/**
+	 * Save an existing Admin entity
+	 * 
 	 */
-	public Admin findAdminByPrimaryKey(Integer id_1);
+	public void saveAdmin(Admin admin);
 
 	/**
 	 * Load an existing Admin entity
 	 * 
 	 */
 	public Set<Admin> loadAdmins();
+
+	/**
+	 * Delete an existing SystemUser entity
+	 * 
+	 */
+	public Admin deleteAdminSystemUser(String admin_id, String related_systemuser_id);
+
+	/**
+	 * Return all Admin entity
+	 * 
+	 */
+	public List<Admin> findAllAdmins(Integer startResult, Integer maxRows);
+
+	/**
+	 * Delete an existing Admin entity
+	 * 
+	 */
+	public void deleteAdmin(Admin admin_1);
 }

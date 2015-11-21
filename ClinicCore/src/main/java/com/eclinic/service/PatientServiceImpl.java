@@ -1,18 +1,16 @@
 package com.eclinic.service;
 
 import com.eclinic.dao.AddressDAO;
-import com.eclinic.dao.PatientCardDAO;
+import com.eclinic.dao.DocumentsDAO;
 import com.eclinic.dao.PatientDAO;
-import com.eclinic.dao.RecipeDAO;
-import com.eclinic.dao.SickLeaveDAO;
-import com.eclinic.dao.WorkerDAO;
+import com.eclinic.dao.SystemUserDAO;
+import com.eclinic.dao.VisitDAO;
 
 import com.eclinic.domain.Address;
+import com.eclinic.domain.Documents;
 import com.eclinic.domain.Patient;
-import com.eclinic.domain.PatientCard;
-import com.eclinic.domain.Recipe;
-import com.eclinic.domain.SickLeave;
-import com.eclinic.domain.Worker;
+import com.eclinic.domain.SystemUser;
+import com.eclinic.domain.Visit;
 
 import java.util.List;
 import java.util.Set;
@@ -40,11 +38,11 @@ public class PatientServiceImpl implements PatientService {
 	private AddressDAO addressDAO;
 
 	/**
-	 * DAO injected by Spring that manages PatientCard entities
+	 * DAO injected by Spring that manages Documents entities
 	 * 
 	 */
 	@Autowired
-	private PatientCardDAO patientCardDAO;
+	private DocumentsDAO documentsDAO;
 
 	/**
 	 * DAO injected by Spring that manages Patient entities
@@ -54,26 +52,18 @@ public class PatientServiceImpl implements PatientService {
 	private PatientDAO patientDAO;
 
 	/**
-	 * DAO injected by Spring that manages Recipe entities
+	 * DAO injected by Spring that manages SystemUser entities
 	 * 
 	 */
 	@Autowired
-	private RecipeDAO recipeDAO;
+	private SystemUserDAO systemUserDAO;
 
 	/**
-	 * DAO injected by Spring that manages SickLeave entities
+	 * DAO injected by Spring that manages Visit entities
 	 * 
 	 */
 	@Autowired
-	private SickLeaveDAO sickLeaveDAO;
-
-	/**
-	 * DAO injected by Spring that manages Worker entities
-	 * 
-	 */
-	@Autowired
-	private WorkerDAO workerDAO;
-	
+	private VisitDAO visitDAO;
 
 	/**
 	 * Instantiates a new PatientServiceImpl.
@@ -83,190 +73,11 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	/**
-	 * Delete an existing Worker entity
-	 * 
-	 */
-	@Transactional
-	public Patient deletePatientWorkers(Integer patient_id, Integer related_workers_id) {
-		Worker related_workers = workerDAO.findWorkerByPrimaryKey(related_workers_id, -1, -1);
-
-		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
-
-		related_workers.setPatient(null);
-		patient.getWorkers().remove(related_workers);
-
-		workerDAO.remove(related_workers);
-		workerDAO.flush();
-
-		return patient;
-	}
-
-	/**
-	 * Delete an existing Address entity
-	 * 
-	 */
-	@Transactional
-	public Patient deletePatientAddress(Integer patient_id, Integer related_address_id) {
-		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
-		Address related_address = addressDAO.findAddressByPrimaryKey(related_address_id, -1, -1);
-
-		patient.setAddress(null);
-		related_address.getPatients().remove(patient);
-		patient = patientDAO.store(patient);
-		patientDAO.flush();
-
-		related_address = addressDAO.store(related_address);
-		addressDAO.flush();
-
-		addressDAO.remove(related_address);
-		addressDAO.flush();
-
-		return patient;
-	}
-
-	/**
-	 * Delete an existing Patient entity
-	 * 
-	 */
-	@Transactional
-	public void deletePatient(Patient patient) {
-		patientDAO.remove(patient);
-		patientDAO.flush();
-	}
-
-	/**
-	 * Save an existing Worker entity
-	 * 
-	 */
-	@Transactional
-	public Patient savePatientWorkers(Integer id, Worker related_workers) {
-		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
-		Worker existingworkers = workerDAO.findWorkerByPrimaryKey(related_workers.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingworkers != null) {
-			existingworkers.setId(related_workers.getId());
-			related_workers = existingworkers;
-		} else {
-			related_workers = workerDAO.store(related_workers);
-			workerDAO.flush();
-		}
-
-		related_workers.setPatient(patient);
-		patient.getWorkers().add(related_workers);
-		related_workers = workerDAO.store(related_workers);
-		workerDAO.flush();
-
-		patient = patientDAO.store(patient);
-		patientDAO.flush();
-
-		return patient;
-	}
-
-	/**
-	 */
-	@Transactional
-	public Patient findPatientByPrimaryKey(Integer id) {
-		return patientDAO.findPatientByPrimaryKey(id);
-	}
-
-	/**
-	 * Delete an existing Recipe entity
-	 * 
-	 */
-	@Transactional
-	public Patient deletePatientRecipes(Integer patient_id, Integer related_recipes_idr) {
-		Recipe related_recipes = recipeDAO.findRecipeByPrimaryKey(related_recipes_idr, -1, -1);
-
-		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
-
-		related_recipes.setPatient(null);
-		patient.getRecipes().remove(related_recipes);
-
-		recipeDAO.remove(related_recipes);
-		recipeDAO.flush();
-
-		return patient;
-	}
-
-	/**
-	 * Return a count of all Patient entity
-	 * 
-	 */
-	@Transactional
-	public Integer countPatients() {
-		return ((Long) patientDAO.createQuerySingleResult("select count(o) from Patient o").getSingleResult()).intValue();
-	}
-
-	/**
-	 * Save an existing Patient entity
-	 * 
-	 */
-	@Transactional
-	public Integer savePatient(Patient patient) {
-		Patient existingPatient = patientDAO.findPatientByPrimaryKey(patient.getId());
-
-		if (existingPatient != null) {
-			if (existingPatient != patient) {
-				existingPatient.setId(patient.getId());
-				existingPatient.setName(patient.getName());
-				existingPatient.setSurname(patient.getSurname());
-				existingPatient.setDateOfBirth(patient.getDateOfBirth());
-//				existingPatient.setEMail(patient.getEMail());
-				existingPatient.setPhoneNr(patient.getPhoneNr());
-				existingPatient.setConfirmed(patient.getConfirmed());
-			}
-			patient = patientDAO.store(existingPatient);
-		} else {
-			patient = patientDAO.store(patient);
-		}
-		patientDAO.flush();
-		return patient.getId();
-	}
-
-	/**
-	 * Save an existing SickLeave entity
-	 * 
-	 */
-	@Transactional
-	public Patient savePatientSickLeaves(Integer id, SickLeave related_sickleaves) {
-		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
-		SickLeave existingsickLeaves = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingsickLeaves != null) {
-			existingsickLeaves.setId(related_sickleaves.getId());
-			existingsickLeaves.setDateFrom(related_sickleaves.getDateFrom());
-			existingsickLeaves.setDateTo(related_sickleaves.getDateTo());
-			related_sickleaves = existingsickLeaves;
-		}
-
-		related_sickleaves.setPatient(patient);
-		patient.getSickLeaves().add(related_sickleaves);
-		related_sickleaves = sickLeaveDAO.store(related_sickleaves);
-		sickLeaveDAO.flush();
-
-		patient = patientDAO.store(patient);
-		patientDAO.flush();
-
-		return patient;
-	}
-
-	/**
-	 * Load an existing Patient entity
-	 * 
-	 */
-	@Transactional
-	public Set<Patient> loadPatients() {
-		return patientDAO.findAllPatients();
-	}
-
-	/**
 	 * Save an existing Address entity
 	 * 
 	 */
 	@Transactional
-	public Patient savePatientAddress(Integer id, Address related_address) {
+	public Patient savePatientAddress(String id, Address related_address) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
 		Address existingaddress = addressDAO.findAddressByPrimaryKey(related_address.getId());
 
@@ -294,63 +105,47 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	/**
-	 * Delete an existing PatientCard entity
+	 * Delete an existing Visit entity
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientPatientCards(Integer patient_id, Integer related_patientcards_id) {
-		PatientCard related_patientcards = patientCardDAO.findPatientCardByPrimaryKey(related_patientcards_id, -1, -1);
+	public Patient deletePatientVisits(String patient_id, Integer related_visits_id) {
+		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
 
 		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
 
-		related_patientcards.setPatient(null);
-		patient.getPatientCards().remove(related_patientcards);
+		related_visits.setPatient(null);
+		patient.getVisits().remove(related_visits);
 
-		patientCardDAO.remove(related_patientcards);
-		patientCardDAO.flush();
+		visitDAO.remove(related_visits);
+		visitDAO.flush();
 
 		return patient;
 	}
 
 	/**
-	 * Delete an existing SickLeave entity
+	 * Save an existing Visit entity
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientSickLeaves(Integer patient_id, Integer related_sickleaves_id) {
-		SickLeave related_sickleaves = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id, -1, -1);
-
-		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
-
-		related_sickleaves.setPatient(null);
-		patient.getSickLeaves().remove(related_sickleaves);
-
-		sickLeaveDAO.remove(related_sickleaves);
-		sickLeaveDAO.flush();
-
-		return patient;
-	}
-
-	/**
-	 * Save an existing PatientCard entity
-	 * 
-	 */
-	@Transactional
-	public Patient savePatientPatientCards(Integer id, PatientCard related_patientcards) {
+	public Patient savePatientVisits(String id, Visit related_visits) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
-		PatientCard existingpatientCards = patientCardDAO.findPatientCardByPrimaryKey(related_patientcards.getId());
+		Visit existingvisits = visitDAO.findVisitByPrimaryKey(related_visits.getId());
 
 		// copy into the existing record to preserve existing relationships
-		if (existingpatientCards != null) {
-			existingpatientCards.setId(related_patientcards.getId());
-			existingpatientCards.setRegisterDate(related_patientcards.getRegisterDate());
-			related_patientcards = existingpatientCards;
+		if (existingvisits != null) {
+			existingvisits.setId(related_visits.getId());
+			existingvisits.setDateOfVisit(related_visits.getDateOfVisit());
+			existingvisits.setDescriptionOfVisit(related_visits.getDescriptionOfVisit());
+			existingvisits.setIsLeave(related_visits.getIsLeave());
+			existingvisits.setSpecial(related_visits.getSpecial());
+			related_visits = existingvisits;
 		}
 
-		related_patientcards.setPatient(patient);
-		patient.getPatientCards().add(related_patientcards);
-		related_patientcards = patientCardDAO.store(related_patientcards);
-		patientCardDAO.flush();
+		related_visits.setPatient(patient);
+		patient.getVisits().add(related_visits);
+		related_visits = visitDAO.store(related_visits);
+		visitDAO.flush();
 
 		patient = patientDAO.store(patient);
 		patientDAO.flush();
@@ -359,31 +154,129 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	/**
-	 * Save an existing Recipe entity
+	 * Delete an existing Patient entity
 	 * 
 	 */
 	@Transactional
-	public Patient savePatientRecipes(Integer id, Recipe related_recipes) {
+	public void deletePatient(Patient patient) {
+		patientDAO.remove(patient);
+		patientDAO.flush();
+	}
+
+	/**
+	 * Save an existing Documents entity
+	 * 
+	 */
+	@Transactional
+	public Patient savePatientDocumentses(String id, Documents related_documentses) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
-		Recipe existingrecipes = recipeDAO.findRecipeByPrimaryKey(related_recipes.getIdr());
+		Documents existingdocumentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses.getId());
 
 		// copy into the existing record to preserve existing relationships
-		if (existingrecipes != null) {
-			existingrecipes.setIdr(related_recipes.getIdr());
-			existingrecipes.setDate(related_recipes.getDate());
-			existingrecipes.setDrug(related_recipes.getDrug());
-			related_recipes = existingrecipes;
+		if (existingdocumentses != null) {
+			existingdocumentses.setId(related_documentses.getId());
+			existingdocumentses.setDateOfDocuments(related_documentses.getDateOfDocuments());
+			existingdocumentses.setDescription(related_documentses.getDescription());
+			existingdocumentses.setTypeOfDocuments(related_documentses.getTypeOfDocuments());
+			existingdocumentses.setDataOfDocuments(related_documentses.getDataOfDocuments());
+			related_documentses = existingdocumentses;
 		}
 
-		related_recipes.setPatient(patient);
-		patient.getRecipes().add(related_recipes);
-		related_recipes = recipeDAO.store(related_recipes);
-		recipeDAO.flush();
+		related_documentses.setPatient(patient);
+		patient.getDocumentses().add(related_documentses);
+		related_documentses = documentsDAO.store(related_documentses);
+		documentsDAO.flush();
 
 		patient = patientDAO.store(patient);
 		patientDAO.flush();
 
 		return patient;
+	}
+
+	/**
+	 * Delete an existing Address entity
+	 * 
+	 */
+	@Transactional
+	public Patient deletePatientAddress(String patient_id, Integer related_address_id) {
+		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
+		Address related_address = addressDAO.findAddressByPrimaryKey(related_address_id, -1, -1);
+
+		patient.setAddress(null);
+		related_address.getPatients().remove(patient);
+		patient = patientDAO.store(patient);
+		patientDAO.flush();
+
+		related_address = addressDAO.store(related_address);
+		addressDAO.flush();
+
+		addressDAO.remove(related_address);
+		addressDAO.flush();
+
+		return patient;
+	}
+
+	/**
+	 * Return a count of all Patient entity
+	 * 
+	 */
+	@Transactional
+	public Integer countPatients() {
+		return ((Long) patientDAO.createQuerySingleResult("select count(o) from Patient o").getSingleResult()).intValue();
+	}
+
+	/**
+	 */
+	@Transactional
+	public Patient findPatientByPrimaryKey(String id) {
+		return patientDAO.findPatientByPrimaryKey(id);
+	}
+
+	/**
+	 * Delete an existing SystemUser entity
+	 * 
+	 */
+	@Transactional
+	public Patient deletePatientSystemUser(String patient_id, String related_systemuser_id) {
+		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
+		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
+
+		patient.setSystemUser(null);
+		patient = patientDAO.store(patient);
+		patientDAO.flush();
+
+		related_systemuser = systemUserDAO.store(related_systemuser);
+		systemUserDAO.flush();
+
+		systemUserDAO.remove(related_systemuser);
+		systemUserDAO.flush();
+
+		return patient;
+	}
+
+	/**
+	 * Save an existing Patient entity
+	 * 
+	 */
+	@Transactional
+	public String savePatient(Patient patient) {
+		Patient existingPatient = patientDAO.findPatientByPrimaryKey(patient.getId());
+
+		if (existingPatient != null) {
+			if (existingPatient != patient) {
+				existingPatient.setId(patient.getId());
+				existingPatient.setName(patient.getName());
+				existingPatient.setSurname(patient.getSurname());
+				existingPatient.setDateOfBirth(patient.getDateOfBirth());
+				existingPatient.setPhoneNr(patient.getPhoneNr());
+				existingPatient.setConfirmed(patient.getConfirmed());
+			}
+			patient = patientDAO.store(existingPatient);
+		} else {
+			patient = patientDAO.store(patient);
+		}
+		patientDAO.flush();
+		return patient.getId();
 	}
 
 	/**
@@ -393,5 +286,69 @@ public class PatientServiceImpl implements PatientService {
 	@Transactional
 	public List<Patient> findAllPatients(Integer startResult, Integer maxRows) {
 		return new java.util.ArrayList<Patient>(patientDAO.findAllPatients(startResult, maxRows));
+	}
+
+	/**
+	 * Delete an existing Documents entity
+	 * 
+	 */
+	@Transactional
+	public Patient deletePatientDocumentses(String patient_id, Integer related_documentses_id) {
+		Documents related_documentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses_id, -1, -1);
+
+		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
+
+		related_documentses.setPatient(null);
+		patient.getDocumentses().remove(related_documentses);
+
+		documentsDAO.remove(related_documentses);
+		documentsDAO.flush();
+
+		return patient;
+	}
+
+	/**
+	 * Save an existing SystemUser entity
+	 * 
+	 */
+	@Transactional
+	public Patient savePatientSystemUser(String id, SystemUser related_systemuser) {
+		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
+		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
+
+		// copy into the existing record to preserve existing relationships
+		if (existingsystemUser != null) {
+			existingsystemUser.setId(related_systemuser.getId());
+			existingsystemUser.setPassword(related_systemuser.getPassword());
+			existingsystemUser.setDescription(related_systemuser.getDescription());
+			existingsystemUser.setRegisterDate(related_systemuser.getRegisterDate());
+			existingsystemUser.setIsActive(related_systemuser.getIsActive());
+			existingsystemUser.setChangedPassword(related_systemuser.getChangedPassword());
+			existingsystemUser.setEmail(related_systemuser.getEmail());
+			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
+			existingsystemUser.setRole(related_systemuser.getRole());
+			related_systemuser = existingsystemUser;
+		} else {
+			related_systemuser = systemUserDAO.store(related_systemuser);
+			systemUserDAO.flush();
+		}
+
+		patient.setSystemUser(related_systemuser);
+		patient = patientDAO.store(patient);
+		patientDAO.flush();
+
+		related_systemuser = systemUserDAO.store(related_systemuser);
+		systemUserDAO.flush();
+
+		return patient;
+	}
+
+	/**
+	 * Load an existing Patient entity
+	 * 
+	 */
+	@Transactional
+	public Set<Patient> loadPatients() {
+		return patientDAO.findAllPatients();
 	}
 }

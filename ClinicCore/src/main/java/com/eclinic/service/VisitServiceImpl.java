@@ -1,17 +1,15 @@
 package com.eclinic.service;
 
 import com.eclinic.dao.DoctorDAO;
-import com.eclinic.dao.PatientCardDAO;
+import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.ReceptionistDAO;
-import com.eclinic.dao.SickLeaveDAO;
 import com.eclinic.dao.StatusOfVisitDAO;
 import com.eclinic.dao.TypeOfVisitDAO;
 import com.eclinic.dao.VisitDAO;
 
 import com.eclinic.domain.Doctor;
-import com.eclinic.domain.PatientCard;
+import com.eclinic.domain.Patient;
 import com.eclinic.domain.Receptionist;
-import com.eclinic.domain.SickLeave;
 import com.eclinic.domain.StatusOfVisit;
 import com.eclinic.domain.TypeOfVisit;
 import com.eclinic.domain.Visit;
@@ -42,11 +40,11 @@ public class VisitServiceImpl implements VisitService {
 	private DoctorDAO doctorDAO;
 
 	/**
-	 * DAO injected by Spring that manages PatientCard entities
+	 * DAO injected by Spring that manages Patient entities
 	 * 
 	 */
 	@Autowired
-	private PatientCardDAO patientCardDAO;
+	private PatientDAO patientDAO;
 
 	/**
 	 * DAO injected by Spring that manages Receptionist entities
@@ -54,13 +52,6 @@ public class VisitServiceImpl implements VisitService {
 	 */
 	@Autowired
 	private ReceptionistDAO receptionistDAO;
-
-	/**
-	 * DAO injected by Spring that manages SickLeave entities
-	 * 
-	 */
-	@Autowired
-	private SickLeaveDAO sickLeaveDAO;
 
 	/**
 	 * DAO injected by Spring that manages StatusOfVisit entities
@@ -91,66 +82,31 @@ public class VisitServiceImpl implements VisitService {
 	}
 
 	/**
-	 * Load an existing Visit entity
+	 * Save an existing Receptionist entity
 	 * 
 	 */
 	@Transactional
-	public Set<Visit> loadVisits() {
-		return visitDAO.findAllVisits();
-	}
+	public Visit saveVisitReceptionist(Integer id, Receptionist related_receptionist) {
+		Visit visit = visitDAO.findVisitByPrimaryKey(id, -1, -1);
+		Receptionist existingreceptionist = receptionistDAO.findReceptionistByPrimaryKey(related_receptionist.getId());
 
-	/**
-	 * Delete an existing TypeOfVisit entity
-	 * 
-	 */
-	@Transactional
-	public Visit deleteVisitTypeOfVisit(Integer visit_id, Integer related_typeofvisit_id) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
-		TypeOfVisit related_typeofvisit = typeOfVisitDAO.findTypeOfVisitByPrimaryKey(related_typeofvisit_id, -1, -1);
+		// copy into the existing record to preserve existing relationships
+		if (existingreceptionist != null) {
+			existingreceptionist.setId(related_receptionist.getId());
+			existingreceptionist.setName(related_receptionist.getName());
+			existingreceptionist.setSurname(related_receptionist.getSurname());
+			existingreceptionist.setPhoneNr(related_receptionist.getPhoneNr());
+			existingreceptionist.setAccess(related_receptionist.getAccess());
+			related_receptionist = existingreceptionist;
+		}
 
-		visit.setTypeOfVisit(null);
-		related_typeofvisit.getVisits().remove(visit);
+		visit.setReceptionist(related_receptionist);
+		related_receptionist.getVisits().add(visit);
 		visit = visitDAO.store(visit);
 		visitDAO.flush();
 
-		related_typeofvisit = typeOfVisitDAO.store(related_typeofvisit);
-		typeOfVisitDAO.flush();
-
-		typeOfVisitDAO.remove(related_typeofvisit);
-		typeOfVisitDAO.flush();
-
-		return visit;
-	}
-
-	/**
-	 * Delete an existing Visit entity
-	 * 
-	 */
-	@Transactional
-	public void deleteVisit(Visit visit) {
-		visitDAO.remove(visit);
-		visitDAO.flush();
-	}
-
-	/**
-	 * Delete an existing PatientCard entity
-	 * 
-	 */
-	@Transactional
-	public Visit deleteVisitPatientCard(Integer visit_id, Integer related_patientcard_id) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
-		PatientCard related_patientcard = patientCardDAO.findPatientCardByPrimaryKey(related_patientcard_id, -1, -1);
-
-		visit.setPatientCard(null);
-		related_patientcard.getVisits().remove(visit);
-		visit = visitDAO.store(visit);
-		visitDAO.flush();
-
-		related_patientcard = patientCardDAO.store(related_patientcard);
-		patientCardDAO.flush();
-
-		patientCardDAO.remove(related_patientcard);
-		patientCardDAO.flush();
+		related_receptionist = receptionistDAO.store(related_receptionist);
+		receptionistDAO.flush();
 
 		return visit;
 	}
@@ -194,84 +150,23 @@ public class VisitServiceImpl implements VisitService {
 	}
 
 	/**
-	 * Save an existing Visit entity
+	 * Delete an existing Doctor entity
 	 * 
 	 */
 	@Transactional
-	public Integer saveVisit(Visit visit) {
-		Visit existingVisit = visitDAO.findVisitByPrimaryKey(visit.getId());
-
-		if (existingVisit != null) {
-			if (existingVisit != visit) {
-				existingVisit.setId(visit.getId());
-				existingVisit.setDateOfVisit(visit.getDateOfVisit());
-				existingVisit.setDescriptionOfVisit(visit.getDescriptionOfVisit());
-				existingVisit.setIsLeave(visit.getIsLeave());
-				existingVisit.setSpecial(visit.getSpecial());
-			}
-			visit = visitDAO.store(existingVisit);
-		} else {
-			visit = visitDAO.store(visit);
-		}
-		visitDAO.flush();
-		return visit.getId();
-	}
-
-	/**
-	 * Return a count of all Visit entity
-	 * 
-	 */
-	@Transactional
-	public Integer countVisits() {
-		return ((Long) visitDAO.createQuerySingleResult("select count(o) from Visit o").getSingleResult()).intValue();
-	}
-
-	/**
-	 * Delete an existing Receptionist entity
-	 * 
-	 */
-	@Transactional
-	public Visit deleteVisitReceptionist(Integer visit_id, Integer related_receptionist_id) {
+	public Visit deleteVisitDoctor(Integer visit_id, String related_doctor_id) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
-		Receptionist related_receptionist = receptionistDAO.findReceptionistByPrimaryKey(related_receptionist_id, -1, -1);
+		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
-		visit.setReceptionist(null);
-		related_receptionist.getVisits().remove(visit);
-		visit = visitDAO.store(visit);
-		visitDAO.flush();
-
-		related_receptionist = receptionistDAO.store(related_receptionist);
-		receptionistDAO.flush();
-
-		receptionistDAO.remove(related_receptionist);
-		receptionistDAO.flush();
-
-		return visit;
-	}
-
-	/**
-	 * Save an existing Doctor entity
-	 * 
-	 */
-	@Transactional
-	public Visit saveVisitDoctor(Integer id, Doctor related_doctor) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(id, -1, -1);
-		Doctor existingdoctor = doctorDAO.findDoctorByPrimaryKey(related_doctor.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingdoctor != null) {
-			existingdoctor.setId(related_doctor.getId());
-			existingdoctor.setName(related_doctor.getName());
-			existingdoctor.setSurname(related_doctor.getSurname());
-			related_doctor = existingdoctor;
-		}
-
-		visit.setDoctor(related_doctor);
-		related_doctor.getVisits().add(visit);
+		visit.setDoctor(null);
+		related_doctor.getVisits().remove(visit);
 		visit = visitDAO.store(visit);
 		visitDAO.flush();
 
 		related_doctor = doctorDAO.store(related_doctor);
+		doctorDAO.flush();
+
+		doctorDAO.remove(related_doctor);
 		doctorDAO.flush();
 
 		return visit;
@@ -305,29 +200,58 @@ public class VisitServiceImpl implements VisitService {
 	}
 
 	/**
-	 */
-	@Transactional
-	public Visit findVisitByPrimaryKey(Integer id) {
-		return visitDAO.findVisitByPrimaryKey(id);
-	}
-
-	/**
-	 * Delete an existing SickLeave entity
+	 * Delete an existing Receptionist entity
 	 * 
 	 */
 	@Transactional
-	public Visit deleteVisitSickLeaves(Integer visit_id, Integer related_sickleaves_id) {
-		SickLeave related_sickleaves = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves_id, -1, -1);
-
+	public Visit deleteVisitReceptionist(Integer visit_id, String related_receptionist_id) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
+		Receptionist related_receptionist = receptionistDAO.findReceptionistByPrimaryKey(related_receptionist_id, -1, -1);
 
-		related_sickleaves.setVisit(null);
-		visit.getSickLeaves().remove(related_sickleaves);
+		visit.setReceptionist(null);
+		related_receptionist.getVisits().remove(visit);
+		visit = visitDAO.store(visit);
+		visitDAO.flush();
 
-		sickLeaveDAO.remove(related_sickleaves);
-		sickLeaveDAO.flush();
+		related_receptionist = receptionistDAO.store(related_receptionist);
+		receptionistDAO.flush();
+
+		receptionistDAO.remove(related_receptionist);
+		receptionistDAO.flush();
 
 		return visit;
+	}
+
+	/**
+	 * Delete an existing TypeOfVisit entity
+	 * 
+	 */
+	@Transactional
+	public Visit deleteVisitTypeOfVisit(Integer visit_id, Integer related_typeofvisit_id) {
+		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
+		TypeOfVisit related_typeofvisit = typeOfVisitDAO.findTypeOfVisitByPrimaryKey(related_typeofvisit_id, -1, -1);
+
+		visit.setTypeOfVisit(null);
+		related_typeofvisit.getVisits().remove(visit);
+		visit = visitDAO.store(visit);
+		visitDAO.flush();
+
+		related_typeofvisit = typeOfVisitDAO.store(related_typeofvisit);
+		typeOfVisitDAO.flush();
+
+		typeOfVisitDAO.remove(related_typeofvisit);
+		typeOfVisitDAO.flush();
+
+		return visit;
+	}
+
+	/**
+	 * Load an existing Visit entity
+	 * 
+	 */
+	@Transactional
+	public Set<Visit> loadVisits() {
+		return visitDAO.findAllVisits();
 	}
 
 	/**
@@ -354,110 +278,134 @@ public class VisitServiceImpl implements VisitService {
 	}
 
 	/**
-	 * Save an existing SickLeave entity
-	 * 
 	 */
 	@Transactional
-	public Visit saveVisitSickLeaves(Integer id, SickLeave related_sickleaves) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(id, -1, -1);
-		SickLeave existingsickLeaves = sickLeaveDAO.findSickLeaveByPrimaryKey(related_sickleaves.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingsickLeaves != null) {
-			existingsickLeaves.setId(related_sickleaves.getId());
-			existingsickLeaves.setDateFrom(related_sickleaves.getDateFrom());
-			existingsickLeaves.setDateTo(related_sickleaves.getDateTo());
-			related_sickleaves = existingsickLeaves;
-		}
-
-		related_sickleaves.setVisit(visit);
-		visit.getSickLeaves().add(related_sickleaves);
-		related_sickleaves = sickLeaveDAO.store(related_sickleaves);
-		sickLeaveDAO.flush();
-
-		visit = visitDAO.store(visit);
-		visitDAO.flush();
-
-		return visit;
+	public Visit findVisitByPrimaryKey(Integer id) {
+		return visitDAO.findVisitByPrimaryKey(id);
 	}
 
 	/**
-	 * Delete an existing Doctor entity
+	 * Return a count of all Visit entity
 	 * 
 	 */
 	@Transactional
-	public Visit deleteVisitDoctor(Integer visit_id, Integer related_doctor_id) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
-		Doctor related_doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
+	public Integer countVisits() {
+		return ((Long) visitDAO.createQuerySingleResult("select count(o) from Visit o").getSingleResult()).intValue();
+	}
 
-		visit.setDoctor(null);
-		related_doctor.getVisits().remove(visit);
+	/**
+	 * Save an existing Doctor entity
+	 * 
+	 */
+	@Transactional
+	public Visit saveVisitDoctor(Integer id, Doctor related_doctor) {
+		Visit visit = visitDAO.findVisitByPrimaryKey(id, -1, -1);
+		Doctor existingdoctor = doctorDAO.findDoctorByPrimaryKey(related_doctor.getId());
+
+		// copy into the existing record to preserve existing relationships
+		if (existingdoctor != null) {
+			existingdoctor.setId(related_doctor.getId());
+			existingdoctor.setName(related_doctor.getName());
+			existingdoctor.setSurname(related_doctor.getSurname());
+			related_doctor = existingdoctor;
+		}
+
+		visit.setDoctor(related_doctor);
+		related_doctor.getVisits().add(visit);
 		visit = visitDAO.store(visit);
 		visitDAO.flush();
 
 		related_doctor = doctorDAO.store(related_doctor);
 		doctorDAO.flush();
 
-		doctorDAO.remove(related_doctor);
-		doctorDAO.flush();
+		return visit;
+	}
+
+	/**
+	 * Delete an existing Visit entity
+	 * 
+	 */
+	@Transactional
+	public void deleteVisit(Visit visit) {
+		visitDAO.remove(visit);
+		visitDAO.flush();
+	}
+
+	/**
+	 * Delete an existing Patient entity
+	 * 
+	 */
+	@Transactional
+	public Visit deleteVisitPatient(Integer visit_id, String related_patient_id) {
+		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id, -1, -1);
+		Patient related_patient = patientDAO.findPatientByPrimaryKey(related_patient_id, -1, -1);
+
+		visit.setPatient(null);
+		related_patient.getVisits().remove(visit);
+		visit = visitDAO.store(visit);
+		visitDAO.flush();
+
+		related_patient = patientDAO.store(related_patient);
+		patientDAO.flush();
+
+		patientDAO.remove(related_patient);
+		patientDAO.flush();
 
 		return visit;
 	}
 
 	/**
-	 * Save an existing PatientCard entity
+	 * Save an existing Patient entity
 	 * 
 	 */
 	@Transactional
-	public Visit saveVisitPatientCard(Integer id, PatientCard related_patientcard) {
+	public Visit saveVisitPatient(Integer id, Patient related_patient) {
 		Visit visit = visitDAO.findVisitByPrimaryKey(id, -1, -1);
-		PatientCard existingpatientCard = patientCardDAO.findPatientCardByPrimaryKey(related_patientcard.getId());
+		Patient existingpatient = patientDAO.findPatientByPrimaryKey(related_patient.getId());
 
 		// copy into the existing record to preserve existing relationships
-		if (existingpatientCard != null) {
-			existingpatientCard.setId(related_patientcard.getId());
-			existingpatientCard.setRegisterDate(related_patientcard.getRegisterDate());
-			related_patientcard = existingpatientCard;
+		if (existingpatient != null) {
+			existingpatient.setId(related_patient.getId());
+			existingpatient.setName(related_patient.getName());
+			existingpatient.setSurname(related_patient.getSurname());
+			existingpatient.setDateOfBirth(related_patient.getDateOfBirth());
+			existingpatient.setPhoneNr(related_patient.getPhoneNr());
+			existingpatient.setConfirmed(related_patient.getConfirmed());
+			related_patient = existingpatient;
 		}
 
-		visit.setPatientCard(related_patientcard);
-		related_patientcard.getVisits().add(visit);
+		visit.setPatient(related_patient);
+		related_patient.getVisits().add(visit);
 		visit = visitDAO.store(visit);
 		visitDAO.flush();
 
-		related_patientcard = patientCardDAO.store(related_patientcard);
-		patientCardDAO.flush();
+		related_patient = patientDAO.store(related_patient);
+		patientDAO.flush();
 
 		return visit;
 	}
 
 	/**
-	 * Save an existing Receptionist entity
+	 * Save an existing Visit entity
 	 * 
 	 */
 	@Transactional
-	public Visit saveVisitReceptionist(Integer id, Receptionist related_receptionist) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(id, -1, -1);
-		Receptionist existingreceptionist = receptionistDAO.findReceptionistByPrimaryKey(related_receptionist.getId());
+	public Integer saveVisit(Visit visit) {
+		Visit existingVisit = visitDAO.findVisitByPrimaryKey(visit.getId());
 
-		// copy into the existing record to preserve existing relationships
-		if (existingreceptionist != null) {
-			existingreceptionist.setId(related_receptionist.getId());
-			existingreceptionist.setName(related_receptionist.getName());
-			existingreceptionist.setSurname(related_receptionist.getSurname());
-			existingreceptionist.setPhoneNr(related_receptionist.getPhoneNr());
-			existingreceptionist.setAccess(related_receptionist.getAccess());
-			related_receptionist = existingreceptionist;
+		if (existingVisit != null) {
+			if (existingVisit != visit) {
+				existingVisit.setId(visit.getId());
+				existingVisit.setDateOfVisit(visit.getDateOfVisit());
+				existingVisit.setDescriptionOfVisit(visit.getDescriptionOfVisit());
+				existingVisit.setIsLeave(visit.getIsLeave());
+				existingVisit.setSpecial(visit.getSpecial());
+			}
+			visit = visitDAO.store(existingVisit);
+		} else {
+			visit = visitDAO.store(visit);
 		}
-
-		visit.setReceptionist(related_receptionist);
-		related_receptionist.getVisits().add(visit);
-		visit = visitDAO.store(visit);
 		visitDAO.flush();
-
-		related_receptionist = receptionistDAO.store(related_receptionist);
-		receptionistDAO.flush();
-
-		return visit;
+		return visit.getId();
 	}
 }

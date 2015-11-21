@@ -35,13 +35,11 @@ import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.PermissionDAO;
 import com.eclinic.dao.ReceptionistDAO;
 import com.eclinic.dao.SystemUserDAO;
-import com.eclinic.dao.WorkerDAO;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.Permission;
 import com.eclinic.domain.Receptionist;
 import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.Worker;
 import com.eclinic.domain.view.DoctorView;
 import com.eclinic.domain.view.PatientView;
 import com.eclinic.domain.view.SystemUserPermissionView;
@@ -51,6 +49,7 @@ import com.eclinic.service.ReceptionistService;
 import com.eclinic.service.SystemUserService;
 import com.eclinic.user.mangament.doctor.DoctorCrud;
 import com.eclinic.user.mangament.patient.PatientCrud;
+import com.eclinic.user.mangament.receptionist.ReceptionistCrud;
 
 /**
  * Spring Rest controller that handles CRUD requests for SystemUser entities
@@ -65,6 +64,9 @@ public class SystemUserRestController {
 
 	@Autowired
 	private DoctorCrud doctorCrud;
+	
+	@Autowired 
+	private ReceptionistCrud receptonistCrud;
 	/**
 	 * DAO injected by Spring that manages Permission entities
 	 * 
@@ -81,13 +83,6 @@ public class SystemUserRestController {
 	 */
 	@Autowired
 	private SystemUserDAO systemUserDAO;
-
-	/**
-	 * DAO injected by Spring that manages Worker entities
-	 * 
-	 */
-	@Autowired
-	private WorkerDAO workerDAO;
 
 	/**
 	 * Service injected by Spring that provides CRUD operations for SystemUser
@@ -157,8 +152,8 @@ public class SystemUserRestController {
 	@GET
 	@Path("/role/{pesel}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getRoleByPesel(@PathParam("pesel") String pesel) {
-		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
+	public Response getRoleById(@PathParam("pesel") String pesel) {
+		SystemUser s = systemUserDAO.findSystemUserById(pesel);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("role", s.getRole());
 		return Response.ok(map).build();
@@ -176,9 +171,9 @@ public class SystemUserRestController {
 	@GET
 	@Path("/get/{pesel}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSystemUserByPesel(@PathParam("pesel") String pesel)
+	public Response getSystemUserById(@PathParam("pesel") String pesel)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
+		SystemUser s = systemUserDAO.findSystemUserById(pesel);
 		return Response.ok(
 				new ObjectMapper()
 						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
@@ -205,62 +200,31 @@ public class SystemUserRestController {
 	@GET
 	@Path("/permissions/{pesel}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadSystemUserPermissionsByPesel(
+	public Response loadSystemUserPermissionsById(
 			@PathParam("pesel") String pesel) {
-		Set<SystemUserPermissionView> showPermissionByPesel = patientCrud
-				.showPermissionByPesel(pesel);
-		return Response.ok(showPermissionByPesel).build();
+		Set<SystemUserPermissionView> showPermissionById = patientCrud
+				.showPermissionById(pesel);
+		return Response.ok(showPermissionById).build();
 	}
 
-	/**
-	 * Delete an existing Permission entity
-	 * 
-	 */
 
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{systemuser_id}/permissions/{permission_id}")
-	public Response deleteSystemUserPermissions(
-			@PathParam("systemuser_id") Integer systemuser_id,
-			@PathParam("related_permissions_id") Integer related_permissions_id) {
-		return Response.ok(
-				systemUserService.deleteSystemUserPermissions(systemuser_id,
-						related_permissions_id)).build();
-	}
-
-	/**
-	 * Create a new Permission entity
-	 * 
-	 * 
-	 */
-
-	@Path("/{systemuser_id}/permissions")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newSystemUserPermissions(
-			@PathParam("systemuser_id") Integer systemuser_id,
-			Permission permission) {
-		systemUserService.saveSystemUserPermissions(systemuser_id, permission);
-		return Response.ok(
-				permissionDAO.findPermissionByPrimaryKey(permission.getId()))
-				.build();
-	}
-
-	/**
-	 * View an existing Worker entity
-	 * 
-	 */
-
-	@GET
-	@Path("/{systemuser_id}/worker/{worker_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadSystemUserWorker(
-			@PathParam("systemuser_id") Integer systemuser_id,
-			@PathParam("related_worker_id") Integer related_worker_id) {
-		Worker worker = workerDAO.findWorkerByPrimaryKey(related_worker_id, -1,
-				-1);
-		return Response.ok(worker).build();
-	}
+//	/**
+//	 * Create a new Permission entity
+//	 * 
+//	 * 
+//	 */
+//
+//	@Path("/{systemuser_id}/permissions")
+//	@POST
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response newSystemUserPermissions(
+//			@PathParam("systemuser_id") Integer systemuser_id,
+//			Permission permission) {
+//		systemUserService.deleteSystemUserSystemUserPermission(systemuser_id, permission);
+//		return Response.ok(
+//				permissionDAO.findPermissionByPrimaryKey(permission.getId()))
+//				.build();
+//	}
 
 	/**
 	 * Select an existing SystemUser entity
@@ -271,7 +235,7 @@ public class SystemUserRestController {
 	@Path("/{systemuser_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadSystemUser(
-			@PathParam("systemuser_id") Integer systemuser_id) {
+			@PathParam("systemuser_id") String systemuser_id) {
 		return Response.ok(
 				systemUserDAO.findSystemUserByPrimaryKey(systemuser_id))
 				.build();
@@ -286,7 +250,7 @@ public class SystemUserRestController {
 	@Path("/save")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response saveSystemUser(SystemUser systemuser) {
-		Integer i = systemUserService.saveSystemUser(systemuser);
+		String i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
 
@@ -307,8 +271,8 @@ public class SystemUserRestController {
 	public Response saveSystemUserPatient(Patient patient,
 			@PathParam("pesel") String pesel) throws JsonGenerationException,
 			JsonMappingException, DataAccessException, IOException {
-		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getWorker().getPatient().getId();
+		SystemUser su = systemUserDAO.findSystemUserById(pesel);
+		String id = su.getPatient().getId();
 		Patient p = patientDao.findPatientById(id);
 		if (p instanceof HibernateProxy) {
 			// Unwrap Proxy;
@@ -318,7 +282,7 @@ public class SystemUserRestController {
 			p = (Patient) li.getImplementation();
 		}
 		p.copy(patient);
-		Integer i = patientService.savePatient(p);
+		String i = patientService.savePatient(p);
 		return Response.ok(
 				new ObjectMapper()
 						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
@@ -333,8 +297,8 @@ public class SystemUserRestController {
 	public Response saveSystemUserDoctor(Doctor doctor,
 			@PathParam("pesel") String pesel) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getWorker().getDoctor().getId();
+		SystemUser su = systemUserDAO.findSystemUserById(pesel);
+		String id = su.getDoctor().getId();
 		Doctor d = doctorDao.findDoctorById(id);
 		if (d instanceof HibernateProxy) {
 			// Unwrap Proxy;
@@ -344,7 +308,7 @@ public class SystemUserRestController {
 			d = (Doctor) li.getImplementation();
 		}
 		d.copy(doctor);
-		Integer i = doctorService.saveDoctor(d);
+		String i = doctorService.saveDoctor(d);
 		return Response.ok(
 				new ObjectMapper()
 						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
@@ -358,8 +322,8 @@ public class SystemUserRestController {
 	public Response saveSystemUserReceptionist(Receptionist receptionist,
 			@PathParam("pesel") String pesel) throws JsonGenerationException,
 			JsonMappingException, DataAccessException, IOException {
-		SystemUser su = systemUserDAO.findSystemUserByPesel(pesel);
-		Integer id = su.getWorker().getReceptionist().getId();
+		SystemUser su = systemUserDAO.findSystemUserById(pesel);
+		String id = su.getReceptionist().getId();
 		Receptionist r = receptionistDao.findReceptionistById(id);
 
 		if (r instanceof HibernateProxy) {
@@ -371,7 +335,7 @@ public class SystemUserRestController {
 		}
 
 		r.copy(receptionist);
-		Integer i = receptionistService.saveReceptionist(r);
+		String i = receptionistService.saveReceptionist(r);
 		return Response
 				.ok(new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
 						false).writeValueAsString(
@@ -383,16 +347,13 @@ public class SystemUserRestController {
 	@Path("/saveAdmin/{pesel}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveSystemUserAdmin(SystemUser systemuser,
+	public Response saveAdmin(SystemUser systemuser,
 			@PathParam("pesel") String pesel) {
-		if (systemuser.getWorker() != null) {
-			Worker w = systemuser.getWorker();
-			if (w.getDoctor() != null || w.getPatient() != null
-					|| w.getReceptionist() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
+		if (systemuser.getDoctor() != null || systemuser.getPatient() != null
+				|| systemuser.getReceptionist() != null) {
+			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
+		String i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
 
@@ -403,10 +364,10 @@ public class SystemUserRestController {
 	public Response confirmedPatient(@PathParam("pesel") String pesel)
 			throws JsonGenerationException, JsonMappingException,
 			DataAccessException, IOException {
-		SystemUser s = systemUserDAO.findSystemUserByPesel(pesel);
-		if (s != null && s.getWorker().getPatient() != null) {
-			s.getWorker().getPatient().setConfirmed(1);
-			Integer i = systemUserService.saveSystemUser(s);
+		SystemUser s = systemUserDAO.findSystemUserById(pesel);
+		if (s != null && s.getPatient() != null) {
+			s.getPatient().setConfirmed(1);
+			String i = systemUserService.saveSystemUser(s);
 
 			return Response.ok(
 					new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
@@ -426,7 +387,7 @@ public class SystemUserRestController {
 	@Path("/newPatient")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newSystemUserPatient(SystemUser systemuser) {
+	public Response newPatient(SystemUser systemuser) {
 		return patientCrud.addPatient(systemuser);
 	}
 
@@ -434,8 +395,8 @@ public class SystemUserRestController {
 	@Path("/newDoctor")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newSystemUserDoctor(SystemUser systemUser) {
-		return doctorCrud.AddDoctor(systemUser);
+	public Response newDoctor(SystemUser systemUser) {
+ 		return doctorCrud.addDoctor(systemUser);
 	}
 
 	@POST
@@ -443,44 +404,26 @@ public class SystemUserRestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newSystemUserReceptionist(SystemUser systemuser) {
-		if (systemuser.getWorker() != null) {
-			Worker w = systemuser.getWorker();
-			if (w.getDoctor() != null || w.getAdmin() != null
-					|| w.getPatient() != null) {
-				return Response.status(Status.NOT_ACCEPTABLE).build();
-			}
-		}
-		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser
-				.getPesel());
-		if (s != null) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("status", "Podany pesel/login istnieje");
-			return Response.ok(map).build();
-		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
-		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
+			return receptonistCrud.addReceptionist(systemuser);
 	}
 
 	@POST
 	@Path("/newAdmin")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newSystemUserAdmin(SystemUser systemuser) {
-		if (systemuser.getWorker() != null) {
-			Worker w = systemuser.getWorker();
-			if (w.getDoctor() != null || w.getPatient() != null
-					|| w.getReceptionist() != null) {
+	public Response newAdmin(SystemUser systemuser) {
+			if (systemuser.getDoctor() != null || systemuser.getPatient() != null
+					|| systemuser.getReceptionist() != null) {
 				return Response.status(Status.NOT_ACCEPTABLE).build();
 			}
-		}
-		SystemUser s = systemUserDAO.findSystemUserByPesel(systemuser
-				.getPesel());
+		SystemUser s = systemUserDAO.findSystemUserById(systemuser
+				.getId());
 		if (s != null) {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("status", "Podany pesel/login istnieje");
 			return Response.ok(map).build();
 		}
-		Integer i = systemUserService.saveSystemUser(systemuser);
+		String i = systemUserService.saveSystemUser(systemuser);
 		return Response.ok(systemUserDAO.findSystemUserByPrimaryKey(i)).build();
 	}
 
@@ -494,39 +437,11 @@ public class SystemUserRestController {
 	@DELETE
 	public void deleteSystemUser(@PathParam("pesel") String systemuser_id) {
 		SystemUser systemuser = systemUserDAO
-				.findSystemUserByPesel(systemuser_id);
+				.findSystemUserById(systemuser_id);
 		systemUserService.deleteSystemUser(systemuser);
 	}
 
-	/**
-	 * Get Worker entity by SystemUser
-	 * 
-	 */
 
-	@GET
-	@Path("/{systemuser_id}/worker")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSystemUserWorker(
-			@PathParam("systemuser_id") Integer systemuser_id) {
-		return Response.ok(
-				systemUserDAO.findSystemUserByPrimaryKey(systemuser_id)
-						.getWorker()).build();
-	}
-
-	/**
-	 * Save an existing Worker entity
-	 * 
-	 */
-
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{systemuser_id}/worker")
-	@PUT
-	public Response saveSystemUserWorker(
-			@PathParam("systemuser_id") Integer systemuser_id, Worker worker) {
-		systemUserService.saveSystemUserWorker(systemuser_id, worker);
-		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId()))
-				.build();
-	}
 
 	/**
 	 * Show all SystemUser entities
@@ -548,38 +463,24 @@ public class SystemUserRestController {
 						systemUserService.loadSystemUsers())).build();
 	}
 
-	/**
-	 * Delete an existing Worker entity
-	 * 
-	 */
+	
 
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{systemuser_id}/worker/{worker_id}")
-	public Response deleteSystemUserWorker(
-			@PathParam("systemuser_id") Integer systemuser_id,
-			@PathParam("related_worker_id") Integer related_worker_id) {
-		return Response.ok(
-				systemUserService.deleteSystemUserWorker(systemuser_id,
-						related_worker_id)).build();
-	}
-
-	/**
-	 * Save an existing Permission entity
-	 * 
-	 */
-
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{systemuser_id}/permissions")
-	@PUT
-	public Response saveSystemUserPermissions(
-			@PathParam("systemuser_id") Integer systemuser_id,
-			Permission permissions) {
-		systemUserService.saveSystemUserPermissions(systemuser_id, permissions);
-		return Response.ok(
-				permissionDAO.findPermissionByPrimaryKey(permissions.getId()))
-				.build();
-	}
+//	/**
+//	 * Save an existing Permission entity
+//	 * 
+//	 */
+//
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Path("/{systemuser_id}/permissions")
+//	@PUT
+//	public Response saveSystemUserPermissions(
+//			@PathParam("systemuser_id") Integer systemuser_id,
+//			Permission permissions) {
+//		systemUserService.saveSystemUserPermissions(systemuser_id, permissions);
+//		return Response.ok(
+//				permissionDAO.findPermissionByPrimaryKey(permissions.getId()))
+//				.build();
+//	}
 
 	/**
 	 * Show all Permission entities by SystemUser
@@ -596,20 +497,6 @@ public class SystemUserRestController {
 	// .getPermissions()).build();
 	// }
 
-	/**
-	 * Create a new Worker entity
-	 * 
-	 */
-
-	@Path("/{systemuser_id}/worker")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newSystemUserWorker(
-			@PathParam("systemuser_id") Integer systemuser_id, Worker worker) {
-		systemUserService.saveSystemUserWorker(systemuser_id, worker);
-		return Response.ok(workerDAO.findWorkerByPrimaryKey(worker.getId()))
-				.build(); 
-	}
 
 	@Path("/patients/all")
 	@GET
@@ -618,15 +505,15 @@ public class SystemUserRestController {
 		Set<PatientView> allPatients = patientCrud.getAllPatients();
 		return Response.ok(allPatients).build();
 	}
-	
+
 	@Path("/patient/{pesel}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPatientByPesel(@PathParam("pesel") String pesel) {
-		PatientView patient = patientCrud.getPatientByPesel(pesel);
+	public Response getPatientById(@PathParam("pesel") String pesel) {
+		PatientView patient = patientCrud.getPatientById(pesel);
 		return Response.ok(patient).build();
 	}
-	
+
 	@Path("/doctors/all")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -634,20 +521,22 @@ public class SystemUserRestController {
 		Set<DoctorView> allDoctors = doctorCrud.getAllDoctors();
 		return Response.ok(allDoctors).build();
 	}
-	
+
 	@Path("/doctor/{pesel}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDoctorByPesel(@PathParam("pesel") String pesel) {
-		DoctorView doctor = doctorCrud.getDoctorByPesel(pesel);
+	public Response getDoctorById(@PathParam("pesel") String pesel) {
+		DoctorView doctor = doctorCrud.getDoctorById(pesel);
 		return Response.ok(doctor).build();
 	}
-	
+
 	@Path("/doctors/specialization/{specialization}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDoctorsBySpecialization(@PathParam("specialization") String specialization) {
-		Set<DoctorView> doctors = doctorCrud.getDoctorsBySpecialization(specialization);
+	public Response getDoctorsBySpecialization(
+			@PathParam("specialization") String specialization) {
+		Set<DoctorView> doctors = doctorCrud
+				.getDoctorsBySpecialization(specialization);
 		return Response.ok(doctors).build();
 	}
 

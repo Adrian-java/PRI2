@@ -244,7 +244,7 @@ public class SpecializationRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{specialization_id}/doctor/{doctor_id}")
 	public Response deleteSpecializationDoctor(@PathParam("specialization_id") Integer specialization_id,
-			@PathParam("related_doctor_id") Integer related_doctor_id) {
+			@PathParam("related_doctor_id") String related_doctor_id) {
 		return Response.ok(specializationService.deleteSpecializationDoctor(specialization_id, related_doctor_id)).build();
 	}
 
@@ -343,7 +343,7 @@ public class SpecializationRestController {
 	@Path("/{specialization_id}/doctor/{doctor_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadSpecializationDoctor(@PathParam("specialization_id") Integer specialization_id,
-			@PathParam("related_doctor_id") Integer related_doctor_id) {
+			@PathParam("related_doctor_id") String related_doctor_id) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
 		return Response.ok(doctor).build();

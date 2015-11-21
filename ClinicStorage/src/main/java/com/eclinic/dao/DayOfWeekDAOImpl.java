@@ -75,4 +75,14 @@ public class DayOfWeekDAOImpl extends AbstractJpaDao<DayOfWeek> implements
 		// TODO Auto-generated method stub
 		return true;
 	}
+
+	public Set<DayOfWeek> findAllDayOfWeeks(Integer startResult, Integer maxRows) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Set<DayOfWeek> findAllDayOfWeeks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

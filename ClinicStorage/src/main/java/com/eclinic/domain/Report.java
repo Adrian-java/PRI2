@@ -1,16 +1,17 @@
 package com.eclinic.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.io.Serializable;
+
 import java.lang.StringBuilder;
+
 import java.util.Calendar;
 
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
 import javax.xml.bind.annotation.*;
+
 import javax.persistence.*;
 
 /**
@@ -31,7 +32,7 @@ import javax.persistence.*;
 		@NamedQuery(name = "findReportByPrimaryKey", query = "select myReport from Report myReport where myReport.id = ?1") })
 @Table(catalog = "eclinic", name = "Report")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = "wee/com/eclinic/domain", name = "Report")
+@XmlType(namespace = "Web/com/eclinic/domain", name = "Report")
 public class Report implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -41,7 +42,6 @@ public class Report implements Serializable {
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
 	Integer id;
 	/**
@@ -68,7 +68,7 @@ public class Report implements Serializable {
 	/**
 	 */
 
-	@Column(name = "report_data", nullable = false, columnDefinition = "BLOB")
+	@Column(name = "report_data", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement

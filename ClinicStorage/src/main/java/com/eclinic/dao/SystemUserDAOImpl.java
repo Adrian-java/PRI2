@@ -115,7 +115,7 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 	 *
 	 */
 	@Transactional
-	public SystemUser findSystemUserByPrimaryKey(Integer id) throws DataAccessException {
+	public SystemUser findSystemUserByPrimaryKey(String id) throws DataAccessException {
 
 		return findSystemUserByPrimaryKey(id, -1, -1);
 	}
@@ -126,7 +126,7 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 	 */
 
 	@Transactional
-	public SystemUser findSystemUserByPrimaryKey(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public SystemUser findSystemUserByPrimaryKey(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findSystemUserByPrimaryKey", startResult, maxRows, id);
 			return (com.eclinic.domain.SystemUser) query.getSingleResult();
@@ -184,7 +184,7 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 	 *
 	 */
 	@Transactional
-	public SystemUser findSystemUserById(Integer id) throws DataAccessException {
+	public SystemUser findSystemUserById(String id) throws DataAccessException {
 
 		return findSystemUserById(id, -1, -1);
 	}
@@ -209,7 +209,7 @@ public class SystemUserDAOImpl extends AbstractJpaDao<SystemUser> implements
 	 */
 
 	@Transactional
-	public SystemUser findSystemUserById(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public SystemUser findSystemUserById(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
 			Query query = createNamedQuery("findSystemUserById", startResult, maxRows, id);
 			return (com.eclinic.domain.SystemUser) query.getSingleResult();

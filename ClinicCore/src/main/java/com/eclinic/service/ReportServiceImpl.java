@@ -60,12 +60,19 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	/**
-	 * Return a count of all Report entity
+	 */
+	@Transactional
+	public Report findReportByPrimaryKey(Integer id) {
+		return reportDAO.findReportByPrimaryKey(id);
+	}
+
+	/**
+	 * Load an existing Report entity
 	 * 
 	 */
 	@Transactional
-	public Integer countReports() {
-		return ((Long) reportDAO.createQuerySingleResult("select count(o) from Report o").getSingleResult()).intValue();
+	public Set<Report> loadReports() {
+		return reportDAO.findAllReports();
 	}
 
 	/**
@@ -79,10 +86,12 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	/**
+	 * Return a count of all Report entity
+	 * 
 	 */
 	@Transactional
-	public Report findReportByPrimaryKey(Integer id) {
-		return reportDAO.findReportByPrimaryKey(id);
+	public Integer countReports() {
+		return ((Long) reportDAO.createQuerySingleResult("select count(o) from Report o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -92,14 +101,5 @@ public class ReportServiceImpl implements ReportService {
 	@Transactional
 	public List<Report> findAllReports(Integer startResult, Integer maxRows) {
 		return new java.util.ArrayList<Report>(reportDAO.findAllReports(startResult, maxRows));
-	}
-
-	/**
-	 * Load an existing Report entity
-	 * 
-	 */
-	@Transactional
-	public Set<Report> loadReports() {
-		return reportDAO.findAllReports();
 	}
 }
