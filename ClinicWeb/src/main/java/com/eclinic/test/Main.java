@@ -5,22 +5,39 @@ import java.text.ParseException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.eclinic.domain.Admin;
+import com.eclinic.domain.SystemUser;
+import com.eclinic.user.mangament.patient.PatientCrud;
 import com.eclinic.visit.VisitCrud;
 
 public class Main {
 
 	private static VisitCrud visitCrud;
 
+	private static PatientCrud patientCrud;
+
 	public static void main(String... args) throws ParseException {
 
 		ApplicationContext ctx = new ClassPathXmlApplicationContext(
 				"applicationContext.xml");
-		visitCrud = (VisitCrud) ctx.getBean("VisitCrud");
-
+		// visitCrud = (VisitCrud) ctx.getBean("VisitCrud");
+		patientCrud = (PatientCrud) ctx.getBean("PatientCrud");
+		boolean first = true;
+		for (int i = 200; i <= 203; i++) {
+			SystemUser s = new SystemUser();
+			s.setPassword("password" + i);
+			s.setEmail("email" + i);
+			s.setId("pesel" + i);
+			Admin p = new Admin();
+			p.setIsSuper(first);
+			s.setAdmin(p);
+			first = false;
+			patientCrud.addPatient(s);
+		}
 		// Date date = new Date(2016, 01, 15,9,00,00);
 		// Set<VisitView> findVisitByDate = visitCrud.findVisitByDate(date);
 		//
-		String doctor = "71120789890";
+		// String doctor = "71120789890";
 		// Set<VisitView> findVisitByDoctor =
 		// visitCrud.findVisitByDoctor(doctor); dziala
 		//
@@ -64,5 +81,4 @@ public class Main {
 		// visitCrud.addFreeVisit(); dziala
 
 	}
-
 }
