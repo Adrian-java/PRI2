@@ -1,10 +1,10 @@
 package com.eclinic.visit.mapper;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class VisitModel {
 
-	private Calendar dateOfVisit;
+	private Date dateOfVisit;
 
 	private String descriptionOfVisit;
 
@@ -22,11 +22,11 @@ public class VisitModel {
 
 	private String patientPesel;
 
-	public Calendar getDateOfVisit() {
+	public Date getDateOfVisit() {
 		return dateOfVisit;
 	}
 
-	public void setDateOfVisit(Calendar dateOfVisit) {
+	public void setDateOfVisit(Date dateOfVisit) {
 		this.dateOfVisit = dateOfVisit;
 	}
 

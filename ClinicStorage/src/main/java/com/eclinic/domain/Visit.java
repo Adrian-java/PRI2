@@ -3,21 +3,32 @@ package com.eclinic.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.lang.StringBuilder;
 import java.util.Calendar;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Date;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
 
 /**
  */
@@ -54,11 +65,18 @@ public class Visit implements Serializable {
 	Integer id;
 	/**
 	 */
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_visit", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
-	Calendar dateOfVisit;
+	Date dateOfVisit;
+	
+//	@Temporal(TemporalType.TIME)
+//	@Column(name = "time_of_visit", nullable = false)
+//	@Basic(fetch = FetchType.EAGER)
+//	@XmlElement
+//	private
+//	Date timeOfVisit;
 	/**
 	 */
 
@@ -85,7 +103,7 @@ public class Visit implements Serializable {
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumns({ @JoinColumn(name = "id_patient", referencedColumnName = "Id", nullable = false) })
+	@JoinColumns({ @JoinColumn(name = "id_patient", referencedColumnName = "Id", nullable = true) })
 	@XmlTransient
 	Patient patient;
 	/**
@@ -97,7 +115,7 @@ public class Visit implements Serializable {
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumns({ @JoinColumn(name = "id_receptionist", referencedColumnName = "Id", nullable = false) })
+	@JoinColumns({ @JoinColumn(name = "id_receptionist", referencedColumnName = "Id", nullable = true) })
 	@XmlTransient
 	Receptionist receptionist;
 	/**
@@ -127,13 +145,13 @@ public class Visit implements Serializable {
 
 	/**
 	 */
-	public void setDateOfVisit(Calendar dateOfVisit) {
+	public void setDateOfVisit(Date dateOfVisit) {
 		this.dateOfVisit = dateOfVisit;
 	}
 
 	/**
 	 */
-	public Calendar getDateOfVisit() {
+	public Date getDateOfVisit() {
 		return this.dateOfVisit;
 	}
 
@@ -306,4 +324,5 @@ public class Visit implements Serializable {
 			return false;
 		return true;
 	}
+
 }

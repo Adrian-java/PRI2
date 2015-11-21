@@ -128,7 +128,7 @@ public class VisitCrudDb implements VisitCrud {
 		Calendar c = new GregorianCalendar();
 		c.setTime(newVisit.getDate());
 		Visit v = new Visit();
-		v.setDateOfVisit(c);
+		v.setDateOfVisit(c.getTime());
 		v.setDescriptionOfVisit(newVisit.getDescription());
 		v.setDoctor(doctorDao.findDoctorById(newVisit.getIdDoctor()));
 		v.setIsLeave(false);

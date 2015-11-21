@@ -49,7 +49,7 @@ public class Doctor implements Serializable {
 	/**
 	 */
 
-	// @Column(name = "Id", nullable = false)
+	 @Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
 	@XmlElement

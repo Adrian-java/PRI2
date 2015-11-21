@@ -87,7 +87,8 @@ public class VisitsOfScheduler {
 		
 		if(last != null){
 			
-			cal = last.getDateOfVisit();
+			cal = Calendar.getInstance();
+			cal.setTime(last.getDateOfVisit());
 			cal.set( Calendar.HOUR_OF_DAY, 0 );
 	        cal.set( Calendar.MINUTE, 0 );
 	        cal.set(Calendar.SECOND, 0 );
@@ -156,7 +157,7 @@ public class VisitsOfScheduler {
 					
 						Visit visit = new Visit();
 						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar);
+						visit.setDateOfVisit(calendar.getTime());
 						visit.setIsLeave(false);
 						visit.setSpecial(false);
 						visit.setStatusOfVisit(statusOfVisit);
@@ -177,7 +178,7 @@ public class VisitsOfScheduler {
 					
 						Visit visit = new Visit();
 						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar);
+						visit.setDateOfVisit(calendar.getTime());
 						visit.setIsLeave(false);
 						visit.setSpecial(false);
 						visit.setStatusOfVisit(statusOfVisit);
@@ -200,7 +201,7 @@ public class VisitsOfScheduler {
 					
 						Visit visit = new Visit();
 						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar);
+						visit.setDateOfVisit(calendar.getTime());
 						visit.setIsLeave(false);
 						visit.setSpecial(false);
 						visit.setStatusOfVisit(statusOfVisit);
@@ -222,7 +223,7 @@ public class VisitsOfScheduler {
 					
 						Visit visit = new Visit();
 						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar);
+						visit.setDateOfVisit(calendar.getTime());
 						visit.setIsLeave(false);
 						visit.setSpecial(false);
 						visit.setStatusOfVisit(statusOfVisit);
@@ -244,7 +245,7 @@ public class VisitsOfScheduler {
 					
 						Visit visit = new Visit();
 						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar);
+						visit.setDateOfVisit(calendar.getTime());
 						visit.setIsLeave(false);
 						visit.setSpecial(false);
 						visit.setStatusOfVisit(statusOfVisit);
@@ -266,7 +267,7 @@ public class VisitsOfScheduler {
 					
 						Visit visit = new Visit();
 						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar);
+						visit.setDateOfVisit(calendar.getTime());
 						visit.setIsLeave(false);
 						visit.setSpecial(false);
 						visit.setStatusOfVisit(statusOfVisit);
@@ -288,7 +289,7 @@ public class VisitsOfScheduler {
 					
 						Visit visit = new Visit();
 						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar);
+						visit.setDateOfVisit(calendar.getTime());
 						visit.setIsLeave(false);
 						visit.setSpecial(false);
 						visit.setStatusOfVisit(statusOfVisit);

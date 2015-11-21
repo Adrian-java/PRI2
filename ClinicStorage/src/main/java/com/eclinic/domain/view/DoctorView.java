@@ -36,12 +36,7 @@ public class DoctorView {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
-	Integer id;
-
-	@Column(name = "pesel", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	private String pesel;
+	String id;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "register_date", nullable = false)
@@ -76,20 +71,12 @@ public class DoctorView {
 	@XmlElement
 	String surname;
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getPesel() {
-		return pesel;
-	}
-
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
 	}
 
 	public Calendar getRegisterDate() {
