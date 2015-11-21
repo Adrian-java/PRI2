@@ -15,9 +15,13 @@ public interface VisitCrud {
     public Set<VisitView> findVisitByDoctor(String doctor);
 
     public Set<VisitView> findVisitByPatient(String id);
+    
+    public VisitView findVisitById(Integer id);
 
     public Set<VisitView> findVisitBySpecialization(String specialization);
 
+    public Set<VisitView> findAllVisit();
+    
     public Set<VisitView> findVisitByStatus(String status);
 
     public VisitView findFirstFreeTermByDoctor(String id);

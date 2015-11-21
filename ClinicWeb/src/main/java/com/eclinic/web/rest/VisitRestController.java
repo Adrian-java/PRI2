@@ -1,50 +1,27 @@
 package com.eclinic.web.rest;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
-import com.eclinic.dao.DoctorDAO;
-import com.eclinic.dao.ReceptionistDAO;
-import com.eclinic.dao.StatusOfVisitDAO;
-import com.eclinic.dao.SystemUserDAO;
-import com.eclinic.dao.TypeOfVisitDAO;
 import com.eclinic.dao.VisitDAO;
-import com.eclinic.domain.Doctor;
-import com.eclinic.domain.Patient;
-import com.eclinic.domain.Receptionist;
-import com.eclinic.domain.StatusOfVisit;
-import com.eclinic.domain.SystemUser;
-import com.eclinic.domain.TypeOfVisit;
-import com.eclinic.domain.Visit;
-import com.eclinic.service.VisitService;
 import com.eclinic.visit.VisitCrud;
-import com.eclinic.visit.mapper.VisitModel;
-import com.eclinic.visit.mapper.VisitUser;
 
 /**
  * Spring Rest controller that handles CRUD requests for Visit entities
@@ -54,62 +31,15 @@ import com.eclinic.visit.mapper.VisitUser;
 @Component("VisitRestController")
 public class VisitRestController {
 
-	/**
-	 * DAO injected by Spring that manages Doctor entities
-	 * 
-	 */
-	@Autowired
-	private DoctorDAO doctorDAO;
-
-	/**
-	 * DAO injected by Spring that manages Receptionist entities
-	 * 
-	 */
-	@Autowired
-	private ReceptionistDAO receptionistDAO;
-
-	/**
-	 * DAO injected by Spring that manages StatusOfVisit entities
-	 * 
-	 */
-	@Autowired
-	private StatusOfVisitDAO statusOfVisitDAO;
-
-	/**
-	 * DAO injected by Spring that manages TypeOfVisit entities
-	 * 
-	 */
-	@Autowired
-	private TypeOfVisitDAO typeOfVisitDAO;
-
-	/**
-	 * DAO injected by Spring that manages Visit entities
-	 * 
-	 */
 	@Autowired
 	private VisitDAO visitDAO;
 
 	@Autowired
 	private VisitCrud visitCrud;
 
-	/**
-	 * Service injected by Spring that provides CRUD operations for Visit
-	 * entities
-	 * 
-	 */
-	@Autowired
-	private VisitService visitService;
-
-	@Autowired
-	private SystemUserDAO systemUserDao;
-
 	public VisitRestController() {
 	}
 
-	/**
-	 * Register custom, context-specific property editors
-	 * 
-	 */
 	@InitBinder
 	public void initBinder(WebDataBinder binder, HttpServletRequest request) { // Register
 		// static
@@ -144,440 +74,111 @@ public class VisitRestController {
 						Double.class, true));
 	}
 
-	/**
-	 * Delete an existing TypeOfVisit entity
-	 * 
-	 */
-
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{visit_id}/typeOfVisit/{typeofvisit_id}")
-	public Response deleteVisitTypeOfVisit(
-			@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_typeofvisit_id") Integer related_typeofvisit_id) {
-		return Response.ok(
-				visitService.deleteVisitTypeOfVisit(visit_id,
-						related_typeofvisit_id)).build();
-	}
-
-	/**
-	 * View an existing TypeOfVisit entity
-	 * 
-	 */
-
 	@GET
-	@Path("/{visit_id}/typeOfVisit/{typeofvisit_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadVisitTypeOfVisit(
-			@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_typeofvisit_id") Integer related_typeofvisit_id) {
-		TypeOfVisit typeofvisit = typeOfVisitDAO.findTypeOfVisitByPrimaryKey(
-				related_typeofvisit_id, -1, -1);
-
-		return Response.ok(typeofvisit).build();
-	}
-
-	/**
-	 * Delete an existing Doctor entity
-	 * 
-	 */
-
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{visit_id}/doctor/{doctor_id}")
-	public Response deleteVisitDoctor(@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_doctor_id") String related_doctor_id) {
-		return Response.ok(
-				visitService.deleteVisitDoctor(visit_id, related_doctor_id))
-				.build();
-	}
-
-	/**
-	 * Create a new Visit entity
-	 * 
-	 */
-
-	@POST
-	@Path("/new")
+	@Path("/new/{visitId}/{patientid}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newVisit(VisitModel visitmodel) {
+	public Response newVisit(@PathParam("visitId") Integer visitId,
+			@PathParam("patientid") String patientId) {
 		try {
-			Doctor d = systemUserDao.findSystemUserById(
-					visitmodel.getDoctorLogin()).getDoctor();
-			Patient p = systemUserDao.findSystemUserById(
-					visitmodel.getPatientPesel()).getPatient();
-			Receptionist r = systemUserDao.findSystemUserById(
-					visitmodel.getRecepcionistLogin()).getReceptionist();
-			StatusOfVisit sov = statusOfVisitDAO
-					.findStatusOfVisitByType(visitmodel.getStatusOfVisit())
-					.iterator().next();
-			TypeOfVisit tof = typeOfVisitDAO
-					.findTypeOfVisitByName(visitmodel.getTypeOfVisit())
-					.iterator().next();
-			Visit visit = new Visit();
-			visit.setDateOfVisit(visitmodel.getDateOfVisit());
-			visit.setDescriptionOfVisit(visitmodel.getDescriptionOfVisit());
-			visit.setDoctor(d);
-			visit.setIsLeave(visitmodel.getIsLeave());
-			visit.setReceptionist(r);
-			visit.setSpecial(visitmodel.getSpecial());
-			visit.setStatusOfVisit(sov);
-			visit.setTypeOfVisit(tof);
-			Integer i = visitService.saveVisit(visit);
-			return Response.ok(visitDAO.findVisitByPrimaryKey(i)).build();
+			visitCrud.addVisit(patientId, visitId);
+			return Response.ok(visitDAO.findVisitByPrimaryKey(visitId)).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}
 	}
 
-	/**
-	 * Get TypeOfVisit entity by Visit
-	 * 
-	 */
-
-	@GET
-	@Path("/{visit_id}/typeOfVisit")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getVisitTypeOfVisit(@PathParam("visit_id") Integer visit_id) {
-		return Response.ok(
-				visitDAO.findVisitByPrimaryKey(visit_id).getTypeOfVisit())
-				.build();
-	}
-
-	/**
-	 * Get StatusOfVisit entity by Visit
-	 * 
-	 */
-
-	@GET
-	@Path("/{visit_id}/statusOfVisit")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getVisitStatusOfVisit(
-			@PathParam("visit_id") Integer visit_id) {
-		return Response.ok(
-				visitDAO.findVisitByPrimaryKey(visit_id).getStatusOfVisit())
-				.build();
-	}
-
-	/**
-	 * Delete an existing Receptionist entity
-	 * 
-	 */
-
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{visit_id}/receptionist/{receptionist_id}")
-	public Response deleteTypeOfUserPermission(
-			@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_receptionist_id") String related_receptionist_id) {
-		return Response.ok(
-				visitService.deleteVisitReceptionist(visit_id,
-						related_receptionist_id)).build();
-	}
-
-	/**
-	 * Create a new StatusOfVisit entity
-	 * 
-	 */
-
-	@Path("/{visit_id}/statusOfVisit")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newVisitStatusOfVisit(
-			@PathParam("visit_id") Integer visit_id, StatusOfVisit statusofvisit) {
-		visitService.saveVisitStatusOfVisit(visit_id, statusofvisit);
-		return Response.ok(
-				statusOfVisitDAO.findStatusOfVisitByPrimaryKey(statusofvisit
-						.getId())).build();
-	}
-
-	/**
-	 * View an existing Doctor entity
-	 * 
-	 */
-
-	@GET
-	@Path("/{visit_id}/doctor/{doctor_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadVisitDoctor(@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_doctor_id") String related_doctor_id) {
-		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1,
-				-1);
-		return Response.ok(doctor).build();
-	}
-
-	/**
-	 * Save an existing Receptionist entity
-	 * 
-	 */
-
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{visit_id}/receptionist")
-	@PUT
-	public Response saveVisitReceptionist(
-			@PathParam("visit_id") Integer visit_id, Receptionist receptionist) {
-		visitService.saveVisitReceptionist(visit_id, receptionist);
-		return Response.ok(
-				receptionistDAO.findReceptionistByPrimaryKey(receptionist
-						.getId())).build();
-	}
-
-	/**
-	 * Delete an existing StatusOfVisit entity
-	 * 
-	 */
-
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{visit_id}/statusOfVisit/{statusofvisit_id}")
-	public Response deleteVisitStatusOfVisit(
-			@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_statusofvisit_id") Integer related_statusofvisit_id) {
-		return Response.ok(
-				visitService.deleteVisitStatusOfVisit(visit_id,
-						related_statusofvisit_id)).build();
-	}
-
-	/**
-	 * Delete an existing Visit entity
-	 * 
-	 */
-
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{visit_id}")
 	@DELETE
 	public void deleteVisit(@PathParam("visit_id") Integer visit_id) {
-		Visit visit = visitDAO.findVisitByPrimaryKey(visit_id);
-		visitService.deleteVisit(visit);
+		visitCrud.deleteVisit(visit_id);
 	}
-
-	/**
-	 * Save an existing Doctor entity
-	 * 
-	 */
-
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{visit_id}/doctor")
-	@PUT
-	public Response saveVisitDoctor(@PathParam("visit_id") Integer visit_id,
-			Doctor doctor) {
-		visitService.saveVisitDoctor(visit_id, doctor);
-		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId()))
-				.build();
-	}
-
-	/**
-	 * Select an existing Visit entity
-	 * 
-	 */
 
 	@GET
 	@Path("/{visit_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadVisit(@PathParam("visit_id") Integer visit_id) {
-		return Response.ok(visitDAO.findVisitByPrimaryKey(visit_id)).build();
+		return Response.ok(visitCrud.findVisitById(visit_id)).build();
 	}
-
-	@GET
-	@Path("/get/{pesel}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getVisitByPesel(@PathParam("pesel") String pesel)
-			throws JsonGenerationException, JsonMappingException,
-			DataAccessException, IOException {
-		return Response.ok(
-				new ObjectMapper()
-						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
-						.writeValueAsString(visitDAO.findVisitByPesel(pesel)))
-				.build();
-	}
-
-	/**
-	 * Create a new TypeOfVisit entity
-	 * 
-	 */
-
-	@Path("/{visit_id}/typeOfVisit")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newVisitTypeOfVisit(
-			@PathParam("visit_id") Integer visit_id, TypeOfVisit typeofvisit) {
-		visitService.saveVisitTypeOfVisit(visit_id, typeofvisit);
-		return Response
-				.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit
-						.getId())).build();
-	}
-
-	/**
-	 * Show all Visit entities
-	 * 
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
-	 * 
-	 */
 
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listVisits() throws JsonGenerationException,
 			JsonMappingException, IOException {
-
-		List<VisitUser> set = new ArrayList<VisitUser>();
-		Set<Visit> visit = visitService.loadVisits();
-		Set<SystemUser> sys = systemUserDao.findAllSystemUsers();
-		for (Visit v : visit) {
-			for (SystemUser su : sys) {
-				if (su.getPatient() != null) {
-					VisitUser vu = new VisitUser();
-					vu.setSystemUser(su);
-					vu.setVisit(v);
-					set.add(vu);
-				}
-			}
-		}
-
-		return Response.ok(
-				new ObjectMapper()
-						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
-						.writeValueAsString(set)).build();
+		return Response.ok(visitCrud.findAllVisit()).build();
 	}
-
-	/**
-	 * Save an existing TypeOfVisit entity
-	 * 
-	 */
-
-	@Path("/{visit_id}/typeOfVisit")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveVisitTypeOfVisit(
-			@PathParam("visit_id") Integer visit_id, TypeOfVisit typeofvisit) {
-		visitService.saveVisitTypeOfVisit(visit_id, typeofvisit);
-		return Response
-				.ok(typeOfVisitDAO.findTypeOfVisitByPrimaryKey(typeofvisit
-						.getId())).build();
-	}
-
-	/**
-	 * Get Receptionist entity by Visit
-	 * 
-	 */
 
 	@GET
-	@Path("/{visit_id}/receptionist")
+	@Path("/free/first/specialization/{specialization}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getVisitReceptionist(@PathParam("visit_id") Integer visit_id) {
+	public Response getFirstVisitBySpecialization(
+			@PathParam("specialization") String specialization) {
 		return Response.ok(
-				visitDAO.findVisitByPrimaryKey(visit_id).getReceptionist())
+				visitCrud.findFirstFreeTermBySpecialization(specialization))
 				.build();
 	}
 
-	/**
-	 * Save an existing Visit entity
-	 * 
-	 */
-
-	@PUT
-	@Path("/save")
+	@GET
+	@Path("/free/first/doctor/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response saveVisit(Visit visit) {
-		visitService.saveVisit(visit);
-		return Response.ok(visitDAO.findVisitByPrimaryKey(visit.getId()))
-				.build();
+	public Response getFirstVisitByDoctor(@PathParam("id") String id) {
+		return Response.ok(visitCrud.findFirstFreeTermByDoctor(id)).build();
 	}
 
-	/**
-	 * Save an existing StatusOfVisit entity
-	 * 
-	 */
-
+	@GET
+	@Path("/free/specialization/{specialization}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{visit_id}/statusOfVisit")
-	@PUT
-	public Response saveVisitStatusOfVisit(
-			@PathParam("visit_id") Integer visit_id, StatusOfVisit statusofvisit) {
-		visitService.saveVisitStatusOfVisit(visit_id, statusofvisit);
+	public Response getVisitBySpecialization(
+			@PathParam("specialization") String specialization) {
 		return Response.ok(
-				statusOfVisitDAO.findStatusOfVisitByPrimaryKey(statusofvisit
-						.getId())).build();
-	}
-
-	/**
-	 * View an existing StatusOfVisit entity
-	 * 
-	 */
-
-	@GET
-	@Path("/{visit_id}/statusOfVisit/{statusofvisit_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadVisitStatusOfVisit(
-			@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_statusofvisit_id") Integer related_statusofvisit_id) {
-		StatusOfVisit statusofvisit = statusOfVisitDAO
-				.findStatusOfVisitByPrimaryKey(related_statusofvisit_id, -1, -1);
-		return Response.ok(statusofvisit).build();
-	}
-
-	/**
-	 * View an existing Receptionist entity
-	 * 
-	 */
-
-	@GET
-	@Path("/{visit_id}/receptionist/{receptionist_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response loadVisitReceptionist(
-			@PathParam("visit_id") Integer visit_id,
-			@PathParam("related_receptionist_id") String related_receptionist_id) {
-		Receptionist receptionist = receptionistDAO
-				.findReceptionistByPrimaryKey(related_receptionist_id, -1, -1);
-		return Response.ok(receptionist).build();
-	}
-
-	/**
-	 * Create a new Doctor entity
-	 * 
-	 */
-
-	@Path("/{visit_id}/doctor")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newVisitDoctor(@PathParam("visit_id") Integer visit_id,
-			Doctor doctor) {
-		visitService.saveVisitDoctor(visit_id, doctor);
-		return Response.ok(doctorDAO.findDoctorByPrimaryKey(doctor.getId()))
+				visitCrud.findFreeTermsBySpecialization(specialization, 10))
 				.build();
 	}
 
-	/**
-	 * Get Doctor entity by Visit
-	 * 
-	 */
+	@GET
+	@Path("/free/doctor/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getVisitByDoctor(@PathParam("id") String id) {
+		return Response.ok(visitCrud.findFreeTermsByDoctor(id, 10)).build();
+	}
 
 	@GET
-	@Path("/{visit_id}/doctor")
+	@Path("/date/{date}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getVisitDoctor(@PathParam("visit_id") Integer visit_id) {
-		return Response
-				.ok(visitDAO.findVisitByPrimaryKey(visit_id).getDoctor())
+	public Response findVisitByDate(@PathParam("date") Date date) {
+		return Response.ok(visitCrud.findVisitByDate(date)).build();
+	}
+
+	@GET
+	@Path("/free/doctor/{doctor}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findVisitByDoctor(@PathParam("doctor") String doctor) {
+		return Response.ok(visitCrud.findVisitByDoctor(doctor)).build();
+	}
+
+	@GET
+	@Path("/patient/{patient}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findVisitByPatient(@PathParam("patient") String id) {
+		return Response.ok(visitCrud.findVisitByPatient(id)).build();
+	}
+
+	@GET
+	@Path("/specialization/{specialization}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findVisitBySpecialization(
+			@PathParam("specialization") String specialization) {
+		return Response.ok(visitCrud.findVisitBySpecialization(specialization))
 				.build();
 	}
 
-	/**
-	 * Create a new Receptionist entity
-	 * 
-	 */
-
-	@Path("/{visit_id}/receptionist")
-	@POST
+	@GET
+	@Path("/free/doctor/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newVisitReceptionist(
-			@PathParam("visit_id") Integer visit_id, Receptionist receptionist) {
-		visitService.saveVisitReceptionist(visit_id, receptionist);
-		return Response.ok(
-				receptionistDAO.findReceptionistByPrimaryKey(receptionist
-						.getId())).build();
+	public Response findVisitByStatus(@PathParam("status") String status) {
+		return Response.ok(visitCrud.findVisitByStatus(status)).build();
 	}
+
 }

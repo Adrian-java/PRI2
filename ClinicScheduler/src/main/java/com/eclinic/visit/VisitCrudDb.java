@@ -209,4 +209,12 @@ public class VisitCrudDb implements VisitCrud {
 			}
 		}
 	}
+
+	public Set<VisitView> findAllVisit() {
+		return visitViewDao.findAllVisit();
+	}
+
+	public VisitView findVisitById(Integer id) {
+		return visitViewDao.findVisitById(id);
+	}
 }
