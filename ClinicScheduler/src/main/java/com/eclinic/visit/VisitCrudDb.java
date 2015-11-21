@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -216,5 +218,24 @@ public class VisitCrudDb implements VisitCrud {
 
 	public VisitView findVisitById(Integer id) {
 		return visitViewDao.findVisitById(id);
+	}
+
+	public VisitView findFirstFreeTermBySpecializationAndDoctor(
+			String specialization, String doctor) {
+
+		return findFreeTermBySpecializationAndDoctor(specialization, doctor)
+				.iterator().next();
+	}
+
+	public Set<VisitView> findFreeTermBySpecializationAndDoctor(
+			String specialization, String doctor) {
+		Set<VisitView> visit = new LinkedHashSet<VisitView>();
+		Set<VisitView> findFreeTermsByDoctor = findFreeTermsByDoctor(doctor, -1);
+		for (VisitView vv : findFreeTermsByDoctor) {
+			if (vv.getSpecialization().equals(specialization)) {
+				visit.add(vv);
+			}
+		}
+		return visit;
 	}
 }

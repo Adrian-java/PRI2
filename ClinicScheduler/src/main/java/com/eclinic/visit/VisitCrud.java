@@ -27,6 +27,10 @@ public interface VisitCrud {
     public VisitView findFirstFreeTermByDoctor(String id);
 
     public VisitView findFirstFreeTermBySpecialization(String specialization);
+    
+    public VisitView findFirstFreeTermBySpecializationAndDoctor(String specialization,String doctor);
+    
+    public Set<VisitView> findFreeTermBySpecializationAndDoctor(String specialization,String doctor);
 
     public Set<VisitView> findFreeTermsByDoctor(String id, Integer resultCounterMonth);
 

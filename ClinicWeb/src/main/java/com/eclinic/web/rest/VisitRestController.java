@@ -181,4 +181,22 @@ public class VisitRestController {
 		return Response.ok(visitCrud.findVisitByStatus(status)).build();
 	}
 
+	@GET
+	@Path("/free/doctor/{id}/specialization/{specialization}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findFreeVisitBySpecializationAndDoctor(
+			@PathParam("id") String doctor,
+			@PathParam("specialization") String specialization) {
+		return Response.ok(visitCrud.findFreeTermBySpecializationAndDoctor(specialization, doctor)).build();
+	}
+	
+	@GET
+	@Path("/free/first/doctor/{id}/specialization/{specialization}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findFirstFreeVisitBySpecializationAndDoctor(
+			@PathParam("id") String doctor,
+			@PathParam("specialization") String specialization) {
+		return Response.ok(visitCrud.findFirstFreeTermBySpecializationAndDoctor(specialization, doctor)).build();
+	}
+
 }
