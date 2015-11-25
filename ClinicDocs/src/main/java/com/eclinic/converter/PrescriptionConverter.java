@@ -73,7 +73,9 @@ public class PrescriptionConverter {
 
 		map.put("Department", prescription.getDepartment());
 		map.put("Permissions", prescription.getPermissions());
-
+		
+		setRemedies(prescription, map);
+		
 //		TODO - add filling report with collection of Remedies
 
 		map.put("IssuedDate", prescription.getIssuedDate().toString());
@@ -82,6 +84,22 @@ public class PrescriptionConverter {
 		map.put("DoctorSpecialization", getDoctorSpecialization(doctor));
 		
 		return map;
+	}
+
+	private void setRemedies(Prescription prescription, HashMap<String, Object> map) {
+		int i = 0;
+		for (Remedy rem : getRemedy(prescription)) {
+			if (rem.getName() != null) {
+				map.put("Remedy"+i, rem.getName());
+				map.put("Repayment"+i, rem.getRepayment());
+				i++;
+			}
+			else {
+				map.put("Remedy"+i, "");
+				map.put("Repayment"+i, "");
+				i++;
+			}
+		}
 	}
 	
 	private String getClinicAddress(Clinic clinic) {
@@ -135,5 +153,6 @@ public class PrescriptionConverter {
 		}
 		return name;
 	}
+	
 	
 }
