@@ -7,3 +7,5 @@ RemoteSystemsTempFiles/
 .git
 *~
 .project
+.DS_Store
+bin/

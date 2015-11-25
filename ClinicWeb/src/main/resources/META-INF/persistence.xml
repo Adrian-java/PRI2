@@ -40,6 +40,8 @@
 		<class>com.eclinic.domain.History</class>
 
 		<class>com.eclinic.domain.view.PatientView</class>
+		<class>com.eclinic.domain.view.VisitSchedulerView</class>
+		<class>com.eclinic.domain.view.VisitView</class>
 		<class>com.eclinic.domain.view.DoctorView</class>
 		<class>com.eclinic.domain.view.AdminView</class>
 		<class>com.eclinic.domain.view.ReceptionistView</class>

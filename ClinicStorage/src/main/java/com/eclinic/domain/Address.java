@@ -105,7 +105,7 @@ public class Address implements Serializable {
 
 	/**
 	 */
-	@OneToMany(mappedBy = "address", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "address", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	//@XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Patient> patients;
 	

@@ -102,16 +102,6 @@ public class AdminRestController {
 	 * 
 	 */
 
-	@GET
-	@Path("/list")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response listAdmins() throws JsonGenerationException,
-			JsonMappingException, IOException {
-		return Response.ok(
-				new ObjectMapper()
-						.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
-						.writeValueAsString(adminService.loadAdmins())).build();
-	}
 
 	/**
 	 * Select an existing Admin entity

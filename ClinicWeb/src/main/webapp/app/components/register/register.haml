@@ -1,0 +1,33 @@
+.container
+  %form
+    .row
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.firstName', :'placeholder' => 'Imię'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.lastName', :'placeholder' => 'Nazwisko'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.pin', :'placeholder' => 'Pesel'}
+      .col-xs-12
+        %input{:type => 'password', 'ng-model' => 'user.password', :'placeholder' => 'Hasło'}
+      .col-xs-12
+        %input{:type => 'password', 'ng-model' => 'user.passwordConfirm', :'placeholder' => 'Powtórz hasło'}
+      .col-xs-12
+        %date-select
+        -# <input rsmdatedropdowns ng-model="model" ng-disabled="test()">
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.city', :'placeholder' => 'Miasto'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.countyCode', :'placeholder' => 'Kod pocztowy'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.homeNumber', :'placeholder' => 'Numer domu/mieszkania'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.province', :'placeholder' => 'Województwo'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.country', :'placeholder' => 'Państwo'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.phone', :'placeholder' => 'Telefon'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.email', :'placeholder' => 'E-mail'}
+      .col-xs-12
+        %input{:type => 'text', 'ng-model' => 'user.passwordConfirm', :'placeholder' => 'Powtórz hasło'}
+      %button{:'type' => 'submit'}

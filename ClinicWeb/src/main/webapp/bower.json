@@ -1,0 +1,28 @@
+{
+  "name": "clinic",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Jacek Czapiewski <j.czapiewski@american-systems.pl>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Adrian-java/PRI2",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-router": "~0.2.14",
+    "angular-cookies": "~1.4.0",
+    "bootstrap": "~3.3.4",
+    "jquery": "~2.1.3",
+    "angular-bootstrap": "~0.14.3",
+    "angular-animate": "~1.4.7",
+    "angular-resource": "~1.4.7",
+    "angular-date-dropdowns": "~0.1.1"
+  }
+}

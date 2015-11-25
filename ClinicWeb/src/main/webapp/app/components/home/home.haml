@@ -1,0 +1,66 @@
+%header
+  .container
+    %button
+      ZAREJESTRUJ SIĘ
+    %p
+      NA WIZYTĘ LEKARSKĄ
+      %br>
+      PRZEZ INTERNET
+    %img{:src => "assets/img/arrow_down.png"}
+%form.search-visit
+  .container
+    .row
+      .col-xs-12.col-sm-6.col-md-3
+        %input.form-control{:type => "text", :placeholder => "Specjalizacja"}
+      .col-xs-12.col-sm-6.col-md-3
+        %input.form-control{:type => "text", :placeholder => "Lekarz"}
+      .col-xs-12.col-sm-6.col-md-3
+        .input-group
+          %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "is-open" => "status.opened", "max-date" => "maxDate", "min-date" => "minDate", "ng-model" => "dt", "ng-required" => "true", :type => "text", "uib-datepicker-popup" => ""}/
+          %span.input-group-btn
+            %button.btn.btn-default{"ng-click" => "open($event)", :type => "button"}
+              %i.glyphicon.glyphicon-calendar
+      .col-xs-12.col-sm-6.col-md-3
+        %button.btn.btn-default.form-control{:type => "submit"}
+          Wyszukaj
+.features-boxes
+  .container
+    .row
+      .col-xs-12.col-md-6.feature-box
+        %img{:src => "assets/img/services_icon.jpg"}
+        .feature-box-content
+          %h2
+            Usługi
+          %p
+            Oferujemy pełen wachlarz usług medycznych.
+            %span.read-more
+              Więcej
+      .col-xs-12.col-md-6.feature-box
+        %img{:src => "assets/img/equipment_icon.jpg"}
+        .feature-box-content
+          %h2
+            Wyposażenie
+          %p
+            Posiadamy nowoczesną aparaturę medyczną.
+            %span.read-more
+              Więcej
+      .col-xs-12.col-md-6.feature-box
+        %img{:src => "assets/img/team_icon.jpg"}
+        .feature-box-content
+          %h2
+            Kadra
+          %p
+            Pracują u nas wykwalifikowani specjaliści.
+            %span.read-more
+              Więcej
+      .col-xs-12.col-md-6.feature-box
+        %img{:src => "assets/img/online_register_icon.jpg"}
+        .feature-box-content
+          %h2
+            Rejestracja
+          %p
+            Dysponujemy systemem do zapisu na wizyty
+            %br>
+            przez internet.
+            %span.read-more
+              Więcej
