@@ -3,6 +3,9 @@ package com.eclinic.web.rest;
 import java.awt.PageAttributes;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +18,9 @@ import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,9 +73,9 @@ public class DocumentController {
  * */	
 	
 	@RequestMapping(value="/prescription/{patient_id}")
-	@Produces(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
 	@ResponseBody
-	public String findPrescription(@PathParam("patient_id") Integer patientId) {
+	public ResponseEntity<byte[]> findPrescription(@PathParam("patient_id") Integer patientId) {
 
 		//TODO - remove builder when db stops returning nullable objects. After that create a new prescription using data passed to the controller
 		PrescriptionBuilder builder = new PrescriptionBuilder();
@@ -89,7 +95,7 @@ public class DocumentController {
 		
 		extractToPDF(printFile);
 		
-		return "Successfully compilled & filled with data!";
+		return createResponse("prescription.pdf");
 	}
 
 	private void compileReport(String filename) {
@@ -124,6 +130,34 @@ public class DocumentController {
 		} catch (JRException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	private ResponseEntity<byte[]> createResponse(String filename) {
+		byte[] fileBytes = convertPdfFile(filename);
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(org.springframework.http.MediaType.parseMediaType("application/pdf"));
+	    headers.setContentDispositionFormData(filename, filename);
+	    headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+	    return new ResponseEntity<byte[]>(fileBytes, headers, HttpStatus.OK);
+	}
+
+	private byte[] convertPdfFile(String filename) {
+		String filePath = getReportPath(filename);
+		filePath = filePath.replaceFirst("^/(.:/)", "$1");
+		
+		Path path = Paths.get(filePath); 
+		
+
+		
+		byte[] bytes = null;
+
+		try {
+			bytes = Files.readAllBytes(path);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return bytes;
 	}
 	
 	
