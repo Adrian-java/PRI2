@@ -102,6 +102,12 @@ public class Address implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String homeNr;
+	
+	@Column(name = "street", length = 20)
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	private
+	String street;
 
 	/**
 	 */
@@ -284,5 +290,13 @@ public class Address implements Serializable {
 
 	public void setClinics(java.util.Set<com.eclinic.domain.Clinic> clinics) {
 		this.clinics = clinics;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
 	}
 }

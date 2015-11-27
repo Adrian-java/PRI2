@@ -153,7 +153,7 @@ public class VisitCrudDb implements VisitCrud {
 		vs.setTimeTo(vsm.getTimeTo());
 		SevenDays convertDaysToSevenDays = visitHelper
 				.convertDaysToSevenDays(vsm.getDaysOfWeek());
-		vs.setSevenDays(sevenDaysDao.merge(convertDaysToSevenDays));
+//		vs.setSevenDays(sevenDaysDao.merge(convertDaysToSevenDays));
 		return visitSchedulerDao.merge(vs);
 	}
 
