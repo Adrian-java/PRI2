@@ -1,6 +1,8 @@
 package com.eclinic.web.rest;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -197,6 +199,17 @@ public class VisitRestController {
 			@PathParam("id") String doctor,
 			@PathParam("specialization") String specialization) {
 		return Response.ok(visitCrud.findFirstFreeTermBySpecializationAndDoctor(specialization, doctor)).build();
+	}
+	
+	@GET
+	@Path("/specialization/{specialization}/{start_date}/{end_date}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findVisitBySpecializationAndDate(
+			@PathParam("specialization") String specialization,@PathParam("start_date") String startDate,@PathParam("end_date") String endDate) throws ParseException {
+		String pattern = "dd-MM-yyyy";
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		Date date = format.parse(startDate);
+		return Response.ok(visitCrud.findVisitBySpecializationAndDate(specialization,format.parse(startDate), format.parse(endDate))).build();
 	}
 
 }

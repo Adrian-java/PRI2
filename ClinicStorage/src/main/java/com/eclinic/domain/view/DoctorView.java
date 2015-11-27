@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "findDoctorByPesel", query = "select doctor from DoctorView doctor where pesel = ?1"),
+		@NamedQuery(name = "findDoctorByPesel", query = "select doctor from DoctorView doctor where id = ?1"),
 		@NamedQuery(name = "findDoctorViewById", query = "select doctor from DoctorView doctor where id = ?1") })
 @Table(catalog = "eclinic", name = "Doctor_View")
 @XmlAccessorType(XmlAccessType.FIELD)

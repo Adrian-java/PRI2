@@ -48,5 +48,10 @@ public interface VisitCrud {
     public void deleteVisit(Integer id);
 
 	public VisitScheduler addFreeVisit();
+	
+	public Set<VisitView> findVisitBySpecializationAndDate(String specialization, Date startDate, Date endDate);
 
+	public Set<VisitScheduler> findVisitSchedulerBySpecialization(String specialization);
+	
+	public Set<VisitScheduler> findVisitSchedulerByDoctor(String doctorId);
 }

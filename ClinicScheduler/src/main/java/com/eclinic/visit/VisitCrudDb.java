@@ -8,8 +8,8 @@ import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
+import org.hibernate.service.spi.Stoppable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +24,7 @@ import com.eclinic.dao.VisitDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
 import com.eclinic.dao.view.VisitSchedulerViewDAO;
 import com.eclinic.dao.view.VisitViewDAO;
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.SevenDays;
 import com.eclinic.domain.Specialization;
@@ -153,7 +154,7 @@ public class VisitCrudDb implements VisitCrud {
 		vs.setTimeTo(vsm.getTimeTo());
 		SevenDays convertDaysToSevenDays = visitHelper
 				.convertDaysToSevenDays(vsm.getDaysOfWeek());
-//		vs.setSevenDays(sevenDaysDao.merge(convertDaysToSevenDays));
+		// vs.setSevenDays(sevenDaysDao.merge(convertDaysToSevenDays));
 		return visitSchedulerDao.merge(vs);
 	}
 
@@ -237,5 +238,22 @@ public class VisitCrudDb implements VisitCrud {
 			}
 		}
 		return visit;
+	}
+
+	public Set<VisitView> findVisitBySpecializationAndDate(
+			String specialization, Date startDate, Date endDate) {
+		return visitViewDao.findVisitBySpecializationAndDate(specialization,
+				startDate, endDate);
+	}
+
+	public Set<VisitScheduler> findVisitSchedulerBySpecialization(
+			String specialization) {
+		return visitSchedulerDao
+				.findVisitSchedulerBySpecialization(specialization);
+	}
+
+	public Set<VisitScheduler> findVisitSchedulerByDoctor(String doctorId) {
+		Doctor d = doctorDao.findDoctorById(doctorId);
+		return visitSchedulerDao.findVisitSchedulerByDoctor(d);
 	}
 }

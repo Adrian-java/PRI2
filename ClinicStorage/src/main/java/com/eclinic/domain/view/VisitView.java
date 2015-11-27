@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 		@NamedQuery(name = "findVisitViewByDoctor", query = "select vs from VisitView vs where vs.idDoctor = ?1"),
 		@NamedQuery(name = "findVisitViewByDateOfVisit", query = "select vs from VisitView vs where vs.dateOfVisit >= ?1"),
 		@NamedQuery(name = "findVisitViewBySpecialization", query = "select vs from VisitView vs where vs.specialization =  ?1"),
+		@NamedQuery(name = "findVisitViewBySpecializationAndDate", query = "select vs from VisitView vs where vs.specialization =  ?1 and vs.dateOfVisit between ?2 and ?3"),
 		@NamedQuery(name = "findFreeVisitViewByDoctor", query = "select vs from VisitView vs where vs.status = 'wolna' and vs.idDoctor = ?1"),
 		@NamedQuery(name = "findFreeVisitViewBySpecialization", query = "select vs from VisitView vs where vs.status = 'wolna' and vs.specialization = ?1") })
 @Table(catalog = "eclinic", name = "Visit_View")

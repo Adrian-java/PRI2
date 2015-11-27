@@ -1,6 +1,7 @@
 package com.eclinic.dao.view;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
@@ -31,5 +32,7 @@ public interface VisitViewDAO extends JpaDao<VisitView> {
 	public Set<VisitView> findVisitByStatus(String status);
 	
 	public Set<VisitView> findVisitBySpecialization(String s);
+	
+	public Set<VisitView> findVisitBySpecializationAndDate(String s, Date start, Date stop);
 
 }
