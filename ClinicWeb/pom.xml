@@ -26,6 +26,19 @@
 			<artifactId>ClinicScheduler</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.eclinic</groupId>
+			<artifactId>ClinicDocs</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sourceforge.barbecue</groupId>
+			<artifactId>barbecue</artifactId>
+			<version>1.5-beta1</version>
+		</dependency>
+		
+		
 	</dependencies>
 	<build>
 		<plugins>
@@ -44,8 +57,8 @@
 					<version>3.0</version>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<warName>ROOT</warName>
-<!-- 					<outputDirectory>../dependencies/jbossews/webapps</outputDirectory>  -->
-					<outputDirectory>/home/adrian/JAVA/tomcat7/webapps</outputDirectory>
+					<outputDirectory>C:\Tomcat\webapps</outputDirectory> 
+				<!--	<outputDirectory>/home/adrian/tomcat7/webapps</outputDirectory> -->
 				</configuration>
 			</plugin>
 		</plugins>

@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "getAllPatients", query = "select patient from PatientView patient"),
-		@NamedQuery(name = "getPatientByPesel", query = "select patient from PatientView patient where patient.pesel = ?1") })
+		@NamedQuery(name = "getPatientByPesel", query = "select patient from PatientView patient where patient.id = ?1") })
 @Table(catalog = "eclinic", name = "Patient_View")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "Patient_View")
@@ -36,7 +36,7 @@ public class PatientView {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
-	Integer id;
+	String id;
 	/**
 	 */
 
@@ -129,11 +129,6 @@ public class PatientView {
 	@XmlElement
 	String homeNr;
 
-	// //
-	@Column(name = "pesel", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	private String pesel;
 	/**
 	 */
 
@@ -152,11 +147,11 @@ public class PatientView {
 	/**
 	 */
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -254,14 +249,6 @@ public class PatientView {
 
 	public void setHomeNr(String homeNr) {
 		this.homeNr = homeNr;
-	}
-
-	public String getPesel() {
-		return pesel;
-	}
-
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
 	}
 
 	public Calendar getRegisterDate() {

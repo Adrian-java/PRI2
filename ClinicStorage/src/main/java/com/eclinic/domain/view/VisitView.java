@@ -22,7 +22,16 @@ import javax.xml.bind.annotation.XmlType;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "findAllVisitView", query = "select vs from VisitView vs"),
-		@NamedQuery(name = "findFreeVisitBySpecialization", query = "select vs from VisitView vs where vs.specialization = ?1") })
+		@NamedQuery(name = "findAllVisitViewById", query = "select vs from VisitView vs where vs.id = ?1"),
+		@NamedQuery(name = "findVisitViewByStatus", query = "select vs from VisitView vs where vs.status = ?1"),
+		@NamedQuery(name = "findVisitViewByPatient", query = "select vs from VisitView vs where vs.idPatient = ?1"),
+		@NamedQuery(name = "findVisitViewByDoctorAndDate", query = "select vs from VisitView vs where vs.idDoctor = ?1 and vs.dateOfVisit between ?2 and ?3"),
+		@NamedQuery(name = "findVisitViewByDateOfVisit", query = "select vs from VisitView vs where vs.dateOfVisit >= ?1"),
+		@NamedQuery(name = "findVisitViewBySpecialization", query = "select vs from VisitView vs where vs.specialization =  ?1"),
+		@NamedQuery(name = "findVisitViewBySpecializationAndDate", query = "select vs from VisitView vs where vs.specialization =  ?1 and vs.dateOfVisit between ?2 and ?3"),
+		@NamedQuery(name = "findVisitViewByDoctorAndSpecializationAndDate", query = "select vs from VisitView vs where vs.idDoctor = ?1 and vs.specialization =  ?2 and vs.dateOfVisit between ?3 and ?4"),
+		@NamedQuery(name = "findFreeVisitViewByDoctor", query = "select vs from VisitView vs where vs.status = 'wolna' and vs.idDoctor = ?1"),
+		@NamedQuery(name = "findFreeVisitViewBySpecialization", query = "select vs from VisitView vs where vs.status = 'wolna' and vs.specialization = ?1") })
 @Table(catalog = "eclinic", name = "Visit_View")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "VisitScheduler")

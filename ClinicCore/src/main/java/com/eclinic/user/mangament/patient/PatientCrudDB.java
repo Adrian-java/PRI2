@@ -30,7 +30,7 @@ import com.eclinic.service.PatientService;
 import com.eclinic.service.SystemUserService;
 import com.eclinic.user.mangament.PermissionMangament;
 
-@Component("patientCrud")
+@Component("PatientCrud")
 public class PatientCrudDB implements PatientCrud {
 
 	@Autowired

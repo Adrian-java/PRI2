@@ -113,7 +113,7 @@ public class Patient implements Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinColumns({ @JoinColumn(name = "id_address", referencedColumnName = "Id", nullable = false)})
 	@XmlTransient
 	Address address;

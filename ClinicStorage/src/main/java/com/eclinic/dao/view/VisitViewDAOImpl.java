@@ -1,6 +1,8 @@
 package com.eclinic.dao.view;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -22,54 +24,31 @@ import com.eclinic.domain.view.VisitView;
  */
 @Repository("VisitViewDAO")
 @Transactional
-public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements VisitViewDAO {
+public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements
+		VisitViewDAO {
 
-	/**
-	 * Set of entity classes managed by this DAO.  Typically a DAO manages a single entity.
-	 *
-	 */
-	private final static Set<Class<?>> dataTypes = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { VisitView.class }));
+	private final static Set<Class<?>> dataTypes = new HashSet<Class<?>>(
+			Arrays.asList(new Class<?>[] { VisitView.class }));
 
-	/**
-	 * EntityManager injected by Spring for persistence unit mysql1
-	 *
-	 */
 	@PersistenceContext(unitName = "mysql1")
 	private EntityManager entityManager;
 
-	/**
-	 * Instantiates a new DoctorDAOImpl
-	 *
-	 */
 	public VisitViewDAOImpl() {
 		super();
 	}
 
-	/**
-	 * Get the entity manager that manages persistence unit 
-	 *
-	 */
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
 
-	/**
-	 * Returns the set of entity classes managed by this DAO.
-	 *
-	 */
 	public Set<Class<?>> getTypes() {
 		return dataTypes;
 	}
 
-	/**
-	 * JPQL Query - findDoctorBySurnameContaining
-	 *
-	 */
-
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Set<VisitView> findAllVisit() throws DataAccessException {
-		Query query = createNamedQuery("findAllVisitScheduler",-1,-1);
+		Query query = createNamedQuery("findAllVisitView", -1, -1);
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 
@@ -81,10 +60,64 @@ public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements Visit
 
 	public Set<VisitView> findFreeVisitBySpecialization(String specialization,
 			int numberOfVisit) throws DataAccessException {
-		Query query = createNamedQuery("findFreeVisitBySpecialization",-1,numberOfVisit,specialization);
+		Query query = createNamedQuery("findFreeVisitViewBySpecialization", -1,
+				numberOfVisit, specialization);
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 
+	public Set<VisitView> findFreeVisitByDoctor(String doctorId,
+			int numberOfVisit) throws DataAccessException {
+		Query query = createNamedQuery("findFreeVisitViewByDoctor", -1,
+				numberOfVisit, doctorId);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+
+	public VisitView findVisitById(Integer visitId) throws DataAccessException {
+		Query query = createNamedQuery("findFreeVisitViewById", -1, -1, visitId);
+		return (VisitView) query.getSingleResult();
+	}
+
+	public Set<VisitView> findVisitByDateOfVisit(Calendar calendar) {
+		Query query = createNamedQuery("findVisitViewByDateOfVisit", -1, -1,
+				calendar.getTime());
+		// ((org.hibernate.ejb.QueryImpl)getEntityManager().createNativeQuery("select * from Visit_View where date_of_visit like '2016-01-15%' and specialization='Psycholog'")).getResultList();
+
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+
+	public Set<VisitView> findVisitByDoctorAndDate(String doctor, Date start, Date stop, int i, int j) {
+		Query query = createNamedQuery("findVisitViewByDoctorAndDate", -1, -1, doctor,start,stop);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+
+	public Set<VisitView> findVisitByPatient(String id) {
+		Query query = createNamedQuery("findVisitViewByPatient", -1, -1, id);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+
+	public Set<VisitView> findVisitByStatus(String status) {
+		Query query = createNamedQuery("findVisitViewByStatus", -1, -1, status);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+
+	public Set<VisitView> findVisitBySpecialization(String s) {
+		Query query = createNamedQuery("findVisitViewBySpecialization", -1, -1,
+				s);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+
+	public Set<VisitView> findVisitBySpecializationAndDate(String s,
+			Date start, Date stop) {
+		Query query = createNamedQuery("findVisitViewBySpecializationAndDate",
+				-1, -1, s, start, stop);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
 	
+	public Set<VisitView> findVisitByDoctorSpecializationAndDate(String doctor, String specialization,
+			Date start, Date stop) {
+		Query query = createNamedQuery("findVisitViewByDoctorAndSpecializationAndDate",
+				-1, -1, doctor,specialization, start, stop);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
 
 }
