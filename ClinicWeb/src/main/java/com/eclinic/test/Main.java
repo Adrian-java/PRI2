@@ -1,16 +1,23 @@
 package com.eclinic.test;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
+import javax.ws.rs.core.Response;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.eclinic.domain.view.VisitView;
 import com.eclinic.user.mangament.patient.PatientCrud;
 import com.eclinic.visit.VisitCrud;
+import com.eclinic.visit.mapper.NewVisitMapper;
+import com.eclinic.web.rest.DoctorRestController;
 
 public class Main {
 
@@ -18,8 +25,10 @@ public class Main {
 
 	private static PatientCrud patientCrud;
 	
+	private static DoctorRestController doctorRest;
+	
 
-	public static void main(String... args) throws ParseException {
+	public static void main(String... args) throws ParseException, JsonGenerationException, JsonMappingException, IOException {
 
 		ApplicationContext ctx = new ClassPathXmlApplicationContext(
 				"applicationContext.xml");
@@ -27,12 +36,30 @@ public class Main {
 		patientCrud = (PatientCrud) ctx.getBean("PatientCrud");
 		
 		visitCrud = (VisitCrud) ctx.getBean("VisitCrud");
+		doctorRest = (DoctorRestController) ctx.getBean("DoctorRestController");
+		
+		Response listDoctors = doctorRest.listDoctors();
+		System.out.println();
+		
 		String pattern = "dd/MM/yyyy";
 		SimpleDateFormat format = new SimpleDateFormat(pattern);
 		Date startDate = format.parse("01/01/2016 ");
 		Date endDate= format.parse("08/01/2016 ");
 		Set<VisitView> allVisit = visitCrud.findVisitBySpecializationAndDate("Dermatolog", startDate, endDate);
 		System.out.println();
+		
+		NewVisitMapper newVisitMapper = new NewVisitMapper();
+		
+	   
+		newVisitMapper.setPatientId("pesel11");
+		newVisitMapper.setDate(new Date());
+		newVisitMapper.setDescription("");
+		newVisitMapper.setIdReceptionist("receptionist1");
+		newVisitMapper.setIdDoctor("71120789123");
+		newVisitMapper.setTypeOfVisit("Dermatolog");
+		
+		
+		visitCrud.addVisit(newVisitMapper);
 //		boolean first = true;
 //		for (int i = 200; i <= 203; i++) {
 //			SystemUser s = new SystemUser();

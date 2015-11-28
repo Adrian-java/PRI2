@@ -276,4 +276,10 @@ public class VisitDAOImpl extends AbstractJpaDao<Visit> implements VisitDAO {
 	    Query query = createNamedQuery("findVisitByStatus", -1, -1, status);
 		return new LinkedHashSet<Visit>(query.getResultList());
 	}
+
+	public Visit findVisitByPrimaryKey(Object newVisitMapper)
+			throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

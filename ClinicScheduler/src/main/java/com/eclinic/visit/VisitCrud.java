@@ -6,6 +6,7 @@ import java.util.Set;
 import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.domain.view.VisitView;
+import com.eclinic.visit.mapper.NewVisitMapper;
 import com.eclinic.visit.mapper.NewVisitSchedulerMapper;
 
 public interface VisitCrud {
@@ -41,7 +42,7 @@ public interface VisitCrud {
 
     public void deleteVisitScheduler(VisitScheduler visitScheduler);
 
-    public Visit addVisit(String  patientId, Integer visitId);
+    public Visit addVisit(NewVisitMapper newVisitMapper);
 
     public void changeStatusOfVisit(Integer id, String status);
 

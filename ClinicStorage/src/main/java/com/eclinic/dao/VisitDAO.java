@@ -49,7 +49,7 @@ public interface VisitDAO extends JpaDao<Visit> {
 	 * JPQL Query - findVisitByPrimaryKey
 	 *
 	 */
-	public Visit findVisitByPrimaryKey(Integer id) throws DataAccessException;
+	public Visit findVisitByPrimaryKey(Object newVisitMapper) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findVisitByPrimaryKey
