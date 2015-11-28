@@ -16,23 +16,30 @@ import com.eclinic.domain.view.VisitView;
 public interface VisitViewDAO extends JpaDao<VisitView> {
 
 	public Set<VisitView> findAllVisit() throws DataAccessException;
-	
-	public Set<VisitView> findFreeVisitBySpecialization(String specialization, int numberOfVisit) throws DataAccessException;
-	
-	public Set<VisitView> findFreeVisitByDoctor(String doctorId, int numberOfVisit) throws DataAccessException;
-	
+
+	public Set<VisitView> findFreeVisitBySpecialization(String specialization,
+			int numberOfVisit) throws DataAccessException;
+
+	public Set<VisitView> findFreeVisitByDoctor(String doctorId,
+			int numberOfVisit) throws DataAccessException;
+
 	public VisitView findVisitById(Integer visitId) throws DataAccessException;
 
 	public Set<VisitView> findVisitByDateOfVisit(Calendar calendar);
 
-	public Set<VisitView> findVisitByDoctor(String doctor, int i, int j);
+	public Set<VisitView> findVisitByDoctorAndDate(String doctor, Date start,
+			Date stop, int i, int j);
 
 	public Set<VisitView> findVisitByPatient(String id);
 
 	public Set<VisitView> findVisitByStatus(String status);
-	
+
 	public Set<VisitView> findVisitBySpecialization(String s);
+
+	public Set<VisitView> findVisitBySpecializationAndDate(String s,
+			Date start, Date stop);
 	
-	public Set<VisitView> findVisitBySpecializationAndDate(String s, Date start, Date stop);
+	public Set<VisitView> findVisitByDoctorSpecializationAndDate(String doctor, String s,
+			Date start, Date stop);
 
 }

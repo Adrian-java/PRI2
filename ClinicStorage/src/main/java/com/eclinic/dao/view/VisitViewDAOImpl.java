@@ -85,8 +85,8 @@ public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 
-	public Set<VisitView> findVisitByDoctor(String doctor, int i, int j) {
-		Query query = createNamedQuery("findVisitViewByDoctor", -1, -1, doctor);
+	public Set<VisitView> findVisitByDoctorAndDate(String doctor, Date start, Date stop, int i, int j) {
+		Query query = createNamedQuery("findVisitViewByDoctorAndDate", -1, -1, doctor,start,stop);
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 
@@ -110,6 +110,13 @@ public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements
 			Date start, Date stop) {
 		Query query = createNamedQuery("findVisitViewBySpecializationAndDate",
 				-1, -1, s, start, stop);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+	
+	public Set<VisitView> findVisitByDoctorSpecializationAndDate(String doctor, String specialization,
+			Date start, Date stop) {
+		Query query = createNamedQuery("findVisitViewByDoctorAndSpecializationAndDate",
+				-1, -1, doctor,specialization, start, stop);
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 

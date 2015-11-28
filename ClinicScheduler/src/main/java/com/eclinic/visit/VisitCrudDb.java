@@ -70,8 +70,8 @@ public class VisitCrudDb implements VisitCrud {
 		return visitViewDao.findVisitByDateOfVisit(calendar);
 	}
 
-	public Set<VisitView> findVisitByDoctor(String doctorId) {
-		return visitViewDao.findVisitByDoctor(doctorId, -1, -1);
+	public Set<VisitView> findVisitByDoctor(String doctorId, Date start ,Date stop) {
+		return visitViewDao.findVisitByDoctorAndDate(doctorId, start, stop, -1, -1);
 	}
 
 	public Set<VisitView> findVisitByPatient(String id) {
@@ -255,5 +255,11 @@ public class VisitCrudDb implements VisitCrud {
 	public Set<VisitScheduler> findVisitSchedulerByDoctor(String doctorId) {
 		Doctor d = doctorDao.findDoctorById(doctorId);
 		return visitSchedulerDao.findVisitSchedulerByDoctor(d);
+	}
+
+	public Set<VisitView> findVisitByDoctorAndSpecialization(String doctor,
+			String specialization, Date startDate, Date endDate) {
+		return visitViewDao.findVisitByDoctorSpecializationAndDate(doctor,specialization,
+				startDate, endDate);
 	}
 }

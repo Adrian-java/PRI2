@@ -154,11 +154,31 @@ public class VisitRestController {
 	}
 
 	@GET
-	@Path("/free/doctor/{doctor}")
+	@Path("/doctor/{doctor}/date/{start_date}/{stop_date}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findVisitByDoctor(@PathParam("doctor") String doctor) {
-		return Response.ok(visitCrud.findVisitByDoctor(doctor)).build();
+	public Response findVisitByDoctorAndDate(@PathParam("doctor") String doctor,
+			@PathParam("start_date") String start,
+			@PathParam("stop_date") String stop) throws ParseException {
+		String pattern = "dd-MM-yyyy";
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		return Response.ok(
+				visitCrud.findVisitByDoctor(doctor, format.parse(start),
+						format.parse(stop))).build();
 	}
+	
+	@GET
+	@Path("/doctor/{doctor}/specialization/{specialization}/date/{start_date}/{stop_date}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findVisitByDoctor(@PathParam("doctor") String doctor,@PathParam("specialization") String specialization,
+			@PathParam("start_date") String start,
+			@PathParam("stop_date") String stop) throws ParseException {
+		String pattern = "dd-MM-yyyy";
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		return Response.ok(
+				visitCrud.findVisitByDoctorAndSpecialization(doctor,specialization, format.parse(start),
+						format.parse(stop))).build();
+	}
+	
 
 	@GET
 	@Path("/patient/{patient}")
@@ -189,27 +209,36 @@ public class VisitRestController {
 	public Response findFreeVisitBySpecializationAndDoctor(
 			@PathParam("id") String doctor,
 			@PathParam("specialization") String specialization) {
-		return Response.ok(visitCrud.findFreeTermBySpecializationAndDoctor(specialization, doctor)).build();
+		return Response.ok(
+				visitCrud.findFreeTermBySpecializationAndDoctor(specialization,
+						doctor)).build();
 	}
-	
+
 	@GET
 	@Path("/free/first/doctor/{id}/specialization/{specialization}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findFirstFreeVisitBySpecializationAndDoctor(
 			@PathParam("id") String doctor,
 			@PathParam("specialization") String specialization) {
-		return Response.ok(visitCrud.findFirstFreeTermBySpecializationAndDoctor(specialization, doctor)).build();
+		return Response.ok(
+				visitCrud.findFirstFreeTermBySpecializationAndDoctor(
+						specialization, doctor)).build();
 	}
-	
+
 	@GET
 	@Path("/specialization/{specialization}/{start_date}/{end_date}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findVisitBySpecializationAndDate(
-			@PathParam("specialization") String specialization,@PathParam("start_date") String startDate,@PathParam("end_date") String endDate) throws ParseException {
+			@PathParam("specialization") String specialization,
+			@PathParam("start_date") String startDate,
+			@PathParam("end_date") String endDate) throws ParseException {
 		String pattern = "dd-MM-yyyy";
 		SimpleDateFormat format = new SimpleDateFormat(pattern);
 		Date date = format.parse(startDate);
-		return Response.ok(visitCrud.findVisitBySpecializationAndDate(specialization,format.parse(startDate), format.parse(endDate))).build();
+		return Response.ok(
+				visitCrud.findVisitBySpecializationAndDate(specialization,
+						format.parse(startDate), format.parse(endDate)))
+				.build();
 	}
 
 }
