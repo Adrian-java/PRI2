@@ -23,7 +23,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.eclinic.dao.VisitDAO;
+import com.eclinic.domain.Visit;
 import com.eclinic.visit.VisitCrud;
+import com.eclinic.visit.mapper.NewVisitMapper;
 
 /**
  * Spring Rest controller that handles CRUD requests for Visit entities
@@ -77,14 +79,14 @@ public class VisitRestController {
 	}
 
 	@GET
-	@Path("/new/{visitId}/{patientid}")
+	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response newVisit(@PathParam("visitId") Integer visitId,
-			@PathParam("patientid") String patientId) {
+	public Response newVisit(NewVisitMapper newVisit) {
 		try {
-			visitCrud.addVisit(patientId, visitId);
-			return Response.ok(visitDAO.findVisitByPrimaryKey(visitId)).build();
+			Visit addVisit = visitCrud.addVisit(newVisit);
+			return Response.ok(visitDAO.findVisitByPrimaryKey(addVisit))
+					.build();
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}
@@ -156,7 +158,8 @@ public class VisitRestController {
 	@GET
 	@Path("/doctor/{doctor}/date/{start_date}/{stop_date}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findVisitByDoctorAndDate(@PathParam("doctor") String doctor,
+	public Response findVisitByDoctorAndDate(
+			@PathParam("doctor") String doctor,
 			@PathParam("start_date") String start,
 			@PathParam("stop_date") String stop) throws ParseException {
 		String pattern = "dd-MM-yyyy";
@@ -165,20 +168,21 @@ public class VisitRestController {
 				visitCrud.findVisitByDoctor(doctor, format.parse(start),
 						format.parse(stop))).build();
 	}
-	
+
 	@GET
 	@Path("/doctor/{doctor}/specialization/{specialization}/date/{start_date}/{stop_date}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findVisitByDoctor(@PathParam("doctor") String doctor,@PathParam("specialization") String specialization,
+	public Response findVisitByDoctor(@PathParam("doctor") String doctor,
+			@PathParam("specialization") String specialization,
 			@PathParam("start_date") String start,
 			@PathParam("stop_date") String stop) throws ParseException {
 		String pattern = "dd-MM-yyyy";
 		SimpleDateFormat format = new SimpleDateFormat(pattern);
-		return Response.ok(
-				visitCrud.findVisitByDoctorAndSpecialization(doctor,specialization, format.parse(start),
-						format.parse(stop))).build();
+		return Response
+				.ok(visitCrud.findVisitByDoctorAndSpecialization(doctor,
+						specialization, format.parse(start), format.parse(stop)))
+				.build();
 	}
-	
 
 	@GET
 	@Path("/patient/{patient}")
