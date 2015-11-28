@@ -1,5 +1,5 @@
 (function() {
-  angular.module('clinic').config(function($stateProvider, $urlRouterProvider) {
+  angular.module('clinic').config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     'ngInject';
     $stateProvider.state('home', {
       url: '/',
@@ -7,7 +7,9 @@
       controller: 'HomeController',
       controllerAs: 'home'
     }).state('login', {
-      url: '/login'
+      url: '/login',
+      controller: 'LoginController',
+      controllerAs: 'login'
     }).state('register', {
       url: '/register',
       templateUrl: '/app/components/register/register.html',
@@ -25,7 +27,11 @@
       controllerAs: 'contact'
     }).state('visits', {
       url: '/visits',
-      abstract: true
+      abstract: true,
+      template: '<div ui-view></div>'
+    }).state('visits.new', {
+      url: '/new',
+      template: '<div>xxxx</div>'
     }).state('specialties', {
       url: '/specialties',
       templateUrl: '/app/components/specialties/specialties.html',

@@ -75,3 +75,10 @@ form.search-visit {
     .feature-box .feature-box-content p {
       margin-top: 15px;
       margin-bottom: 15px; }
+
+.date-select .form-control {
+  width: 33.33%;
+  display: inline-block; }
+
+.modal-content .container {
+  width: 100%; }

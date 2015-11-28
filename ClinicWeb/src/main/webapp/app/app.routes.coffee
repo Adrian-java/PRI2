@@ -1,5 +1,5 @@
 angular.module 'clinic'
-  .config ($stateProvider, $urlRouterProvider) ->
+  .config ($stateProvider, $urlRouterProvider, $locationProvider) ->
     'ngInject'
     $stateProvider
       .state 'home',
@@ -9,6 +9,8 @@ angular.module 'clinic'
         controllerAs: 'home'
       .state 'login',
         url: '/login'
+        controller: 'LoginController'
+        controllerAs: 'login'
       .state 'register',
         url: '/register'
         templateUrl: '/app/components/register/register.html'
@@ -27,6 +29,10 @@ angular.module 'clinic'
       .state 'visits',
         url: '/visits'
         abstract: true
+        template: '<div ui-view></div>'
+      .state 'visits.new',
+        url: '/new'
+        template: '<div>xxxx</div>'
       .state 'specialties',
         url: '/specialties'
         templateUrl: '/app/components/specialties/specialties.html'
@@ -82,6 +88,10 @@ angular.module 'clinic'
 
 
     $urlRouterProvider.otherwise '/'
+    #$locationProvider.html5Mode({
+    #  enabled: true,
+    #  requireBase: false
+    #})
 
 ###
 
