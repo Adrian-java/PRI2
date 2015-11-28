@@ -50,6 +50,8 @@
 		<security:intercept-url pattern="/rest/Specialization/list"
 			access="permitAll" />
 
+		<security:intercept-url pattern="/rest/Visit/new"
+			access="permitAll" />
 
 		<!-- listowanie lekarzy(wszyscy) -->
 		<security:intercept-url pattern="/rest/SystemUser/doctors/all"
