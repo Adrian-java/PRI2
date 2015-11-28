@@ -33,6 +33,7 @@ import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.domain.view.VisitSchedulerView;
 import com.eclinic.domain.view.VisitView;
+import com.eclinic.visit.mapper.NewVisitMapper;
 import com.eclinic.visit.mapper.NewVisitSchedulerMapper;
 import com.eclinic.visit.planner.VisitHelper;
 
@@ -106,13 +107,29 @@ public class VisitCrudDb implements VisitCrud {
 		return visitViewDao.findFreeVisitBySpecialization(specialization, 10);
 	}
 
-	public Visit addVisit(String patientId, Integer visitId) {
+	public Visit addVisit(NewVisitMapper newVisitMapper) {
+		/*
 		Visit visitById = visitDao.findVisitById(visitId);
 		Patient patient = patientDao.findPatientById(patientId);
 		visitById.setPatient(patient);
 		visitById.setStatusOfVisit(statusOfVisitDao
 				.findStatusOfVisitByType("niepotwierdzona").iterator().next());
 		Visit merge = visitDao.merge(visitById);
+		*/
+		
+		Visit newVisit = new Visit();
+		
+		newVisit.setDateOfVisit(newVisitMapper.getDate());
+		newVisit.setDescriptionOfVisit(newVisitMapper.getDescription());
+		newVisit.setIsLeave(false);
+		newVisit.setSpecial(false);
+		newVisit.setPatient(patientDao.findPatientById(newVisitMapper.getPatientId()));
+		newVisit.setTypeOfVisit(typeOfVisitDao.findTypeOfVisitByName(newVisitMapper.getTypeOfVisit()).iterator().next());
+		newVisit.setReceptionist(receptionistDao.findReceptionistById(newVisitMapper.getIdReceptionist()));
+		newVisit.setStatusOfVisit(statusOfVisitDao.findStatusOfVisitById(3));
+		newVisit.setDoctor(doctorDao.findDoctorById(newVisitMapper.getIdDoctor()));
+		
+		Visit merge = visitDao.merge(newVisit);
 		// wysylka maila
 		visitDao.flush();
 		return merge;

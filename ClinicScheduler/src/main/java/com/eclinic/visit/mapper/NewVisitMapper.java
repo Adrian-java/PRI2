@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class NewVisitMapper {
 
-    private Integer patientId;
+    private String patientId;
     
     private Date date;
     
@@ -16,11 +16,11 @@ public class NewVisitMapper {
     
     private String typeOfVisit;
 
-    public Integer getPatientId() {
+    public String getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Integer patientId) {
+    public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 
