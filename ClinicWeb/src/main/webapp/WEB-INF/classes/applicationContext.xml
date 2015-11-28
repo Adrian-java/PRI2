@@ -11,7 +11,7 @@
 	<import resource="classpath:wee-service-context.xml" />
 	<import resource="classpath:wee-web-context.xml" />
 
- 
+
 	<bean id="passwordEncoder"
 		class="org.springframework.security.crypto.password.StandardPasswordEncoder">
 		<constructor-arg value="ThisIsASecretSoChangeMe" />
@@ -45,20 +45,53 @@
 			access="hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 
 
+
+		<!-- listowanie specjalizacji(wszyscy) -->
+		<security:intercept-url pattern="/rest/Specialization/list"
+			access="permitAll" />
+
+
+		<!-- listowanie lekarzy(wszyscy) -->
+		<security:intercept-url pattern="/rest/SystemUser/doctors/all"
+			access="permitAll" />
+
+		<!-- listowanie lekarzy według specjalizacji(wszyscy) -->
+		<security:intercept-url
+			pattern="/rest/SystemUser/doctors/specialization/{specialization}"
+			access="permitAll" />
+
+
+		<!-- listowanie godzin pracy lekarza w ciągu tygodnia(wszyscy) -->
+		<security:intercept-url pattern="/rest/VisitScheduler/doctor/{doctor}"
+			access="permitAll" />
+
+
+		<!-- listowanie wizyt lekarza w określonym terminie(wszyscy) -->
+		<security:intercept-url
+			pattern="/rest/Visit/doctor/{doctor}/date/{start_date}/{stop_date}"
+			access="permitAll" />
+
+
+		<!-- listowanie wizyt lekarza przy wybranej specjalizacji w określonym 
+			terminie(wszyscy) -->
+		<security:intercept-url
+			pattern="/rest/Visit/doctor/{doctor}/specialization/Dermatolog/date/{start_date}/{stop_date}"
+			access="permitAll" />
+
+
+		<!-- listowanie wizty z danej specializacji z przedzialu czasowego -->
+		<security:intercept-url
+			pattern="/rest/Visit/specialization/Dermatolog/{start_date}/{stop_date}"
+			access="permitAll" />
+
+
+
 		<security:intercept-url method="GET" pattern="/rest/**"
 			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 		<security:intercept-url method="PUT" pattern="/rest/**"
 			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
 		<security:intercept-url method="POST" pattern="/rest/**"
 			access="hasRole('patient') or hasRole('admin') or hasRole('superAdmin') or hasRole('doctor') or hasRole('receptionist')" />
-
-			
-			<security:intercept-url method="GET" pattern="/rest/**"
-			access="permitAll" />
-		<security:intercept-url method="PUT" pattern="/rest/**"
-			access="permitAll" />
-		<security:intercept-url method="POST" pattern="/rest/**"
-			access="permitAll" />
 
 		<security:intercept-url method="DELETE"
 			pattern="/rest/news/**" access="hasRole('admin')" />
@@ -71,5 +104,4 @@
 		id="authenticationTokenProcessingFilter">
 
 	</bean>
-
 </beans>
