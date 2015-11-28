@@ -517,9 +517,11 @@ public class SystemUserRestController {
 	@Path("/doctors/all")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllDoctors() {
+	public Response getAllDoctors() throws JsonGenerationException, JsonMappingException, IOException {
 		Set<DoctorView> allDoctors = doctorCrud.getAllDoctors();
-		return Response.ok(allDoctors).build();
+//		return Response.ok(allDoctors).build();
+		
+		return Response.ok(new ObjectMapper().writeValueAsString(allDoctors)).build();
 	}
 
 	@Path("/doctor/{pesel}")
