@@ -33,6 +33,7 @@ public class UserResource {
 	@Path("/token")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password)
 	{
 		UsernamePasswordAuthenticationToken authenticationToken =
