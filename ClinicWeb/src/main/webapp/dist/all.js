@@ -50862,7 +50862,7 @@ angular.module('ngAnimate', [])
 })(window, window.angular);
 
 /**
- * @license AngularJS v1.4.7
+ * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -51436,8 +51436,17 @@ angular.module('ngResource', ['ng']).
               undefined;
 
             forEach(action, function(value, key) {
-              if (key != 'params' && key != 'isArray' && key != 'interceptor') {
-                httpConfig[key] = copy(value);
+              switch (key) {
+                default:
+                  httpConfig[key] = copy(value);
+                  break;
+                case 'params':
+                case 'isArray':
+                case 'interceptor':
+                  break;
+                case 'timeout':
+                  httpConfig[key] = value;
+                  break;
               }
             });
 
@@ -58394,9 +58403,13 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
+(function() {
+  angular.module('clinic', ['ngAnimate', 'ngCookies', 'ngResource', 'ui.router', 'ui.bootstrap']);
+
+}).call(this);
 
 (function() {
-  angular.module('clinic').config(function($stateProvider, $urlRouterProvider) {
+  angular.module('clinic').config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     'ngInject';
     $stateProvider.state('home', {
       url: '/',
@@ -58404,7 +58417,9 @@ if (typeof jQuery === 'undefined') {
       controller: 'HomeController',
       controllerAs: 'home'
     }).state('login', {
-      url: '/login'
+      url: '/login',
+      controller: 'LoginController',
+      controllerAs: 'login'
     }).state('register', {
       url: '/register',
       templateUrl: '/app/components/register/register.html',
@@ -58422,7 +58437,11 @@ if (typeof jQuery === 'undefined') {
       controllerAs: 'contact'
     }).state('visits', {
       url: '/visits',
-      abstract: true
+      abstract: true,
+      template: '<div ui-view></div>'
+    }).state('visits.new', {
+      url: '/new',
+      template: '<div>xxxx</div>'
     }).state('specialties', {
       url: '/specialties',
       templateUrl: '/app/components/specialties/specialties.html',
@@ -58578,21 +58597,43 @@ if (typeof jQuery === 'undefined') {
 }).call(this);
 
 (function() {
-  angular.module('clinic').controller('LoginModalController', ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {}]);
+  angular.module('clinic').controller('LoginController', [
+    '$scope', '$uibModalInstance', 'Auth', function($scope, $uibModalInstance, Auth) {
+      return $scope.submit = function() {
+        return $uibModalInstance.close($scope.user);
+      };
+    }
+  ]);
 
 }).call(this);
 
 (function() {
   angular.module('clinic').controller('MainController', [
-    '$scope', '$uibModal', function($scope, $uibModal) {
-      return $scope.open = function(size) {
+    '$scope', '$uibModal', 'Auth', 'Role', '$cookies', function($scope, $uibModal, Auth, Role, $cookies) {
+      $scope.open = function(size) {
         var modalInstance;
-        return modalInstance = $uibModal.open({
+        modalInstance = $uibModal.open({
           animation: true,
           templateUrl: '/app/components/login/login_modal.html',
-          controller: 'LoginModalController'
+          controller: 'LoginController'
+        });
+        return modalInstance.result.then(function(user) {
+          return console.log(user);
         });
       };
+      $scope.logout = function() {
+        return Auth.logout();
+      };
+      return $scope.$watch((function() {
+        return $cookies.token;
+      }), function(newValue) {
+        if ($cookies.token) {
+          $scope.loggedIn = true;
+          Role.check();
+        } else {
+          $scope.loggedIn = false;
+        }
+      });
     }
   ]);
 
@@ -58608,15 +58649,11 @@ if (typeof jQuery === 'undefined') {
 }).call(this);
 
 (function() {
-  angular.module('clinic').controller('RegisterController', ['$scope', function($scope) {}]);
-
-}).call(this);
-
-(function() {
-  angular.module('clinic').directive('dateSelect', [
-    function() {
-      return {
-        template: '<div class="xxxx">cos</div>'
+  angular.module('clinic').controller('RegisterController', [
+    '$scope', 'Auth', function($scope, Auth) {
+      return $scope.submit = function() {
+        console.log($scope.user);
+        return Auth.register($scope.user);
       };
     }
   ]);
