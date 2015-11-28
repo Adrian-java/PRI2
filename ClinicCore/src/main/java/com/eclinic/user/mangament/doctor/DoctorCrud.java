@@ -16,4 +16,6 @@ public interface DoctorCrud {
 	public DoctorView getDoctorById(String pesel);
 	
 	public Set<DoctorView> getDoctorsBySpecialization(String specialization);
+	
+	public Response deleteDoctor(String pesel);
 }

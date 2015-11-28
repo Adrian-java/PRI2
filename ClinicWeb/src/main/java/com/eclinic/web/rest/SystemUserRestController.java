@@ -49,6 +49,7 @@ import com.eclinic.service.ReceptionistService;
 import com.eclinic.service.SystemUserService;
 import com.eclinic.user.mangament.doctor.DoctorCrud;
 import com.eclinic.user.mangament.patient.PatientCrud;
+import com.eclinic.user.mangament.patient.PatientCrudDB;
 import com.eclinic.user.mangament.receptionist.ReceptionistCrud;
 
 /**
@@ -428,17 +429,39 @@ public class SystemUserRestController {
 	}
 
 	/**
-	 * Delete an existing SystemUser entity
+	 * Delete an existing Doctor entity
 	 * 
 	 */
 
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{pesel}")
+	@Path("doctor/{pesel}")
 	@DELETE
-	public void deleteSystemUser(@PathParam("pesel") String systemuser_id) {
-		SystemUser systemuser = systemUserDAO
-				.findSystemUserById(systemuser_id);
-		systemUserService.deleteSystemUser(systemuser);
+	public void deleteDoctor(@PathParam("pesel") String id) {
+	doctorCrud.deleteDoctor(id);
+	}
+	
+	/**
+	 * Delete an existing Patient entity
+	 * 
+	 */
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("patient/{pesel}")
+	@DELETE
+	public void deletePatient(@PathParam("pesel") String id) {
+		patientCrud.deletePatient(id);
+	}
+	
+	/**
+	 * Delete an existing Receptionist entity
+	 * 
+	 */
+
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("receptionist/{pesel}")
+	@DELETE
+	public void deleteReceptionist(@PathParam("pesel") String id) {
+		receptonistCrud.deleteReceptionist(id);
 	}
 
 

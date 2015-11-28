@@ -7,8 +7,10 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -55,8 +57,7 @@ public class PatientCrudDB implements PatientCrud {
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		Map<String, String> map = new HashMap<String, String>();
-		SystemUser s = systemUserDAO.findSystemUserById(systemUser
-				.getId());
+		SystemUser s = systemUserDAO.findSystemUserById(systemUser.getId());
 		if (s != null) {
 
 			map.put("status", "Podany pesel/login istnieje");
@@ -114,9 +115,18 @@ public class PatientCrudDB implements PatientCrud {
 
 	public Response deletePatient(String pesel) {
 		SystemUser su = systemUserDAO.findSystemUserById(pesel);
-		su.setIsActive(false);
-		systemUserService.saveSystemUser(su);
-		return null;
+		Map<String, String> map = new TreeMap<String, String>();
+		if (su.getRole().equalsIgnoreCase("patient")) {
+			su.setIsActive(false);
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			su.setUnregisterDate(c);
+			systemUserService.saveSystemUser(su);
+			map.put("status", "usunieto");
+			return Response.ok(map).build();
+		} else {
+			return Response.status(Status.NO_CONTENT).build();
+		}
 	}
 
 	public Set<PatientView> getAllPatients() {
