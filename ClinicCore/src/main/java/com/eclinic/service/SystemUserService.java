@@ -74,7 +74,7 @@ public interface SystemUserService {
 	 * Save an existing Admin entity
 	 * 
 	 */
-	public SystemUser saveSystemUserAdmin(String id_5, Admin related_admin);
+	public String saveSystemUserAdmin(SystemUser su);
 
 	/**
 	 * Delete an existing Admin entity

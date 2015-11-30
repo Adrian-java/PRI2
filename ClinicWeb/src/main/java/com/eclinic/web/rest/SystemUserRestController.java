@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -46,10 +47,10 @@ import com.eclinic.domain.view.SystemUserPermissionView;
 import com.eclinic.service.DoctorService;
 import com.eclinic.service.PatientService;
 import com.eclinic.service.ReceptionistService;
+import com.eclinic.service.SessionBean;
 import com.eclinic.service.SystemUserService;
 import com.eclinic.user.mangament.doctor.DoctorCrud;
 import com.eclinic.user.mangament.patient.PatientCrud;
-import com.eclinic.user.mangament.patient.PatientCrudDB;
 import com.eclinic.user.mangament.receptionist.ReceptionistCrud;
 
 /**
@@ -106,6 +107,9 @@ public class SystemUserRestController {
 	private DoctorDAO doctorDao;
 
 	@Autowired
+	private SessionBean sessionBean;
+	
+	@Autowired
 	private ReceptionistDAO receptionistDao;
 
 	public SystemUserRestController() {
@@ -158,6 +162,23 @@ public class SystemUserRestController {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("role", s.getRole());
 		return Response.ok(map).build();
+	}
+	
+	/**
+	 * Return actually SystemUser role
+	 * 
+	 */
+
+	@GET
+	@Path("/role")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLoggedRole() {
+		if(sessionBean.getLoggedSystemUser()==null){
+			return Response.noContent().build();
+		}
+		Map<String,String> m = new TreeMap<String,String>();
+		m.put("role",sessionBean.getLoggedSystemUser().getRole());
+		return Response.ok(m).build();
 	}
 
 	/**

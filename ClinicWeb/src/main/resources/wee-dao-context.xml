@@ -103,6 +103,7 @@
 							<map>
 										<entry key="hibernate.transaction.manager_lookup_class" value="com.atomikos.icatch.jta.hibernate3.TransactionManagerLookup" />
 										<entry key="hibernate.connection.release_mode" value="on_close" />
+										 <entry key="hibernate.format_sql" value="true" />
 							</map>
 						</property>
 				</bean>
