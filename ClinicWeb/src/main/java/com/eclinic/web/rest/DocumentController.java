@@ -31,7 +31,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Component("DocumentController")
-//@RequestMapping("/documents")
 @javax.ws.rs.Path("/documents")
 public class DocumentController {
 	
@@ -57,14 +56,9 @@ public class DocumentController {
  * 
  * */	
 	
-//	@RequestMapping(value="/prescription/{patient_id}")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@ResponseBody
-	
 	@javax.ws.rs.Path("/prescription/{patient_id}")
 	@GET
 	@Produces("application/pdf")
-//	public ResponseEntity<byte[]> findPrescription(@PathParam("patient_id") Integer patientId) {
 	public Response findPrescription(@PathParam("patient_id") Integer patientId) {
 
 		//TODO - remove builder when db stops returning nullable objects. After that create a new prescription using data passed to the controller
@@ -85,8 +79,6 @@ public class DocumentController {
 		String printFile = fillDocument(prescriptionFile, parameters, dataSource);
 		
 		extractToPDF(printFile);
-		
-//		return createResponse("prescription.pdf");
 		
 		return Response.status(200).entity(convertPdfFile("prescription.pdf")).build();
 	}
@@ -124,6 +116,7 @@ public class DocumentController {
 		}
 	}
 	
+//	Use this method when you want to create a ResponseEntity<byte[]>
 	private ResponseEntity<byte[]> createResponse(String filename) {
 		byte[] fileBytes = convertPdfFile(filename);
 		
