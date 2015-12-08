@@ -1,39 +1,25 @@
 package com.eclinic.web.rest;
 
-import java.awt.PageAttributes;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Map;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eclinic.converter.PrescriptionConverter;
 import com.eclinic.dao.PatientDAO;
-import com.eclinic.domain.Address;
-import com.eclinic.domain.Doctor;
-import com.eclinic.domain.Patient;
-import com.eclinic.domain.Specialization;
 import com.eclinic.helper.PrescriptionBuilder;
-import com.eclinic.model.Clinic;
 import com.eclinic.model.Prescription;
 import com.eclinic.model.PrescriptionData;
 import com.eclinic.service.PatientService;
@@ -42,12 +28,11 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-
 @Component("DocumentController")
-@RequestMapping("/documents")
+//@RequestMapping("/documents")
+@javax.ws.rs.Path("/documents")
 public class DocumentController {
 	
 	@Autowired
@@ -72,10 +57,15 @@ public class DocumentController {
  * 
  * */	
 	
-	@RequestMapping(value="/prescription/{patient_id}")
+//	@RequestMapping(value="/prescription/{patient_id}")
 //	@Produces(MediaType.APPLICATION_JSON)
-	@ResponseBody
-	public ResponseEntity<byte[]> findPrescription(@PathParam("patient_id") Integer patientId) {
+//	@ResponseBody
+	
+	@javax.ws.rs.Path("/prescription/{patient_id}")
+	@GET
+	@Produces("application/pdf")
+//	public ResponseEntity<byte[]> findPrescription(@PathParam("patient_id") Integer patientId) {
+	public Response findPrescription(@PathParam("patient_id") Integer patientId) {
 
 		//TODO - remove builder when db stops returning nullable objects. After that create a new prescription using data passed to the controller
 		PrescriptionBuilder builder = new PrescriptionBuilder();
@@ -87,6 +77,7 @@ public class DocumentController {
 		String prescriptionFile = getReportPath("prescription.jasper");
 		
 		Prescription prescription = builder.createPresctiption();
+		
 		PrescriptionData data = converter.convert(prescription);
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data.getRemedy());
 		Map<String, Object> parameters = converter.convertToMap(prescription);
@@ -95,7 +86,9 @@ public class DocumentController {
 		
 		extractToPDF(printFile);
 		
-		return createResponse("prescription.pdf");
+//		return createResponse("prescription.pdf");
+		
+		return Response.status(200).entity(convertPdfFile("prescription.pdf")).build();
 	}
 
 	private void compileReport(String filename) {
@@ -106,7 +99,6 @@ public class DocumentController {
 		} catch (JRException e) {
 			throw new RuntimeException(e);
 		}
-		
 	}
 
 	private String getReportPath(String filename) {
