@@ -112,7 +112,7 @@ public class SevenDaysServiceImpl implements SevenDaysService {
 			visitSchedulerDAO.flush();
 		}
 
-		related_visitschedulers.setSevenDays(sevendays);
+//		related_visitschedulers.setSevenDays(sevendays);
 		sevendays.getVisitScheduler().add(related_visitschedulers);
 		related_visitschedulers = visitSchedulerDAO.store(related_visitschedulers);
 		visitSchedulerDAO.flush();
@@ -159,7 +159,7 @@ public class SevenDaysServiceImpl implements SevenDaysService {
 
 		SevenDays sevendays = sevenDaysDAO.findSevenDaysByPrimaryKey(sevendays_id, -1, -1);
 
-		related_visitschedulers.setSevenDays(null);
+//		related_visitschedulers.setSevenDays(null);
 		sevendays.getVisitScheduler().remove(related_visitschedulers);
 
 		visitSchedulerDAO.remove(related_visitschedulers);

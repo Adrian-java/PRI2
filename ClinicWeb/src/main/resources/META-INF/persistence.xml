@@ -28,7 +28,6 @@
 		<class>com.eclinic.domain.Visit</class>
 		<class>com.eclinic.domain.Admin</class>
 		<class>com.eclinic.domain.SystemUserPermission</class>
-		<class>com.eclinic.domain.SevenDays</class>
 		<class>com.eclinic.domain.DayOfWeek</class>
 		<class>com.eclinic.domain.Documents</class>
 

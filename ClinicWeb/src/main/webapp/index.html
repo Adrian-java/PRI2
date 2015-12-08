@@ -21,16 +21,10 @@
               <img src='assets/img/logo.png'>
             </a>
           </div>
-          <!-- Collection of nav links and other content for toggling -->
           <div class='collapse navbar-collapse' id='navbarCollapse'>
-            <!--
-              <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Przychodnia</a></li>
-              </ul>
-            -->
             <ul class='nav navbar-nav navbar-right'>
               <li>
-                <a ui-sref='add_visit'>Umów się</a>
+                <a ui-sref='visits.new'>Umów się</a>
               </li>
               <li>
                 <a ui-sref='services'>Usługi</a>
@@ -51,7 +45,7 @@
                 <a href='' ng-click='open()' ng-hide='loggedIn'>Zaloguj</a>
               </li>
               <li>
-                <a href='#' ng-click='logout()' ng-show='loggedIn'>Wyloguj</a>
+                <a href='' ng-click='logout()' ng-show='loggedIn'>Wyloguj</a>
               </li>
             </ul>
           </div>
@@ -62,11 +56,15 @@
     <script src='assets/js/bower/bower.js'></script>
     <script src='assets/js/app.module.js'></script>
     <script src='assets/js/app.routes.js'></script>
+    <script src='assets/js/common/services/specialities.js'></script>
+    <script src='assets/js/common/services/user.js'></script>
+    <script src='assets/js/common/services/role.js'></script>
+    <script src='assets/js/common/directives/date_select.js'></script>
+    <script src='assets/js/common/directives/form_validation.js'></script>
     <script src='assets/js/components/home/homeController.js'></script>
-    <script src='assets/js/components/login/loginModalController.js'></script>
-    <script src='assets/js/'></script>
-    <script src='assets/js/'></script>
-    <script src='assets/js/'></script>
-    <script src='assets/js/'></script>
+    <script src='assets/js/components/login/loginController.js'></script>
+    <script src='assets/js/components/main/mainController.js'></script>
+    <script src='assets/js/components/patient/patientController.js'></script>
+    <script src='assets/js/components/register/registerController.js'></script>
   </body>
 </html>

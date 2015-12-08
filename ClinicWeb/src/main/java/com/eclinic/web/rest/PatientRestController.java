@@ -93,8 +93,7 @@ public class PatientRestController {
 	@Path("/{patient_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loadPatient(@PathParam("patient_id") String patient_id) {
-		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id))
-				.build();
+		return Response.ok(patientDAO.findPatientByPrimaryKey(patient_id)).build();
 	}
 
 	/**
@@ -105,20 +104,10 @@ public class PatientRestController {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listPatients() {
-		// ObjectMapper mapper = new ObjectMapper();
-		try {
-			return Response.ok(
-					new ObjectMapper().writeValueAsString(patientService
-							.loadPatients())).build();
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public Response listPatient() throws JsonGenerationException,
+			JsonMappingException, IOException {
+		return Response.ok(
+				new ObjectMapper().writeValueAsString(patientService.loadPatients())).build();
 	}
 
 	/**

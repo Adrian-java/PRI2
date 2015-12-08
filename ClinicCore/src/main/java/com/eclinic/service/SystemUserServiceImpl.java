@@ -295,30 +295,13 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public SystemUser saveSystemUserAdmin(String id, Admin related_admin) {
-		SystemUser systemuser = systemUserDAO.findSystemUserByPrimaryKey(id,
-				-1, -1);
-		Admin existingadmin = adminDAO.findAdminByPrimaryKey(related_admin
-				.getId());
-
-		// copy into the existing record to preserve existing relationships
-		if (existingadmin != null) {
-			existingadmin.setId(related_admin.getId());
-			existingadmin.setIsSuper(related_admin.getIsSuper());
-			related_admin = existingadmin;
-		} else {
-			related_admin = adminDAO.store(related_admin);
-			adminDAO.flush();
-		}
-
-		systemuser.setAdmin(related_admin);
-		systemuser = systemUserDAO.store(systemuser);
+	public String saveSystemUserAdmin(SystemUser systemuser) {
+		systemuser
+		.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+		systemuser.getAdmin().setSystemUser(systemuser);
+		SystemUser su = systemUserDAO.store(systemuser);
 		systemUserDAO.flush();
-
-		related_admin = adminDAO.store(related_admin);
-		adminDAO.flush();
-
-		return systemuser;
+		return su.getId();
 	}
 
 	/**

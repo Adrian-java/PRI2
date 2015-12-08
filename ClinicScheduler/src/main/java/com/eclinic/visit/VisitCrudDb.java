@@ -8,8 +8,8 @@ import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
+import org.hibernate.service.spi.Stoppable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +24,7 @@ import com.eclinic.dao.VisitDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
 import com.eclinic.dao.view.VisitSchedulerViewDAO;
 import com.eclinic.dao.view.VisitViewDAO;
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.SevenDays;
 import com.eclinic.domain.Specialization;
@@ -32,6 +33,7 @@ import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.domain.view.VisitSchedulerView;
 import com.eclinic.domain.view.VisitView;
+import com.eclinic.visit.mapper.NewVisitMapper;
 import com.eclinic.visit.mapper.NewVisitSchedulerMapper;
 import com.eclinic.visit.planner.VisitHelper;
 
@@ -69,8 +71,8 @@ public class VisitCrudDb implements VisitCrud {
 		return visitViewDao.findVisitByDateOfVisit(calendar);
 	}
 
-	public Set<VisitView> findVisitByDoctor(String doctorId) {
-		return visitViewDao.findVisitByDoctor(doctorId, -1, -1);
+	public Set<VisitView> findVisitByDoctor(String doctorId, Date start ,Date stop) {
+		return visitViewDao.findVisitByDoctorAndDate(doctorId, start, stop, -1, -1);
 	}
 
 	public Set<VisitView> findVisitByPatient(String id) {
@@ -105,13 +107,29 @@ public class VisitCrudDb implements VisitCrud {
 		return visitViewDao.findFreeVisitBySpecialization(specialization, 10);
 	}
 
-	public Visit addVisit(String patientId, Integer visitId) {
+	public Visit addVisit(NewVisitMapper newVisitMapper) {
+		/*
 		Visit visitById = visitDao.findVisitById(visitId);
 		Patient patient = patientDao.findPatientById(patientId);
 		visitById.setPatient(patient);
 		visitById.setStatusOfVisit(statusOfVisitDao
 				.findStatusOfVisitByType("niepotwierdzona").iterator().next());
 		Visit merge = visitDao.merge(visitById);
+		*/
+		
+		Visit newVisit = new Visit();
+		
+		newVisit.setDateOfVisit(newVisitMapper.getDate());
+		newVisit.setDescriptionOfVisit(newVisitMapper.getDescription());
+		newVisit.setIsLeave(false);
+		newVisit.setSpecial(false);
+		newVisit.setPatient(patientDao.findPatientById(newVisitMapper.getPatientId()));
+		newVisit.setTypeOfVisit(typeOfVisitDao.findTypeOfVisitByName(newVisitMapper.getTypeOfVisit()).iterator().next());
+		newVisit.setReceptionist(receptionistDao.findReceptionistById(newVisitMapper.getIdReceptionist()));
+		newVisit.setStatusOfVisit(statusOfVisitDao.findStatusOfVisitById(3));
+		newVisit.setDoctor(doctorDao.findDoctorById(newVisitMapper.getIdDoctor()));
+		
+		Visit merge = visitDao.merge(newVisit);
 		// wysylka maila
 		visitDao.flush();
 		return merge;
@@ -153,7 +171,7 @@ public class VisitCrudDb implements VisitCrud {
 		vs.setTimeTo(vsm.getTimeTo());
 		SevenDays convertDaysToSevenDays = visitHelper
 				.convertDaysToSevenDays(vsm.getDaysOfWeek());
-		vs.setSevenDays(sevenDaysDao.merge(convertDaysToSevenDays));
+		// vs.setSevenDays(sevenDaysDao.merge(convertDaysToSevenDays));
 		return visitSchedulerDao.merge(vs);
 	}
 
@@ -237,5 +255,28 @@ public class VisitCrudDb implements VisitCrud {
 			}
 		}
 		return visit;
+	}
+
+	public Set<VisitView> findVisitBySpecializationAndDate(
+			String specialization, Date startDate, Date endDate) {
+		return visitViewDao.findVisitBySpecializationAndDate(specialization,
+				startDate, endDate);
+	}
+
+	public Set<VisitScheduler> findVisitSchedulerBySpecialization(
+			String specialization) {
+		return visitSchedulerDao
+				.findVisitSchedulerBySpecialization(specialization);
+	}
+
+	public Set<VisitScheduler> findVisitSchedulerByDoctor(String doctorId) {
+		Doctor d = doctorDao.findDoctorById(doctorId);
+		return visitSchedulerDao.findVisitSchedulerByDoctor(d);
+	}
+
+	public Set<VisitView> findVisitByDoctorAndSpecialization(String doctor,
+			String specialization, Date startDate, Date endDate) {
+		return visitViewDao.findVisitByDoctorSpecializationAndDate(doctor,specialization,
+				startDate, endDate);
 	}
 }

@@ -1,33 +1,57 @@
 .container
-  %form
-    .row
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.firstName', :'placeholder' => 'Imię'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.lastName', :'placeholder' => 'Nazwisko'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.pin', :'placeholder' => 'Pesel'}
-      .col-xs-12
-        %input{:type => 'password', 'ng-model' => 'user.password', :'placeholder' => 'Hasło'}
-      .col-xs-12
-        %input{:type => 'password', 'ng-model' => 'user.passwordConfirm', :'placeholder' => 'Powtórz hasło'}
-      .col-xs-12
-        %date-select
-        -# <input rsmdatedropdowns ng-model="model" ng-disabled="test()">
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.city', :'placeholder' => 'Miasto'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.countyCode', :'placeholder' => 'Kod pocztowy'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.homeNumber', :'placeholder' => 'Numer domu/mieszkania'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.province', :'placeholder' => 'Województwo'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.country', :'placeholder' => 'Państwo'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.phone', :'placeholder' => 'Telefon'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.email', :'placeholder' => 'E-mail'}
-      .col-xs-12
-        %input{:type => 'text', 'ng-model' => 'user.passwordConfirm', :'placeholder' => 'Powtórz hasło'}
-      %button{:'type' => 'submit'}
+  %form.form-horizontal{:role => "form", :'ng-submit' => 'submit()', :'form-validation' => ''}
+    .form-group
+      %label.control-label.col-sm-2{:for => "first-name"} Imię:
+      .col-sm-10
+        %input#first-name.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'user.firstName'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "last-name"} Nazwisko:
+      .col-sm-10
+        %input#last-name.form-control{:placeholder => "Wpisz nazwisko", :type => "text", :'ng-model' => 'user.lastName'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "pin"} Pesel:
+      .col-sm-10
+        %input#pin.form-control{:placeholder => "Wpisz pesel", :type => "number", :'ng-model' => 'user.pin'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "password"} Hasło:
+      .col-sm-10
+        %input#password.form-control{:placeholder => "Podaj hasło", :type => "password", :'ng-model' => 'user.password'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "password-confirmation"} Potwierdzenie hasła:
+      .col-sm-10
+        %input#password-confirmation.form-control{:placeholder => "Podaj hasło", :type => "password"}
+    .form-group
+      %label.control-label.col-sm-2{:for => "birth-date"} Data narodzin:
+      .col-sm-10
+        .date-select{:'ng-model' => 'user.birthDate'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "city"} Miasto:
+      .col-sm-10
+        %input#city.form-control{:placeholder => "Wpisz miasto", :type => "text", :'ng-model' => 'user.city'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "county-code"} Kod pocztowy:
+      .col-sm-10
+        %input#county-code.form-control{:placeholder => "Wpisz kod pocztowy", :type => "text", :'ng-model' => 'user.contyCode'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "house-number"} Numer domu/mieszkania:
+      .col-sm-10
+        %input#county-code.form-control{:placeholder => "Wpisz numer domu/mieszkania", :type => "text", :'ng-model' => 'user.houseNumber'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "province"} Województwo:
+      .col-sm-10
+        %input#province.form-control{:placeholder => "Wpisz województwo", :type => "text", :'ng-model' => 'user.province'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "country"} Państwo:
+      .col-sm-10
+        %input#country.form-control{:placeholder => "Wpisz nazwę państwa", :type => "text", :'ng-model' => 'user.country'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "phone"} Telefon:
+      .col-sm-10
+        %input#phone.form-control{:placeholder => "Wpisz numer kontaktowy", :type => "text", :'ng-model' => 'user.phone'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "email"} Email:
+      .col-sm-10
+        %input#email.form-control{:placeholder => "Wpisz adres email", :type => "email", :'ng-model' => 'user.email'}
+    .form-group
+      .col-sm-offset-2.col-sm-10
+        %button.btn.btn-default{:type => "submit"} Submit

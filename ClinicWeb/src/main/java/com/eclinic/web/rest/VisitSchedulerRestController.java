@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
-import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.VisitSchedulerDAO;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.service.VisitSchedulerService;
@@ -158,4 +157,23 @@ public class VisitSchedulerRestController {
 		return Response.ok(addVisitScheduler).build();
 	}
 
+	@GET
+	@Path("/specialization/{specialization}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findVisitSchedulerBySpecialization(
+			@PathParam("specialization") String specialization) {
+		return Response.ok(
+				visitCrud.findVisitSchedulerBySpecialization(specialization))
+				.build();
+	}
+	
+	@GET
+	@Path("/doctor/{doctor}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findVisitSchedulerByDoctor(
+			@PathParam("doctor") String doctor) {
+		return Response.ok(
+				visitCrud.findVisitSchedulerByDoctor(doctor))
+				.build();
+	}
 }

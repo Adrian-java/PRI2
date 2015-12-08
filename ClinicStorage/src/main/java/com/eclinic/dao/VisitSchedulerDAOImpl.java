@@ -223,4 +223,10 @@ public class VisitSchedulerDAOImpl extends AbstractJpaDao<VisitScheduler>
 	    Query query = createNamedQuery("findVisitSchedulerByDoctor", -1, -1, d);
 		return new LinkedHashSet<VisitScheduler>(query.getResultList());
 	}
+
+	public Set<VisitScheduler> findVisitSchedulerByDoctor(String d)
+			throws DataAccessException {
+		 Query query = createQuery("select v from VisitScheduler", -1, -1, d);
+			return new LinkedHashSet<VisitScheduler>(query.getResultList());
+	}
 }

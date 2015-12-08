@@ -141,166 +141,166 @@ public class VisitsOfScheduler {
 			
 			
 		}
-			for(VisitScheduler v:visitSchedulers){
-				Set<Time> hours = startVisits(v);
-				SevenDays dayOfWeek = v.getSevenDays();
-				typeOfVisit.setDuration(v.getDuration());
-				
-				if(dayOfWeek.getMon()){
-					for(Time h:hours){
-						takenDate = new Date (h.getTime());
-						for(Date m:mon){	
-						m.setHours(takenDate.getHours());
-						m.setMinutes(takenDate.getMinutes());
-						
-						calendar.setTime(m); 
-					
-						Visit visit = new Visit();
-						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar.getTime());
-						visit.setIsLeave(false);
-						visit.setSpecial(false);
-						visit.setStatusOfVisit(statusOfVisit);
-						visit.setTypeOfVisit(typeOfVisit);
-						visitDao.store(visit);
-
-						}
-					}
-				}
-				if(dayOfWeek.getTue()){
-					for(Time h:hours){
-						takenDate = new Date (h.getTime());
-						for(Date t:tue){	
-						t.setHours(takenDate.getHours());
-						t.setMinutes(takenDate.getMinutes());
-						
-						calendar.setTime(t); 
-					
-						Visit visit = new Visit();
-						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar.getTime());
-						visit.setIsLeave(false);
-						visit.setSpecial(false);
-						visit.setStatusOfVisit(statusOfVisit);
-						visit.setTypeOfVisit(typeOfVisit);
-						visitDao.store(visit);
-
-						}
-				}
-					
-				}
-				if(dayOfWeek.getWen()){
-					
-					for(Time h:hours){
-						takenDate = new Date (h.getTime());
-						for(Date w:wed){	
-						w.setHours(takenDate.getHours());
-						w.setMinutes(takenDate.getMinutes());
-						
-						calendar.setTime(w); 
-					
-						Visit visit = new Visit();
-						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar.getTime());
-						visit.setIsLeave(false);
-						visit.setSpecial(false);
-						visit.setStatusOfVisit(statusOfVisit);
-						visit.setTypeOfVisit(typeOfVisit);
-						visitDao.store(visit);
-
-						}
-					}
-					
-				}
-				if(dayOfWeek.getThu()){
-					for(Time h:hours){
-						takenDate = new Date (h.getTime());
-						for(Date t:thr){	
-						t.setHours(takenDate.getHours());
-						t.setMinutes(takenDate.getMinutes());
-						
-						calendar.setTime(t); 
-					
-						Visit visit = new Visit();
-						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar.getTime());
-						visit.setIsLeave(false);
-						visit.setSpecial(false);
-						visit.setStatusOfVisit(statusOfVisit);
-						visit.setTypeOfVisit(typeOfVisit);
-						visitDao.store(visit);
-
-						}
-					}
-					
-				}
-				if(dayOfWeek.getFri()){
-					for(Time h:hours){
-						takenDate = new Date (h.getTime());
-						for(Date f:fri){	
-						f.setHours(takenDate.getHours());
-						f.setMinutes(takenDate.getMinutes());
-						
-						calendar.setTime(f); 
-					
-						Visit visit = new Visit();
-						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar.getTime());
-						visit.setIsLeave(false);
-						visit.setSpecial(false);
-						visit.setStatusOfVisit(statusOfVisit);
-						visit.setTypeOfVisit(typeOfVisit);
-						visitDao.store(visit);
-
-						}
-					}
-					
-				}
-				if(dayOfWeek.getSat()){
-					for(Time h:hours){
-						takenDate = new Date (h.getTime());
-						for(Date s:sat){	
-						s.setHours(takenDate.getHours());
-						s.setMinutes(takenDate.getMinutes());
-						
-						calendar.setTime(s); 
-					
-						Visit visit = new Visit();
-						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar.getTime());
-						visit.setIsLeave(false);
-						visit.setSpecial(false);
-						visit.setStatusOfVisit(statusOfVisit);
-						visit.setTypeOfVisit(typeOfVisit);
-						visitDao.store(visit);
-
-						}
-					}
-					
-				}
-				if(dayOfWeek.getSun()){
-					for(Time h:hours){
-						takenDate = new Date (h.getTime());
-						for(Date s:sun){	
-						s.setHours(takenDate.getHours());
-						s.setMinutes(takenDate.getMinutes());
-						
-						calendar.setTime(s); 
-					
-						Visit visit = new Visit();
-						visit.setDoctor(v.getDoctor());
-						visit.setDateOfVisit(calendar.getTime());
-						visit.setIsLeave(false);
-						visit.setSpecial(false);
-						visit.setStatusOfVisit(statusOfVisit);
-						visit.setTypeOfVisit(typeOfVisit);
-						visitDao.store(visit);
-
-						}
-					}
-					
-				}
-			}
+//			for(VisitScheduler v:visitSchedulers){
+//				Set<Time> hours = startVisits(v);
+////				SevenDays dayOfWeek = v.getSevenDays();
+//				typeOfVisit.setDuration(v.getDuration());
+//				
+//				if(dayOfWeek.getMon()){
+//					for(Time h:hours){
+//						takenDate = new Date (h.getTime());
+//						for(Date m:mon){	
+//						m.setHours(takenDate.getHours());
+//						m.setMinutes(takenDate.getMinutes());
+//						
+//						calendar.setTime(m); 
+//					
+//						Visit visit = new Visit();
+//						visit.setDoctor(v.getDoctor());
+//						visit.setDateOfVisit(calendar.getTime());
+//						visit.setIsLeave(false);
+//						visit.setSpecial(false);
+//						visit.setStatusOfVisit(statusOfVisit);
+//						visit.setTypeOfVisit(typeOfVisit);
+//						visitDao.store(visit);
+//
+//						}
+//					}
+//				}
+//				if(dayOfWeek.getTue()){
+//					for(Time h:hours){
+//						takenDate = new Date (h.getTime());
+//						for(Date t:tue){	
+//						t.setHours(takenDate.getHours());
+//						t.setMinutes(takenDate.getMinutes());
+//						
+//						calendar.setTime(t); 
+//					
+//						Visit visit = new Visit();
+//						visit.setDoctor(v.getDoctor());
+//						visit.setDateOfVisit(calendar.getTime());
+//						visit.setIsLeave(false);
+//						visit.setSpecial(false);
+//						visit.setStatusOfVisit(statusOfVisit);
+//						visit.setTypeOfVisit(typeOfVisit);
+//						visitDao.store(visit);
+//
+//						}
+//				}
+//					
+//				}
+//				if(dayOfWeek.getWen()){
+//					
+//					for(Time h:hours){
+//						takenDate = new Date (h.getTime());
+//						for(Date w:wed){	
+//						w.setHours(takenDate.getHours());
+//						w.setMinutes(takenDate.getMinutes());
+//						
+//						calendar.setTime(w); 
+//					
+//						Visit visit = new Visit();
+//						visit.setDoctor(v.getDoctor());
+//						visit.setDateOfVisit(calendar.getTime());
+//						visit.setIsLeave(false);
+//						visit.setSpecial(false);
+//						visit.setStatusOfVisit(statusOfVisit);
+//						visit.setTypeOfVisit(typeOfVisit);
+//						visitDao.store(visit);
+//
+//						}
+//					}
+//					
+//				}
+//				if(dayOfWeek.getThu()){
+//					for(Time h:hours){
+//						takenDate = new Date (h.getTime());
+//						for(Date t:thr){	
+//						t.setHours(takenDate.getHours());
+//						t.setMinutes(takenDate.getMinutes());
+//						
+//						calendar.setTime(t); 
+//					
+//						Visit visit = new Visit();
+//						visit.setDoctor(v.getDoctor());
+//						visit.setDateOfVisit(calendar.getTime());
+//						visit.setIsLeave(false);
+//						visit.setSpecial(false);
+//						visit.setStatusOfVisit(statusOfVisit);
+//						visit.setTypeOfVisit(typeOfVisit);
+//						visitDao.store(visit);
+//
+//						}
+//					}
+//					
+//				}
+//				if(dayOfWeek.getFri()){
+//					for(Time h:hours){
+//						takenDate = new Date (h.getTime());
+//						for(Date f:fri){	
+//						f.setHours(takenDate.getHours());
+//						f.setMinutes(takenDate.getMinutes());
+//						
+//						calendar.setTime(f); 
+//					
+//						Visit visit = new Visit();
+//						visit.setDoctor(v.getDoctor());
+//						visit.setDateOfVisit(calendar.getTime());
+//						visit.setIsLeave(false);
+//						visit.setSpecial(false);
+//						visit.setStatusOfVisit(statusOfVisit);
+//						visit.setTypeOfVisit(typeOfVisit);
+//						visitDao.store(visit);
+//
+//						}
+//					}
+//					
+//				}
+//				if(dayOfWeek.getSat()){
+//					for(Time h:hours){
+//						takenDate = new Date (h.getTime());
+//						for(Date s:sat){	
+//						s.setHours(takenDate.getHours());
+//						s.setMinutes(takenDate.getMinutes());
+//						
+//						calendar.setTime(s); 
+//					
+//						Visit visit = new Visit();
+//						visit.setDoctor(v.getDoctor());
+//						visit.setDateOfVisit(calendar.getTime());
+//						visit.setIsLeave(false);
+//						visit.setSpecial(false);
+//						visit.setStatusOfVisit(statusOfVisit);
+//						visit.setTypeOfVisit(typeOfVisit);
+//						visitDao.store(visit);
+//
+//						}
+//					}
+//					
+//				}
+//				if(dayOfWeek.getSun()){
+//					for(Time h:hours){
+//						takenDate = new Date (h.getTime());
+//						for(Date s:sun){	
+//						s.setHours(takenDate.getHours());
+//						s.setMinutes(takenDate.getMinutes());
+//						
+//						calendar.setTime(s); 
+//					
+//						Visit visit = new Visit();
+//						visit.setDoctor(v.getDoctor());
+//						visit.setDateOfVisit(calendar.getTime());
+//						visit.setIsLeave(false);
+//						visit.setSpecial(false);
+//						visit.setStatusOfVisit(statusOfVisit);
+//						visit.setTypeOfVisit(typeOfVisit);
+//						visitDao.store(visit);
+//
+//						}
+//					}
+//					
+//				}
+//			}
 			
 		}
 

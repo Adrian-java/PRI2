@@ -4,6 +4,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -90,12 +91,22 @@ public class VisitScheduler implements Serializable {
 	private
 	Time timeTo;
 	
+
+	@Column(name = "start_date")
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	private
+	Date startDate;
+	
 	@Column(name = "duration")
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	private
 	Integer duration;
 
+	@Column(name = "visit_repeat")
+	@Basic(fetch = FetchType.EAGER)
+	private Integer visitRepeat;
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -109,11 +120,6 @@ public class VisitScheduler implements Serializable {
 	@XmlTransient
 	Doctor doctor;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumns({ @JoinColumn(name = "id_seven_days", referencedColumnName = "Id", nullable = false) })
-	@XmlTransient
-	SevenDays sevenDays;
-
 	/**
 	 */
 	public void setId(Integer id) {
@@ -246,13 +252,6 @@ public class VisitScheduler implements Serializable {
 		return true;
 	}
 
-	public SevenDays getSevenDays() {
-		return sevenDays;
-	}
-
-	public void setSevenDays(SevenDays sevenDays) {
-		this.sevenDays = sevenDays;
-	}
 
 	public Time getTimeFrom() {
 		return timeFrom;
@@ -275,5 +274,21 @@ public class VisitScheduler implements Serializable {
 	}
 	public void setDuration(Integer duration) {
 		this.duration = duration;
+	}
+
+	public Integer getVisitRepeat() {
+		return visitRepeat;
+	}
+
+	public void setVisitRepeat(Integer visitRepeat) {
+		this.visitRepeat = visitRepeat;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 }

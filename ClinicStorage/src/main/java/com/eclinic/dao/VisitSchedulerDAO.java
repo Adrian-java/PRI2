@@ -101,5 +101,8 @@ public interface VisitSchedulerDAO extends JpaDao<VisitScheduler> {
     
     public Set<VisitScheduler> findVisitSchedulerByDoctor(Doctor d)
 	    throws DataAccessException;
+    
+    public Set<VisitScheduler> findVisitSchedulerByDoctor(String d)
+    	    throws DataAccessException;
 
 }

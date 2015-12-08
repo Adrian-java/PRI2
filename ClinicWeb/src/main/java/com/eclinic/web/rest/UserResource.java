@@ -1,5 +1,6 @@
 package com.eclinic.web.rest;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -33,6 +34,8 @@ public class UserResource {
 	@Path("/token")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Consumes({"application/x-www-form-urlencoded"})
 	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password)
 	{
 		UsernamePasswordAuthenticationToken authenticationToken =
