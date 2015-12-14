@@ -1,5 +1,6 @@
 package com.eclinic.converter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,20 +11,22 @@ import com.eclinic.domain.Address;
 import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.Specialization;
+import com.eclinic.model.Certificate;
 import com.eclinic.model.Clinic;
 import com.eclinic.model.Prescription;
 import com.eclinic.model.PrescriptionData;
+import com.eclinic.model.Referral;
 import com.eclinic.model.Remedy;
 
-public class PrescriptionConverter {
+public class DocumentConverter {
 
-	public PrescriptionData convert(Prescription prescription) {
+//	TODO - refactor, delete comments
+	public PrescriptionData getDataFrom(Prescription prescription) {
 		PrescriptionData data = new PrescriptionData();
 		
 		Patient patient = prescription.getPatient();
 		Clinic clinic = prescription.getClinic();
 		Doctor doctor = prescription.getDoctor();
-		
 		
 		data.setNumber(prescription.getNumber());
 		
@@ -52,8 +55,46 @@ public class PrescriptionConverter {
 		return data;
 	}
 	
-	public Map<String, Object> convertToMap(Prescription prescription) {
+	
+	public Map<String, Object> convertToCertificate(Certificate certificate) {		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+	
+		Clinic clinic = certificate.getClinic();
+		Patient patient = certificate.getPatient();
 		
+		SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
+		
+		map.put("City", clinic.getCity());
+		map.put("Date", date.format(certificate.getDate()));
+		map.put("BirthDate", "29.11.1990");
+		map.put("Name", getPatientName(patient));
+		map.put("IdNumber", patient.getId());
+		map.put("Address", getPatientAddress(patient));
+		map.put("Recognition", certificate.getRecognition());
+		map.put("Purpose", certificate.getPurpose());
+		
+		return map;
+	}
+	
+	public Map<String, Object> convertToReferral(Referral referral) {		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		Clinic clinic = referral.getClinic();
+		Patient patient = referral.getPatient();
+		
+		map.put("City", clinic.getCity());
+		map.put("Name", getPatientName(patient));
+		map.put("Pesel", "9102012351");
+		map.put("Purpose", referral.getPurpose());
+		map.put("Destination", referral.getDestination());
+		map.put("Recognition", referral.getRecognition());
+		map.put("Date", referral.getDate().toString());
+		
+		return map;
+	}
+	
+	
+	public Map<String, Object> convertToPrescription(Prescription prescription) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		Patient patient = prescription.getPatient();
@@ -76,8 +117,6 @@ public class PrescriptionConverter {
 		
 		setRemedies(prescription, map);
 		
-//		TODO - add filling report with collection of Remedies
-
 		map.put("IssuedDate", prescription.getIssuedDate().toString());
 		map.put("ExecutionDate", prescription.getExecutionDate().toString());
 		map.put("DoctorName", getDoctorName(doctor));
@@ -122,7 +161,7 @@ public class PrescriptionConverter {
 //	TODO - add street do Address model
 	private String getPatientAddress(Patient patient) {
 		Address adr = patient.getAddress();
-		return String.format("ul. Brak ulicy! %s %s %s", adr.getHomeNr(), adr.getCountryCodeCity(), adr.getCity());	
+		return String.format("ul. %s %s %s %s", adr.getStreet(), adr.getHomeNr(), adr.getCountryCodeCity(), adr.getCity());	
 	}
 	
 	

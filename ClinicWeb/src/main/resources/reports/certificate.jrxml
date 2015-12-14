@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
+<!-- 2015-12-10T16:13:42 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificate" pageWidth="421" pageHeight="297" orientation="Landscape" columnWidth="401" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="db1a975b-d167-4776-9eef-346ae325dd1c">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="City" class="java.lang.String"/>
+	<parameter name="Date" class="java.lang.String"/>
+	<parameter name="BirthDate" class="java.lang.String"/>
+	<parameter name="Name" class="java.lang.String"/>
+	<parameter name="IdNumber" class="java.lang.String"/>
+	<parameter name="Address" class="java.lang.String"/>
+	<parameter name="Recognition" class="java.lang.String"/>
+	<parameter name="Purpose" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="93" splitType="Stretch">
+			<staticText>
+				<reportElement x="99" y="30" width="200" height="20" uuid="dcdc9af3-4399-4db2-bf33-16bf901eacc5"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[ZASWIADCZENIE LEKARSKIE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="60" width="77" height="20" uuid="7f136f57-39cd-4c81-aa81-d239eb8543ff"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Nazwisko i imie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="10" width="20" height="10" uuid="ba21eee9-6280-45d3-9a11-875f12a1da45"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[dnia]]></text>
+			</staticText>
+			<line>
+				<reportElement x="93" y="68" width="296" height="1" uuid="7f697565-6cae-45e7-84fd-83a7ab408384">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="275" y="10" width="41" height="10" uuid="b720a60b-069e-4f0e-86e5-51f5cb41fc8f"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{City}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="342" y="10" width="49" height="10" uuid="b7d245a9-5109-49aa-8687-2259d8c42297"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="58" width="291" height="19" uuid="074e3b8d-214f-4423-9f9a-9c30a0f6bcbe"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="180" splitType="Stretch">
+			<staticText>
+				<reportElement x="22" y="-7" width="57" height="15" uuid="a802386f-1b9f-4cde-b6e2-e1abe1a31d71"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Data urodz.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="142" y="-7" width="160" height="20" uuid="8132483f-a5e1-4571-87d4-6d409a2989b8"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Nazwa i nr dowodu tozszamosci]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="14" width="77" height="20" uuid="bea4edfa-a231-40da-9483-868cbff9a0a8"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[zamieszkaly(a)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="38" width="67" height="20" uuid="2b249f84-424d-436e-a4b9-75d4655e5402"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Rozpoznanie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="96" width="127" height="14" uuid="3974fbbc-48c7-4232-ad06-b2f6b49e6607"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Cel wydania zaswiadczenia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="160" width="120" height="20" uuid="ab683a0e-8ec1-41a1-a6a8-d35524b0d2bb"/>
+				<text><![CDATA[pieczatka i podpis lekarza]]></text>
+			</staticText>
+			<line>
+				<reportElement x="79" y="1" width="60" height="1" uuid="11dcfdea-d650-40d0-abf6-9fa2f5ae3729">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="290" y="1" width="100" height="1" uuid="244871aa-7162-4b72-b232-f1c304f1d8b2">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="91" y="24" width="300" height="1" uuid="0d01d4bc-f389-4162-98e7-ef222729b833">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="83" y="46" width="307" height="1" uuid="151b25b7-01c3-465d-a4ce-3aa82706816c">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="23" y="65" width="367" height="1" uuid="6edb9861-f436-4562-af24-cf9e4d69c491"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="23" y="84" width="367" height="1" uuid="0b31c8c2-82a4-45c7-895a-90b8a10fdf7c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="23" y="130" width="367" height="1" uuid="f3439638-696b-4126-a763-8d3e850c2e4c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="149" y="104" width="241" height="1" uuid="c7fa3d53-c251-4999-b5fe-c6891eaf6908"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="79" y="-9" width="60" height="19" uuid="b0eefec1-331d-46b5-9136-cbfef5426688"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BirthDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="-9" width="101" height="19" uuid="568d3e2d-a62b-4c78-a1ac-b7ff3f35a9ba"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{IdNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="91" y="13" width="298" height="19" uuid="406a744d-d3f9-416e-a734-5400f58c1425"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="36" width="306" height="48" uuid="3d266cb8-42cc-4424-baf8-5264dc773f4c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Recognition}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="94" width="239" height="36" uuid="df722caa-bf20-41e3-b673-f30d7e2d7589"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Purpose}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
