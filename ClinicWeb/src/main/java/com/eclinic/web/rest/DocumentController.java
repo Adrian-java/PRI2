@@ -20,14 +20,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.eclinic.converter.DocumentConverter;
-import com.eclinic.dao.PatientDAO;
 import com.eclinic.domain.Patient;
+import com.eclinic.domain.view.PatientView;
 import com.eclinic.helper.DocumentBuilder;
+import com.eclinic.helper.EntityConverter;
 import com.eclinic.model.Certificate;
 import com.eclinic.model.Prescription;
 import com.eclinic.model.PrescriptionData;
 import com.eclinic.model.Referral;
-import com.eclinic.service.PatientService;
+import com.eclinic.user.mangament.patient.PatientCrudDB;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -40,11 +41,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class DocumentController {
 	
 	@Autowired
-	private PatientDAO patientDao;
+	private PatientCrudDB patientCrudDB;
 	
-	private PatientService patientService;
-	
-	private DocumentConverter converter = new DocumentConverter();;
+	@Autowired
+	private DocumentConverter converter;
+//	= new DocumentConverter();;
 	
 	private DocumentBuilder builder = new DocumentBuilder();
 	
@@ -70,10 +71,14 @@ public class DocumentController {
 	@Produces("application/pdf")
 	public Response findPrescription(@PathParam("patientId") Integer patientId) {
 
-//		Patient patient = patientService.findPatientByPrimaryKey(patientId.toString());
+		PatientView view = patientCrudDB.getPatientById(patientId.toString());
+		
+		EntityConverter entityConverter = new EntityConverter();
+		Patient patient = entityConverter.convertToPatient(view);
 		
 		String prescriptionFile = getReportPath("prescription.jasper");
 		Prescription prescription = builder.createPresctiption();
+		prescription.setPatient(patient);
 		
 		PrescriptionData data = converter.getDataFrom(prescription);
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data.getRemedy());
