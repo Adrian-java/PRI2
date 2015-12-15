@@ -43,9 +43,7 @@ public class DocumentController {
 	@Autowired
 	private PatientCrudDB patientCrudDB;
 	
-	@Autowired
-	private DocumentConverter converter;
-//	= new DocumentConverter();;
+	private DocumentConverter converter = new DocumentConverter();;
 	
 	private DocumentBuilder builder = new DocumentBuilder();
 	
