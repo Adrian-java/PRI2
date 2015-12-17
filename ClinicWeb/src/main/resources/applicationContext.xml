@@ -25,7 +25,7 @@
 	</security:authentication-manager>
 
 	<security:http realm="Protected API" use-expressions="true"
-		auto-config="false" create-session="stateless" entry-point-ref="unauthorizedEntryPoint"
+		auto-config="false" create-session="always" entry-point-ref="unauthorizedEntryPoint"
 		authentication-manager-ref="authenticationManager">
 		<security:custom-filter ref="authenticationTokenProcessingFilter"
 			position="FORM_LOGIN_FILTER" />
@@ -50,6 +50,8 @@
 		<security:intercept-url pattern="/rest/Specialization/list"
 			access="permitAll" />
 
+		<security:intercept-url pattern="/rest/Visit/new"
+			access="permitAll" />
 
 		<!-- listowanie lekarzy(wszyscy) -->
 		<security:intercept-url pattern="/rest/SystemUser/doctors/all"

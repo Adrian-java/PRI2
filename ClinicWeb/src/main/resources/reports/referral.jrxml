@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
+<!-- 2015-12-12T19:46:45 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="referral" pageWidth="421" pageHeight="297" orientation="Landscape" columnWidth="401" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="1fe273fb-c812-435e-b743-520cbf8e3d6a">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="Name" class="java.lang.String"/>
+	<parameter name="Pesel" class="java.lang.String"/>
+	<parameter name="Purpose" class="java.lang.String"/>
+	<parameter name="Recognition" class="java.lang.String"/>
+	<parameter name="Date" class="java.lang.String"/>
+	<parameter name="City" class="java.lang.String"/>
+	<parameter name="Destination" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="235" splitType="Stretch">
+			<staticText>
+				<reportElement x="193" y="4" width="147" height="30" uuid="1e35abe9-4a72-4671-bb7b-02123ec18ae9"/>
+				<textElement>
+					<font fontName="Arial" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Skierowanie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="25" width="90" height="10" uuid="a5f17449-5fee-4cfe-a4b4-01b6aacd93ca"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[(miejsce na pieczatke)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="66" width="105" height="20" uuid="7be73a0c-79c5-477b-81e1-97d4648a183e"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Kieruje sie Pana/ia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="95" width="45" height="20" uuid="67c7780d-7dc1-4e11-920f-ce0f5b95a600"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[PESEL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="152" width="41" height="20" uuid="f5e26e65-5ecf-4126-ad97-675b8c8899eb"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[celem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="179" width="75" height="20" uuid="afc48427-3f49-4dfe-9570-d8e7af5c36da"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Rozpoznanie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="225" width="52" height="10" uuid="c234b4e5-0f9c-4dab-8d2a-582bf8a09e99"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[podpis lekarza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="216" width="18" height="10" uuid="a71626e3-408b-440e-a9f9-e1f118d34a0d"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[dnia]]></text>
+			</staticText>
+			<line>
+				<reportElement x="125" y="77" width="255" height="1" uuid="434b2e02-0ddd-489a-b853-9e70b9b28bdf"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="65" y="106" width="316" height="1" uuid="cf803b04-b6b3-42d6-bae2-db5d26a117d1">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="57" y="164" width="324" height="1" uuid="39e72c4e-2649-4f71-b5e4-e7776d178d6c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="95" y="191" width="285" height="1" uuid="7dcfe89b-63d7-4a97-8b1d-3efb43e17ebf">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="250" y="223" width="70" height="1" uuid="43f61b34-ef9a-4069-bd9d-8c37b36d743a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="125" y="65" width="255" height="14" uuid="6b9ff414-9c07-48b9-9bf4-5394dbd3dab4"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="65" y="94" width="316" height="16" uuid="043d88ea-b96e-4d1b-8921-eef0cebb6096"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Pesel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="59" y="153" width="316" height="20" uuid="2814e45f-c0d1-4fc9-9cd4-613a229141a7"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Purpose}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="96" y="179" width="285" height="14" uuid="c81b5739-e695-4047-ac33-7eee08bbc72b"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Recognition}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="216" width="59" height="11" uuid="5ae8546b-1326-4530-b61f-d8d58e6430f9"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{City}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="216" width="59" height="11" uuid="e23099bf-5a55-425d-bf07-418d50cf3e03"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="123" width="17" height="20" uuid="904a87f9-f760-4944-945b-473a6886fb42"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[do]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="40" y="123" width="340" height="20" uuid="4490792b-fe7e-471f-9d4f-a1c94fa2dbf2"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Destination}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="37" y="135" width="344" height="1" uuid="26ad719b-b111-4391-acd3-ea51d6ebedaa"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+</jasperReport>

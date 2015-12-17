@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -113,11 +114,20 @@ public class DoctorCrudDB implements DoctorCrud {
 		return null;
 	}
 
-	public Response deletePatient(String d) {
-		SystemUser su = systemUserDAO.findSystemUserById(d);
-		su.setIsActive(false);
-		systemUserService.saveSystemUser(su);
-		return null;
+	public Response deleteDoctor(String pesel) {
+		SystemUser su = systemUserDAO.findSystemUserById(pesel);
+		Map<String, String> map = new TreeMap<String, String>();
+		if (su.getRole().equalsIgnoreCase("doctor")) {
+			su.setIsActive(false);
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			su.setUnregisterDate(c);
+			systemUserService.saveSystemUser(su);
+			map.put("status", "usunieto");
+			return Response.ok(map).build();
+		} else {
+			return Response.status(Status.NO_CONTENT).build();
+		}
 	}
 
 	public Set<DoctorView> getAllDoctors() {

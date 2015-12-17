@@ -1,6 +1,5 @@
 package com.eclinic.model;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import com.eclinic.domain.Doctor;

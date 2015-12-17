@@ -12,13 +12,19 @@ import com.eclinic.domain.SystemUser;
 @Service("userService")
 public class UserService implements UserDetailsService {
 	
+	
 	@Autowired
 	private SystemUserDAO systemUserDao;
+	
+	@Autowired
+	private SessionBean sessionBean;
 
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 
 		SystemUser su = systemUserDao.findSystemUserById(username);
+		sessionBean.setSystemUser(su);
 		return su;
 	}
+
 }

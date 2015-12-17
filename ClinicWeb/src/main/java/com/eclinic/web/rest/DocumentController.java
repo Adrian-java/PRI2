@@ -1,53 +1,51 @@
 package com.eclinic.web.rest;
 
-import java.awt.PageAttributes;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.HashSet;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.eclinic.converter.PrescriptionConverter;
-import com.eclinic.dao.PatientDAO;
-import com.eclinic.domain.Address;
-import com.eclinic.domain.Doctor;
+import com.eclinic.converter.DocumentConverter;
 import com.eclinic.domain.Patient;
-import com.eclinic.domain.Specialization;
-import com.eclinic.helper.PrescriptionBuilder;
-import com.eclinic.model.Clinic;
+import com.eclinic.domain.view.PatientView;
+import com.eclinic.helper.DocumentBuilder;
+import com.eclinic.helper.EntityConverter;
+import com.eclinic.model.Certificate;
 import com.eclinic.model.Prescription;
 import com.eclinic.model.PrescriptionData;
-import com.eclinic.service.PatientService;
+import com.eclinic.model.Referral;
+import com.eclinic.user.mangament.patient.PatientCrudDB;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-
 @Component("DocumentController")
-@RequestMapping("/documents")
+@javax.ws.rs.Path("/documents")
 public class DocumentController {
 	
 	@Autowired
-	private PatientDAO patientDao;
+	private PatientCrudDB patientCrudDB;
 	
-	private PatientService patientService;
+	private DocumentConverter converter = new DocumentConverter();;
+	
+	private DocumentBuilder builder = new DocumentBuilder();
 	
 	public DocumentController() {
 		compileReport("prescription.jrxml");
@@ -66,32 +64,66 @@ public class DocumentController {
  * 
  * */	
 	
-	@RequestMapping(value="/prescription/{patient_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ResponseBody
-	public String findPrescription(@PathParam("patient_id") Integer patientId) {
+	@GET
+	@Path("/prescription/{patientId}")
+	@Produces("application/pdf")
+	public Response findPrescription(@PathParam("patientId") Integer patientId) {
 
-		//TODO - remove builder when db stops returning nullable objects. After that create a new prescription using data passed to the controller
-		PrescriptionBuilder builder = new PrescriptionBuilder();
-//		Patient patient = patientService.findPatientByPrimaryKey(patientId);
+		PatientView view = patientCrudDB.getPatientById(patientId.toString());
 		
-		//TODO - Converter should be autowired
-		PrescriptionConverter converter = new PrescriptionConverter();
+		EntityConverter entityConverter = new EntityConverter();
+		Patient patient = entityConverter.convertToPatient(view);
 		
 		String prescriptionFile = getReportPath("prescription.jasper");
-		
 		Prescription prescription = builder.createPresctiption();
-		PrescriptionData data = converter.convert(prescription);
+		prescription.setPatient(patient);
+		
+		PrescriptionData data = converter.getDataFrom(prescription);
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data.getRemedy());
-		Map<String, Object> parameters = converter.convertToMap(prescription);
+		Map<String, Object> parameters = converter.convertToPrescription(prescription);
 		
 		String printFile = fillDocument(prescriptionFile, parameters, dataSource);
+//		String fileName = String.format("prescription_%s.pdf", patientId.toString());
+//		String f = getReportPath(fileName);
+		exportToPDF(printFile);
 		
-		extractToPDF(printFile);
-		
-		return "Successfully compilled & filled with data!";
+		return Response.status(200).entity(convertPdfFile("prescription.pdf")).build();
 	}
-
+	
+	@GET
+	@Path("/certificate/{patientId}")
+	@Produces("application/pdf")
+	public Response findCertificate(@PathParam("patientId") Integer patientId) {
+		compileReport("certificate.jrxml");
+		Certificate certificate = builder.createCertificate();
+		String certificateFile = getReportPath("certificate.jasper");
+		Map<String, Object> parameters = converter.convertToCertificate(certificate);
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(initializeDataSource());
+		
+		String printFileName = fillDocument(certificateFile, parameters, dataSource);
+//		String fileName = String.format("certificate_%s.pdf", patientId.toString());
+		exportToPDF(printFileName);
+		
+		return Response.status(200).entity(convertPdfFile("certificate.pdf")).build();
+	}
+	
+	@GET
+	@Path("/referral/{patientId}")
+	@Produces("application/pdf")
+	public Response findReferral(@PathParam("patientId") Integer patientId) {
+		compileReport("referral.jrxml");
+		Referral referral = builder.createReferaral();
+		String referralFile = getReportPath("referral.jasper");
+		Map<String,Object> parameters = converter.convertToReferral(referral);
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(initializeDataSource());
+		
+		String printFileName = fillDocument(referralFile, parameters, dataSource);
+		exportToPDF(printFileName);
+		
+		return  Response.status(200).entity(convertPdfFile("referral.pdf")).build();
+	}
+	
+	
 	private void compileReport(String filename) {
 		String filePath = getReportPath(filename);	
 		
@@ -100,7 +132,6 @@ public class DocumentController {
 		} catch (JRException e) {
 			throw new RuntimeException(e);
 		}
-		
 	}
 
 	private String getReportPath(String filename) {
@@ -118,7 +149,7 @@ public class DocumentController {
 		}
 	}
 	
-	private void extractToPDF(String printFile) {
+	private void exportToPDF(String printFile) {
 		try {
 			JasperExportManager.exportReportToPdfFile(printFile);
 		} catch (JRException e) {
@@ -126,5 +157,38 @@ public class DocumentController {
 		}
 	}
 	
+	private byte[] convertPdfFile(String filename) {
+		String filePath = getReportPath(filename);
+		filePath = filePath.replaceFirst("^/(.:/)", "$1");
+		
+		java.nio.file.Path path = Paths.get(filePath); 
+		
+		byte[] bytes = null;
+
+		try {
+			bytes = Files.readAllBytes(path);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return bytes;
+	}
+	
+//	Use this method when you want to create a ResponseEntity<byte[]>
+	private ResponseEntity<byte[]> createResponse(String filename) {
+		byte[] fileBytes = convertPdfFile(filename);
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(org.springframework.http.MediaType.parseMediaType("application/pdf"));
+	    headers.setContentDispositionFormData(filename, filename);
+	    headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+	    return new ResponseEntity<byte[]>(fileBytes, headers, HttpStatus.OK);
+	}
+
+	
+	private List<Object> initializeDataSource() {
+		List<Object> list = new ArrayList<Object>();
+		list.add("list");
+		return list;
+	}
 	
 }

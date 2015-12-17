@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
@@ -78,14 +80,14 @@ public class VisitRestController {
 						Double.class, true));
 	}
 
-	@GET
+	@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newVisit(NewVisitMapper newVisit) {
 		try {
 			Visit addVisit = visitCrud.addVisit(newVisit);
-			return Response.ok(visitDAO.findVisitByPrimaryKey(addVisit))
+			return Response.ok(new ObjectMapper().writeValueAsString(addVisit))
 					.build();
 		} catch (Exception e) {
 			return Response.serverError().build();
