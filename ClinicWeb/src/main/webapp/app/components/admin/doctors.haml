@@ -1,0 +1,20 @@
+.container
+  .row
+    .col-xs-12
+      %a{:'ui-sref' => 'admin-doctors-new'}
+        dodaj lekarza
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Imię
+            %th
+              Nazwisko
+        %tbody
+          %tr{:'ng-repeat' => 'doctor in doctors'}
+            %td
+              %a{:'ui-sref' => 'admin-doctors-show({doctorId: doctor.id})'}
+                {{doctor.name}}
+            %td
+              %a{:'ui-sref' => 'admin-doctors-show({doctorId: doctor.id})'}
+                {{doctor.surname}}

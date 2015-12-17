@@ -1,0 +1,25 @@
+.container
+  .row
+    .col-xs-12
+      %a{:'ui-sref' => 'doctor-patients-new'}
+        dodaj pacjenta
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Pesel
+            %th
+              Imię
+            %th
+              Nazwisko
+        %tbody
+          %tr{:'ng-repeat' => 'patient in patients'}
+            %td
+              %a{:'ui-sref' => 'doctor-patients-show({patientId: patient.id})'}
+                {{patient.id}}
+            %td
+              %a{:'ui-sref' => 'doctor-patients-show({patientId: patient.id})'}
+                {{patient.name}}
+            %td
+              %a{:'ui-sref' => 'doctor-patients-show({patientId: patient.id})'}
+                {{patient.surname}}

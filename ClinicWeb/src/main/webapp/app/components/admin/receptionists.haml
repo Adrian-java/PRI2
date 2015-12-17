@@ -1,0 +1,20 @@
+.container
+  .row
+    .col-xs-12
+      %a{:'ui-sref' => 'admin-receptionists-new'}
+        dodaj recepcjonistę
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Imię
+            %th
+              Nazwisko
+        %tbody
+          %tr{:'ng-repeat' => 'receptionist in receptionists'}
+            %td
+              %a{:'ui-sref' => 'admin-receptionist-show({receptionistId: receptionist.id})'}
+                {{receptionist.name}}
+            %td
+              %a{:'ui-sref' => 'admin-receptionist-show({receptionistId: receptionist.id})'}
+                {{receptionist.surname}}

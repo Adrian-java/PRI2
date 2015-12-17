@@ -1,0 +1,35 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <a ui-sref='admin-doctors-new'>
+        dodaj lekarza
+      </a>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Imię
+            </th>
+            <th>
+              Nazwisko
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='doctor in doctors'>
+            <td>
+              <a ui-sref='admin-doctors-show({doctorId: doctor.id})'>
+                {{doctor.name}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='admin-doctors-show({doctorId: doctor.id})'>
+                {{doctor.surname}}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

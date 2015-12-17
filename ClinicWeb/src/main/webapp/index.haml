@@ -22,15 +22,9 @@
               %li
                 %a{"ui-sref" => "visits.new"} Umów się
               %li
-                %a{"ui-sref" => "services"} Usługi
-              %li
-                %a{"ui-sref" => "price_list"} Cennik
-              %li
-                %a{"ui-sref" => "contact"} Kontakt
-              %li
                 %a{:"ng-hide" => "loggedIn", :"ui-sref" => "register"} Zarejestruj się
               %li
-                %a{"ng-show" => "loggedIn", "ui-sref" => "panel"} Panel
+                %a{"ng-show" => "loggedIn", "href" => "", :'ng-click' => 'panel()'} Panel
               %li
                 %a{:href => "", "ng-click" => "open()", "ng-hide" => "loggedIn"} Zaloguj
               %li
@@ -42,6 +36,10 @@
     %script{:src => "assets/js/common/services/specialities.js"}
     %script{:src => "assets/js/common/services/user.js"}
     %script{:src => "assets/js/common/services/role.js"}
+    %script{:src => "assets/js/common/services/doctors.js"}
+    %script{:src => "assets/js/common/services/patients.js"}
+    %script{:src => "assets/js/common/services/receptionists.js"}
+    %script{:src => "assets/js/common/services/visits.js"}
     %script{:src => "assets/js/common/directives/date_select.js"}
     %script{:src => "assets/js/common/directives/form_validation.js"}
     %script{:src => "assets/js/components/home/homeController.js"}
@@ -49,3 +47,10 @@
     %script{:src => "assets/js/components/main/mainController.js"}
     %script{:src => "assets/js/components/patient/patientController.js"}
     %script{:src => "assets/js/components/register/registerController.js"}
+    %script{:src => "assets/js/components/visits/visitsController.js"}
+    %script{:src => "assets/js/components/admin/adminDoctorsController.js"}
+    %script{:src => "assets/js/components/admin/adminPatientsController.js"}
+    %script{:src => "assets/js/components/admin/adminReceptionistsController.js"}
+    %script{:src => "assets/js/components/admin/adminSpecialitiesController.js"}
+    %script{:src => "assets/js/components/admin/adminPatientsVisitsController.js"}
+    %script{:src => "assets/js/components/doctor/doctorPatientsController.js"}

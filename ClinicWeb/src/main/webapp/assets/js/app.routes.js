@@ -28,10 +28,14 @@
     }).state('visits', {
       url: '/visits',
       abstract: true,
+      controller: 'VisitsController',
+      controllerAs: 'visits',
       template: '<div ui-view></div>'
     }).state('visits.new', {
-      url: '/new',
-      template: '<div>xxxx</div>'
+      url: '/new?speciality&doctor&date',
+      templateUrl: 'app/components/visits/newVisit.html',
+      controller: 'VisitsController',
+      controllerAs: 'visits'
     }).state('specialties', {
       url: '/specialties',
       templateUrl: '/app/components/specialties/specialties.html',
@@ -50,10 +54,7 @@
       template: '/app/components/doctors/calendar.html'
     }).state('patient', {
       url: '/patient',
-      abstract: true,
-      conroller: 'PatientController',
-      constrollerAs: 'patient',
-      template: '<div ui-view></div>'
+      template: '<div ui-view>ddd</div>'
     }).state('patient.change_password', {
       url: '/change_password'
     }).state('patient.edit', {
@@ -69,7 +70,20 @@
       url: '/:id/edit'
     }).state('doctor', {
       url: '/doctor',
-      abstract: true
+      templateUrl: 'app/components/doctor/panel.html'
+    }).state('doctor-patients', {
+      url: '/doctor/patients',
+      templateUrl: 'app/components/doctor/patients.html',
+      controller: 'DoctorPatientsController',
+      controllesAs: 'doctor.patients'
+    }).state('doctor-patients-new', {
+      url: '/doctor/patients/new',
+      templateUrl: 'app/components/doctor/patients.new.html'
+    }).state('doctor-patients-show', {
+      url: '/doctor/patients/:patientId/show',
+      templateUrl: 'app/components/doctor/patients.show.html',
+      controller: 'DoctorPatientsController',
+      controllerAs: 'doctor.patients.show'
     }).state('doctor.edit', {
       url: '/edit'
     }).state('doctor.calendar', {
@@ -84,6 +98,71 @@
       url: '/:id/edit'
     }).state('doctor.visits.comments.new', {
       url: '/:id/comments/new'
+    }).state('admin', {
+      url: '/admin',
+      templateUrl: 'app/components/admin/panel.html'
+    }).state('admin-doctors', {
+      url: '/admin/doctors',
+      templateUrl: 'app/components/admin/doctors.html',
+      controller: 'AdminDoctorsController',
+      controllesAs: 'admin.doctors'
+    }).state('admin-doctors-new', {
+      url: '/admin/doctors/new',
+      templateUrl: 'app/components/admin/doctors.new.html',
+      controller: 'AdminDoctorsController',
+      controllesAs: 'admin.doctors'
+    }).state('admin-doctors-show', {
+      url: '/admin/doctors/:doctorId/show',
+      templateUrl: 'app/components/admin/doctors.show.html',
+      controller: 'AdminDoctorsController',
+      controllerAs: 'admin.doctors.details'
+    }).state('admin-patients', {
+      url: '/admin/patients',
+      templateUrl: 'app/components/admin/patients.html',
+      controller: 'AdminPatientsController',
+      controllerAs: 'admin.patients'
+    }).state('admin-patients-new', {
+      url: '/admin/patients/new',
+      templateUrl: 'app/components/admin/patients.new.html'
+    }).state('admin-patients-show', {
+      url: '/admin/patients/:patientId/show',
+      templateUrl: 'app/components/admin/patients.show.html',
+      controller: 'AdminPatientsController',
+      controllerAs: 'admin.patients.show'
+    }).state('admin-patients-edit', {
+      url: '/admin/patients/:patientId/edit',
+      controller: 'AdminPatientsController',
+      controllerAs: 'admin.patients.edit',
+      templateUrl: 'app/components/admin/patients.edit.html'
+    }).state('admin-patients-visits', {
+      url: '/admin/patients/:patientId/visits',
+      controller: 'AdminPatientsVisitsController',
+      controllerAs: 'admin.patients.visits.index',
+      templateUrl: 'app/components/admin/patients.visits.html'
+    }).state('admin-patients-remove', {
+      url: '/admin/patients/:patientId/remove',
+      controller: 'AdminPatientsController',
+      controllerAs: 'admin.patients.remove'
+    }).state('admin-receptionists', {
+      url: '/admin/receptionists',
+      templateUrl: 'app/components/admin/receptionists.html',
+      controller: 'AdminReceptionistsController',
+      controllerAs: 'admin.receptionists'
+    }).state('admin-receptionists-new', {
+      url: '/admin/receptionists/new',
+      templateUrl: 'app/components/admin/receptionists.new.html',
+      controller: 'AdminReceptionistsController',
+      controllesAs: 'admin.receptionists'
+    }).state('admin-receptionists-show', {
+      url: '/admin/receptionists/:receptionistId/show',
+      templateUrl: 'app/components/admin/receptionists.show.html',
+      controller: 'AdminReceptionistsController',
+      controllerAs: 'admin.receptionists.show'
+    }).state('admin-specialities', {
+      url: '/admin/specialities',
+      templateUrl: 'app/components/admin/specialities.html',
+      controller: 'AdminSpecialitiesController',
+      controllerAs: 'admin.specialities'
     });
     return $urlRouterProvider.otherwise('/');
   });

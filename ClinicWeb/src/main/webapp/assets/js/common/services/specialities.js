@@ -4,13 +4,10 @@
     getSpecialities = function() {
       var request;
       request = $http({
-        method: 'get',
-        url: 'http://localhost:8080/rest/Specialization/list',
-        params: {
-          action: 'get'
-        }
+        method: 'GET',
+        url: 'http://localhost:8080/rest/Specialization/list'
       });
-      return request.then(handleSuccess, handleError);
+      return request;
     };
     handleError = function(response) {
       if (!angular.isObject(response.data) || !response.data.message) {

@@ -5,13 +5,11 @@ angular.module 'clinic'
     # PUBLIC METHODS.
     # ---
     # I add a friend with the given name to the remote collection.
-
     getSpecialities = ->
       request = $http(
-        method: 'get'
-        url: 'http://localhost:8080/rest/Specialization/list'
-        params: action: 'get')
-      request.then handleSuccess, handleError
+        method: 'GET'
+        url: 'http://localhost:8080/rest/Specialization/list')
+      return request
 
     # ---
     # PRIVATE METHODS.
