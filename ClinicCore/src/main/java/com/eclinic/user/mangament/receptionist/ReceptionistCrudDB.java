@@ -65,7 +65,7 @@ public class ReceptionistCrudDB implements ReceptionistCrud {
 		}
 		systemUser.setChangedPassword(false);
 		systemUser.setIsActive(true);
-		systemUser.setRole("patient");
+		systemUser.setRole("receptionist");
 		systemUser.getReceptionist().setAccess(new String("access").getBytes());
 		Calendar c = new GregorianCalendar();
 		c.setTime(new Date());
