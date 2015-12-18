@@ -28,6 +28,7 @@ import com.eclinic.domain.Patient;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.view.PatientView;
 import com.eclinic.domain.view.SystemUserPermissionView;
+import com.eclinic.service.AddressService;
 import com.eclinic.service.PatientService;
 import com.eclinic.service.SystemUserService;
 import com.eclinic.user.mangament.PermissionMangament;
@@ -47,6 +48,8 @@ public class PatientCrudDB implements PatientCrud {
 	private PermissionMangament permissionMangament;
 	@Autowired
 	PatientViewDAO patientViewDao;
+	@Autowired
+	private AddressService addressService;
 
 	public Response addPatient(SystemUser systemUser) {
 
@@ -73,7 +76,7 @@ public class PatientCrudDB implements PatientCrud {
 		c.setTime(new Date());
 		systemUser.setRegisterDate(c);
 		try {
-			String i = systemUserService.saveSystemUserPatient(systemUser);
+			String i = systemUserService.saveSystemUserPatient(systemUser,false);
 			systemUser.setId(i);
 			// permissionMangament.setUserPermission(systemUser);
 			map.put("status", "ok");
@@ -87,15 +90,17 @@ public class PatientCrudDB implements PatientCrud {
 		return permissionMangament.showPermissionById(pesel);
 	}
 
-	public Response updatePatient(SystemUser systemUser, String pesel) {
-		SystemUser su = systemUserDAO.findSystemUserById(pesel);
-		String id = su.getPatient().getId();
-		Patient p = patientDao.findPatientById(id);
-		if (p instanceof HibernateProxy) {
-			HibernateProxy proxy = (HibernateProxy) p;
-			LazyInitializer li = proxy.getHibernateLazyInitializer();
-			p = (Patient) li.getImplementation();
+	public Response updatePatient(Patient p, String id) {
+//		if (p instanceof HibernateProxy) {
+//			HibernateProxy proxy = (HibernateProxy) p;
+//			LazyInitializer li = proxy.getHibernateLazyInitializer();
+//			p = (Patient) li.getImplementation();
+//		}
+		if(p.getAddress()!=null){
+			p.getAddress().setId(patientDao.findPatientById(id).getAddress().getId());
+			addressService.saveAddress(p.getAddress());
 		}
+		p.setId(id);
 		String i = patientService.savePatient(p);
 		try {
 			try {
@@ -121,7 +126,7 @@ public class PatientCrudDB implements PatientCrud {
 			Calendar c = Calendar.getInstance();
 			c.setTime(new Date());
 			su.setUnregisterDate(c);
-			systemUserService.saveSystemUser(su);
+			systemUserService.saveSystemUserPatient(su,true);
 			map.put("status", "usunieto");
 			return Response.ok(map).build();
 		} else {
