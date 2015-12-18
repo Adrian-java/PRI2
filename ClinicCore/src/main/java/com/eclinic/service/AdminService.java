@@ -2,6 +2,7 @@ package com.eclinic.service;
 
 import com.eclinic.domain.Admin;
 import com.eclinic.domain.SystemUser;
+import com.eclinic.domain.view.AdminView;
 
 import java.util.List;
 import java.util.Set;
@@ -38,7 +39,7 @@ public interface AdminService {
 	 * Load an existing Admin entity
 	 * 
 	 */
-	public Set<Admin> loadAdmins();
+	public Set<AdminView> loadAdmins();
 
 	/**
 	 * Delete an existing SystemUser entity
@@ -50,7 +51,7 @@ public interface AdminService {
 	 * Return all Admin entity
 	 * 
 	 */
-	public List<Admin> findAllAdmins(Integer startResult, Integer maxRows);
+	public List<AdminView> findAllAdmins(Integer startResult, Integer maxRows);
 
 	/**
 	 * Delete an existing Admin entity

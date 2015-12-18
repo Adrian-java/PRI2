@@ -96,10 +96,12 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public String saveSystemUserPatient(SystemUser systemuser) {
+	public String saveSystemUserPatient(SystemUser systemuser,
+			boolean passwordAdded) {
 		systemuser.getPatient().setSystemUser(systemuser);
-		systemuser
-				.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+		if (!passwordAdded)
+			systemuser.setPassword(passwordEncoder.encode(systemuser
+					.getPassword()));
 		SystemUser su = systemUserDAO.store(systemuser);
 		systemUserDAO.flush();
 		return su.getId();
@@ -136,9 +138,10 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public String saveSystemUserDoctor(SystemUser systemuser) {
-		systemuser
-		.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+	public String saveSystemUserDoctor(SystemUser systemuser, boolean passwordAdded) {
+		if (!passwordAdded)
+			systemuser.setPassword(passwordEncoder.encode(systemuser
+					.getPassword()));
 		systemuser.getDoctor().setSystemUser(systemuser);
 		SystemUser su = systemUserDAO.store(systemuser);
 		systemUserDAO.flush();
@@ -281,9 +284,11 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public String saveSystemUserReceptionist(SystemUser systemuser) {
-		systemuser
-		.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+	public String saveSystemUserReceptionist(SystemUser systemuser,
+			boolean passwordAdded) {
+		if (!passwordAdded)
+			systemuser.setPassword(passwordEncoder.encode(systemuser
+					.getPassword()));
 		systemuser.getReceptionist().setSystemUser(systemuser);
 		SystemUser su = systemUserDAO.store(systemuser);
 		systemUserDAO.flush();
@@ -295,9 +300,11 @@ public class SystemUserServiceImpl implements SystemUserService {
 	 * 
 	 */
 	@Transactional
-	public String saveSystemUserAdmin(SystemUser systemuser) {
-		systemuser
-		.setPassword(passwordEncoder.encode(systemuser.getPassword()));
+	public String saveSystemUserAdmin(SystemUser systemuser,
+			boolean passwordAdded) {
+		if (!passwordAdded)
+			systemuser.setPassword(passwordEncoder.encode(systemuser
+					.getPassword()));
 		systemuser.getAdmin().setSystemUser(systemuser);
 		SystemUser su = systemUserDAO.store(systemuser);
 		systemUserDAO.flush();
@@ -381,20 +388,20 @@ public class SystemUserServiceImpl implements SystemUserService {
 				.findSystemUserByPrimaryKey(systemuser.getId());
 		SystemUser su = null;
 		if (existingSystemUser != null) {
-			if (existingSystemUser != systemuser) {
-				existingSystemUser.setId(systemuser.getId());
-				existingSystemUser.setPassword(systemuser.getPassword());
-				existingSystemUser.setDescription(systemuser.getDescription());
-				existingSystemUser
-						.setRegisterDate(systemuser.getRegisterDate());
-				existingSystemUser.setIsActive(systemuser.getIsActive());
-				existingSystemUser.setChangedPassword(systemuser
-						.getChangedPassword());
-				existingSystemUser.setEmail(systemuser.getEmail());
-				existingSystemUser.setUnregisterDate(systemuser
-						.getUnregisterDate());
-				existingSystemUser.setRole(systemuser.getRole());
-			}
+			// if (existingSystemUser != systemuser) {
+			existingSystemUser.setId(systemuser.getId());
+			existingSystemUser.setPassword(systemuser.getPassword());
+			existingSystemUser.setDescription(systemuser.getDescription());
+			existingSystemUser.setRegisterDate(systemuser.getRegisterDate());
+			existingSystemUser.setIsActive(systemuser.getIsActive());
+			existingSystemUser.setChangedPassword(systemuser
+					.getChangedPassword());
+			existingSystemUser.setEmail(systemuser.getEmail());
+			existingSystemUser
+					.setUnregisterDate(systemuser.getUnregisterDate());
+			existingSystemUser.setRole(systemuser.getRole());
+			// }
+			systemuser.getDoctor().setSystemUser(systemuser);
 			systemuser = systemUserDAO.store(existingSystemUser);
 		} else {
 			systemuser.getDoctor().setSystemUser(systemuser);

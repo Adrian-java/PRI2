@@ -128,6 +128,12 @@ public class PatientView {
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String homeNr;
+	
+	@Column(name = "street", length = 40)
+	@Basic(fetch = FetchType.EAGER)
+	@XmlElement
+	private
+	String street;
 
 	/**
 	 */
@@ -265,6 +271,14 @@ public class PatientView {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
 	}
 
 }

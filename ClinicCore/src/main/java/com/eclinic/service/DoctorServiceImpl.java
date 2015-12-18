@@ -92,8 +92,11 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorSpecializations(String doctor_id, Integer related_specializations_id) {
-		Specialization related_specializations = specializationDAO.findSpecializationByPrimaryKey(related_specializations_id, -1, -1);
+	public Doctor deleteDoctorSpecializations(String doctor_id,
+			Integer related_specializations_id) {
+		Specialization related_specializations = specializationDAO
+				.findSpecializationByPrimaryKey(related_specializations_id, -1,
+						-1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
 
@@ -111,8 +114,10 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorGraphics(String doctor_id, Integer related_graphics_id) {
-		Graphic related_graphics = graphicDAO.findGraphicByPrimaryKey(related_graphics_id, -1, -1);
+	public Doctor deleteDoctorGraphics(String doctor_id,
+			Integer related_graphics_id) {
+		Graphic related_graphics = graphicDAO.findGraphicByPrimaryKey(
+				related_graphics_id, -1, -1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
 
@@ -131,14 +136,14 @@ public class DoctorServiceImpl implements DoctorService {
 	 */
 	@Transactional
 	public String saveDoctor(Doctor doctor) {
-		Doctor existingDoctor = doctorDAO.findDoctorByPrimaryKey(doctor.getId());
+		Doctor existingDoctor = doctorDAO
+				.findDoctorByPrimaryKey(doctor.getId());
 
 		if (existingDoctor != null) {
-			if (existingDoctor != doctor) {
-				existingDoctor.setId(doctor.getId());
+			if (!doctor.getName().isEmpty())
 				existingDoctor.setName(doctor.getName());
+			if (!doctor.getSurname().isEmpty())
 				existingDoctor.setSurname(doctor.getSurname());
-			}
 			doctor = doctorDAO.store(existingDoctor);
 		} else {
 			doctor = doctorDAO.store(doctor);
@@ -153,7 +158,8 @@ public class DoctorServiceImpl implements DoctorService {
 	 */
 	@Transactional
 	public List<Doctor> findAllDoctors(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Doctor>(doctorDAO.findAllDoctors(startResult, maxRows));
+		return new java.util.ArrayList<Doctor>(doctorDAO.findAllDoctors(
+				startResult, maxRows));
 	}
 
 	/**
@@ -172,13 +178,15 @@ public class DoctorServiceImpl implements DoctorService {
 	@Transactional
 	public Doctor saveDoctorVisits(String id, Visit related_visits) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		Visit existingvisits = visitDAO.findVisitByPrimaryKey(related_visits.getId());
+		Visit existingvisits = visitDAO.findVisitByPrimaryKey(related_visits
+				.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingvisits != null) {
 			existingvisits.setId(related_visits.getId());
 			existingvisits.setDateOfVisit(related_visits.getDateOfVisit());
-			existingvisits.setDescriptionOfVisit(related_visits.getDescriptionOfVisit());
+			existingvisits.setDescriptionOfVisit(related_visits
+					.getDescriptionOfVisit());
 			existingvisits.setIsLeave(related_visits.getIsLeave());
 			existingvisits.setSpecial(related_visits.getSpecial());
 			related_visits = existingvisits;
@@ -200,8 +208,11 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorVisitSchedulers(String doctor_id, Integer related_visitschedulers_id) {
-		VisitScheduler related_visitschedulers = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(related_visitschedulers_id, -1, -1);
+	public Doctor deleteDoctorVisitSchedulers(String doctor_id,
+			Integer related_visitschedulers_id) {
+		VisitScheduler related_visitschedulers = visitSchedulerDAO
+				.findVisitSchedulerByPrimaryKey(related_visitschedulers_id, -1,
+						-1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
 
@@ -238,15 +249,20 @@ public class DoctorServiceImpl implements DoctorService {
 	@Transactional
 	public Doctor saveDoctorDocumentses(String id, Documents related_documentses) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		Documents existingdocumentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses.getId());
+		Documents existingdocumentses = documentsDAO
+				.findDocumentsByPrimaryKey(related_documentses.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingdocumentses != null) {
 			existingdocumentses.setId(related_documentses.getId());
-			existingdocumentses.setDateOfDocuments(related_documentses.getDateOfDocuments());
-			existingdocumentses.setDescription(related_documentses.getDescription());
-			existingdocumentses.setTypeOfDocuments(related_documentses.getTypeOfDocuments());
-			existingdocumentses.setDataOfDocuments(related_documentses.getDataOfDocuments());
+			existingdocumentses.setDateOfDocuments(related_documentses
+					.getDateOfDocuments());
+			existingdocumentses.setDescription(related_documentses
+					.getDescription());
+			existingdocumentses.setTypeOfDocuments(related_documentses
+					.getTypeOfDocuments());
+			existingdocumentses.setDataOfDocuments(related_documentses
+					.getDataOfDocuments());
 			related_documentses = existingdocumentses;
 		}
 
@@ -266,24 +282,32 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor saveDoctorVisitSchedulers(String id, VisitScheduler related_visitschedulers) {
+	public Doctor saveDoctorVisitSchedulers(String id,
+			VisitScheduler related_visitschedulers) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		VisitScheduler existingvisitSchedulers = visitSchedulerDAO.findVisitSchedulerByPrimaryKey(related_visitschedulers.getId());
+		VisitScheduler existingvisitSchedulers = visitSchedulerDAO
+				.findVisitSchedulerByPrimaryKey(related_visitschedulers.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingvisitSchedulers != null) {
 			existingvisitSchedulers.setId(related_visitschedulers.getId());
-			existingvisitSchedulers.setNumberOfMonth(related_visitschedulers.getNumberOfMonth());
-			existingvisitSchedulers.setDescription(related_visitschedulers.getDescription());
-			existingvisitSchedulers.setTimeFrom(related_visitschedulers.getTimeFrom());
-			existingvisitSchedulers.setTimeTo(related_visitschedulers.getTimeTo());
-			existingvisitSchedulers.setDuration(related_visitschedulers.getDuration());
+			existingvisitSchedulers.setNumberOfMonth(related_visitschedulers
+					.getNumberOfMonth());
+			existingvisitSchedulers.setDescription(related_visitschedulers
+					.getDescription());
+			existingvisitSchedulers.setTimeFrom(related_visitschedulers
+					.getTimeFrom());
+			existingvisitSchedulers.setTimeTo(related_visitschedulers
+					.getTimeTo());
+			existingvisitSchedulers.setDuration(related_visitschedulers
+					.getDuration());
 			related_visitschedulers = existingvisitSchedulers;
 		}
 
 		related_visitschedulers.setDoctor(doctor);
 		doctor.getVisitSchedulers().add(related_visitschedulers);
-		related_visitschedulers = visitSchedulerDAO.store(related_visitschedulers);
+		related_visitschedulers = visitSchedulerDAO
+				.store(related_visitschedulers);
 		visitSchedulerDAO.flush();
 
 		doctor = doctorDAO.store(doctor);
@@ -298,7 +322,8 @@ public class DoctorServiceImpl implements DoctorService {
 	 */
 	@Transactional
 	public Doctor deleteDoctorVisits(String doctor_id, Integer related_visits_id) {
-		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
+		Visit related_visits = visitDAO.findVisitByPrimaryKey(
+				related_visits_id, -1, -1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
 
@@ -318,7 +343,8 @@ public class DoctorServiceImpl implements DoctorService {
 	@Transactional
 	public Doctor saveDoctorGraphics(String id, Graphic related_graphics) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		Graphic existinggraphics = graphicDAO.findGraphicByPrimaryKey(related_graphics.getId());
+		Graphic existinggraphics = graphicDAO
+				.findGraphicByPrimaryKey(related_graphics.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existinggraphics != null) {
@@ -345,9 +371,11 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorSystemUser(String doctor_id, String related_systemuser_id) {
+	public Doctor deleteDoctorSystemUser(String doctor_id,
+			String related_systemuser_id) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
-		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
+		SystemUser related_systemuser = systemUserDAO
+				.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
 		doctor.setSystemUser(null);
 		doctor = doctorDAO.store(doctor);
@@ -367,8 +395,10 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor deleteDoctorDocumentses(String doctor_id, Integer related_documentses_id) {
-		Documents related_documentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses_id, -1, -1);
+	public Doctor deleteDoctorDocumentses(String doctor_id,
+			Integer related_documentses_id) {
+		Documents related_documentses = documentsDAO.findDocumentsByPrimaryKey(
+				related_documentses_id, -1, -1);
 
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(doctor_id, -1, -1);
 
@@ -387,7 +417,8 @@ public class DoctorServiceImpl implements DoctorService {
 	 */
 	@Transactional
 	public Integer countDoctors() {
-		return ((Long) doctorDAO.createQuerySingleResult("select count(o) from Doctor o").getSingleResult()).intValue();
+		return ((Long) doctorDAO.createQuerySingleResult(
+				"select count(o) from Doctor o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -395,21 +426,25 @@ public class DoctorServiceImpl implements DoctorService {
 	 * 
 	 */
 	@Transactional
-	public Doctor saveDoctorSpecializations(String id, Specialization related_specializations) {
+	public Doctor saveDoctorSpecializations(String id,
+			Specialization related_specializations) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		Specialization existingspecializations = specializationDAO.findSpecializationByPrimaryKey(related_specializations.getId());
+		Specialization existingspecializations = specializationDAO
+				.findSpecializationByPrimaryKey(related_specializations.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingspecializations != null) {
 			existingspecializations.setId(related_specializations.getId());
 			existingspecializations.setName(related_specializations.getName());
-			existingspecializations.setDescription(related_specializations.getDescription());
+			existingspecializations.setDescription(related_specializations
+					.getDescription());
 			related_specializations = existingspecializations;
 		}
 
 		related_specializations.setDoctor(doctor);
 		doctor.getSpecializations().add(related_specializations);
-		related_specializations = specializationDAO.store(related_specializations);
+		related_specializations = specializationDAO
+				.store(related_specializations);
 		specializationDAO.flush();
 
 		doctor = doctorDAO.store(doctor);
@@ -425,18 +460,23 @@ public class DoctorServiceImpl implements DoctorService {
 	@Transactional
 	public Doctor saveDoctorSystemUser(String id, SystemUser related_systemuser) {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(id, -1, -1);
-		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
+		SystemUser existingsystemUser = systemUserDAO
+				.findSystemUserByPrimaryKey(related_systemuser.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingsystemUser != null) {
 			existingsystemUser.setId(related_systemuser.getId());
 			existingsystemUser.setPassword(related_systemuser.getPassword());
-			existingsystemUser.setDescription(related_systemuser.getDescription());
-			existingsystemUser.setRegisterDate(related_systemuser.getRegisterDate());
+			existingsystemUser.setDescription(related_systemuser
+					.getDescription());
+			existingsystemUser.setRegisterDate(related_systemuser
+					.getRegisterDate());
 			existingsystemUser.setIsActive(related_systemuser.getIsActive());
-			existingsystemUser.setChangedPassword(related_systemuser.getChangedPassword());
+			existingsystemUser.setChangedPassword(related_systemuser
+					.getChangedPassword());
 			existingsystemUser.setEmail(related_systemuser.getEmail());
-			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
+			existingsystemUser.setUnregisterDate(related_systemuser
+					.getUnregisterDate());
 			existingsystemUser.setRole(related_systemuser.getRole());
 			related_systemuser = existingsystemUser;
 		} else {

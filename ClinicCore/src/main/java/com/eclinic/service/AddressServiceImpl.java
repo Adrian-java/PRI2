@@ -60,7 +60,8 @@ public class AddressServiceImpl implements AddressService {
 	 */
 	@Transactional
 	public List<Address> findAllAddresss(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Address>(addressDAO.findAllAddresss(startResult, maxRows));
+		return new java.util.ArrayList<Address>(addressDAO.findAllAddresss(
+				startResult, maxRows));
 	}
 
 	/**
@@ -78,10 +79,13 @@ public class AddressServiceImpl implements AddressService {
 	 * 
 	 */
 	@Transactional
-	public Address deleteAddressPatients(Integer address_id, String related_patients_id) {
-		Patient related_patients = patientDAO.findPatientByPrimaryKey(related_patients_id, -1, -1);
+	public Address deleteAddressPatients(Integer address_id,
+			String related_patients_id) {
+		Patient related_patients = patientDAO.findPatientByPrimaryKey(
+				related_patients_id, -1, -1);
 
-		Address address = addressDAO.findAddressByPrimaryKey(address_id, -1, -1);
+		Address address = addressDAO
+				.findAddressByPrimaryKey(address_id, -1, -1);
 
 		related_patients.setAddress(null);
 		address.getPatients().remove(related_patients);
@@ -107,7 +111,8 @@ public class AddressServiceImpl implements AddressService {
 	 */
 	@Transactional
 	public Integer countAddresss() {
-		return ((Long) addressDAO.createQuerySingleResult("select count(o) from Address o").getSingleResult()).intValue();
+		return ((Long) addressDAO.createQuerySingleResult(
+				"select count(o) from Address o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -117,7 +122,8 @@ public class AddressServiceImpl implements AddressService {
 	@Transactional
 	public Address saveAddressClinics(Integer id, Clinic related_clinics) {
 		Address address = addressDAO.findAddressByPrimaryKey(id, -1, -1);
-		Clinic existingclinics = clinicDAO.findClinicByPrimaryKey(related_clinics.getId());
+		Clinic existingclinics = clinicDAO
+				.findClinicByPrimaryKey(related_clinics.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingclinics != null) {
@@ -144,7 +150,8 @@ public class AddressServiceImpl implements AddressService {
 	@Transactional
 	public Address saveAddressPatients(Integer id, Patient related_patients) {
 		Address address = addressDAO.findAddressByPrimaryKey(id, -1, -1);
-		Patient existingpatients = patientDAO.findPatientByPrimaryKey(related_patients.getId());
+		Patient existingpatients = patientDAO
+				.findPatientByPrimaryKey(related_patients.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingpatients != null) {
@@ -174,17 +181,26 @@ public class AddressServiceImpl implements AddressService {
 	 */
 	@Transactional
 	public Integer saveAddress(Address address) {
-		Address existingAddress = addressDAO.findAddressByPrimaryKey(address.getId());
+		Address existingAddress = addressDAO.findAddressByPrimaryKey(address
+				.getId());
 
 		if (existingAddress != null) {
 			if (existingAddress != address) {
-				existingAddress.setId(address.getId());
-				existingAddress.setCity(address.getCity());
-				existingAddress.setCountryCode(address.getCountryCode());
-				existingAddress.setProvince(address.getProvince());
-				existingAddress.setCountry(address.getCountry());
-				existingAddress.setCountryCodeCity(address.getCountryCodeCity());
-				existingAddress.setHomeNr(address.getHomeNr());
+				if (!address.getCity().isEmpty())
+					existingAddress.setCity(address.getCity());
+				if (!address.getCountryCode().isEmpty())
+					existingAddress.setCountryCode(address.getCountryCode());
+				if (!address.getProvince().isEmpty())
+					existingAddress.setProvince(address.getProvince());
+				if (!address.getCountry().isEmpty())
+					existingAddress.setCountry(address.getCountry());
+				if (!address.getCountryCodeCity().isEmpty())
+					existingAddress.setCountryCodeCity(address
+							.getCountryCodeCity());
+				if (!address.getHomeNr().isEmpty())
+					existingAddress.setHomeNr(address.getHomeNr());
+				if (!address.getStreet().isEmpty())
+					existingAddress.setStreet(address.getStreet());
 			}
 			address = addressDAO.store(existingAddress);
 		} else {
@@ -199,10 +215,13 @@ public class AddressServiceImpl implements AddressService {
 	 * 
 	 */
 	@Transactional
-	public Address deleteAddressClinics(Integer address_id, Integer related_clinics_id) {
-		Clinic related_clinics = clinicDAO.findClinicByPrimaryKey(related_clinics_id, -1, -1);
+	public Address deleteAddressClinics(Integer address_id,
+			Integer related_clinics_id) {
+		Clinic related_clinics = clinicDAO.findClinicByPrimaryKey(
+				related_clinics_id, -1, -1);
 
-		Address address = addressDAO.findAddressByPrimaryKey(address_id, -1, -1);
+		Address address = addressDAO
+				.findAddressByPrimaryKey(address_id, -1, -1);
 
 		related_clinics.setAddress(null);
 		address.getClinics().remove(related_clinics);

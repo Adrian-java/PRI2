@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.view.DoctorView;
 
@@ -18,4 +19,6 @@ public interface DoctorCrud {
 	public Set<DoctorView> getDoctorsBySpecialization(String specialization);
 	
 	public Response deleteDoctor(String pesel);
+	
+	public Response updateDoctor(Doctor d, String id);
 }

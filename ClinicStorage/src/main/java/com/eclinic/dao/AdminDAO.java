@@ -1,11 +1,11 @@
 package com.eclinic.dao;
 
 import com.eclinic.domain.Admin;
+import com.eclinic.domain.view.AdminView;
 
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -54,12 +54,12 @@ public interface AdminDAO extends JpaDao<Admin> {
 	 * JPQL Query - findAllAdmins
 	 *
 	 */
-	public Set<Admin> findAllAdmins() throws DataAccessException;
+	public Set<AdminView> findAllAdmins() throws DataAccessException;
 
 	/**
 	 * JPQL Query - findAllAdmins
 	 *
 	 */
-	public Set<Admin> findAllAdmins(int startResult, int maxRows) throws DataAccessException;
+	public Set<AdminView> findAllAdmins(int startResult, int maxRows) throws DataAccessException;
 
 }
