@@ -1,0 +1,31 @@
+.container
+  .row
+    .col-xs-12.col-sm-6.col-md-3
+      %select.form-control{:'ng-options' => 'speciality.name as speciality.name for speciality in specialities', :'ng-model' => 'selectedSpeciality', :'ng-change' => 'updateDoctorsList()'}
+        %option{:'value' => ''}
+          Wybierz specjalizację
+    .col-xs-12.col-sm-6.col-md-3
+      %select.form-control{:'ng-options' => 'doctor as doctor.name + " " + doctor.surname for doctor in doctors', :'ng-model' => 'selectedDoctor'}
+        %option{:'value' => ''}
+          Wybierz lekarza
+    .col-xs-12.col-sm-6.col-md-3
+      %select.form-control{:'ng-options' => 'patient.id as patient.id for patient in patients', :'ng-model' => 'selectedPatient'}
+        %option{:'value' => ''}
+          Wybierz pacjenta
+.container
+  .row
+    .col-xs-12
+      {{selectedSpeciality}}
+      %br
+      {{selectedDoctor}}
+      %br
+      {{selectedDate}}
+      %br
+      {{workingTime}}
+      %br
+      {{selectedVisitDate}}
+    .col-xs-12
+      #cal.span8.calendar{:'ui-calendar' => 'uiConfig.calendar', :'ng-model' => 'eventSources', :'calendar' => 'cal'}
+    .col-xs-12
+      %button.btn.btn-default{:'ng-click' => 'submit()'}
+        Dodaj wizytę

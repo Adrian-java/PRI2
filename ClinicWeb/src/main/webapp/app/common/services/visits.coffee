@@ -1,11 +1,11 @@
-angular.module('clinic').service 'Visits', [ '$http', '$cookies', ($http, $cookies) ->
+angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
 
   create = (visit) ->
     console.log visit
     request = $http(
       method: 'POST'
       isArray: false
-      url: 'http://localhost:8080/rest/Visit/new/'
+      url: api + 'Visit/new/'
       data: visit
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
@@ -16,8 +16,8 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', ($http, $cooki
     return
 
   handleSuccess = (response) ->
-    response.data
-    console.log 'doctor added'
+    console.log response.data
+    console.log 'visit added'
 
   {
     create: create

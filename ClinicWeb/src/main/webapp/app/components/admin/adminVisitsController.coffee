@@ -1,11 +1,17 @@
 angular.module 'clinic'
-  .controller 'VisitsController', ['$scope', '$stateParams', 'Doctors', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', ($scope, $stateParams, Doctors, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal) ->
+  .controller 'AdminVisitsController', ['$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', ($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) ->
 
     $scope.workingTime = []
 
     Specialities.getSpecialities().then((res) ->
       $scope.specialities = res.data
     )
+
+    Patients.index().then((res) ->
+      console.log res
+      $scope.patients = res.data
+    )
+
     getAllDoctors = ->
       Doctors.index().then((res) ->
         $scope.doctors = res.data
@@ -30,17 +36,6 @@ angular.module 'clinic'
         $scope.selectedDoctorId = $scope.selectedDoctor.id
         getWorkingTime()
     )
-
-
-    getStateParams = ->
-      if $stateParams.speciality
-        $scope.selectedSpeciality = $stateParams.speciality
-        $scope.updateDoctorsList()
-      if $stateParams.doctor
-        $scope.selectedDoctorId = $stateParams.doctor
-      if $stateParams.date
-        $scope.selectedDate = $stateParams.date
-
 
     getWorkingTime = ->
       Doctors.workingTime($scope.selectedDoctorId).then((res) ->
@@ -73,19 +68,10 @@ angular.module 'clinic'
               end: new Date(eventCurrentDate.getTime() + 20*60000)
             })
             eventCurrentDate = new Date(eventCurrentDate.getTime() + 20*60000)
-    getStateParams()
 
     $scope.$watch 'selectedDoctor', ->
       if $scope.selectedDoctor
         getWorkingTime()
-
-    $scope.changeTo = 'Hungarian'
-
-    ### alert on eventClick ###
-
-    $scope.alertOnEventClick = (date, jsEvent, view) ->
-      $scope.alertMessage = date.title + ' was clicked '
-      return
 
     changeWeek = (element, view) ->
       $scope.calendarStartDate = element.start._d
@@ -112,56 +98,6 @@ angular.module 'clinic'
       eventResize: $scope.alertOnResize
       eventRender: $scope.eventRender
       viewRender: changeWeek
-      defaultDate: if $scope.selectedDate then new Date($scope.selectedDate) else new Date()
-
-    ###$timeout( ->
-      $scope.uiConfig.calendar.slotDuration = '00:30:00'
-      #$scope.renderCalender()
-    , 5000)
-    ###
-
-    $scope.changeLang = ->
-      if $scope.changeTo == 'Hungarian'
-        $scope.uiConfig.calendar.dayNames = [
-          'Vasárnap'
-          'Hétfő'
-          'Kedd'
-          'Szerda'
-          'Csütörtök'
-          'Péntek'
-          'Szombat'
-        ]
-        $scope.uiConfig.calendar.dayNamesShort = [
-          'Vas'
-          'Hét'
-          'Kedd'
-          'Sze'
-          'Csüt'
-          'Pén'
-          'Szo'
-        ]
-        $scope.changeTo = 'English'
-      else
-        $scope.uiConfig.calendar.dayNames = [
-          'Sunday'
-          'Monday'
-          'Tuesday'
-          'Wednesday'
-          'Thursday'
-          'Friday'
-          'Saturday'
-        ]
-        $scope.uiConfig.calendar.dayNamesShort = [
-          'Sun'
-          'Mon'
-          'Tue'
-          'Wed'
-          'Thu'
-          'Fri'
-          'Sat'
-        ]
-        $scope.changeTo = 'Hungarian'
-      return
 
     ### event sources array###
 
@@ -170,26 +106,13 @@ angular.module 'clinic'
     ]
 
     $scope.submit = ->
-      login = Auth.validate()
-      if login
-        visit = {}
-        visit.patientId = login
-        visit.date = $scope.selectedVisitDate.getTime()
-        #visit.date = $scope.selectedVisitDate.getTime()/1000
-        visit.idDoctor = $scope.selectedDoctorId
-        visit.typeOfVisit = 'Dermatolog'
-        console.log visit
-        Visits.create(visit).then((res)->
-          console.log res
-        )
-      else
-        modalInstance = $uibModal.open(
-          animation: true
-          templateUrl: '/app/components/login/login_modal.html'
-          controller: 'LoginController'
-        )
-        modalInstance.result.then( (user) ->
-          console.log user
-        )
+      visit = {}
+      visit.patientId = $scope.selectedPatient
+      visit.date = $scope.selectedVisitDate.getTime()
+      visit.idDoctor = $scope.selectedDoctorId
+      visit.typeOfVisit = 'Dermatolog'
+      Visits.create(visit).then((res)->
+        $state.go('admin-visits')
+      )
 
   ]

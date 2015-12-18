@@ -1,12 +1,12 @@
 (function() {
   angular.module('clinic').service('Receptionists', [
-    '$http', '$cookies', function($http, $cookies) {
+    '$http', '$cookies', 'api', function($http, $cookies, api) {
       var create, handleError, handleSuccess, index, show;
       index = function() {
         var request;
         request = $http({
           method: 'GET',
-          url: "http://localhost:8080/rest/Receptionist/list",
+          url: api + 'Receptionist/list',
           headers: {
             'XToken': $cookies.token,
             'Content-Type': 'application/json'
@@ -20,7 +20,7 @@
         request = $http({
           method: 'POST',
           isArray: false,
-          url: 'http://localhost:8080/rest/SystemUser/newReceptionist',
+          url: api + 'SystemUser/newReceptionist',
           data: receptionist,
           headers: {
             'XToken': $cookies.token,
@@ -33,7 +33,7 @@
         var request;
         request = $http({
           method: 'GET',
-          url: "http://localhost:8080/rest/SystemUser/receptionist/" + id,
+          url: api + 'SystemUser/receptionist/' + id,
           headers: {
             'XToken': $cookies.token,
             'Content-Type': 'application/json'

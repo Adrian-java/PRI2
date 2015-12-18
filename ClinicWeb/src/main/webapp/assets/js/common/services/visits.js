@@ -1,6 +1,6 @@
 (function() {
   angular.module('clinic').service('Visits', [
-    '$http', '$cookies', function($http, $cookies) {
+    '$http', '$cookies', 'api', function($http, $cookies, api) {
       var create, handleError, handleSuccess;
       create = function(visit) {
         var request;
@@ -8,7 +8,7 @@
         request = $http({
           method: 'POST',
           isArray: false,
-          url: 'http://localhost:8080/rest/Visit/new/',
+          url: api + 'Visit/new/',
           data: visit,
           headers: {
             'XToken': $cookies.token,
@@ -23,8 +23,8 @@
         }
       };
       handleSuccess = function(response) {
-        response.data;
-        return console.log('doctor added');
+        console.log(response.data);
+        return console.log('visit added');
       };
       return {
         create: create
