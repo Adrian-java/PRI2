@@ -1,5 +1,5 @@
 angular.module 'clinic'
-  .service 'Specialities', ($http) ->
+  .service 'Specialities', ['$http', 'api', ($http, api) ->
     # Return public API.
     # ---
     # PUBLIC METHODS.
@@ -8,7 +8,7 @@ angular.module 'clinic'
     getSpecialities = ->
       request = $http(
         method: 'GET'
-        url: 'http://localhost:8080/rest/Specialization/list')
+        url: api + 'Specialization/list')
       return request
 
     # ---
@@ -38,3 +38,4 @@ angular.module 'clinic'
     {
       getSpecialities: getSpecialities
     }
+  ]

@@ -116,6 +116,20 @@
       templateUrl: 'app/components/admin/doctors.show.html',
       controller: 'AdminDoctorsController',
       controllerAs: 'admin.doctors.details'
+    }).state('admin-doctors-remove', {
+      url: '/admin/doctors/:doctorId/remove',
+      controller: 'AdminDoctorsController',
+      controllerAs: 'admin.doctors.remove'
+    }).state('admin-doctors-edit', {
+      url: '/admin/doctors/:doctorId/edit',
+      controller: 'AdminDoctorsController',
+      controllerAs: 'admin.doctors.edit',
+      templateUrl: 'app/components/admin/doctors.edit.html'
+    }).state('admin-doctors-visits', {
+      url: '/admin/doctors/:doctorId/visits',
+      controller: 'AdminDoctorsVisitsController',
+      controllerAs: 'admin.doctors.visits.index',
+      templateUrl: 'app/components/admin/doctors.visits.html'
     }).state('admin-patients', {
       url: '/admin/patients',
       templateUrl: 'app/components/admin/patients.html',
@@ -163,37 +177,23 @@
       templateUrl: 'app/components/admin/specialities.html',
       controller: 'AdminSpecialitiesController',
       controllerAs: 'admin.specialities'
+    }).state('admin-visits', {
+      url: '/admin/visits',
+      templateUrl: 'app/components/admin/visits.html',
+      controller: 'AdminVisitsController',
+      controllerAs: 'admin.visits.index'
+    }).state('admin-visits-show', {
+      url: '/admin/visits/:visitId/show',
+      templateUrl: 'app/components/admin/visits.show.html',
+      controller: 'AdminVisitsController',
+      controllesAs: 'admin.visits.show'
+    }).state('admin-visits-new', {
+      url: '/admin/visits/new',
+      templateUrl: 'app/components/admin/visits.new.html',
+      controller: 'AdminVisitsController',
+      controllerAs: 'admin.visits.new'
     });
     return $urlRouterProvider.otherwise('/');
   });
-
-
-  /*
-  
-  
-      - receptionist/settings/change_password
-      - receptionist/patients/new
-      - receptionist/patients/:id
-      - receptionist/patients/:id/edit
-      - receptionist/patients/:id/visits/:id/delete
-      - receptionist/patients/:id/visits/:id/edit
-      - receptionist/patients/:id/card
-      - receptionist/doctors/:id/edit
-      - receptionist/doctors/:id/calendar
-      - receptionist/doctors/:id/calendar/edit
-      - receptionist/visits/new
-  
-      - admin/settings/change_password - admin
-      - admin/doctors/new
-      - admin/admins/new
-      - admin/receptionists/new
-      - admin/patients/new
-      - admin/patients/:id/edit
-      - admin/doctors/:id/edit
-      - admin/doctors/:id/calendar
-      - admin/doctors/:id/calendar/edit
-      - admin/specialties
-      - admin/specialties/new
-   */
 
 }).call(this);

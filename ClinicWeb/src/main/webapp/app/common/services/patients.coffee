@@ -1,9 +1,9 @@
-angular.module('clinic').service 'Patients', [ '$http', '$cookies', ($http, $cookies) ->
+angular.module('clinic').service 'Patients', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
 
   index = ->
     request = $http(
       method: 'GET'
-      url: "http://localhost:8080/rest/SystemUser/patients/all"
+      url: api + 'SystemUser/patients/all'
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     #request.then handleSuccess, handleError
     return request
@@ -11,7 +11,7 @@ angular.module('clinic').service 'Patients', [ '$http', '$cookies', ($http, $coo
   show = (id) ->
     request = $http(
       method: 'GET'
-      url: "http://localhost:8080/rest/SystemUser/patient/"+id
+      url: api + 'SystemUser/patient/'+id
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 

@@ -1,0 +1,48 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12 col-sm-6 col-md-3'>
+      <select class='form-control' ng-change='updateDoctorsList()' ng-model='selectedSpeciality' ng-options='speciality.name as speciality.name for speciality in specialities'>
+        <option value=''>
+          Wybierz specjalizację
+        </option>
+      </select>
+    </div>
+    <div class='col-xs-12 col-sm-6 col-md-3'>
+      <select class='form-control' ng-model='selectedDoctor' ng-options='doctor as doctor.name + " " + doctor.surname for doctor in doctors'>
+        <option value=''>
+          Wybierz lekarza
+        </option>
+      </select>
+    </div>
+    <div class='col-xs-12 col-sm-6 col-md-3'>
+      <select class='form-control' ng-model='selectedPatient' ng-options='patient.id as patient.id for patient in patients'>
+        <option value=''>
+          Wybierz pacjenta
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      {{selectedSpeciality}}
+      <br>
+      {{selectedDoctor}}
+      <br>
+      {{selectedDate}}
+      <br>
+      {{workingTime}}
+      <br>
+      {{selectedVisitDate}}
+    </div>
+    <div class='col-xs-12'>
+      <div calendar='cal' class='span8 calendar' id='cal' ng-model='eventSources' ui-calendar='uiConfig.calendar'></div>
+    </div>
+    <div class='col-xs-12'>
+      <button class='btn btn-default' ng-click='submit()'>
+        Dodaj wizytę
+      </button>
+    </div>
+  </div>
+</div>

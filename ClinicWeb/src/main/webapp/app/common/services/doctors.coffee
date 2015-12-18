@@ -1,9 +1,9 @@
-angular.module('clinic').service 'Doctors', [ '$http', '$cookies', ($http, $cookies) ->
+angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
 
   index = ->
     request = $http(
       method: 'GET'
-      url: "http://localhost:8080/rest/SystemUser/doctors/all"
+      url: api + 'SystemUser/doctors/all'
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     #request.then handleSuccess, handleError
     return request
@@ -13,7 +13,7 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', ($http, $cook
     request = $http(
       method: 'POST'
       isArray: false
-      url: 'http://localhost:8080/rest/SystemUser/newDoctor'
+      url: api + 'SystemUser/newDoctor'
       data: doctor
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
@@ -21,21 +21,21 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', ($http, $cook
   show = (id) ->
     request = $http(
       method: 'GET'
-      url: "http://localhost:8080/rest/SystemUser/doctor/"+id
+      url: api + 'SystemUser/doctor/'+id
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 
   indexBySpeciality = (speciality) ->
     request = $http(
       method: 'GET'
-      url: "http://localhost:8080/rest/SystemUser/doctors/specialization/"+speciality
+      url: api + 'SystemUser/doctors/specialization/'+speciality
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 
   workingTime = (doctorId) ->
     request = $http(
       method: 'GET'
-      url: "http://localhost:8080/rest/VisitScheduler/doctor/"+doctorId
+      url: api + 'VisitScheduler/doctor/'+doctorId
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 
@@ -52,9 +52,7 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', ($http, $cook
 
     request = $http(
       method: 'GET'
-      url: "http://localhost:8080/rest/Visit/doctor/"+doctorId+"/date/"+startDate.day+"-"+startDate.month+"-"+startDate.year+"/"+endDate.day+"-"+endDate.month+"-"+endDate.year
-      #url: "http://localhost:8080/rest/Visit/doctor/71120789123/date/01-01-2016/08-01-2016"
-      #urL: "http://localhost:8080/rest/Visit/doctor/71120789123/03-01-2016/10-01-2016"
+      url: api + 'Visit/doctor/'+doctorId+"/date/"+startDate.day+"-"+startDate.month+"-"+startDate.year+"/"+endDate.day+"-"+endDate.month+"-"+endDate.year
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 

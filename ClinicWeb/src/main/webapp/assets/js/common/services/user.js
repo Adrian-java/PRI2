@@ -1,13 +1,13 @@
 (function() {
   angular.module('clinic').service('Auth', [
-    '$http', '$cookies', function($http, $cookies) {
+    '$http', '$cookies', 'api', function($http, $cookies, api) {
       var handleError, handleLoginSuccess, handleSuccess, login, logout, register, validate;
       login = function(user) {
         var request;
         request = $http({
           method: 'POST',
           isArray: false,
-          url: 'http://localhost:8080/rest/auth/token',
+          url: api + 'auth/token',
           data: $.param({
             username: user.login,
             password: user.password
@@ -49,7 +49,7 @@
         request = $http({
           method: 'POST',
           isArray: false,
-          url: 'http://localhost:8080/rest/SystemUser/newPatient',
+          url: api + 'SystemUser/newPatient',
           data: userInfo,
           headers: {
             'XToken': $cookies.token,

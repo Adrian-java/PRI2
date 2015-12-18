@@ -1,10 +1,10 @@
-angular.module('clinic').service 'Auth', [ '$http', '$cookies', ($http, $cookies) ->
+angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
 
   login = (user) ->
     request = $http(
       method: 'POST'
       isArray: false
-      url: 'http://localhost:8080/rest/auth/token'
+      url: api + 'auth/token'
       data: $.param(
         username: user.login
         password: user.password)
@@ -41,7 +41,7 @@ angular.module('clinic').service 'Auth', [ '$http', '$cookies', ($http, $cookies
     request = $http(
       method: 'POST'
       isArray: false
-      url: 'http://localhost:8080/rest/SystemUser/newPatient'
+      url: api + 'SystemUser/newPatient'
       data: userInfo
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError

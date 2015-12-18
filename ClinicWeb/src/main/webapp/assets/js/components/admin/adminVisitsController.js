@@ -1,10 +1,14 @@
 (function() {
-  angular.module('clinic').controller('VisitsController', [
-    '$scope', '$stateParams', 'Doctors', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', function($scope, $stateParams, Doctors, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal) {
-      var changeWeek, getAllDoctors, getStateParams, getWorkingTime, setCalendarWorkingTime;
+  angular.module('clinic').controller('AdminVisitsController', [
+    '$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', function($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) {
+      var changeWeek, getAllDoctors, getWorkingTime, setCalendarWorkingTime;
       $scope.workingTime = [];
       Specialities.getSpecialities().then(function(res) {
         return $scope.specialities = res.data;
+      });
+      Patients.index().then(function(res) {
+        console.log(res);
+        return $scope.patients = res.data;
       });
       getAllDoctors = function() {
         return Doctors.index().then(function(res) {
@@ -39,18 +43,6 @@
           return getWorkingTime();
         }
       });
-      getStateParams = function() {
-        if ($stateParams.speciality) {
-          $scope.selectedSpeciality = $stateParams.speciality;
-          $scope.updateDoctorsList();
-        }
-        if ($stateParams.doctor) {
-          $scope.selectedDoctorId = $stateParams.doctor;
-        }
-        if ($stateParams.date) {
-          return $scope.selectedDate = $stateParams.date;
-        }
-      };
       getWorkingTime = function() {
         return Doctors.workingTime($scope.selectedDoctorId).then(function(res) {
           $scope.workingTime = res.data;
@@ -90,18 +82,11 @@
         }
         return results;
       };
-      getStateParams();
       $scope.$watch('selectedDoctor', function() {
         if ($scope.selectedDoctor) {
           return getWorkingTime();
         }
       });
-      $scope.changeTo = 'Hungarian';
-
-      /* alert on eventClick */
-      $scope.alertOnEventClick = function(date, jsEvent, view) {
-        $scope.alertMessage = date.title + ' was clicked ';
-      };
       changeWeek = function(element, view) {
         $scope.calendarStartDate = element.start._d;
         Doctors.takenVisitsTimeFrame($scope.selectedDoctorId, element.start._d, element.end._d).then(function(res) {
@@ -130,53 +115,22 @@
           eventDrop: $scope.alertOnDrop,
           eventResize: $scope.alertOnResize,
           eventRender: $scope.eventRender,
-          viewRender: changeWeek,
-          defaultDate: $scope.selectedDate ? new Date($scope.selectedDate) : new Date()
+          viewRender: changeWeek
         }
 
-        /*$timeout( ->
-          $scope.uiConfig.calendar.slotDuration = '00:30:00'
-          #$scope.renderCalender()
-        , 5000)
-         */
+        /* event sources array */
       };
-      $scope.changeLang = function() {
-        if ($scope.changeTo === 'Hungarian') {
-          $scope.uiConfig.calendar.dayNames = ['Vasárnap', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat'];
-          $scope.uiConfig.calendar.dayNamesShort = ['Vas', 'Hét', 'Kedd', 'Sze', 'Csüt', 'Pén', 'Szo'];
-          $scope.changeTo = 'English';
-        } else {
-          $scope.uiConfig.calendar.dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-          $scope.uiConfig.calendar.dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-          $scope.changeTo = 'Hungarian';
-        }
-      };
-
-      /* event sources array */
       $scope.eventSources = [$scope.workingTimeEvents];
       return $scope.submit = function() {
-        var login, modalInstance, visit;
-        login = Auth.validate();
-        if (login) {
-          visit = {};
-          visit.patientId = login;
-          visit.date = $scope.selectedVisitDate.getTime();
-          visit.idDoctor = $scope.selectedDoctorId;
-          visit.typeOfVisit = 'Dermatolog';
-          console.log(visit);
-          return Visits.create(visit).then(function(res) {
-            return console.log(res);
-          });
-        } else {
-          modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: '/app/components/login/login_modal.html',
-            controller: 'LoginController'
-          });
-          return modalInstance.result.then(function(user) {
-            return console.log(user);
-          });
-        }
+        var visit;
+        visit = {};
+        visit.patientId = $scope.selectedPatient;
+        visit.date = $scope.selectedVisitDate.getTime();
+        visit.idDoctor = $scope.selectedDoctorId;
+        visit.typeOfVisit = 'Dermatolog';
+        return Visits.create(visit).then(function(res) {
+          return $state.go('admin-visits');
+        });
       };
     }
   ]);
