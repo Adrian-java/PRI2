@@ -1,6 +1,9 @@
 angular.module 'clinic'
   .controller 'AdminVisitsController', ['$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', ($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) ->
 
+    $scope.removeVisit = (id) ->
+      Visits.destroy(id)
+
     $scope.workingTime = []
 
     Specialities.getSpecialities().then((res) ->

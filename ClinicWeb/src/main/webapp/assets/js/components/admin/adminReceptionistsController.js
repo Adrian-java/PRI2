@@ -12,10 +12,18 @@
         });
       };
       if ($stateParams) {
-        return Receptionists.show($stateParams.receptionistId).then(function(res) {
+        Receptionists.show($stateParams.receptionistId).then(function(res) {
           return $scope.receptionist = res.data;
         });
       }
+      return $scope.remove = function(id) {
+        return Receptionists.remove(id).then(function(res) {
+          console.log(res);
+          return Receptionists.index().then(function(res) {
+            return $scope.receptionists = res.data;
+          });
+        });
+      };
     }
   ]);
 

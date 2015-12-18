@@ -15,4 +15,12 @@ angular.module 'clinic'
       Receptionists.show($stateParams.receptionistId).then((res)->
         $scope.receptionist = res.data
       )
+
+    $scope.remove = (id) ->
+      Receptionists.remove(id).then((res) ->
+        console.log res
+        Receptionists.index().then((res) ->
+          $scope.receptionists = res.data
+        )
+      )
   ]

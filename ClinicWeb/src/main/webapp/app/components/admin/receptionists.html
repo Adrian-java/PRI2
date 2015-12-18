@@ -13,6 +13,9 @@
             <th>
               Nazwisko
             </th>
+            <th>
+              Akcje
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -25,6 +28,11 @@
             <td>
               <a ui-sref='admin-receptionist-show({receptionistId: receptionist.id})'>
                 {{receptionist.surname}}
+              </a>
+            </td>
+            <td>
+              <a ng-click='remove(receptionist.id)'>
+                Usuń
               </a>
             </td>
           </tr>

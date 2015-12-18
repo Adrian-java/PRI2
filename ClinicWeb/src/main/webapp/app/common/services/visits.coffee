@@ -10,6 +10,14 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
 
+  destroy = (visitId) ->
+    console.log 'visit id: ' + visitId
+    request = $http(
+      method: 'DELETE'
+      url: api + 'Visit/' + visitId
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+    return request
+
   handleError = (response) ->
     if !angular.isObject(response.data) or !response.data.message
       return console.log('An unknown error occurred.')
@@ -21,5 +29,6 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
 
   {
     create: create
+    destroy: destroy
   }
 ]

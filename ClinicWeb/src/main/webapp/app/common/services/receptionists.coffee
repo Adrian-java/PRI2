@@ -25,6 +25,13 @@ angular.module('clinic').service 'Receptionists', [ '$http', '$cookies', 'api', 
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 
+  remove = (id) ->
+    console.log id
+    request = $http(
+      method: 'DELETE'
+      url: api + 'SystemUser/receptionist/' + id
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+    return request
 
   handleError = (response) ->
     if !angular.isObject(response.data) or !response.data.message
@@ -39,5 +46,6 @@ angular.module('clinic').service 'Receptionists', [ '$http', '$cookies', 'api', 
     index: index
     create: create
     show: show
+    remove: remove
   }
 ]

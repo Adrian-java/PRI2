@@ -73747,10 +73747,18 @@ angular.module('ui.calendar', [])
         });
       };
       if ($stateParams) {
-        return Receptionists.show($stateParams.receptionistId).then(function(res) {
+        Receptionists.show($stateParams.receptionistId).then(function(res) {
           return $scope.receptionist = res.data;
         });
       }
+      return $scope.remove = function(id) {
+        return Receptionists.remove(id).then(function(res) {
+          console.log(res);
+          return Receptionists.index().then(function(res) {
+            return $scope.receptionists = res.data;
+          });
+        });
+      };
     }
   ]);
 
@@ -73774,6 +73782,9 @@ angular.module('ui.calendar', [])
   angular.module('clinic').controller('AdminVisitsController', [
     '$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', function($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) {
       var changeWeek, getAllDoctors, getWorkingTime, setCalendarWorkingTime;
+      $scope.removeVisit = function(id) {
+        return Visits.destroy(id);
+      };
       $scope.workingTime = [];
       Specialities.getSpecialities().then(function(res) {
         return $scope.specialities = res.data;
@@ -73910,24 +73921,6 @@ angular.module('ui.calendar', [])
 }).call(this);
 
 (function() {
-  angular.module('clinic').controller('DoctorPatientsController', [
-    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
-      Patients.index().then(function(res) {
-        console.log(res);
-        return $scope.patients = res.data;
-      });
-      console.log($stateParams);
-      if ($stateParams) {
-        return Patients.show($stateParams.patientId).then(function(res) {
-          return $scope.patient = res.data;
-        });
-      }
-    }
-  ]);
-
-}).call(this);
-
-(function() {
   angular.module('clinic').controller('HomeController', [
     '$scope', '$timeout', '$state', 'Specialities', 'Doctors', function($scope, $timeout, $state, Specialities, Doctors) {
       var afterTomorrow, tomorrow;
@@ -74015,6 +74008,24 @@ angular.module('ui.calendar', [])
           'date': $scope.selectedDate
         });
       };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('DoctorPatientsController', [
+    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
+      Patients.index().then(function(res) {
+        console.log(res);
+        return $scope.patients = res.data;
+      });
+      console.log($stateParams);
+      if ($stateParams) {
+        return Patients.show($stateParams.patientId).then(function(res) {
+          return $scope.patient = res.data;
+        });
+      }
     }
   ]);
 

@@ -10,6 +10,8 @@
               Imię
             %th
               Nazwisko
+            %th
+              Akcje
         %tbody
           %tr{:'ng-repeat' => 'receptionist in receptionists'}
             %td
@@ -18,3 +20,6 @@
             %td
               %a{:'ui-sref' => 'admin-receptionist-show({receptionistId: receptionist.id})'}
                 {{receptionist.surname}}
+            %td
+              %a{:'ng-click' => 'remove(receptionist.id)'}
+                Usuń

@@ -2,6 +2,9 @@
   angular.module('clinic').controller('AdminVisitsController', [
     '$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', function($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) {
       var changeWeek, getAllDoctors, getWorkingTime, setCalendarWorkingTime;
+      $scope.removeVisit = function(id) {
+        return Visits.destroy(id);
+      };
       $scope.workingTime = [];
       Specialities.getSpecialities().then(function(res) {
         return $scope.specialities = res.data;
