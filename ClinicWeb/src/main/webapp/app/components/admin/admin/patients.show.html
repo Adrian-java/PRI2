@@ -1,0 +1,71 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      {{patient}}
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Pesel
+        </li>
+        <li class='list-group-item'>
+          {{patient.id}}
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Imię i nazwisko
+        </li>
+        <li class='list-group-item'>
+          {{patient.name}} {{patient.surname}}
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Data urodzenia
+        </li>
+        <li class='list-group-item'>
+          {{dateOfBirth}}
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Kod pocztowy | Miasto
+        </li>
+        <li class='list-group-item'>
+          {{patient.countryCodeCity}} | {{patient.city}}
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Wojwództwo
+        </li>
+        <li class='list-group-item'>
+          {{patient.province}}
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Państwo
+        </li>
+        <li class='list-group-item'>
+          {{patient.country}}
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Telefon kontaktowy
+        </li>
+        <li class='list-group-item'>
+          {{patient.phoneNr}}
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          E-mail
+        </li>
+        <li class='list-group-item'>
+          {{patient.EMail}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

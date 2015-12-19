@@ -1,0 +1,57 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <a ui-sref='admin-patients-new'>
+        dodaj pacjenta
+      </a>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Pesel
+            </th>
+            <th>
+              Imię
+            </th>
+            <th>
+              Nazwisko
+            </th>
+            <th>
+              Akcje
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='patient in patients'>
+            <td>
+              <a ui-sref='admin-patients-show({patientId: patient.id})'>
+                {{patient.id}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='admin-patients-show({patientId: patient.id})'>
+                {{patient.name}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='admin-patients-show({patientId: patient.id})'>
+                {{patient.surname}}
+              </a>
+            </td>
+            <td>
+              <a class='btn btn-danger' ui-sref='admin-patients-remove({patientId: patient.id})'>
+                Usuń
+              </a>
+              <a class='btn btn-primary' ui-sref='admin-patients-edit({patientId: patient.id})'>
+                Edytuj
+              </a>
+              <a class='btn btn-primary' ui-sref='admin-patients-visits({patientId: patient.id})'>
+                Wizyty
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <form class='form-horizontal' form-validation='' ng-submit='submit()' role='form'>
+        <div class='form-group'>
+          <label class='control-label col-sm-2' for='id'>Identyfikator lekarza:</label>
+          <div class='col-sm-10'>
+            <input class='form-control' id='id' ng-model='doctor.id' placeholder='Wpisz identyfikator' type='text'>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label class='control-label col-sm-2' for='name'>Imię lekarza:</label>
+          <div class='col-sm-10'>
+            <input class='form-control' id='name' ng-model='doctor.doctor.name' placeholder='Wpisz imię' type='text'>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label class='control-label col-sm-2' for='surname'>Nazwisko lekarza:</label>
+          <div class='col-sm-10'>
+            <input class='form-control' id='surname' ng-model='doctor.doctor.surname' placeholder='Wpisz imię' type='text'>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label class='control-label col-sm-2' for='password'>Hasło:</label>
+          <div class='col-sm-10'>
+            <input class='form-control' id='password' ng-model='doctor.password' placeholder='Wpisz hasło' type='password'>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label class='control-label col-sm-2' for='email'>E-mail:</label>
+          <div class='col-sm-10'>
+            <input class='form-control' id='email' ng-model='doctor.email' placeholder='Wpisz e-mail' type='email'>
+          </div>
+        </div>
+        <div class='form-group'>
+          <div class='col-sm-offset-2 col-sm-10'>
+            <button class='btn btn-default' type='submit'>Dodaj</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

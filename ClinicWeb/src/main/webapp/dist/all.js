@@ -73606,6 +73606,81 @@ angular.module('ui.calendar', [])
       templateUrl: 'app/components/admin/visits.new.html',
       controller: 'AdminVisitsController',
       controllerAs: 'admin.visits.new'
+    }).state('receptionist', {
+      url: '/receptionist',
+      templateUrl: 'app/components/receptionist/panel.html'
+    }).state('receptionist-doctors', {
+      url: '/receptionist/doctors',
+      templateUrl: 'app/components/receptionist/doctors.html',
+      controller: 'ReceptionistDoctorsController',
+      controllesAs: 'receptionist.doctors'
+    }).state('receptionist-doctors-new', {
+      url: '/receptionist/doctors/new',
+      templateUrl: 'app/components/receptionist/doctors.new.html',
+      controller: 'ReceptionistDoctorsController',
+      controllesAs: 'receptionist.doctors'
+    }).state('receptionist-doctors-show', {
+      url: '/receptionist/doctors/:doctorId/show',
+      templateUrl: 'app/components/receptionist/doctors.show.html',
+      controller: 'ReceptionistDoctorsController',
+      controllerAs: 'receptionist.doctors.details'
+    }).state('receptionist-doctors-remove', {
+      url: '/receptionist/doctors/:doctorId/remove',
+      controller: 'ReceptionistDoctorsController',
+      controllerAs: 'receptionist.doctors.remove'
+    }).state('receptionist-doctors-edit', {
+      url: '/receptionist/doctors/:doctorId/edit',
+      controller: 'ReceptionistDoctorsController',
+      controllerAs: 'receptionist.doctors.edit',
+      templateUrl: 'app/components/receptionist/doctors.edit.html'
+    }).state('receptionist-doctors-visits', {
+      url: '/receptionist/doctors/:doctorId/visits',
+      controller: 'ReceptionistDoctorsVisitsController',
+      controllerAs: 'receptionist.doctors.visits.index',
+      templateUrl: 'app/components/receptionist/doctors.visits.html'
+    }).state('receptionist-patients', {
+      url: '/receptionist/patients',
+      templateUrl: 'app/components/receptionist/patients.html',
+      controller: 'ReceptionistPatientsController',
+      controllerAs: 'receptionist.patients'
+    }).state('receptionist-patients-new', {
+      url: '/receptionist/patients/new',
+      templateUrl: 'app/components/receptionist/patients.new.html'
+    }).state('receptionist-patients-show', {
+      url: '/receptionist/patients/:patientId/show',
+      templateUrl: 'app/components/receptionist/patients.show.html',
+      controller: 'ReceptionistPatientsController',
+      controllerAs: 'receptionist.patients.show'
+    }).state('receptionist-patients-edit', {
+      url: '/receptionist/patients/:patientId/edit',
+      controller: 'ReceptionistPatientsController',
+      controllerAs: 'receptionist.patients.edit',
+      templateUrl: 'app/components/receptionist/patients.edit.html'
+    }).state('receptionist-patients-visits', {
+      url: '/receptionist/patients/:patientId/visits',
+      controller: 'ReceptionistPatientsVisitsController',
+      controllerAs: 'receptionist.patients.visits.index',
+      templateUrl: 'app/components/receptionist/patients.visits.html'
+    }).state('receptionist-specialities', {
+      url: '/receptionist/specialities',
+      templateUrl: 'app/components/receptionist/specialities.html',
+      controller: 'ReceptionistSpecialitiesController',
+      controllerAs: 'receptionist.specialities'
+    }).state('receptionist-visits', {
+      url: '/receptionist/visits',
+      templateUrl: 'app/components/receptionist/visits.html',
+      controller: 'ReceptionistVisitsController',
+      controllerAs: 'receptionist.visits.index'
+    }).state('receptionist-visits-show', {
+      url: '/receptionist/visits/:visitId/show',
+      templateUrl: 'app/components/receptionist/visits.show.html',
+      controller: 'ReceptionistVisitsController',
+      controllesAs: 'receptionist.visits.show'
+    }).state('receptionist-visits-new', {
+      url: '/receptionist/visits/new',
+      templateUrl: 'app/components/receptionist/visits.new.html',
+      controller: 'ReceptionistVisitsController',
+      controllerAs: 'receptionist.visits.new'
     });
     return $urlRouterProvider.otherwise('/');
   });
@@ -73921,6 +73996,24 @@ angular.module('ui.calendar', [])
 }).call(this);
 
 (function() {
+  angular.module('clinic').controller('DoctorPatientsController', [
+    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
+      Patients.index().then(function(res) {
+        console.log(res);
+        return $scope.patients = res.data;
+      });
+      console.log($stateParams);
+      if ($stateParams) {
+        return Patients.show($stateParams.patientId).then(function(res) {
+          return $scope.patient = res.data;
+        });
+      }
+    }
+  ]);
+
+}).call(this);
+
+(function() {
   angular.module('clinic').controller('HomeController', [
     '$scope', '$timeout', '$state', 'Specialities', 'Doctors', function($scope, $timeout, $state, Specialities, Doctors) {
       var afterTomorrow, tomorrow;
@@ -74014,24 +74107,6 @@ angular.module('ui.calendar', [])
 }).call(this);
 
 (function() {
-  angular.module('clinic').controller('DoctorPatientsController', [
-    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
-      Patients.index().then(function(res) {
-        console.log(res);
-        return $scope.patients = res.data;
-      });
-      console.log($stateParams);
-      if ($stateParams) {
-        return Patients.show($stateParams.patientId).then(function(res) {
-          return $scope.patient = res.data;
-        });
-      }
-    }
-  ]);
-
-}).call(this);
-
-(function() {
   angular.module('clinic').controller('LoginController', [
     '$scope', '$uibModalInstance', 'Auth', function($scope, $uibModalInstance, Auth) {
       return $scope.submit = function() {
@@ -74088,6 +74163,283 @@ angular.module('ui.calendar', [])
   angular.module('clinic').controller('PatientController', [
     '$scope', '$timeout', function($scope, $timeout) {
       return console.log('xxx');
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('ReceptionistDoctorsController', [
+    '$scope', '$stateParams', 'Doctors', '$state', function($scope, $stateParams, Doctors, $state) {
+      console.log('admin doctors controller');
+      Doctors.index().then(function(res) {
+        return $scope.doctors = res.data;
+      });
+      $scope.submit = function() {
+        return Doctors.create($scope.doctor).then(function(res) {
+          return $state.go('admin-doctors');
+        });
+      };
+      console.log($stateParams);
+      if ($stateParams) {
+        return Doctors.show($stateParams.doctorId).then(function(res) {
+          return $scope.doctor = res.data;
+        });
+      }
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('ReceptionistDoctorsVisitsController', [
+    '$scope', 'Doctors', '$stateParams', '$state', function($scope, Doctors, $stateParams, $state) {
+      var changeWeek, getVisits;
+      if ($stateParams) {
+        $scope.selectedDoctorId = $stateParams.doctorId;
+      }
+      changeWeek = function(element, view) {
+        $scope.calendarStartDate = element.start._d;
+        return Doctors.takenVisitsTimeFrame($scope.selectedDoctorId, element.start._d, element.end._d).then(function(res) {
+          var visitDate;
+          if (res.data.length > 0) {
+            visitDate = new Date(res.data[0].dateOfVisit * 1000);
+          }
+          console.log(res);
+          $scope.visitsTemp = res.data;
+          return getVisits();
+        });
+      };
+      $scope.visits = [];
+      getVisits = function() {
+        var i, len, ref, results, visit;
+        $scope.visits.length = 0;
+        ref = $scope.visitsTemp;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          visit = ref[i];
+          results.push((function() {
+            var endDate, startDate;
+            startDate = new Date(visit.dateOfVisit);
+            endDate = new Date(startDate.getTime() + 20 * 60000);
+            return $scope.visits.push({
+              start: startDate,
+              end: endDate,
+              id: visit.id
+            });
+          })());
+        }
+        return results;
+      };
+      $scope.clickEvent = function(event) {
+        return $state.go('admin-visits-show', {
+          visitId: event.id
+        });
+      };
+      $scope.uiConfig = {
+        calendar: {
+          height: 450,
+          editable: false,
+          defaultView: 'agendaWeek',
+          slotDuration: '00:20:00',
+          header: {
+            left: 'title',
+            center: '',
+            right: 'today prev,next'
+          },
+          eventClick: $scope.clickEvent,
+          eventDrop: $scope.alertOnDrop,
+          eventResize: $scope.alertOnResize,
+          eventRender: $scope.eventRender,
+          viewRender: changeWeek,
+          defaultDate: $scope.selectedDate ? new Date($scope.selectedDate) : new Date()
+        }
+      };
+      return $scope.eventSources = [$scope.visits];
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('ReceptionistPatientsController', [
+    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
+      console.log('admin patients controller');
+      Patients.index().then(function(res) {
+        console.log(res);
+        return $scope.patients = res.data;
+      });
+      console.log($stateParams);
+      if ($stateParams) {
+        return Patients.show($stateParams.patientId).then(function(res) {
+          return $scope.patient = res.data;
+        });
+      }
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('ReceptionistPatientsVisitsController', [
+    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
+      return console.log('admin patients visits controller');
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('ReceptionistSpecialitiesController', [
+    '$scope', 'Specialities', function($scope, Specialities) {
+      console.log('Specialities controller');
+      return Specialities.getSpecialities().then(function(res) {
+        $scope.specialities = res.data;
+        console.log('specialities list');
+        return console.log($scope.specialities);
+      });
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('ReceptionistVisitsController', [
+    '$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', function($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) {
+      var changeWeek, getAllDoctors, getWorkingTime, setCalendarWorkingTime;
+      $scope.removeVisit = function(id) {
+        return Visits.destroy(id);
+      };
+      $scope.workingTime = [];
+      Specialities.getSpecialities().then(function(res) {
+        return $scope.specialities = res.data;
+      });
+      Patients.index().then(function(res) {
+        console.log(res);
+        return $scope.patients = res.data;
+      });
+      getAllDoctors = function() {
+        return Doctors.index().then(function(res) {
+          return $scope.doctors = res.data;
+        });
+      };
+      getAllDoctors();
+      $scope.updateDoctorsList = function() {
+        if ($scope.selectedSpeciality) {
+          return Doctors.indexBySpeciality($scope.selectedSpeciality).then(function(res) {
+            var doctor, i, len, ref, results;
+            $scope.doctors = res.data;
+            ref = $scope.doctors;
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              doctor = ref[i];
+              results.push((function() {
+                if (doctor.id === $scope.selectedDoctorId) {
+                  return $scope.selectedDoctor = doctor;
+                }
+              })());
+            }
+            return results;
+          });
+        } else {
+          return getAllDoctors();
+        }
+      };
+      $scope.$watch('selectedDoctor', function() {
+        if ($scope.selectedDoctor) {
+          $scope.selectedDoctorId = $scope.selectedDoctor.id;
+          return getWorkingTime();
+        }
+      });
+      getWorkingTime = function() {
+        return Doctors.workingTime($scope.selectedDoctorId).then(function(res) {
+          $scope.workingTime = res.data;
+          return setCalendarWorkingTime(res.data);
+        });
+      };
+      $scope.workingTimeEvents = [];
+      setCalendarWorkingTime = function() {
+        var date, i, len, ref, results;
+        $scope.workingTimeEvents.length = 0;
+        ref = $scope.workingTime;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          date = ref[i];
+          results.push((function() {
+            var dayOfTheWeek, eventCurrentDate, eventCurrentEndDate, eventEndDate, eventStartDate, results1, startDate;
+            startDate = new Date(date.startDate * 1000);
+            dayOfTheWeek = startDate.getDay();
+            eventStartDate = new Date($scope.calendarStartDate.getUTCFullYear(), $scope.calendarStartDate.getMonth(), $scope.calendarStartDate.getUTCDate() + dayOfTheWeek, date.timeFrom.split(':')[0], date.timeFrom.split(':')[1]);
+            eventEndDate = new Date($scope.calendarStartDate.getUTCFullYear(), $scope.calendarStartDate.getMonth(), $scope.calendarStartDate.getUTCDate() + dayOfTheWeek, date.timeTo.split(':')[0], date.timeTo.split(':')[1]);
+            $scope.workingTimeEvents.push({
+              start: eventStartDate,
+              end: eventEndDate
+            });
+            eventCurrentDate = eventStartDate;
+            eventCurrentEndDate = new Date(eventEndDate.getTime() + 20 * 60000);
+            results1 = [];
+            while (eventCurrentDate < eventEndDate) {
+              $scope.workingTimeEvents.push({
+                start: eventCurrentDate,
+                end: new Date(eventCurrentDate.getTime() + 20 * 60000)
+              });
+              results1.push(eventCurrentDate = new Date(eventCurrentDate.getTime() + 20 * 60000));
+            }
+            return results1;
+          })());
+        }
+        return results;
+      };
+      $scope.$watch('selectedDoctor', function() {
+        if ($scope.selectedDoctor) {
+          return getWorkingTime();
+        }
+      });
+      changeWeek = function(element, view) {
+        $scope.calendarStartDate = element.start._d;
+        Doctors.takenVisitsTimeFrame($scope.selectedDoctorId, element.start._d, element.end._d).then(function(res) {
+          var visitDate;
+          if (res.data.length > 0) {
+            return visitDate = new Date(res.data[0].dateOfVisit * 1000);
+          }
+        });
+        return setCalendarWorkingTime();
+      };
+      $scope.clickEvent = function(event, jsEvent, view) {
+        return $scope.selectedVisitDate = event.start._d;
+      };
+      $scope.uiConfig = {
+        calendar: {
+          height: 450,
+          editable: false,
+          defaultView: 'agendaWeek',
+          slotDuration: '00:20:00',
+          header: {
+            left: 'title',
+            center: '',
+            right: 'today prev,next'
+          },
+          eventClick: $scope.clickEvent,
+          eventDrop: $scope.alertOnDrop,
+          eventResize: $scope.alertOnResize,
+          eventRender: $scope.eventRender,
+          viewRender: changeWeek
+        }
+
+        /* event sources array */
+      };
+      $scope.eventSources = [$scope.workingTimeEvents];
+      return $scope.submit = function() {
+        var visit;
+        visit = {};
+        visit.patientId = $scope.selectedPatient;
+        visit.date = $scope.selectedVisitDate.getTime();
+        visit.idDoctor = $scope.selectedDoctorId;
+        visit.typeOfVisit = 'Dermatolog';
+        return Visits.create(visit).then(function(res) {
+          return $state.go('admin-visits');
+        });
+      };
     }
   ]);
 
@@ -74284,6 +74636,314 @@ angular.module('ui.calendar', [])
             return console.log(user);
           });
         }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('AdminDoctorsController', [
+    '$scope', '$stateParams', 'Doctors', '$state', function($scope, $stateParams, Doctors, $state) {
+      console.log('admin doctors controller');
+      Doctors.index().then(function(res) {
+        return $scope.doctors = res.data;
+      });
+      $scope.submit = function() {
+        return Doctors.create($scope.doctor).then(function(res) {
+          return $state.go('admin-doctors');
+        });
+      };
+      console.log($stateParams);
+      if ($stateParams) {
+        return Doctors.show($stateParams.doctorId).then(function(res) {
+          return $scope.doctor = res.data;
+        });
+      }
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('AdminDoctorsVisitsController', [
+    '$scope', 'Doctors', '$stateParams', '$state', function($scope, Doctors, $stateParams, $state) {
+      var changeWeek, getVisits;
+      if ($stateParams) {
+        $scope.selectedDoctorId = $stateParams.doctorId;
+      }
+      changeWeek = function(element, view) {
+        $scope.calendarStartDate = element.start._d;
+        return Doctors.takenVisitsTimeFrame($scope.selectedDoctorId, element.start._d, element.end._d).then(function(res) {
+          var visitDate;
+          if (res.data.length > 0) {
+            visitDate = new Date(res.data[0].dateOfVisit * 1000);
+          }
+          console.log(res);
+          $scope.visitsTemp = res.data;
+          return getVisits();
+        });
+      };
+      $scope.visits = [];
+      getVisits = function() {
+        var i, len, ref, results, visit;
+        $scope.visits.length = 0;
+        ref = $scope.visitsTemp;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          visit = ref[i];
+          results.push((function() {
+            var endDate, startDate;
+            startDate = new Date(visit.dateOfVisit);
+            endDate = new Date(startDate.getTime() + 20 * 60000);
+            return $scope.visits.push({
+              start: startDate,
+              end: endDate,
+              id: visit.id
+            });
+          })());
+        }
+        return results;
+      };
+      $scope.clickEvent = function(event) {
+        return $state.go('admin-visits-show', {
+          visitId: event.id
+        });
+      };
+      $scope.uiConfig = {
+        calendar: {
+          height: 450,
+          editable: false,
+          defaultView: 'agendaWeek',
+          slotDuration: '00:20:00',
+          header: {
+            left: 'title',
+            center: '',
+            right: 'today prev,next'
+          },
+          eventClick: $scope.clickEvent,
+          eventDrop: $scope.alertOnDrop,
+          eventResize: $scope.alertOnResize,
+          eventRender: $scope.eventRender,
+          viewRender: changeWeek,
+          defaultDate: $scope.selectedDate ? new Date($scope.selectedDate) : new Date()
+        }
+      };
+      return $scope.eventSources = [$scope.visits];
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('AdminPatientsController', [
+    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
+      console.log('admin patients controller');
+      Patients.index().then(function(res) {
+        console.log(res);
+        return $scope.patients = res.data;
+      });
+      console.log($stateParams);
+      if ($stateParams) {
+        return Patients.show($stateParams.patientId).then(function(res) {
+          return $scope.patient = res.data;
+        });
+      }
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('AdminPatientsVisitsController', [
+    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
+      return console.log('admin patients visits controller');
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('AdminReceptionistsController', [
+    '$scope', 'Receptionists', '$stateParams', '$state', function($scope, Receptionists, $stateParams, $state) {
+      console.log('admin receptionists controller');
+      Receptionists.index().then(function(res) {
+        return $scope.receptionists = res.data;
+      });
+      $scope.submit = function() {
+        console.log($scope.receptionist);
+        return Receptionists.create($scope.receptionist).then(function(res) {
+          return $state.go('admin-receptionists');
+        });
+      };
+      if ($stateParams) {
+        Receptionists.show($stateParams.receptionistId).then(function(res) {
+          return $scope.receptionist = res.data;
+        });
+      }
+      return $scope.remove = function(id) {
+        return Receptionists.remove(id).then(function(res) {
+          console.log(res);
+          return Receptionists.index().then(function(res) {
+            return $scope.receptionists = res.data;
+          });
+        });
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('AdminSpecialitiesController', [
+    '$scope', 'Specialities', function($scope, Specialities) {
+      console.log('Specialities controller');
+      return Specialities.getSpecialities().then(function(res) {
+        $scope.specialities = res.data;
+        console.log('specialities list');
+        return console.log($scope.specialities);
+      });
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('AdminVisitsController', [
+    '$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', function($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) {
+      var changeWeek, getAllDoctors, getWorkingTime, setCalendarWorkingTime;
+      $scope.removeVisit = function(id) {
+        return Visits.destroy(id);
+      };
+      $scope.workingTime = [];
+      Specialities.getSpecialities().then(function(res) {
+        return $scope.specialities = res.data;
+      });
+      Patients.index().then(function(res) {
+        console.log(res);
+        return $scope.patients = res.data;
+      });
+      getAllDoctors = function() {
+        return Doctors.index().then(function(res) {
+          return $scope.doctors = res.data;
+        });
+      };
+      getAllDoctors();
+      $scope.updateDoctorsList = function() {
+        if ($scope.selectedSpeciality) {
+          return Doctors.indexBySpeciality($scope.selectedSpeciality).then(function(res) {
+            var doctor, i, len, ref, results;
+            $scope.doctors = res.data;
+            ref = $scope.doctors;
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              doctor = ref[i];
+              results.push((function() {
+                if (doctor.id === $scope.selectedDoctorId) {
+                  return $scope.selectedDoctor = doctor;
+                }
+              })());
+            }
+            return results;
+          });
+        } else {
+          return getAllDoctors();
+        }
+      };
+      $scope.$watch('selectedDoctor', function() {
+        if ($scope.selectedDoctor) {
+          $scope.selectedDoctorId = $scope.selectedDoctor.id;
+          return getWorkingTime();
+        }
+      });
+      getWorkingTime = function() {
+        return Doctors.workingTime($scope.selectedDoctorId).then(function(res) {
+          $scope.workingTime = res.data;
+          return setCalendarWorkingTime(res.data);
+        });
+      };
+      $scope.workingTimeEvents = [];
+      setCalendarWorkingTime = function() {
+        var date, i, len, ref, results;
+        $scope.workingTimeEvents.length = 0;
+        ref = $scope.workingTime;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          date = ref[i];
+          results.push((function() {
+            var dayOfTheWeek, eventCurrentDate, eventCurrentEndDate, eventEndDate, eventStartDate, results1, startDate;
+            startDate = new Date(date.startDate * 1000);
+            dayOfTheWeek = startDate.getDay();
+            eventStartDate = new Date($scope.calendarStartDate.getUTCFullYear(), $scope.calendarStartDate.getMonth(), $scope.calendarStartDate.getUTCDate() + dayOfTheWeek, date.timeFrom.split(':')[0], date.timeFrom.split(':')[1]);
+            eventEndDate = new Date($scope.calendarStartDate.getUTCFullYear(), $scope.calendarStartDate.getMonth(), $scope.calendarStartDate.getUTCDate() + dayOfTheWeek, date.timeTo.split(':')[0], date.timeTo.split(':')[1]);
+            $scope.workingTimeEvents.push({
+              start: eventStartDate,
+              end: eventEndDate
+            });
+            eventCurrentDate = eventStartDate;
+            eventCurrentEndDate = new Date(eventEndDate.getTime() + 20 * 60000);
+            results1 = [];
+            while (eventCurrentDate < eventEndDate) {
+              $scope.workingTimeEvents.push({
+                start: eventCurrentDate,
+                end: new Date(eventCurrentDate.getTime() + 20 * 60000)
+              });
+              results1.push(eventCurrentDate = new Date(eventCurrentDate.getTime() + 20 * 60000));
+            }
+            return results1;
+          })());
+        }
+        return results;
+      };
+      $scope.$watch('selectedDoctor', function() {
+        if ($scope.selectedDoctor) {
+          return getWorkingTime();
+        }
+      });
+      changeWeek = function(element, view) {
+        $scope.calendarStartDate = element.start._d;
+        Doctors.takenVisitsTimeFrame($scope.selectedDoctorId, element.start._d, element.end._d).then(function(res) {
+          var visitDate;
+          if (res.data.length > 0) {
+            return visitDate = new Date(res.data[0].dateOfVisit * 1000);
+          }
+        });
+        return setCalendarWorkingTime();
+      };
+      $scope.clickEvent = function(event, jsEvent, view) {
+        return $scope.selectedVisitDate = event.start._d;
+      };
+      $scope.uiConfig = {
+        calendar: {
+          height: 450,
+          editable: false,
+          defaultView: 'agendaWeek',
+          slotDuration: '00:20:00',
+          header: {
+            left: 'title',
+            center: '',
+            right: 'today prev,next'
+          },
+          eventClick: $scope.clickEvent,
+          eventDrop: $scope.alertOnDrop,
+          eventResize: $scope.alertOnResize,
+          eventRender: $scope.eventRender,
+          viewRender: changeWeek
+        }
+
+        /* event sources array */
+      };
+      $scope.eventSources = [$scope.workingTimeEvents];
+      return $scope.submit = function() {
+        var visit;
+        visit = {};
+        visit.patientId = $scope.selectedPatient;
+        visit.date = $scope.selectedVisitDate.getTime();
+        visit.idDoctor = $scope.selectedDoctorId;
+        visit.typeOfVisit = 'Dermatolog';
+        return Visits.create(visit).then(function(res) {
+          return $state.go('admin-visits');
+        });
       };
     }
   ]);

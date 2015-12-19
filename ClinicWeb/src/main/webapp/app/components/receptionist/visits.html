@@ -1,0 +1,54 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <a ui-sref='receptionist-visits-new'>
+        dodaj wizytę
+      </a>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Data
+            </th>
+            <th>
+              Pacjent
+            </th>
+            <th>
+              Lekarz
+            </th>
+            <th>
+              Akcje
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='visit in visits'>
+            <td>
+              <a ui-sref='receptionist-visits-show({visitId: visit.id})'>
+                {{visit}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='receptionist-visits-show({visitId: visit.id})'>
+                {{visit}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='receptionist-visits-show({visitId: visit.id})'>
+                {{visit}}
+              </a>
+            </td>
+            <td>
+              <a class='btn btn-danger' ui-sref='receptionist-visits-remove({visitId: visit.id})'>
+                Usuń
+              </a>
+              <a class='btn btn-primary' ui-sref='receptionist-visits-edit({visitId: visit.id})'>
+                Edytuj
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
