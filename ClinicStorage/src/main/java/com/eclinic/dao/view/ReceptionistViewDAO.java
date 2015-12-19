@@ -29,13 +29,13 @@ public interface ReceptionistViewDAO extends JpaDao<ReceptionistView> {
 	 * JPQL Query - findReceptionistById
 	 *
 	 */
-	public ReceptionistView findReceptionistById(Integer id) throws DataAccessException;
+	public ReceptionistView findReceptionistById(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findReceptionistById
 	 *
 	 */
-	public ReceptionistView findReceptionistById(Integer id, int startResult, int maxRows) throws DataAccessException;
+	public ReceptionistView findReceptionistById(String id, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findReceptionistBySurname

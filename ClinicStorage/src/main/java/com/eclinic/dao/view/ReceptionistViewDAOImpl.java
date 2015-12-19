@@ -91,7 +91,7 @@ public class ReceptionistViewDAOImpl extends AbstractJpaDao<ReceptionistView> im
 	 *
 	 */
 	@Transactional
-	public ReceptionistView findReceptionistById(Integer id) throws DataAccessException {
+	public ReceptionistView findReceptionistById(String id) throws DataAccessException {
 
 		return findReceptionistById(id, -1, -1);
 	}
@@ -102,9 +102,9 @@ public class ReceptionistViewDAOImpl extends AbstractJpaDao<ReceptionistView> im
 	 */
 
 	@Transactional
-	public ReceptionistView findReceptionistById(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public ReceptionistView findReceptionistById(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
-			Query query = createNamedQuery("findReceptionistById", startResult, maxRows, id);
+			Query query = createNamedQuery("findReceptionistViewById", startResult, maxRows, id);
 			return (ReceptionistView) query.getSingleResult();
 		} catch (NoResultException nre) {
 			return null;

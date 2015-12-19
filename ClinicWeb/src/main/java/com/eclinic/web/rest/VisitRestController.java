@@ -132,6 +132,13 @@ public class VisitRestController {
 	public Response getFirstVisitByDoctor(@PathParam("id") String id) {
 		return Response.ok(visitCrud.findFirstFreeTermByDoctor(id)).build();
 	}
+	
+	@GET
+	@Path("/all/patient/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllVisitByPatient(@PathParam("id") String id) {
+		return Response.ok(visitCrud.getAllVisitByPatient(id)).build();
+	}
 
 	@GET
 	@Path("/free/specialization/{specialization}")
@@ -199,10 +206,17 @@ public class VisitRestController {
 	}
 
 	@GET
-	@Path("/patient/{patient}")
+	@Path("/patient/done/{patient}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findVisitByPatient(@PathParam("patient") String id) {
-		return Response.ok(visitCrud.findVisitByPatient(id)).build();
+	public Response findDoneVisitByPatient(@PathParam("patient") String id) {
+		return Response.ok(visitCrud.findDoneVisitByPatient(id)).build();
+	}
+	
+	@GET
+	@Path("/patient/plane/{patient}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findPlaneVisitByPatient(@PathParam("patient") String id) {
+		return Response.ok(visitCrud.findPlaneVisitByPatient(id)).build();
 	}
 
 	@GET

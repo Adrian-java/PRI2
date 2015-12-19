@@ -16,7 +16,9 @@ public interface VisitCrud {
 
     public Set<VisitView> findVisitByDoctor(String doctor, Date start, Date stop);
 
-    public Set<VisitView> findVisitByPatient(String id);
+    public Set<VisitView> findPlaneVisitByPatient(String id);
+    
+    public Set<VisitView> findDoneVisitByPatient(String id);
     
     public VisitInfo findVisitById(Integer id);
     
@@ -63,4 +65,6 @@ public interface VisitCrud {
 
 	public Set<VisitView> findVisitByDoctorAndSpecialization(String doctor,
 			String specialization, Date parse, Date parse2);
+
+	public Set<VisitView> getAllVisitByPatient(String id);
 }

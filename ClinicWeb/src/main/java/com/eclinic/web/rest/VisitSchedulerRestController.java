@@ -2,7 +2,9 @@ package com.eclinic.web.rest;
 
 import java.io.IOException;
 
+import javax.net.ssl.SSLEngineResult.Status;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,6 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.StatusType;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -154,6 +157,8 @@ public class VisitSchedulerRestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addVisitScheduler(NewVisitSchedulerMapper vsm) {
 		VisitScheduler addVisitScheduler = visitCrud.addVisitScheduler(vsm);
+		if (addVisitScheduler == null)
+			return Response.noContent().build();
 		return Response.ok(addVisitScheduler).build();
 	}
 
@@ -166,14 +171,13 @@ public class VisitSchedulerRestController {
 				visitCrud.findVisitSchedulerBySpecialization(specialization))
 				.build();
 	}
-	
+
 	@GET
 	@Path("/doctor/{doctor}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findVisitSchedulerByDoctor(
 			@PathParam("doctor") String doctor) {
-		return Response.ok(
-				visitCrud.findVisitSchedulerByDoctor(doctor))
+		return Response.ok(visitCrud.findVisitSchedulerByDoctor(doctor))
 				.build();
 	}
 }

@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,6 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @Entity
+@NamedQueries(value = { @NamedQuery(name = "findReceptionistViewById", query = "select r from ReceptionistView r where r.id = ?1") })
 @Table(catalog = "eclinic", name = "Receptionist_View")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "ReceptionistView")
@@ -32,22 +35,7 @@ public class ReceptionistView {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
-	Integer id;
-	/**
-	 */
-
-	@Column(name = "pesel", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	private String pesel;
-	/**
-	 */
-
-	@Column(name = "description", columnDefinition = "BLOB")
-	@Basic(fetch = FetchType.EAGER)
-	@Lob
-	@XmlElement
-	byte[] description;
+	String id;
 	/**
 	 */
 	@Temporal(TemporalType.DATE)
@@ -58,22 +46,11 @@ public class ReceptionistView {
 	/**
 	 */
 
-	@Column(name = "is_active", nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	Boolean isActive;
-	/**
-	 */
-
 	@Column(name = "email", length = 20, nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@XmlElement
 	String email;
 
-	@Column(name = "role", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	String role;
 
 	@Column(name = "name", length = 20, nullable = false)
 	@Basic(fetch = FetchType.EAGER)
@@ -94,29 +71,14 @@ public class ReceptionistView {
 	@XmlElement
 	String phoneNr;
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getPesel() {
-		return pesel;
-	}
-
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
-	}
-
-	public byte[] getDescription() {
-		return description;
-	}
-
-	public void setDescription(byte[] description) {
-		this.description = description;
-	}
 
 	public Calendar getRegisterDate() {
 		return registerDate;
@@ -126,13 +88,6 @@ public class ReceptionistView {
 		this.registerDate = registerDate;
 	}
 
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
 
 	public String getEmail() {
 		return email;
@@ -140,14 +95,6 @@ public class ReceptionistView {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
 	}
 
 	public String getName() {
