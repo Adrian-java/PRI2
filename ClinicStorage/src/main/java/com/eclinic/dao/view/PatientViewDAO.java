@@ -79,13 +79,13 @@ public interface PatientViewDAO extends JpaDao<PatientView> {
 	 * JPQL Query - findPatientById
 	 *
 	 */
-	public PatientView findPatientById(Integer id) throws DataAccessException;
+	public PatientView findPatientById(String id) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findPatientById
 	 *
 	 */
-	public PatientView findPatientById(Integer id, int startResult, int maxRows) throws DataAccessException;
+	public PatientView findPatientById(String id, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findPatientByEMailContaining

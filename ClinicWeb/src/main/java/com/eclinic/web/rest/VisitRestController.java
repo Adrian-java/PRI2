@@ -187,6 +187,18 @@ public class VisitRestController {
 	}
 
 	@GET
+	@Path("/all/date/{start_date}/{stop_date}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findAllVisitByDate(@PathParam("start_date") String start,
+			@PathParam("stop_date") String stop) throws ParseException {
+		String pattern = "dd-MM-yyyy";
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		return Response.ok(
+				visitCrud.findAllVisitByDate(format.parse(start),
+						format.parse(stop))).build();
+	}
+
+	@GET
 	@Path("/patient/{patient}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findVisitByPatient(@PathParam("patient") String id) {
@@ -245,6 +257,15 @@ public class VisitRestController {
 				visitCrud.findVisitBySpecializationAndDate(specialization,
 						format.parse(startDate), format.parse(endDate)))
 				.build();
+	}
+	
+	@GET
+	@Path("/info/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findVisitById(
+			@PathParam("id") Integer id) throws ParseException {
+		return Response.ok(
+				visitCrud.findVisitById(id)).build();
 	}
 
 }
