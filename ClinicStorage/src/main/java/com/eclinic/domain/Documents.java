@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.*;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 /**
  */
 
@@ -40,7 +42,7 @@ public class Documents implements Serializable {
 
 	/**
 	 */
-
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
