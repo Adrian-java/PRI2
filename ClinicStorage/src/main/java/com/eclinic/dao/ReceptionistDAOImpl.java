@@ -85,7 +85,13 @@ public class ReceptionistDAOImpl extends AbstractJpaDao<Receptionist> implements
 	@Transactional
 	public Set<Receptionist> findAllReceptionists(int startResult, int maxRows) throws DataAccessException {
 		Query query = createNamedQuery("findAllReceptionists", startResult, maxRows);
-		return new LinkedHashSet<Receptionist>(query.getResultList());
+		 LinkedHashSet<Receptionist> linkedHashSet = new LinkedHashSet<Receptionist>(query.getResultList());
+		 LinkedHashSet<Receptionist> out = new LinkedHashSet<Receptionist>();
+		 for(Receptionist r : linkedHashSet){
+			 if(r.getSystemUser().getIsActive())
+				 out.add(r);
+		 }
+		 return out;
 	}
 
 	/**
