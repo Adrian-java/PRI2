@@ -1,0 +1,49 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <a ui-sref='admin-doctors-new'>
+        dodaj lekarza
+      </a>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Imię
+            </th>
+            <th>
+              Nazwisko
+            </th>
+            <th>
+              Akcje
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='doctor in doctors'>
+            <td>
+              <a ui-sref='admin-doctors-show({doctorId: doctor.id})'>
+                {{doctor.name}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='admin-doctors-show({doctorId: doctor.id})'>
+                {{doctor.surname}}
+              </a>
+            </td>
+            <td>
+              <a class='btn btn-danger' ng-click='remove(doctor.id)'>
+                Usuń
+              </a>
+              <a class='btn btn-primary' ui-sref='admin-doctors-edit({doctorId: doctor.id})'>
+                Edytuj
+              </a>
+              <a class='btn btn-primary' ui-sref='admin-doctors-visits({doctorId: doctor.id})'>
+                Wizyty
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

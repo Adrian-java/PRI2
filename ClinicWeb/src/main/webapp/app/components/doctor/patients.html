@@ -1,0 +1,43 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <a ui-sref='doctor-patients-new'>
+        dodaj pacjenta
+      </a>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Pesel
+            </th>
+            <th>
+              Imię
+            </th>
+            <th>
+              Nazwisko
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='patient in patients'>
+            <td>
+              <a ui-sref='doctor-patients-show({patientId: patient.id})'>
+                {{patient.id}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='doctor-patients-show({patientId: patient.id})'>
+                {{patient.name}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='doctor-patients-show({patientId: patient.id})'>
+                {{patient.surname}}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

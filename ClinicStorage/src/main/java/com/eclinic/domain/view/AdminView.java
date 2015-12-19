@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -17,6 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @Entity
+@NamedQueries(value = { @NamedQuery(name = "findAllAdminsView", query = "select a from AdminView a") })
 @Table(catalog = "eclinic", name = "Admin_View")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "wee/com/eclinic/domain", name = "AdminView")
@@ -28,54 +31,39 @@ public class AdminView {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@XmlElement
-	Integer id;
+	String  id;
 	/**
 	 */
 
-	@Column(name = "pesel", length = 20, nullable = false)
-	@Basic(fetch = FetchType.EAGER)
-	@XmlElement
-	private String pesel;
-	/**
-	 */
 
-	@Column(name = "description", columnDefinition = "BLOB")
-	@Basic(fetch = FetchType.EAGER)
-	@Lob
-	@XmlElement
-	byte[] description;
+//	@Column(name = "description", columnDefinition = "BLOB")
+//	@Basic(fetch = FetchType.EAGER)
+//	@Lob
+//	@XmlElement
+//	String description;
 	/**
 	 */
 
 	@Column(name = "is_super")
 	@Basic(fetch = FetchType.EAGER)
-	@Lob
 	@XmlElement
 	Boolean isSuper;
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getPesel() {
-		return pesel;
-	}
-
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
-	}
-
-	public byte[] getDescription() {
-		return description;
-	}
-
-	public void setDescription(byte[] description) {
-		this.description = description;
-	}
+//	public String getDescription() {
+//		return description;
+//	}
+//
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
 
 	public Boolean getIsSuper() {
 		return isSuper;

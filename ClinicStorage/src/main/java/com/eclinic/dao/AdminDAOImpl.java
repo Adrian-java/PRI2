@@ -1,6 +1,7 @@
 package com.eclinic.dao;
 
 import com.eclinic.domain.Admin;
+import com.eclinic.domain.view.AdminView;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,11 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.skyway.spring.util.dao.AbstractJpaDao;
-
 import org.springframework.dao.DataAccessException;
-
 import org.springframework.stereotype.Repository;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -142,7 +140,7 @@ public class AdminDAOImpl extends AbstractJpaDao<Admin> implements AdminDAO {
 	 *
 	 */
 	@Transactional
-	public Set<Admin> findAllAdmins() throws DataAccessException {
+	public Set<AdminView> findAllAdmins() throws DataAccessException {
 
 		return findAllAdmins(-1, -1);
 	}
@@ -154,9 +152,9 @@ public class AdminDAOImpl extends AbstractJpaDao<Admin> implements AdminDAO {
 
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public Set<Admin> findAllAdmins(int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findAllAdmins", startResult, maxRows);
-		return new LinkedHashSet<Admin>(query.getResultList());
+	public Set<AdminView> findAllAdmins(int startResult, int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findAllAdminsView", startResult, maxRows);
+		return new LinkedHashSet<AdminView>(query.getResultList());
 	}
 
 	/**

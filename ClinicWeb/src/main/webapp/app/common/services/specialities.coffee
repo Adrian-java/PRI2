@@ -1,17 +1,15 @@
 angular.module 'clinic'
-  .service 'Specialities', ($http) ->
+  .service 'Specialities', ['$http', 'api', ($http, api) ->
     # Return public API.
     # ---
     # PUBLIC METHODS.
     # ---
     # I add a friend with the given name to the remote collection.
-
     getSpecialities = ->
       request = $http(
-        method: 'get'
-        url: 'http://localhost:8080/rest/Specialization/list'
-        params: action: 'get')
-      request.then handleSuccess, handleError
+        method: 'GET'
+        url: api + 'Specialization/list')
+      return request
 
     # ---
     # PRIVATE METHODS.
@@ -40,3 +38,4 @@ angular.module 'clinic'
     {
       getSpecialities: getSpecialities
     }
+  ]

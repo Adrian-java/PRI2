@@ -1,20 +1,19 @@
 (function() {
   angular.module('clinic').service('Role', [
-    '$http', '$cookies', function($http, $cookies) {
+    '$http', '$cookies', 'api', function($http, $cookies, api) {
       var check, handleError, handleSuccess;
       check = function() {
         var login, request;
         login = $cookies.token.split(":")[0];
-        console.log(login);
         request = $http({
           method: 'GET',
-          url: "http://localhost:8080/rest/SystemUser/role/" + login,
+          url: api + 'SystemUser/role/' + login,
           headers: {
-            'XToken': $cookies.get('token'),
+            'XToken': $cookies.token,
             'Content-Type': 'application/json'
           }
         });
-        return request.then(handleSuccess, handleError);
+        return request;
       };
       handleError = function(response) {
         if (!angular.isObject(response.data) || !response.data.message) {
@@ -22,7 +21,6 @@
         }
       };
       handleSuccess = function(response) {
-        console.log(response.data);
         return response.data;
       };
       return {

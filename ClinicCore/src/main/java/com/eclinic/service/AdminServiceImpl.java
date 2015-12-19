@@ -2,17 +2,15 @@ package com.eclinic.service;
 
 import com.eclinic.dao.AdminDAO;
 import com.eclinic.dao.SystemUserDAO;
-
 import com.eclinic.domain.Admin;
 import com.eclinic.domain.SystemUser;
+import com.eclinic.domain.view.AdminView;
 
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -122,7 +120,7 @@ public class AdminServiceImpl implements AdminService {
 	 * 
 	 */
 	@Transactional
-	public Set<Admin> loadAdmins() {
+	public Set<AdminView> loadAdmins() {
 		return adminDAO.findAllAdmins();
 	}
 
@@ -153,8 +151,8 @@ public class AdminServiceImpl implements AdminService {
 	 * 
 	 */
 	@Transactional
-	public List<Admin> findAllAdmins(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Admin>(adminDAO.findAllAdmins(startResult, maxRows));
+	public List<AdminView> findAllAdmins(Integer startResult, Integer maxRows) {
+		return new java.util.ArrayList<AdminView>(adminDAO.findAllAdmins(startResult, maxRows));
 	}
 
 	/**

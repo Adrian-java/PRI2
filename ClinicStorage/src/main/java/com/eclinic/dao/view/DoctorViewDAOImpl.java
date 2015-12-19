@@ -147,7 +147,7 @@ public class DoctorViewDAOImpl extends AbstractJpaDao<DoctorView> implements Doc
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Set<DoctorView> findAllDoctors(int startResult, int maxRows) throws DataAccessException {
-		Query query = createNamedQuery("findAllDoctors", startResult, maxRows);
+		Query query = createNamedQuery("getAllDoctors", startResult, maxRows);
 		return new LinkedHashSet<DoctorView>(query.getResultList());
 	}
 

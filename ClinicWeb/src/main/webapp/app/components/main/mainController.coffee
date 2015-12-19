@@ -1,5 +1,5 @@
 angular.module 'clinic'
-  .controller 'MainController', ['$scope', '$uibModal', 'Auth', 'Role', '$cookies', ($scope, $uibModal, Auth, Role, $cookies) ->
+  .controller 'MainController', ['$scope', '$uibModal', 'Auth', 'Role', '$cookies', '$state', ($scope, $uibModal, Auth, Role,$cookies, $state) ->
 
 
     $scope.open = (size) ->
@@ -15,12 +15,21 @@ angular.module 'clinic'
     $scope.logout = ->
       Auth.logout()
 
+    $scope.panel = ->
+      $state.go($scope.role)
+
     $scope.$watch (->
       $cookies.token
     ), (newValue) ->
       if($cookies.token)
+        console.log $cookies.token
         $scope.loggedIn = true
-        Role.check()
+        Role.check().then((res) ->
+          console.log res
+          $scope.role = res.data.role
+        , (err) ->
+          console.log err
+        )
       else
         $scope.loggedIn = false
       return

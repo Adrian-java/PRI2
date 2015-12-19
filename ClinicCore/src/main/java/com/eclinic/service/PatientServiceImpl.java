@@ -79,7 +79,8 @@ public class PatientServiceImpl implements PatientService {
 	@Transactional
 	public Patient savePatientAddress(String id, Address related_address) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
-		Address existingaddress = addressDAO.findAddressByPrimaryKey(related_address.getId());
+		Address existingaddress = addressDAO
+				.findAddressByPrimaryKey(related_address.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingaddress != null) {
@@ -88,7 +89,8 @@ public class PatientServiceImpl implements PatientService {
 			existingaddress.setCountryCode(related_address.getCountryCode());
 			existingaddress.setProvince(related_address.getProvince());
 			existingaddress.setCountry(related_address.getCountry());
-			existingaddress.setCountryCodeCity(related_address.getCountryCodeCity());
+			existingaddress.setCountryCodeCity(related_address
+					.getCountryCodeCity());
 			existingaddress.setHomeNr(related_address.getHomeNr());
 			related_address = existingaddress;
 		}
@@ -109,10 +111,13 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientVisits(String patient_id, Integer related_visits_id) {
-		Visit related_visits = visitDAO.findVisitByPrimaryKey(related_visits_id, -1, -1);
+	public Patient deletePatientVisits(String patient_id,
+			Integer related_visits_id) {
+		Visit related_visits = visitDAO.findVisitByPrimaryKey(
+				related_visits_id, -1, -1);
 
-		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
+		Patient patient = patientDAO
+				.findPatientByPrimaryKey(patient_id, -1, -1);
 
 		related_visits.setPatient(null);
 		patient.getVisits().remove(related_visits);
@@ -130,13 +135,15 @@ public class PatientServiceImpl implements PatientService {
 	@Transactional
 	public Patient savePatientVisits(String id, Visit related_visits) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
-		Visit existingvisits = visitDAO.findVisitByPrimaryKey(related_visits.getId());
+		Visit existingvisits = visitDAO.findVisitByPrimaryKey(related_visits
+				.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingvisits != null) {
 			existingvisits.setId(related_visits.getId());
 			existingvisits.setDateOfVisit(related_visits.getDateOfVisit());
-			existingvisits.setDescriptionOfVisit(related_visits.getDescriptionOfVisit());
+			existingvisits.setDescriptionOfVisit(related_visits
+					.getDescriptionOfVisit());
 			existingvisits.setIsLeave(related_visits.getIsLeave());
 			existingvisits.setSpecial(related_visits.getSpecial());
 			related_visits = existingvisits;
@@ -168,17 +175,23 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient savePatientDocumentses(String id, Documents related_documentses) {
+	public Patient savePatientDocumentses(String id,
+			Documents related_documentses) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
-		Documents existingdocumentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses.getId());
+		Documents existingdocumentses = documentsDAO
+				.findDocumentsByPrimaryKey(related_documentses.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingdocumentses != null) {
 			existingdocumentses.setId(related_documentses.getId());
-			existingdocumentses.setDateOfDocuments(related_documentses.getDateOfDocuments());
-			existingdocumentses.setDescription(related_documentses.getDescription());
-			existingdocumentses.setTypeOfDocuments(related_documentses.getTypeOfDocuments());
-			existingdocumentses.setDataOfDocuments(related_documentses.getDataOfDocuments());
+			existingdocumentses.setDateOfDocuments(related_documentses
+					.getDateOfDocuments());
+			existingdocumentses.setDescription(related_documentses
+					.getDescription());
+			existingdocumentses.setTypeOfDocuments(related_documentses
+					.getTypeOfDocuments());
+			existingdocumentses.setDataOfDocuments(related_documentses
+					.getDataOfDocuments());
 			related_documentses = existingdocumentses;
 		}
 
@@ -198,9 +211,12 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientAddress(String patient_id, Integer related_address_id) {
-		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
-		Address related_address = addressDAO.findAddressByPrimaryKey(related_address_id, -1, -1);
+	public Patient deletePatientAddress(String patient_id,
+			Integer related_address_id) {
+		Patient patient = patientDAO
+				.findPatientByPrimaryKey(patient_id, -1, -1);
+		Address related_address = addressDAO.findAddressByPrimaryKey(
+				related_address_id, -1, -1);
 
 		patient.setAddress(null);
 		related_address.getPatients().remove(patient);
@@ -222,7 +238,8 @@ public class PatientServiceImpl implements PatientService {
 	 */
 	@Transactional
 	public Integer countPatients() {
-		return ((Long) patientDAO.createQuerySingleResult("select count(o) from Patient o").getSingleResult()).intValue();
+		return ((Long) patientDAO.createQuerySingleResult(
+				"select count(o) from Patient o").getSingleResult()).intValue();
 	}
 
 	/**
@@ -237,9 +254,12 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientSystemUser(String patient_id, String related_systemuser_id) {
-		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
-		SystemUser related_systemuser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
+	public Patient deletePatientSystemUser(String patient_id,
+			String related_systemuser_id) {
+		Patient patient = patientDAO
+				.findPatientByPrimaryKey(patient_id, -1, -1);
+		SystemUser related_systemuser = systemUserDAO
+				.findSystemUserByPrimaryKey(related_systemuser_id, -1, -1);
 
 		patient.setSystemUser(null);
 		patient = patientDAO.store(patient);
@@ -260,17 +280,21 @@ public class PatientServiceImpl implements PatientService {
 	 */
 	@Transactional
 	public String savePatient(Patient patient) {
-		Patient existingPatient = patientDAO.findPatientByPrimaryKey(patient.getId());
+		Patient existingPatient = patientDAO.findPatientByPrimaryKey(patient
+				.getId());
 
 		if (existingPatient != null) {
-			if (existingPatient != patient) {
-				existingPatient.setId(patient.getId());
-				existingPatient.setName(patient.getName());
+			if (!patient.getName().isEmpty())
+				existingPatient.setName((patient.getName()));
+			if (!patient.getSurname().isEmpty())
 				existingPatient.setSurname(patient.getSurname());
+			if (patient.getDateOfBirth() != null)
 				existingPatient.setDateOfBirth(patient.getDateOfBirth());
+			if (!patient.getPhoneNr().isEmpty())
 				existingPatient.setPhoneNr(patient.getPhoneNr());
-				existingPatient.setConfirmed(patient.getConfirmed());
-			}
+			if (patient.getAddress() != null)
+				existingPatient.setAddress(patient.getAddress());
+
 			patient = patientDAO.store(existingPatient);
 		} else {
 			patient = patientDAO.store(patient);
@@ -285,7 +309,8 @@ public class PatientServiceImpl implements PatientService {
 	 */
 	@Transactional
 	public List<Patient> findAllPatients(Integer startResult, Integer maxRows) {
-		return new java.util.ArrayList<Patient>(patientDAO.findAllPatients(startResult, maxRows));
+		return new java.util.ArrayList<Patient>(patientDAO.findAllPatients(
+				startResult, maxRows));
 	}
 
 	/**
@@ -293,10 +318,13 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient deletePatientDocumentses(String patient_id, Integer related_documentses_id) {
-		Documents related_documentses = documentsDAO.findDocumentsByPrimaryKey(related_documentses_id, -1, -1);
+	public Patient deletePatientDocumentses(String patient_id,
+			Integer related_documentses_id) {
+		Documents related_documentses = documentsDAO.findDocumentsByPrimaryKey(
+				related_documentses_id, -1, -1);
 
-		Patient patient = patientDAO.findPatientByPrimaryKey(patient_id, -1, -1);
+		Patient patient = patientDAO
+				.findPatientByPrimaryKey(patient_id, -1, -1);
 
 		related_documentses.setPatient(null);
 		patient.getDocumentses().remove(related_documentses);
@@ -312,20 +340,26 @@ public class PatientServiceImpl implements PatientService {
 	 * 
 	 */
 	@Transactional
-	public Patient savePatientSystemUser(String id, SystemUser related_systemuser) {
+	public Patient savePatientSystemUser(String id,
+			SystemUser related_systemuser) {
 		Patient patient = patientDAO.findPatientByPrimaryKey(id, -1, -1);
-		SystemUser existingsystemUser = systemUserDAO.findSystemUserByPrimaryKey(related_systemuser.getId());
+		SystemUser existingsystemUser = systemUserDAO
+				.findSystemUserByPrimaryKey(related_systemuser.getId());
 
 		// copy into the existing record to preserve existing relationships
 		if (existingsystemUser != null) {
 			existingsystemUser.setId(related_systemuser.getId());
 			existingsystemUser.setPassword(related_systemuser.getPassword());
-			existingsystemUser.setDescription(related_systemuser.getDescription());
-			existingsystemUser.setRegisterDate(related_systemuser.getRegisterDate());
+			existingsystemUser.setDescription(related_systemuser
+					.getDescription());
+			existingsystemUser.setRegisterDate(related_systemuser
+					.getRegisterDate());
 			existingsystemUser.setIsActive(related_systemuser.getIsActive());
-			existingsystemUser.setChangedPassword(related_systemuser.getChangedPassword());
+			existingsystemUser.setChangedPassword(related_systemuser
+					.getChangedPassword());
 			existingsystemUser.setEmail(related_systemuser.getEmail());
-			existingsystemUser.setUnregisterDate(related_systemuser.getUnregisterDate());
+			existingsystemUser.setUnregisterDate(related_systemuser
+					.getUnregisterDate());
 			existingsystemUser.setRole(related_systemuser.getRole());
 			related_systemuser = existingsystemUser;
 		} else {

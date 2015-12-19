@@ -9,32 +9,27 @@
     %nav.navbar.navbar-default.navbar-fixed-top{:role => "navigation"}
       .container
         .row
-          .navbar-header
-            %button.navbar-toggle{"data-target" => "#navbarCollapse", "data-toggle" => "collapse", :type => "button"}
-              %span.sr-only Toggle navigation
-              %span.icon-bar
-              %span.icon-bar
-              %span.icon-bar
-            %a.navbar-brand{"ui-sref" => "home"}
-              %img{:src => "assets/img/logo.png"}/
-          #navbarCollapse.collapse.navbar-collapse
-            %ul.nav.navbar-nav.navbar-right
-              %li
-                %a{"ui-sref" => "visits.new"} Umów się
-              %li
-                %a{"ui-sref" => "services"} Usługi
-              %li
-                %a{"ui-sref" => "price_list"} Cennik
-              %li
-                %a{"ui-sref" => "contact"} Kontakt
-              %li
-                %a{:"ng-hide" => "loggedIn", :"ui-sref" => "register"} Zarejestruj się
-              %li
-                %a{"ng-show" => "loggedIn", "ui-sref" => "panel"} Panel
-              %li
-                %a{:href => "", "ng-click" => "open()", "ng-hide" => "loggedIn"} Zaloguj
-              %li
-                %a{:href => "", "ng-click" => "logout()", "ng-show" => "loggedIn"} Wyloguj
+          .col-xs-12
+            .navbar-header
+              %button.navbar-toggle{"data-target" => "#navbarCollapse", "data-toggle" => "collapse", :type => "button"}
+                %span.sr-only Toggle navigation
+                %span.icon-bar
+                %span.icon-bar
+                %span.icon-bar
+              %a.navbar-brand{"ui-sref" => "home"}
+                %img{:src => "assets/img/logo.png"}/
+            #navbarCollapse.collapse.navbar-collapse
+              %ul.nav.navbar-nav.navbar-right
+                %li
+                  %a{"ui-sref" => "visits.new"} Umów się
+                %li
+                  %a{:"ng-hide" => "loggedIn", :"ui-sref" => "register"} Zarejestruj się
+                %li
+                  %a{"ng-show" => "loggedIn", "href" => "", :'ng-click' => 'panel()'} Panel
+                %li
+                  %a{:href => "", "ng-click" => "open()", "ng-hide" => "loggedIn"} Zaloguj
+                %li
+                  %a{:href => "", "ng-click" => "logout()", "ng-show" => "loggedIn"} Wyloguj
     %div.main-container{:"ui-view" => ""}
     %script{:src => "assets/js/bower/bower.js"}
     %script{:src => "assets/js/app.module.js"}
@@ -42,6 +37,10 @@
     %script{:src => "assets/js/common/services/specialities.js"}
     %script{:src => "assets/js/common/services/user.js"}
     %script{:src => "assets/js/common/services/role.js"}
+    %script{:src => "assets/js/common/services/doctors.js"}
+    %script{:src => "assets/js/common/services/patients.js"}
+    %script{:src => "assets/js/common/services/receptionists.js"}
+    %script{:src => "assets/js/common/services/visits.js"}
     %script{:src => "assets/js/common/directives/date_select.js"}
     %script{:src => "assets/js/common/directives/form_validation.js"}
     %script{:src => "assets/js/components/home/homeController.js"}
@@ -49,3 +48,18 @@
     %script{:src => "assets/js/components/main/mainController.js"}
     %script{:src => "assets/js/components/patient/patientController.js"}
     %script{:src => "assets/js/components/register/registerController.js"}
+    %script{:src => "assets/js/components/visits/visitsController.js"}
+    %script{:src => "assets/js/components/admin/adminDoctorsController.js"}
+    %script{:src => "assets/js/components/admin/adminPatientsController.js"}
+    %script{:src => "assets/js/components/admin/adminReceptionistsController.js"}
+    %script{:src => "assets/js/components/admin/adminSpecialitiesController.js"}
+    %script{:src => "assets/js/components/admin/adminPatientsVisitsController.js"}
+    %script{:src => "assets/js/components/admin/adminDoctorsVisitsController.js"}
+    %script{:src => "assets/js/components/admin/adminVisitsController.js"}
+    %script{:src => "assets/js/components/receptionist/receptionistDoctorsController.js"}
+    %script{:src => "assets/js/components/receptionist/receptionistPatientsController.js"}
+    %script{:src => "assets/js/components/receptionist/receptionistSpecialitiesController.js"}
+    %script{:src => "assets/js/components/receptionist/receptionistPatientsVisitsController.js"}
+    %script{:src => "assets/js/components/receptionist/receptionistDoctorsVisitsController.js"}
+    %script{:src => "assets/js/components/receptionist/receptionistVisitsController.js"}
+    %script{:src => "assets/js/components/doctor/doctorPatientsController.js"}

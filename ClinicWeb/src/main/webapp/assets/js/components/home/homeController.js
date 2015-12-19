@@ -1,6 +1,6 @@
 (function() {
   angular.module('clinic').controller('HomeController', [
-    '$scope', '$timeout', function($scope, $timeout) {
+    '$scope', '$timeout', '$state', 'Specialities', 'Doctors', function($scope, $timeout, $state, Specialities, Doctors) {
       var afterTomorrow, tomorrow;
       $scope.today = function() {
         $scope.dt = new Date;
@@ -45,7 +45,7 @@
           status: 'partially'
         }
       ];
-      return $scope.getDayClass = function(date, mode) {
+      $scope.getDayClass = function(date, mode) {
         var currentDay, dayToCheck, i;
         if (mode === 'day') {
           dayToCheck = new Date(date).setHours(0, 0, 0, 0);
@@ -59,6 +59,32 @@
           }
         }
         return '';
+      };
+      Specialities.getSpecialities().then(function(res) {
+        $scope.specialities = res.data;
+        console.log('specialities list');
+        return console.log($scope.specialities);
+      });
+      Doctors.index().then(function(res) {
+        $scope.doctors = res.data;
+        console.log('doctors');
+        return console.log($scope.doctors);
+      });
+      $scope.updateDoctorsList = function() {
+        console.log('update doctors list ' + $scope.selectedSpeciality);
+        return Doctors.indexBySpeciality($scope.selectedSpeciality).then(function(res) {
+          console.log('change doctors select');
+          return $scope.doctors = res.data;
+        });
+      };
+      return $scope.submit = function() {
+        console.log('submit main form');
+        console.log($scope.selectedDoctor);
+        return $state.go('visits.new', {
+          'speciality': $scope.selectedSpeciality,
+          'doctor': $scope.selectedDoctor.id,
+          'date': $scope.selectedDate
+        });
       };
     }
   ]);

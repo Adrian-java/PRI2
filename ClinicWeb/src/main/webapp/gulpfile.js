@@ -90,6 +90,6 @@ gulp.task('watch', function() {
 });
 
 // Default Task
-gulp.task('default', ['bower-files', 'haml-double-quote', 'haml-double-quote-view', 'coffee', 'css', 'sass', 'css-concat', 'scripts', 'watch', 'serve']);
+gulp.task('default', ['serve', 'bower-files', 'haml-double-quote', 'haml-double-quote-view', 'coffee', 'css', 'sass', 'css-concat', 'scripts', 'watch']);
 
 gulp.task('serve', serve('.'));

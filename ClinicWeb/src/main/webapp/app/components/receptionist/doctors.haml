@@ -1,0 +1,29 @@
+.container
+  .row
+    .col-xs-12
+      %a{:'ui-sref' => 'receptionist-doctors-new'}
+        dodaj lekarza
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Imię
+            %th
+              Nazwisko
+            %th
+              Akcje
+        %tbody
+          %tr{:'ng-repeat' => 'doctor in doctors'}
+            %td
+              %a{:'ui-sref' => 'receptionist-doctors-show({doctorId: doctor.id})'}
+                {{doctor.name}}
+            %td
+              %a{:'ui-sref' => 'receptionist-doctors-show({doctorId: doctor.id})'}
+                {{doctor.surname}}
+            %td
+              %a.btn.btn-danger{:'ui-sref' => 'receptionist-doctors-remove({doctorId: doctor.id})'}
+                Usuń
+              %a.btn.btn-primary{:'ui-sref' => 'receptionist-doctors-edit({doctorId: doctor.id})'}
+                Edytuj
+              %a.btn.btn-primary{:'ui-sref' => 'receptionist-doctors-visits({doctorId: doctor.id})'}
+                Wizyty

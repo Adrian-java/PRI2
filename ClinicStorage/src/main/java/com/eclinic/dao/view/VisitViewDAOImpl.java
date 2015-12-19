@@ -73,7 +73,7 @@ public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements
 	}
 
 	public VisitView findVisitById(Integer visitId) throws DataAccessException {
-		Query query = createNamedQuery("findFreeVisitViewById", -1, -1, visitId);
+		Query query = createNamedQuery("findAllVisitViewById", -1, -1, visitId);
 		return (VisitView) query.getSingleResult();
 	}
 
@@ -85,8 +85,10 @@ public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 
-	public Set<VisitView> findVisitByDoctorAndDate(String doctor, Date start, Date stop, int i, int j) {
-		Query query = createNamedQuery("findVisitViewByDoctorAndDate", -1, -1, doctor,start,stop);
+	public Set<VisitView> findVisitByDoctorAndDate(String doctor, Date start,
+			Date stop, int i, int j) {
+		Query query = createNamedQuery("findVisitViewByDoctorAndDate", -1, -1,
+				doctor, start, stop);
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 
@@ -112,11 +114,19 @@ public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements
 				-1, -1, s, start, stop);
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
-	
-	public Set<VisitView> findVisitByDoctorSpecializationAndDate(String doctor, String specialization,
-			Date start, Date stop) {
-		Query query = createNamedQuery("findVisitViewByDoctorAndSpecializationAndDate",
-				-1, -1, doctor,specialization, start, stop);
+
+	public Set<VisitView> findVisitByDoctorSpecializationAndDate(String doctor,
+			String specialization, Date start, Date stop) {
+		Query query = createNamedQuery(
+				"findVisitViewByDoctorAndSpecializationAndDate", -1, -1,
+				doctor, specialization, start, stop);
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+
+	public Set<VisitView> findVisitByDate(Date start, Date stop) {
+		// TODO Auto-generated method stub
+		Query query = createNamedQuery("findVisitViewByDate", -1, -1, start,
+				stop);
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 

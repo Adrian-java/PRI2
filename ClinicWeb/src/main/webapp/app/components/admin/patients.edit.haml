@@ -1,0 +1,42 @@
+.container
+  {{patient}}
+  %form.form-horizontal{:role => "form", :'ng-submit' => 'edit()', :'form-validation' => ''}
+    .form-group
+      %label.control-label.col-sm-2{:for => "first-name"} Imię:
+      .col-sm-10
+        %input#first-name.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'patient.name'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "last-name"} Nazwisko:
+      .col-sm-10
+        %input#last-name.form-control{:placeholder => "Wpisz nazwisko", :type => "text", :'ng-model' => 'patient.surname'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "phone"} Telefon:
+      .col-sm-10
+        %input#phone.form-control{:placeholder => "Wpisz numer kontaktowy", :type => "text", :'ng-model' => 'patient.phoneNr'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "city"} Miasto:
+      .col-sm-10
+        %input#city.form-control{:placeholder => "Wpisz miasto", :type => "text", :'ng-model' => 'patient.city'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "county-code"} Kod pocztowy:
+      .col-sm-10
+        %input#county-code.form-control{:placeholder => "Wpisz kod pocztowy", :type => "text", :'ng-model' => 'patient.countryCode'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "house-number"} Numer domu/mieszkania:
+      .col-sm-10
+        %input#county-code.form-control{:placeholder => "Wpisz numer domu/mieszkania", :type => "text", :'ng-model' => 'patient.homeNr'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "province"} Województwo:
+      .col-sm-10
+        %input#province.form-control{:placeholder => "Wpisz województwo", :type => "text", :'ng-model' => 'patient.province'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "country"} Państwo:
+      .col-sm-10
+        %input#country.form-control{:placeholder => "Wpisz nazwę państwa", :type => "text", :'ng-model' => 'patient.country'}
+    .form-group
+      %label.control-label.col-sm-2{:for => "street"} Ulica:
+      .col-sm-10
+        %input#country.form-control{:placeholder => "Wpisz nazwę ulicy", :type => "text", :'ng-model' => 'patient.street'}
+    .form-group
+      .col-sm-offset-2.col-sm-10
+        %button.btn.btn-default{:type => "submit"} Zapisz

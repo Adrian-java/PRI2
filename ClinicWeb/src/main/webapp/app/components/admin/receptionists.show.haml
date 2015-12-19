@@ -1,0 +1,19 @@
+.container
+  .row
+    .col-xs-12
+      {{receptionist}}
+      %ul.list-group
+        %li.list-group-item.active
+          Imię i nazwisko
+        %li.list-group-item
+          {{receptionist.name}} {{receptionist.surname}}
+      %ul.list-group
+        %li.list-group-item.active
+          Telefon kontaktowy
+        %li.list-group-item
+          {{receptionist.phoneNr}}
+      %ul.list-group
+        %li.list-group-item.active
+          E-mail
+        %li.list-group-item
+          {{receptionist.EMail}}

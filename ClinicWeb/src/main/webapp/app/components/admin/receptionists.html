@@ -1,0 +1,46 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <a ui-sref='admin-receptionists-new'>
+        dodaj recepcjonistę
+      </a>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Imię
+            </th>
+            <th>
+              Nazwisko
+            </th>
+            <th>
+              Akcje
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='receptionist in receptionists'>
+            <td>
+              <a ui-sref='admin-receptionist-show({receptionistId: receptionist.id})'>
+                {{receptionist.name}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='admin-receptionist-show({receptionistId: receptionist.id})'>
+                {{receptionist.surname}}
+              </a>
+            </td>
+            <td>
+              <a class='btn btn-danger' ng-click='remove(receptionist.id)'>
+                Usuń
+              </a>
+              <a class='btn btn-primary' ui-sref='admin-receptionists-edit({receptionistId: receptionist.id})'>
+                Edytuj
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -76,7 +76,7 @@ public class DoctorCrudDB implements DoctorCrud {
 		systemUser.setRegisterDate(c);
 		try {
 			map.put("status","ok");
-			String i = systemUserService.saveSystemUserDoctor(systemUser);
+			String i = systemUserService.saveSystemUserDoctor(systemUser,false);
 			return Response.ok(map)
 					.build();
 		} catch (Exception e) {
@@ -88,16 +88,14 @@ public class DoctorCrudDB implements DoctorCrud {
 		return permissionMangament.showPermissionById(pesel);
 	}
 
-	public Response updatePatient(SystemUser systemUser, String idd) {
-		SystemUser su = systemUserDAO.findSystemUserById(idd);
-		String id = su.getPatient().getId();
-		Doctor d = doctorDao.findDoctorById(id);
-		if (d instanceof HibernateProxy) {
-			HibernateProxy proxy = (HibernateProxy) d;
-			LazyInitializer li = proxy.getHibernateLazyInitializer();
-			d = (Doctor) li.getImplementation();
-		}
-		String i = doctorService.saveDoctor(d);
+	public Response updateDoctor(Doctor doctor, String id) {
+//		if (d instanceof HibernateProxy) {
+//			HibernateProxy proxy = (HibernateProxy) d;
+//			LazyInitializer li = proxy.getHibernateLazyInitializer();
+//			d = (Doctor) li.getImplementation();
+//		}
+		doctor.setId(id);
+		String i = doctorService.saveDoctor(doctor);
 		try {
 			try {
 				return Response
@@ -122,7 +120,7 @@ public class DoctorCrudDB implements DoctorCrud {
 			Calendar c = Calendar.getInstance();
 			c.setTime(new Date());
 			su.setUnregisterDate(c);
-			systemUserService.saveSystemUser(su);
+			systemUserService.saveSystemUserDoctor(su,true);
 			map.put("status", "usunieto");
 			return Response.ok(map).build();
 		} else {

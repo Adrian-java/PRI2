@@ -10,44 +10,37 @@
     <nav class='navbar navbar-default navbar-fixed-top' role='navigation'>
       <div class='container'>
         <div class='row'>
-          <div class='navbar-header'>
-            <button class='navbar-toggle' data-target='#navbarCollapse' data-toggle='collapse' type='button'>
-              <span class='sr-only'>Toggle navigation</span>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-            </button>
-            <a class='navbar-brand' ui-sref='home'>
-              <img src='assets/img/logo.png'>
-            </a>
-          </div>
-          <div class='collapse navbar-collapse' id='navbarCollapse'>
-            <ul class='nav navbar-nav navbar-right'>
-              <li>
-                <a ui-sref='visits.new'>Umów się</a>
-              </li>
-              <li>
-                <a ui-sref='services'>Usługi</a>
-              </li>
-              <li>
-                <a ui-sref='price_list'>Cennik</a>
-              </li>
-              <li>
-                <a ui-sref='contact'>Kontakt</a>
-              </li>
-              <li>
-                <a ng-hide='loggedIn' ui-sref='register'>Zarejestruj się</a>
-              </li>
-              <li>
-                <a ng-show='loggedIn' ui-sref='panel'>Panel</a>
-              </li>
-              <li>
-                <a href='' ng-click='open()' ng-hide='loggedIn'>Zaloguj</a>
-              </li>
-              <li>
-                <a href='' ng-click='logout()' ng-show='loggedIn'>Wyloguj</a>
-              </li>
-            </ul>
+          <div class='col-xs-12'>
+            <div class='navbar-header'>
+              <button class='navbar-toggle' data-target='#navbarCollapse' data-toggle='collapse' type='button'>
+                <span class='sr-only'>Toggle navigation</span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+              </button>
+              <a class='navbar-brand' ui-sref='home'>
+                <img src='assets/img/logo.png'>
+              </a>
+            </div>
+            <div class='collapse navbar-collapse' id='navbarCollapse'>
+              <ul class='nav navbar-nav navbar-right'>
+                <li>
+                  <a ui-sref='visits.new'>Umów się</a>
+                </li>
+                <li>
+                  <a ng-hide='loggedIn' ui-sref='register'>Zarejestruj się</a>
+                </li>
+                <li>
+                  <a href='' ng-click='panel()' ng-show='loggedIn'>Panel</a>
+                </li>
+                <li>
+                  <a href='' ng-click='open()' ng-hide='loggedIn'>Zaloguj</a>
+                </li>
+                <li>
+                  <a href='' ng-click='logout()' ng-show='loggedIn'>Wyloguj</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -59,6 +52,10 @@
     <script src='assets/js/common/services/specialities.js'></script>
     <script src='assets/js/common/services/user.js'></script>
     <script src='assets/js/common/services/role.js'></script>
+    <script src='assets/js/common/services/doctors.js'></script>
+    <script src='assets/js/common/services/patients.js'></script>
+    <script src='assets/js/common/services/receptionists.js'></script>
+    <script src='assets/js/common/services/visits.js'></script>
     <script src='assets/js/common/directives/date_select.js'></script>
     <script src='assets/js/common/directives/form_validation.js'></script>
     <script src='assets/js/components/home/homeController.js'></script>
@@ -66,5 +63,20 @@
     <script src='assets/js/components/main/mainController.js'></script>
     <script src='assets/js/components/patient/patientController.js'></script>
     <script src='assets/js/components/register/registerController.js'></script>
+    <script src='assets/js/components/visits/visitsController.js'></script>
+    <script src='assets/js/components/admin/adminDoctorsController.js'></script>
+    <script src='assets/js/components/admin/adminPatientsController.js'></script>
+    <script src='assets/js/components/admin/adminReceptionistsController.js'></script>
+    <script src='assets/js/components/admin/adminSpecialitiesController.js'></script>
+    <script src='assets/js/components/admin/adminPatientsVisitsController.js'></script>
+    <script src='assets/js/components/admin/adminDoctorsVisitsController.js'></script>
+    <script src='assets/js/components/admin/adminVisitsController.js'></script>
+    <script src='assets/js/components/receptionist/receptionistDoctorsController.js'></script>
+    <script src='assets/js/components/receptionist/receptionistPatientsController.js'></script>
+    <script src='assets/js/components/receptionist/receptionistSpecialitiesController.js'></script>
+    <script src='assets/js/components/receptionist/receptionistPatientsVisitsController.js'></script>
+    <script src='assets/js/components/receptionist/receptionistDoctorsVisitsController.js'></script>
+    <script src='assets/js/components/receptionist/receptionistVisitsController.js'></script>
+    <script src='assets/js/components/doctor/doctorPatientsController.js'></script>
   </body>
 </html>

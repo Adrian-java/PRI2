@@ -65,13 +65,13 @@ public class ReceptionistCrudDB implements ReceptionistCrud {
 		}
 		systemUser.setChangedPassword(false);
 		systemUser.setIsActive(true);
-		systemUser.setRole("patient");
+		systemUser.setRole("receptionist");
 		systemUser.getReceptionist().setAccess(new String("access").getBytes());
 		Calendar c = new GregorianCalendar();
 		c.setTime(new Date());
 		systemUser.setRegisterDate(c);
 		try {
-			String i = systemUserService.saveSystemUserReceptionist(systemUser);
+			String i = systemUserService.saveSystemUserReceptionist(systemUser,false);
 			systemUser.setId(i);
 			// permissionMangament.setUserPermission(systemUser);
 			map.put("status", "ok");
@@ -85,16 +85,14 @@ public class ReceptionistCrudDB implements ReceptionistCrud {
 		return permissionMangament.showPermissionById(pesel);
 	}
 
-	public Response updateReceptionist(SystemUser systemUser, String pesel) {
-		SystemUser su = systemUserDAO.findSystemUserById(pesel);
-		String id = su.getReceptionist().getId();
-		Receptionist p = ReceptionistDao.findReceptionistById(id);
-		if (p instanceof HibernateProxy) {
-			HibernateProxy proxy = (HibernateProxy) p;
-			LazyInitializer li = proxy.getHibernateLazyInitializer();
-			p = (Receptionist) li.getImplementation();
-		}
-		String i = ReceptionistService.saveReceptionist(p);
+	public Response updateReceptionist(Receptionist receptionist, String id) {
+//		if (p instanceof HibernateProxy) {
+//			HibernateProxy proxy = (HibernateProxy) p;
+//			LazyInitializer li = proxy.getHibernateLazyInitializer();
+//			p = (Receptionist) li.getImplementation();
+//		}
+		receptionist.setId(id);
+		String i = ReceptionistService.saveReceptionist(receptionist);
 		try {
 			try {
 				return Response.ok(
@@ -119,7 +117,7 @@ public class ReceptionistCrudDB implements ReceptionistCrud {
 			Calendar c = Calendar.getInstance();
 			c.setTime(new Date());
 			su.setUnregisterDate(c);
-			systemUserService.saveSystemUser(su);
+			systemUserService.saveSystemUserReceptionist(su,true);
 			map.put("status", "usunieto");
 			return Response.ok(map).build();
 		} else {

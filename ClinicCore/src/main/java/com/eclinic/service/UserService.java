@@ -23,6 +23,9 @@ public class UserService implements UserDetailsService {
 			throws UsernameNotFoundException {
 
 		SystemUser su = systemUserDao.findSystemUserById(username);
+		if(!su.getIsActive()){
+			return null;
+		}
 		sessionBean.setSystemUser(su);
 		return su;
 	}

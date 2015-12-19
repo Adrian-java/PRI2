@@ -1,5 +1,5 @@
 angular.module 'clinic'
-  .controller 'HomeController', ['$scope', '$timeout', ($scope, $timeout) ->
+  .controller 'HomeController', ['$scope', '$timeout', '$state', 'Specialities', 'Doctors', ($scope, $timeout, $state, Specialities, Doctors) ->
     $scope.today = ->
       $scope.dt = new Date
       return
@@ -67,4 +67,31 @@ angular.module 'clinic'
           i++
       ''
 
+    Specialities.getSpecialities().then((res) ->
+      $scope.specialities = res.data
+      console.log 'specialities list'
+      console.log $scope.specialities
+    )
+
+    Doctors.index().then((res) ->
+      $scope.doctors = res.data
+      console.log 'doctors'
+      console.log $scope.doctors
+    )
+
+    $scope.updateDoctorsList = ->
+      console.log 'update doctors list ' + $scope.selectedSpeciality
+      Doctors.indexBySpeciality($scope.selectedSpeciality).then( (res) ->
+        console.log 'change doctors select'
+        $scope.doctors = res.data
+      )
+
+    $scope.submit = ->
+      console.log 'submit main form'
+      console.log $scope.selectedDoctor
+      $state.go('visits.new', {
+        'speciality': $scope.selectedSpeciality
+        'doctor': $scope.selectedDoctor.id
+        'date': $scope.selectedDate
+      })
   ]

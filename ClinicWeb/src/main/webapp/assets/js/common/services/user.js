@@ -1,13 +1,13 @@
 (function() {
   angular.module('clinic').service('Auth', [
-    '$http', '$cookies', function($http, $cookies) {
-      var handleError, handleLoginSuccess, handleSuccess, login, logout, register;
+    '$http', '$cookies', 'api', '$state', function($http, $cookies, api, $state) {
+      var handleError, handleLoginSuccess, handleSuccess, login, logout, register, validate;
       login = function(user) {
         var request;
         request = $http({
           method: 'POST',
           isArray: false,
-          url: 'http://localhost:8080/rest/auth/token',
+          url: api + 'auth/token',
           data: $.param({
             username: user.login,
             password: user.password
@@ -20,17 +20,21 @@
       };
       logout = function() {
         $cookies.token = void 0;
-        return console.log('user logout success');
+        console.log('user logout success');
+        return $state.go('home');
       };
       register = function(user) {
         var request, userInfo;
+        user.birthDate.monthId = user.birthDate.monthId < 10 ? '0' + user.birthDate.monthId : user.birthDate.monthId;
+        user.birthDate.day = user.birthDate.day < 10 ? '0' + user.birthDate.day : user.birthDate.day;
         userInfo = {
-          'id': user.pin,
           'password': user.password,
+          'email': user.email,
+          'id': user.pin,
           'patient': {
             'name': user.firstName,
             'surname': user.lastName,
-            'dateOfBirth': user.birthDate.day + '-' + user.birthDate.monthId + '-' + user.birthDate.year,
+            'dateOfBirth': user.birthDate.year + '-' + user.birthDate.monthId + '-' + user.birthDate.day,
             'phoneNr': user.phone,
             'address': {
               'city': user.city,
@@ -38,55 +42,30 @@
               'province': user.province,
               'country': user.country,
               'countryCodeCity': user.countyCode,
+              'street': user.street,
               'homeNr': user.home_nr
             }
-          },
-          'email': user.email
+          }
         };
         request = $http({
           method: 'POST',
           isArray: false,
-          url: 'http://localhost:8080/rest/SystemUser/newPatient"',
+          url: api + 'SystemUser/newPatient',
           data: userInfo,
           headers: {
-            'XToken': $cookies.get('token'),
+            'XToken': $cookies.token,
             'Content-Type': 'application/json'
           }
         });
         return request.then(handleSuccess, handleError);
       };
-
-      /*
-      $scope.addUser = function(user){
-      		var userInfo = {
-      				"id": user.pesel,
-      				"password": user.password,
-      					"patient": {
-      						"name": user.first_name,
-      						"surname": user.last_name,
-      						"dateOfBirth": user.birth_date,
-      						"phoneNr": user.phone,
-      						"address": {
-      							"city": user.city,
-      							"countryCode": user.county_code,
-      							"province": user.province,
-      							"country": user.country,
-      							"countryCodeCity": user.county_code,
-      							"homeNr": user.home_nr,
-      						}
-      					},
-      				"email": user.email
-      			};
-      		console.log(userInfo);
-      		$http({
-      			method: 'POST',
-      			url: "http://localhost:9000/rest/SystemUser/newPatient",
-      			data: userInfo,
-      			headers: {'XToken': $cookies.get('token'), 'Content-Type': 'application/json'}
-      		}).success(function(result){
-      			console.log("user added");
-      			console.log(result);
-       */
+      validate = function() {
+        if ($cookies.token) {
+          return $cookies.token.split(":")[0];
+        } else {
+          return false;
+        }
+      };
       handleError = function(response) {
         if (!angular.isObject(response.data) || !response.data.message) {
           return console.log('An unknown error occurred.');
@@ -102,7 +81,8 @@
       return {
         login: login,
         logout: logout,
-        register: register
+        register: register,
+        validate: validate
       };
     }
   ]);
