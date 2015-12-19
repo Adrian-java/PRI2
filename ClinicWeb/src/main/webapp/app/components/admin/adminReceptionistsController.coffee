@@ -12,8 +12,13 @@ angular.module 'clinic'
       )
 
     if $stateParams
+      console.log $stateParams
       Receptionists.show($stateParams.receptionistId).then((res)->
+        console.log 'downloaded receptionists'
+        console.log res
         $scope.receptionist = res.data
+      , (err) ->
+        console.log err
       )
 
     $scope.remove = (id) ->
@@ -23,4 +28,17 @@ angular.module 'clinic'
           $scope.receptionists = res.data
         )
       )
+
+    $scope.edit = ->
+      $scope.editedReceptionist = {
+        'name': $scope.receptionist.name
+        'surname': $scope.receptionist.surname
+        'phoneNr': $scope.receptionist.phoneNr
+      }
+      console.log $stateParams.receptionistId
+      #Receptionists.edit($stateParams.receptionistId, $scope.editedReceptionist).then((res) ->
+      #  console.log res
+      #  console.log 'receptionist update'
+      #  $state.go('admin-receptionists')
+      #)
   ]

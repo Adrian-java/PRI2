@@ -173,6 +173,11 @@ angular.module 'clinic'
         templateUrl: 'app/components/admin/receptionists.show.html'
         controller: 'AdminReceptionistsController'
         controllerAs: 'admin.receptionists.show'
+      .state 'admin-receptionists-edit',
+        url: '/admin/receptionists/:receptionistId/edit'
+        templateUrl: 'app/components/admin/receptionists.edit.html'
+        controller: 'AdminReceptionistsController'
+        controllerAs: 'admin.receptionists.edit'
       .state 'admin-specialities',
         url: '/admin/specialities'
         templateUrl: 'app/components/admin/specialities.html'

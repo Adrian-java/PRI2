@@ -73598,6 +73598,11 @@ angular.module('ui.calendar', [])
       templateUrl: 'app/components/admin/receptionists.show.html',
       controller: 'AdminReceptionistsController',
       controllerAs: 'admin.receptionists.show'
+    }).state('admin-receptionists-edit', {
+      url: '/admin/receptionists/:receptionistId/edit',
+      templateUrl: 'app/components/admin/receptionists.edit.html',
+      controller: 'AdminReceptionistsController',
+      controllerAs: 'admin.receptionists.edit'
     }).state('admin-specialities', {
       url: '/admin/specialities',
       templateUrl: 'app/components/admin/specialities.html',
@@ -73802,7 +73807,7 @@ angular.module('ui.calendar', [])
 
 (function() {
   angular.module('clinic').controller('AdminPatientsController', [
-    '$scope', 'Patients', '$stateParams', function($scope, Patients, $stateParams) {
+    '$scope', 'Patients', '$stateParams', '$state', function($scope, Patients, $stateParams, $state) {
       console.log('admin patients controller');
       Patients.index().then(function(res) {
         console.log(res);
@@ -73810,10 +73815,40 @@ angular.module('ui.calendar', [])
       });
       console.log($stateParams);
       if ($stateParams) {
-        return Patients.show($stateParams.patientId).then(function(res) {
+        Patients.show($stateParams.patientId).then(function(res) {
+          console.log(res);
           return $scope.patient = res.data;
         });
       }
+      $scope.remove = function(id) {
+        return Patients.remove(id).then(function(res) {
+          console.log(res);
+          return Patients.index().then(function(res) {
+            return $scope.receptionists = res.data;
+          });
+        });
+      };
+      return $scope.edit = function() {
+        $scope.editedPatient = {
+          'name': $scope.patient.name,
+          'surname': $scope.patient.surname,
+          'phoneNr': $scope.patient.phoneNr,
+          'address': {
+            'city': $scope.patient.city,
+            'countryCode': $scope.patient.countryCode,
+            'province': $scope.patient.province,
+            'country': $scope.patient.country,
+            'countryCodeCity': $scope.patient.countryCode,
+            'street': $scope.patient.street,
+            'homeNr': $scope.patient.homeNr
+          }
+        };
+        return Patients.edit($scope.patient.id, $scope.editedPatient).then(function(res) {
+          console.log(res);
+          console.log('patient update');
+          return $state.go('admin-patients');
+        });
+      };
     }
   ]);
 
@@ -73843,16 +73878,28 @@ angular.module('ui.calendar', [])
       };
       if ($stateParams) {
         Receptionists.show($stateParams.receptionistId).then(function(res) {
+          console.log('downloaded receptionists');
+          console.log(res);
           return $scope.receptionist = res.data;
+        }, function(err) {
+          return console.log(err);
         });
       }
-      return $scope.remove = function(id) {
+      $scope.remove = function(id) {
         return Receptionists.remove(id).then(function(res) {
           console.log(res);
           return Receptionists.index().then(function(res) {
             return $scope.receptionists = res.data;
           });
         });
+      };
+      return $scope.edit = function() {
+        $scope.editedReceptionist = {
+          'name': $scope.receptionist.name,
+          'surname': $scope.receptionist.surname,
+          'phoneNr': $scope.receptionist.phoneNr
+        };
+        return console.log($stateParams.receptionistId);
       };
     }
   ]);

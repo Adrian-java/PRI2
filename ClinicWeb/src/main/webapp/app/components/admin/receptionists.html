@@ -31,8 +31,11 @@
               </a>
             </td>
             <td>
-              <a ng-click='remove(receptionist.id)'>
+              <a class='btn btn-danger' ng-click='remove(receptionist.id)'>
                 Usuń
+              </a>
+              <a class='btn btn-primary' ui-sref='admin-receptionists-edit({receptionistId: receptionist.id})'>
+                Edytuj
               </a>
             </td>
           </tr>

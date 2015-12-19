@@ -25,6 +25,16 @@ angular.module('clinic').service 'Receptionists', [ '$http', '$cookies', 'api', 
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 
+  edit = (id, receptionist) ->
+    request = $http(
+      method: 'POST'
+      isArray: false
+      url: api + 'SystemUser/updateReceptionist/' + id
+      data: receptionist
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json'
+    )
+    return request
+
   remove = (id) ->
     console.log id
     request = $http(
@@ -46,6 +56,7 @@ angular.module('clinic').service 'Receptionists', [ '$http', '$cookies', 'api', 
     index: index
     create: create
     show: show
+    edit: edit
     remove: remove
   }
 ]

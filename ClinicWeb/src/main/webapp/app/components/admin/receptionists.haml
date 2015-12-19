@@ -21,5 +21,7 @@
               %a{:'ui-sref' => 'admin-receptionist-show({receptionistId: receptionist.id})'}
                 {{receptionist.surname}}
             %td
-              %a{:'ng-click' => 'remove(receptionist.id)'}
+              %a.btn.btn-danger{:'ng-click' => 'remove(receptionist.id)'}
                 Usuń
+              %a.btn.btn-primary{:'ui-sref' => 'admin-receptionists-edit({receptionistId: receptionist.id})'}
+                Edytuj

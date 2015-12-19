@@ -26,7 +26,7 @@
               %a{:'ui-sref' => 'admin-patients-show({patientId: patient.id})'}
                 {{patient.surname}}
             %td
-              %a.btn.btn-danger{:'ui-sref' => 'admin-patients-remove({patientId: patient.id})'}
+              %a.btn.btn-danger{:'ng-click' => 'remove(patient.id)'}
                 Usuń
               %a.btn.btn-primary{:'ui-sref' => 'admin-patients-edit({patientId: patient.id})'}
                 Edytuj

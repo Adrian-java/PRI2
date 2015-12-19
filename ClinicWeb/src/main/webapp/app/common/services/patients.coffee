@@ -15,6 +15,24 @@ angular.module('clinic').service 'Patients', [ '$http', '$cookies', 'api', ($htt
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 
+  edit = (id, patient) ->
+    request = $http(
+      method: 'POST'
+      isArray: false
+      url: api + 'SystemUser/updatePatient/' + id
+      data: patient
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json'
+    )
+    return request
+
+  remove = (id) ->
+    console.log id
+    request = $http(
+      method: 'DELETE'
+      url: api + 'SystemUser/patient/' + id
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+    return request
+
   handleError = (response) ->
     if !angular.isObject(response.data) or !response.data.message
       return console.log('An unknown error occurred.')
@@ -27,5 +45,7 @@ angular.module('clinic').service 'Patients', [ '$http', '$cookies', 'api', ($htt
   {
     index: index
     show: show
+    edit: edit
+    remove: remove
   }
 ]

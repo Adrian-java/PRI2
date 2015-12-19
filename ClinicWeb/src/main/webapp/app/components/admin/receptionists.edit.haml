@@ -1,0 +1,19 @@
+.container
+  .row
+    .col-xs-12
+      %form.form-horizontal{:role => "form", :'ng-submit' => 'edit()', :'form-validation' => ''}
+        .form-group
+          %label.control-label.col-sm-2{:for => "name"} Imię recepcjonisty:
+          .col-sm-10
+            %input#name.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'receptionist.name'}
+        .form-group
+          %label.control-label.col-sm-2{:for => "surname"} Nazwisko lekarza:
+          .col-sm-10
+            %input#surname.form-control{:placeholder => "Wpisz nazwisko", :type => "text", :'ng-model' => 'receptionist.surname'}
+        .form-group
+          %label.control-label.col-sm-2{:for => "phone"} Telefon do recepcjonisty:
+          .col-sm-10
+            %input#phone.form-control{:placeholder => "Wpisz numer telefonu", :type => "text", :'ng-model' => 'receptionist.phoneNr'}
+        .form-group
+          .col-sm-offset-2.col-sm-10
+            %button.btn.btn-default{:type => "submit"} Zapisz

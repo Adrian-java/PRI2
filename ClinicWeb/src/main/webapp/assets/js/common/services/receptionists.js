@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Receptionists', [
     '$http', '$cookies', 'api', function($http, $cookies, api) {
-      var create, handleError, handleSuccess, index, remove, show;
+      var create, edit, handleError, handleSuccess, index, remove, show;
       index = function() {
         var request;
         request = $http({
@@ -41,6 +41,20 @@
         });
         return request;
       };
+      edit = function(id, receptionist) {
+        var request;
+        request = $http({
+          method: 'POST',
+          isArray: false,
+          url: api + 'SystemUser/updateReceptionist/' + id,
+          data: receptionist,
+          headers: {
+            'XToken': $cookies.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
       remove = function(id) {
         var request;
         console.log(id);
@@ -67,6 +81,7 @@
         index: index,
         create: create,
         show: show,
+        edit: edit,
         remove: remove
       };
     }

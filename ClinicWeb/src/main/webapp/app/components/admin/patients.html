@@ -39,7 +39,7 @@
               </a>
             </td>
             <td>
-              <a class='btn btn-danger' ui-sref='admin-patients-remove({patientId: patient.id})'>
+              <a class='btn btn-danger' ng-click='remove(patient.id)'>
                 Usuń
               </a>
               <a class='btn btn-primary' ui-sref='admin-patients-edit({patientId: patient.id})'>
