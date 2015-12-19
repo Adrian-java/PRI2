@@ -12,10 +12,18 @@
       };
       console.log($stateParams);
       if ($stateParams) {
-        return Doctors.show($stateParams.doctorId).then(function(res) {
+        Doctors.show($stateParams.doctorId).then(function(res) {
           return $scope.doctor = res.data;
         });
       }
+      return $scope.remove = function(id) {
+        return Doctors.remove(id).then(function(res) {
+          console.log(res);
+          return Doctors.index().then(function(res) {
+            return $scope.doctors = res.data;
+          });
+        });
+      };
     }
   ]);
 
