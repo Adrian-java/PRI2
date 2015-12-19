@@ -179,7 +179,7 @@ public class PatientViewDAOImpl extends AbstractJpaDao<PatientView> implements
 	 *
 	 */
 	@Transactional
-	public PatientView findPatientById(Integer id) throws DataAccessException {
+	public PatientView findPatientById(String id) throws DataAccessException {
 
 		return findPatientById(id, -1, -1);
 	}
@@ -190,9 +190,9 @@ public class PatientViewDAOImpl extends AbstractJpaDao<PatientView> implements
 	 */
 
 	@Transactional
-	public PatientView findPatientById(Integer id, int startResult, int maxRows) throws DataAccessException {
+	public PatientView findPatientById(String id, int startResult, int maxRows) throws DataAccessException {
 		try {
-			Query query = createNamedQuery("findPatientById", startResult, maxRows, id);
+			Query query = createNamedQuery("getPatientByPesel", startResult, maxRows, id);
 			return (PatientView) query.getSingleResult();
 		} catch (NoResultException nre) {
 			return null;

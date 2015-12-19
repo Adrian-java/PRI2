@@ -6,6 +6,7 @@ import java.util.Set;
 import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.domain.view.VisitView;
+import com.eclinic.model.VisitInfo;
 import com.eclinic.visit.mapper.NewVisitMapper;
 import com.eclinic.visit.mapper.NewVisitSchedulerMapper;
 
@@ -17,7 +18,9 @@ public interface VisitCrud {
 
     public Set<VisitView> findVisitByPatient(String id);
     
-    public VisitView findVisitById(Integer id);
+    public VisitInfo findVisitById(Integer id);
+    
+    public VisitView findVisitWithInfoById(Integer id);
 
     public Set<VisitView> findVisitBySpecialization(String specialization);
 
@@ -49,6 +52,8 @@ public interface VisitCrud {
     public void deleteVisit(Integer id);
 
 	public VisitScheduler addFreeVisit();
+	
+	public Set<VisitView> findAllVisitByDate(Date start, Date stop);
 	
 	public Set<VisitView> findVisitBySpecializationAndDate(String specialization, Date startDate, Date endDate);
 

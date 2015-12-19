@@ -41,5 +41,7 @@ public interface VisitViewDAO extends JpaDao<VisitView> {
 	
 	public Set<VisitView> findVisitByDoctorSpecializationAndDate(String doctor, String s,
 			Date start, Date stop);
+	
+	public Set<VisitView> findVisitByDate(Date start, Date stop);
 
 }
