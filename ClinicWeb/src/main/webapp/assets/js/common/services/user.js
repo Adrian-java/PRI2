@@ -1,6 +1,6 @@
 (function() {
   angular.module('clinic').service('Auth', [
-    '$http', '$cookies', 'api', function($http, $cookies, api) {
+    '$http', '$cookies', 'api', '$state', function($http, $cookies, api, $state) {
       var handleError, handleLoginSuccess, handleSuccess, login, logout, register, validate;
       login = function(user) {
         var request;
@@ -20,7 +20,8 @@
       };
       logout = function() {
         $cookies.token = void 0;
-        return console.log('user logout success');
+        console.log('user logout success');
+        return $state.go('home');
       };
       register = function(user) {
         var request, userInfo;

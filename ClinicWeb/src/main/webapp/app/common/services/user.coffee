@@ -1,4 +1,4 @@
-angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
+angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', '$state', ($http, $cookies, api, $state) ->
 
   login = (user) ->
     request = $http(
@@ -14,6 +14,7 @@ angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', ($http, $
   logout = ->
     $cookies.token = undefined
     console.log 'user logout success'
+    $state.go('home')
 
   register = (user) ->
     user.birthDate.monthId = if user.birthDate.monthId < 10 then '0' + user.birthDate.monthId else user.birthDate.monthId

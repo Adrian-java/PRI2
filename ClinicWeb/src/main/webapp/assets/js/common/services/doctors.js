@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Doctors', [
     '$http', '$cookies', 'api', function($http, $cookies, api) {
-      var create, handleError, handleSuccess, index, indexBySpeciality, show, takenVisitsTimeFrame, workingTime;
+      var create, handleError, handleSuccess, index, indexBySpeciality, remove, show, takenVisitsTimeFrame, workingTime;
       index = function() {
         var request;
         request = $http({
@@ -85,6 +85,19 @@
         });
         return request;
       };
+      remove = function(id) {
+        var request;
+        console.log(id);
+        request = $http({
+          method: 'DELETE',
+          url: api + 'SystemUser/doctor/' + id,
+          headers: {
+            'XToken': $cookies.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
       handleError = function(response) {
         if (!angular.isObject(response.data) || !response.data.message) {
           return console.log('An unknown error occurred.');
@@ -100,7 +113,8 @@
         show: show,
         indexBySpeciality: indexBySpeciality,
         workingTime: workingTime,
-        takenVisitsTimeFrame: takenVisitsTimeFrame
+        takenVisitsTimeFrame: takenVisitsTimeFrame,
+        remove: remove
       };
     }
   ]);

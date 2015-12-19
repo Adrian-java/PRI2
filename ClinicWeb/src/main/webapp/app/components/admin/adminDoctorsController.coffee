@@ -16,4 +16,12 @@ angular.module 'clinic'
       Doctors.show($stateParams.doctorId).then((res)->
         $scope.doctor = res.data
       )
+
+    $scope.remove = (id) ->
+      Doctors.remove(id).then((res) ->
+        console.log res
+        Doctors.index().then((res) ->
+          $scope.doctors = res.data
+        )
+      )
   ]

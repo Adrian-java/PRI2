@@ -56,6 +56,14 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 
+  remove = (id) ->
+    console.log id
+    request = $http(
+      method: 'DELETE'
+      url: api + 'SystemUser/doctor/' + id
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+    return request
+
   handleError = (response) ->
     if !angular.isObject(response.data) or !response.data.message
       return console.log('An unknown error occurred.')
@@ -72,5 +80,6 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
     indexBySpeciality: indexBySpeciality
     workingTime: workingTime
     takenVisitsTimeFrame: takenVisitsTimeFrame
+    remove: remove
   }
 ]
