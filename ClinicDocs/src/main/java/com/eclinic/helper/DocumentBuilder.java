@@ -13,7 +13,7 @@ import com.eclinic.model.Referral;
 
 public class DocumentBuilder {
 
-	public Prescription createPresctiption() {
+	public Prescription createPrescription(Patient patient) {
 		Prescription prescription = new Prescription();
 		
 		prescription.setClinic(createClinic());
@@ -22,31 +22,31 @@ public class DocumentBuilder {
 		prescription.setExecutionDate(Calendar.getInstance().getTime());
 		prescription.setIssuedDate(Calendar.getInstance().getTime());
 		prescription.setNumber(1000210321);
-		prescription.setPatient(createPatient());
+		prescription.setPatient(patient);
 		prescription.setPermissions("brak");
 		prescription.setRemedy("Atecortin;100%;Duomox;50%;Prestarium;72%;Noliprel;30%;Torvacard;92%;");
 		
 		return prescription;
 	}
 	
-	public Certificate createCertificate() {
+	public Certificate createCertificate(Patient patient) {
 		Certificate certificate = new Certificate();
 		
 		certificate.setClinic(createClinic());
 		certificate.setDate(Calendar.getInstance().getTime());
 		certificate.setId(92134141);
-		certificate.setPatient(createPatient());
+		certificate.setPatient(patient);
 		certificate.setPurpose("Zwolnienie z zajec WF");
 		certificate.setRecognition("Choroba górnych dróg oddechowych");
 		
 		return certificate; 
 	}
 	
-	public Referral createReferaral() {
+	public Referral createReferaral(Patient patient) {
 		Referral referral = new Referral();
 
 		referral.setClinic(createClinic());
-		referral.setPatient(createPatient());
+		referral.setPatient(patient);
 		referral.setDate(Calendar.getInstance().getTime());
 		referral.setDestination("Laryngologa");
 		referral.setPurpose("Dalsze leczenie specjalistyczne");
