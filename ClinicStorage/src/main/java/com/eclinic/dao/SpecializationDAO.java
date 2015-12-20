@@ -1,11 +1,11 @@
 package com.eclinic.dao;
 
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Specialization;
 
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -26,6 +26,7 @@ public interface SpecializationDAO extends JpaDao<Specialization> {
 	 */
 	public Set<Specialization> findSpecializationByNameContaining(String name, int startResult, int maxRows) throws DataAccessException;
 
+	public Set<Specialization> findSpecializationByDoctor(Doctor d) throws DataAccessException;
 	/**
 	 * JPQL Query - findSpecializationByPrimaryKey
 	 *

@@ -25,6 +25,7 @@ import javax.persistence.*;
 		@NamedQuery(name = "findAllSpecializations", query = "select mySpecialization from Specialization mySpecialization"),
 		@NamedQuery(name = "findSpecializationById", query = "select mySpecialization from Specialization mySpecialization where mySpecialization.id = ?1"),
 		@NamedQuery(name = "findSpecializationByName", query = "select mySpecialization from Specialization mySpecialization where mySpecialization.name = ?1"),
+		@NamedQuery(name = "findSpecializationByDoctor", query = "select mySpecialization from Specialization mySpecialization where mySpecialization.doctor = ?1"),
 		@NamedQuery(name = "findSpecializationByNameContaining", query = "select mySpecialization from Specialization mySpecialization where mySpecialization.name like ?1"),
 		@NamedQuery(name = "findSpecializationByPrimaryKey", query = "select mySpecialization from Specialization mySpecialization where mySpecialization.id = ?1") })
 @Table(catalog = "eclinic", name = "Specialization")

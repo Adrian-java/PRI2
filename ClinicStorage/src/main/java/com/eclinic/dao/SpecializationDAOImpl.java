@@ -1,5 +1,6 @@
 package com.eclinic.dao;
 
+import com.eclinic.domain.Doctor;
 import com.eclinic.domain.Specialization;
 
 import java.util.Arrays;
@@ -13,11 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.skyway.spring.util.dao.AbstractJpaDao;
-
 import org.springframework.dao.DataAccessException;
-
 import org.springframework.stereotype.Repository;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -190,5 +188,11 @@ public class SpecializationDAOImpl extends AbstractJpaDao<Specialization>
 	 */
 	public boolean canBeMerged(Specialization entity) {
 		return true;
+	}
+
+	public Set<Specialization> findSpecializationByDoctor(Doctor doctor)
+			throws DataAccessException {
+		Query query = createNamedQuery("findSpecializationByDoctor", -1, -1, doctor);
+		return new LinkedHashSet<Specialization>(query.getResultList());
 	}
 }
