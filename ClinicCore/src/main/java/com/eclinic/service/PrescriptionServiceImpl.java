@@ -94,7 +94,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 				existingPrescription.setDepartment(prescription.getDepartment());
 				existingPrescription.setIssuedDate(prescription.getIssuedDate());
 				existingPrescription.setExecutionDate(prescription.getExecutionDate());
-				existingPrescription.setRemady(prescription.getRemady());
+				existingPrescription.setRemady(prescription.getRemedy());
 			}
 			prescription = prescriptionDAO.store(existingPrescription);
 		} else {

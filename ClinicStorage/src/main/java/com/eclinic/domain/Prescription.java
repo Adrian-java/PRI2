@@ -14,6 +14,9 @@ import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.*;
 import javax.persistence.*;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 /**
  */
 
@@ -32,13 +35,14 @@ import javax.persistence.*;
 		@NamedQuery(name = "findPrescriptionByPrimaryKey", query = "select myPrescription from Prescription myPrescription where myPrescription.id = ?1") })
 @Table(catalog = "eclinic", name = "Prescription")
 @XmlAccessorType(XmlAccessType.FIELD)
+@GenericGenerator(name = "foreign", strategy = "foreign", parameters = { @Parameter(name = "property", value = "documentsMapping") })
 @XmlType(namespace = "Web/com/eclinic/domain", name = "Prescription")
 public class Prescription implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 */
-	@GeneratedValue(strategy = IDENTITY)
+//	@GeneratedValue(generator = "foreign")
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
@@ -68,7 +72,7 @@ public class Prescription implements Serializable {
 	/**
 	 */
 
-	@Column(name = "remady")
+	@Column(name = "remedy")
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
@@ -83,7 +87,7 @@ public class Prescription implements Serializable {
 	/**
 	 */
 	@PrimaryKeyJoinColumn
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER, optional=false)
 	@XmlElement(name = "", namespace = "")
 	DocumentsMapping documentsMapping;
 
@@ -143,7 +147,7 @@ public class Prescription implements Serializable {
 
 	/**
 	 */
-	public byte[] getRemady() {
+	public byte[] getRemedy() {
 		return this.remady;
 	}
 
@@ -185,7 +189,7 @@ public class Prescription implements Serializable {
 		setDepartment(that.getDepartment());
 		setIssuedDate(that.getIssuedDate());
 		setExecutionDate(that.getExecutionDate());
-		setRemady(that.getRemady());
+		setRemady(that.getRemedy());
 		setClinic(that.getClinic());
 		setDocumentsMapping(that.getDocumentsMapping());
 	}

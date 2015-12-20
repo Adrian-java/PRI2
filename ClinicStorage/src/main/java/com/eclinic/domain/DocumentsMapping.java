@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.lang.StringBuilder;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
@@ -41,28 +42,28 @@ public class DocumentsMapping implements Serializable {
 
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_documents", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Documents documents;
 	/**
 	 */
-	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.EAGER)
 	@XmlElement(name = "", namespace = "")
 	History history;
 	/**
 	 */
-	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.EAGER)
 	@XmlElement(name = "", namespace = "")
 	Certificate certificate;
 	/**
 	 */
-	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@XmlElement(name = "", namespace = "")
 	Prescription prescription;
 	/**
 	 */
-	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "documentsMapping", fetch = FetchType.EAGER)
 	@XmlElement(name = "", namespace = "")
 	Referral referral;
 

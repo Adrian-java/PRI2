@@ -31,7 +31,7 @@ public class Certificate implements Serializable {
 
 	/**
 	 */
-	@GeneratedValue(strategy = IDENTITY)
+//	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
@@ -64,7 +64,7 @@ public class Certificate implements Serializable {
 	/**
 	 */
 	@PrimaryKeyJoinColumn
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@XmlElement(name = "", namespace = "")
 	DocumentsMapping documentsMapping;
 

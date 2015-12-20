@@ -29,6 +29,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 		@NamedQuery(name = "findDocumentsByDateOfDocuments", query = "select myDocuments from Documents myDocuments where myDocuments.dateOfDocuments = ?1"),
 		@NamedQuery(name = "findDocumentsByDateOfDocumentsAfter", query = "select myDocuments from Documents myDocuments where myDocuments.dateOfDocuments > ?1"),
 		@NamedQuery(name = "findDocumentsByDateOfDocumentsBefore", query = "select myDocuments from Documents myDocuments where myDocuments.dateOfDocuments < ?1"),
+		@NamedQuery(name = "findDocumentsByPatient", query = "select myDocuments from Documents myDocuments where myDocuments.patient =  ?1"),
 		@NamedQuery(name = "findDocumentsById", query = "select myDocuments from Documents myDocuments where myDocuments.id = ?1"),
 		@NamedQuery(name = "findDocumentsByPrimaryKey", query = "select myDocuments from Documents myDocuments where myDocuments.id = ?1"),
 		@NamedQuery(name = "findDocumentsByTypeOfDocuments", query = "select myDocuments from Documents myDocuments where myDocuments.typeOfDocuments = ?1"),
@@ -87,13 +88,13 @@ public class Documents implements Serializable {
 	Patient patient;
 	/**
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "id_doctor", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Doctor doctor;
 	/**
 	 */
-	@OneToMany(mappedBy = "documents", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "documents", cascade = { CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	@XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.DocumentsMapping> documentsMappings;
 

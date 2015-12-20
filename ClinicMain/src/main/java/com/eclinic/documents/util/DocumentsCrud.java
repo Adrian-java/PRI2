@@ -4,7 +4,7 @@ import com.eclinic.domain.Documents;
 
 public interface DocumentsCrud {
 
-	public void addDocumet(DocumentsModel document);
+	public void addDocument(DocumentsModel document);
 
 	public void updateDocument(Documents document);
 	

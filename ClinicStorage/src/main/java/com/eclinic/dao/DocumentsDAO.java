@@ -1,13 +1,13 @@
 package com.eclinic.dao;
 
-import com.eclinic.domain.Documents;
-
 import java.util.Calendar;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
-
 import org.springframework.dao.DataAccessException;
+
+import com.eclinic.domain.Documents;
+import com.eclinic.domain.Patient;
 
 /**
  * DAO to manage Documents entities.
@@ -98,6 +98,8 @@ public interface DocumentsDAO extends JpaDao<Documents> {
 	 *
 	 */
 	public Documents findDocumentsByPrimaryKey(Integer id_1, int startResult, int maxRows) throws DataAccessException;
+	
+	public Documents findDocumentsByPatient(Patient p, int startResult, int maxRows) throws DataAccessException;
 
 	/**
 	 * JPQL Query - findAllDocumentss

@@ -1,17 +1,26 @@
 package com.eclinic.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.io.Serializable;
-import java.lang.StringBuilder;
-import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.xml.bind.annotation.*;
-import javax.persistence.*;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 /**
  */
@@ -24,12 +33,13 @@ import javax.persistence.*;
 @Table(catalog = "eclinic", name = "Referral")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(namespace = "Web/com/eclinic/domain", name = "Referral")
+@GenericGenerator(name = "foreign", strategy = "foreign", parameters = { @Parameter(name = "property", value = "documentsMapping") })
 public class Referral implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 */
-	@GeneratedValue(strategy = IDENTITY)
+//	@GeneratedValue(generator = "foreign")
 	@Column(name = "Id", nullable = false)
 	@Basic(fetch = FetchType.EAGER)
 	@Id
@@ -63,7 +73,7 @@ public class Referral implements Serializable {
 	/**
 	 */
 	@PrimaryKeyJoinColumn
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@XmlElement(name = "", namespace = "")
 	DocumentsMapping documentsMapping;
 

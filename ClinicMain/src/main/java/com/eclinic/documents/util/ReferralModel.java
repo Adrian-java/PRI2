@@ -1,10 +1,13 @@
 package com.eclinic.documents.util;
 
-public class ReferralModel {
+import com.eclinic.model.IDocumentsModel;
+
+public class ReferralModel implements IDocumentsModel {
 	
 	private String destination;
 	private String recognition;
 	private String purpose;
+	private String patientId;
 	public String getDestination() {
 		return destination;
 	}
@@ -22,6 +25,12 @@ public class ReferralModel {
 	}
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
+	}
+	public String getPatientId() {
+		return patientId;
+	}
+	public void setPatientId(String id){
+		patientId = id;
 	}
 
 }

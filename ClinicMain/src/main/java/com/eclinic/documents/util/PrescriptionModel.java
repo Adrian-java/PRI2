@@ -2,12 +2,15 @@ package com.eclinic.documents.util;
 
 import java.util.Date;
 
-public class PrescriptionModel {
+import com.eclinic.model.IDocumentsModel;
+
+public class PrescriptionModel  implements IDocumentsModel{
 	private String department;
 	private Integer idClinic;
 	private Date issuedDate;
 	private Date executionDate;
 	private String remady;
+	private String patienId;
 	public String getDepartment() {
 		return department;
 	}
@@ -37,6 +40,13 @@ public class PrescriptionModel {
 	}
 	public void setRemady(String remady) {
 		this.remady = remady;
+	}
+	public void setPatientId(String patienId) {
+		this.patienId = patienId;
+	}
+	public String getPatientId() {
+		// TODO Auto-generated method stub
+		return patienId;
 	}
 
 }

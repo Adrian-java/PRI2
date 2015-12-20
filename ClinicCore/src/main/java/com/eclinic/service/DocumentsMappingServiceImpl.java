@@ -276,7 +276,7 @@ public class DocumentsMappingServiceImpl implements DocumentsMappingService {
 			existingprescription.setDepartment(related_prescription.getDepartment());
 			existingprescription.setIssuedDate(related_prescription.getIssuedDate());
 			existingprescription.setExecutionDate(related_prescription.getExecutionDate());
-			existingprescription.setRemady(related_prescription.getRemady());
+			existingprescription.setRemady(related_prescription.getRemedy());
 			related_prescription = existingprescription;
 		} else {
 			related_prescription = prescriptionDAO.store(related_prescription);

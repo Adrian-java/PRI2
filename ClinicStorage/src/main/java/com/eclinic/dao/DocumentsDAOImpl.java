@@ -1,6 +1,7 @@
 package com.eclinic.dao;
 
 import com.eclinic.domain.Documents;
+import com.eclinic.domain.Patient;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,11 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.skyway.spring.util.dao.AbstractJpaDao;
-
 import org.springframework.dao.DataAccessException;
-
 import org.springframework.stereotype.Repository;
-
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -256,5 +254,11 @@ public class DocumentsDAOImpl extends AbstractJpaDao<Documents> implements
 	 */
 	public boolean canBeMerged(Documents entity) {
 		return true;
+	}
+
+	public Documents findDocumentsByPatient(Patient p, int startResult,
+			int maxRows) throws DataAccessException {
+		Query query = createNamedQuery("findDocumentsByPatient", startResult, maxRows,p);
+		return (Documents) query.getSingleResult();
 	}
 }

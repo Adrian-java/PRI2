@@ -4,16 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.eclinic.converter.DocumentConverter;
+import com.eclinic.documents.util.CertificateModel;
+import com.eclinic.documents.util.DocumentsCrud;
+import com.eclinic.documents.util.DocumentsModel;
+import com.eclinic.documents.util.PrescriptionModel;
+import com.eclinic.documents.util.ReferralModel;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.view.PatientView;
 import com.eclinic.helper.DocumentBuilder;
@@ -37,21 +45,73 @@ import net.sf.jasperreports.engine.util.JRLoader;
 @Component("DocumentController")
 @javax.ws.rs.Path("/documents")
 public class DocumentController {
-	
+
 	@Autowired
 	private PatientCrudDB patientCrudDB;
-	
+
 	private DocumentConverter converter;
-	
+
+	@Autowired
 	private DocumentBuilder builder;
-	
+
+	@Autowired
+	private DocumentsCrud documentsCrud;
+
 	private EntityConverter entityConverter;
-	
+
 	private ByteOutputStream byteStream;
-	
+
 	public DocumentController() {
 		setupEnvironment();
 		compileReports();
+	}
+
+	@POST
+	@Path("/new/prescription")
+	@Consumes("application/json")
+	public Response addPrescription(PrescriptionModel model) {
+		try {
+			documentsCrud.addPrescription(model);
+			return Response.ok().build();
+		} catch (Exception e) {
+			return Response.noContent().build();
+		}
+	}
+
+	@POST
+	@Path("/new/certificate")
+	@Consumes("application/json")
+	public Response addCertificate(CertificateModel model) {
+		try {
+			documentsCrud.addCertificate(model);
+			return Response.ok().build();
+		} catch (Exception e) {
+			return Response.noContent().build();
+		}
+	}
+
+	@POST
+	@Path("/new/referral")
+	@Consumes("application/json")
+	public Response addReferral(ReferralModel model) {
+		try {
+			documentsCrud.addReferral(model);
+			return Response.ok().build();
+		} catch (Exception e) {
+			return Response.noContent().build();
+		}
+	}
+
+	@POST
+	@Path("/new/document")
+	@Consumes("application/json")
+	public Response addDocument(DocumentsModel model) {
+		try {
+			documentsCrud.addDocument(model);
+			return Response.ok().build();
+		} catch (Exception e) {
+			return Response.noContent().build();
+		}
 	}
 
 	@GET
@@ -69,7 +129,7 @@ public class DocumentController {
 		createCertificate(patientId);
 		return createResponse(byteStream);
 	}
-	
+
 	@GET
 	@Path("/referral/{patientId}")
 	@Produces("application/pdf")
@@ -77,22 +137,19 @@ public class DocumentController {
 		createReferral(patientId);
 		return createResponse(byteStream);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private Response createResponse(ByteOutputStream byteStream) {
-		return Response
-				.status(200)
-				.entity(byteStream.toByteArray())
-				.build();
+		return Response.status(200).entity(byteStream.toByteArray()).build();
 	}
-	
+
 	private Patient getPatientById(String patientId) {
 		PatientView view = patientCrudDB.getPatientById(patientId);
 		return entityConverter.convertToPatient(view);
 	}
-	
+
 	private void compileReport(String fileName) {
-		String filePath = findReportPath(fileName);	
+		String filePath = findReportPath(fileName);
 		try {
 			JasperCompileManager.compileReportToFile(filePath);
 		} catch (JRException e) {
@@ -102,54 +159,61 @@ public class DocumentController {
 
 	private String findReportPath(String fileName) {
 		ClassLoader loader = this.getClass().getClassLoader();
-		String file =  "reports/" + fileName;
+		String file = "reports/" + fileName;
 		return loader.getResource(file).getPath();
 	}
-	
+
 	private void createPrescription(String patientId) {
 		Patient patient = getPatientById(patientId);
 		String prescriptionPath = findReportPath("prescription.jasper");
 		Prescription prescription = builder.createPrescription(patient);
 
 		JasperReport report = createReport(prescriptionPath);
-		
+
 		JRBeanCollectionDataSource dataSource = getPrescriptionData(prescription);
-		Map<String, Object> parameters = converter.convertToPrescription(prescription);
-		
-		JasperPrint printObject = createPrintObject(report, dataSource, parameters);
+		Map<String, Object> parameters = converter
+				.convertToPrescription(prescription);
+
+		JasperPrint printObject = createPrintObject(report, dataSource,
+				parameters);
 		exportToStream(printObject, byteStream);
 	}
-	
+
 	private void createCertificate(String patientId) {
-		
+
 		Patient patient = getPatientById(patientId);
 		String certificatePath = findReportPath("certificate.jasper");
 		Certificate certificate = builder.createCertificate(patient);
 
 		JasperReport report = createReport(certificatePath);
-		
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(initializeDataSource());
-		Map<String, Object> parameters = converter.convertToCertificate(certificate);
-		
-		JasperPrint printObject = createPrintObject(report, dataSource, parameters);
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
+				initializeDataSource());
+		Map<String, Object> parameters = converter
+				.convertToCertificate(certificate);
+
+		JasperPrint printObject = createPrintObject(report, dataSource,
+				parameters);
 		exportToStream(printObject, byteStream);
 	}
-	
+
 	private void createReferral(String patientId) {
-		
+
 		Patient patient = getPatientById(patientId);
 		String referralPath = findReportPath("referral.jasper");
 		Referral referral = builder.createReferaral(patient);
 
 		JasperReport report = createReport(referralPath);
-		
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(initializeDataSource());
+
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
+				initializeDataSource());
 		Map<String, Object> parameters = converter.convertToReferral(referral);
-		
-		JasperPrint printObject = createPrintObject(report, dataSource, parameters);
+
+		JasperPrint printObject = createPrintObject(report, dataSource,
+				parameters);
 		exportToStream(printObject, byteStream);
 	}
-	
+
 	private void exportToStream(JasperPrint print, ByteOutputStream byteStream) {
 		try {
 			JasperExportManager.exportReportToPdfStream(print, byteStream);
@@ -158,11 +222,13 @@ public class DocumentController {
 		}
 	}
 
-	private JasperPrint createPrintObject(JasperReport report, JRBeanCollectionDataSource dataSource,
+	private JasperPrint createPrintObject(JasperReport report,
+			JRBeanCollectionDataSource dataSource,
 			Map<String, Object> parameters) {
 		JasperPrint print = null;
 		try {
-			print = JasperFillManager.fillReport(report, parameters, dataSource);
+			print = JasperFillManager
+					.fillReport(report, parameters, dataSource);
 		} catch (JRException e) {
 			throw new RuntimeException(e);
 		}
@@ -179,29 +245,31 @@ public class DocumentController {
 		return report;
 	}
 
-	private JRBeanCollectionDataSource getPrescriptionData(Prescription prescription) {
+	private JRBeanCollectionDataSource getPrescriptionData(
+			Prescription prescription) {
 		PrescriptionData data = converter.getDataFrom(prescription);
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data.getRemedy());
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
+				data.getRemedy());
 		return dataSource;
 	}
-	
+
 	private List<Object> initializeDataSource() {
 		List<Object> list = new ArrayList<Object>();
 		list.add("list");
 		return list;
 	}
-	
+
 	private void compileReports() {
 		compileReport("prescription.jrxml");
 		compileReport("certificate.jrxml");
 		compileReport("referral.jrxml");
 	}
-	
+
 	private void setupEnvironment() {
 		this.converter = new DocumentConverter();
-		this.builder = new DocumentBuilder();
+		// this.builder = new DocumentBuilder();
 		this.entityConverter = new EntityConverter();
 		this.byteStream = new ByteOutputStream();
 	}
-	
+
 }
