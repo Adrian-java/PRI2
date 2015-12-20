@@ -46,9 +46,9 @@ public class Main {
 //		documentsCrud.addDocument(docm);
 		docController = (DocumentController) ctx.getBean("DocumentController");
 		
-		Response findPrescription = docController.findPrescription("pesel38");
-		docController.findCertificate("pesel38");
-		docController.findReferral("pesel38");
+//		Response findPrescription = docController.findPrescription("pesel38");
+//		docController.findCertificate("pesel38");
+//		docController.findReferral("pesel38");
 //		 PrescriptionModel prescription = new PrescriptionModel();
 //		 Prescription d = new Prescription();
 //		 Calendar c = Calendar.getInstance();

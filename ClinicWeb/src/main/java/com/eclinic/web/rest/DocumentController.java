@@ -30,7 +30,9 @@ import com.eclinic.model.Certificate;
 import com.eclinic.model.Prescription;
 import com.eclinic.model.PrescriptionData;
 import com.eclinic.model.Referral;
+import com.eclinic.model.VisitInfo;
 import com.eclinic.user.mangament.patient.PatientCrudDB;
+import com.eclinic.visit.VisitCrudDb;
 import com.sun.xml.messaging.saaj.util.ByteOutputStream;
 
 import net.sf.jasperreports.engine.JRException;
@@ -53,6 +55,9 @@ public class DocumentController {
 
 	@Autowired
 	private DocumentBuilder builder;
+	
+	@Autowired
+	private VisitCrudDb visitCrudDb;
 
 	@Autowired
 	private DocumentsCrud documentsCrud;
@@ -115,26 +120,26 @@ public class DocumentController {
 	}
 
 	@GET
-	@Path("/prescription/{patientId}")
+	@Path("/prescription/{visitId}")
 	@Produces("application/pdf")
-	public Response findPrescription(@PathParam("patientId") String patientId) {
-		createPrescription(patientId);
+	public Response findPrescription(@PathParam("visitId") Integer visitId) {
+		createPrescription(visitId);
 		return createResponse(byteStream);
 	}
 
 	@GET
-	@Path("/certificate/{patientId}")
+	@Path("/certificate/{visitId}")
 	@Produces("application/pdf")
-	public Response findCertificate(@PathParam("patientId") String patientId) {
-		createCertificate(patientId);
+	public Response findCertificate(@PathParam("visitId") Integer visitId) {
+		createCertificate(visitId);
 		return createResponse(byteStream);
 	}
 
 	@GET
-	@Path("/referral/{patientId}")
+	@Path("/referral/{visitId}")
 	@Produces("application/pdf")
-	public Response findReferral(@PathParam("patientId") String patientId) {
-		createReferral(patientId);
+	public Response findReferral(@PathParam("visitId") Integer visitId) {
+		createReferral(visitId);
 		return createResponse(byteStream);
 	}
 
@@ -197,8 +202,10 @@ public class DocumentController {
 		return loader.getResource(file).getPath();
 	}
 
-	private void createPrescription(String patientId) {
-		Patient patient = getPatientById(patientId);
+	private void createPrescription(Integer visitId) {
+		
+		Patient patient = getPatientByVisitId(visitId);
+		
 		String prescriptionPath = findReportPath("prescription.jasper");
 		Prescription prescription = builder.createPrescription(patient);
 
@@ -213,9 +220,15 @@ public class DocumentController {
 		exportToStream(printObject, byteStream);
 	}
 
-	private void createCertificate(String patientId) {
+	private Patient getPatientByVisitId(Integer visitId) {
+		VisitInfo visit = visitCrudDb.findVisitById(visitId);
+		Patient patient = entityConverter.convertToPatient(visit.getPatientView());
+		return patient;
+	}
 
-		Patient patient = getPatientById(patientId);
+	private void createCertificate(Integer visitId) {
+
+		Patient patient = getPatientByVisitId(visitId);
 		String certificatePath = findReportPath("certificate.jasper");
 		Certificate certificate = builder.createCertificate(patient);
 
@@ -231,9 +244,9 @@ public class DocumentController {
 		exportToStream(printObject, byteStream);
 	}
 
-	private void createReferral(String patientId) {
+	private void createReferral(Integer visitId) {
 
-		Patient patient = getPatientById(patientId);
+		Patient patient = getPatientByVisitId(visitId);
 		String referralPath = findReportPath("referral.jasper");
 		Referral referral = builder.createReferaral(patient);
 
