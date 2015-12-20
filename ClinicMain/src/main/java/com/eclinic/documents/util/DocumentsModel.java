@@ -34,10 +34,10 @@ public class DocumentsModel {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public Integer getIdVisit() {
+	public Integer getVisitId() {
 		return visitId;
 	}
-	public void setIdVisit(Integer idVisit) {
+	public void setVisitId(Integer idVisit) {
 		this.visitId = idVisit;
 	}
 		
