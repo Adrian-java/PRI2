@@ -1,18 +1,24 @@
 package com.eclinic.visit;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.eclinic.dao.DoctorDAO;
+import com.eclinic.dao.DocumentsDAO;
 import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.ReceptionistDAO;
 import com.eclinic.dao.SevenDaysDAO;
@@ -25,13 +31,17 @@ import com.eclinic.dao.view.DoctorViewDAO;
 import com.eclinic.dao.view.PatientViewDAO;
 import com.eclinic.dao.view.VisitSchedulerViewDAO;
 import com.eclinic.dao.view.VisitViewDAO;
+import com.eclinic.documents.util.DocumentsModel;
+import com.eclinic.domain.Certificate;
 import com.eclinic.domain.Doctor;
-import com.eclinic.domain.SevenDays;
+import com.eclinic.domain.Documents;
+import com.eclinic.domain.DocumentsMapping;
+import com.eclinic.domain.Prescription;
+import com.eclinic.domain.Referral;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.StatusOfVisit;
 import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
-import com.eclinic.domain.view.PatientView;
 import com.eclinic.domain.view.VisitSchedulerView;
 import com.eclinic.domain.view.VisitView;
 import com.eclinic.model.VisitInfo;
@@ -70,6 +80,8 @@ public class VisitCrudDb implements VisitCrud {
 	private PatientViewDAO patientViewDao;
 	@Autowired
 	private VisitSchedulerViewDAO visitSchedulerViewDao;
+	@Autowired
+	private DocumentsDAO documentsDao;
 
 	public Set<VisitView> findVisitByDate(Date date) {
 		Calendar calendar = new GregorianCalendar();
@@ -86,7 +98,7 @@ public class VisitCrudDb implements VisitCrud {
 	public Set<VisitView> findPlaneVisitByPatient(String id) {
 		return visitViewDao.findPlaneVisitByPatient(id);
 	}
-	
+
 	public Set<VisitView> findDoneVisitByPatient(String id) {
 		return visitViewDao.findDoneVisitByPatient(id);
 	}
@@ -183,7 +195,7 @@ public class VisitCrudDb implements VisitCrud {
 				break;
 			}
 		}
-		if(specialization==null){
+		if (specialization == null) {
 			return null;
 		}
 		vs.setSpecialization(specialization);
@@ -258,8 +270,46 @@ public class VisitCrudDb implements VisitCrud {
 		v.setVisitView(visitViewDao.findVisitById(id));
 		v.setDoctorView(doctorViewDao.findDoctorById(v.getVisitView()
 				.getIdDoctor()));
-		v.setPatientView(patientViewDao.findPatientById(v.getVisitView().getIdPatient()));
+		v.setPatientView(patientViewDao.findPatientById(v.getVisitView()
+				.getIdPatient()));
+		v.setDocuments(createDocumentModel(documentsDao.findDocumentsByVisit(visitDao
+				.findVisitById(id))));
 		return v;
+	}
+	
+	
+
+	private DocumentsModel createDocumentModel(Documents d) {
+		Map<String, Object> map = new TreeMap<String, Object>();
+		DocumentsModel dm = new DocumentsModel();
+		dm.setDate(d.getDateOfDocuments().getTime());
+		try {
+			dm.setDescription(new String(d.getDescription(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+		}
+		map.put("documents", dm);
+//		Set<Referral> referral = new HashSet<Referral>();
+//		Set<Prescription> prescription = new TreeSet<Prescription>();
+//		Set<Certificate> certificate = new TreeSet<Certificate>();
+//		Set<DocumentsMapping> documentsMappings = d.getDocumentsMappings();
+//		for (DocumentsMapping dsm : documentsMappings) {
+//			if (dsm.getReferral() != null) {
+//				referral.add(dsm.getReferral());
+//			}
+//			if (dsm.getPrescription() != null) {
+//				prescription.add(dsm.getPrescription());
+//			}
+//			if (dsm.getCertificate() != null) {
+//				certificate.add(dsm.getCertificate());
+//			}
+//		}
+//		if (referral.size() > 0)
+//			map.put("referral", referral);
+//		if (prescription.size() > 0)
+//			map.put("referral", prescription);
+//		if (certificate.size() > 0)
+//			map.put("referral", certificate);
+		return dm;
 	}
 
 	public VisitView findFirstFreeTermBySpecializationAndDoctor(

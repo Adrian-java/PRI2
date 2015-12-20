@@ -1,5 +1,11 @@
 package com.eclinic.model;
 
+import java.util.Set;
+
+import com.eclinic.documents.util.DocumentsModel;
+import com.eclinic.domain.Certificate;
+import com.eclinic.domain.Prescription;
+import com.eclinic.domain.Referral;
 import com.eclinic.domain.view.DoctorView;
 import com.eclinic.domain.view.PatientView;
 import com.eclinic.domain.view.VisitView;
@@ -11,6 +17,15 @@ public class VisitInfo {
 	private PatientView patientView;
 	
 	private VisitView visitView;
+	
+	private Set<Referral> referral;
+	
+	private Set<Certificate> certificate;
+	
+	private Set<Prescription> prescription;
+	
+	private DocumentsModel documents;
+	
 
 	public DoctorView getDoctorView() {
 		return doctorView;
@@ -35,6 +50,40 @@ public class VisitInfo {
 	public void setVisitView(VisitView visitView) {
 		this.visitView = visitView;
 	}
-	
-	
+
+	public DocumentsModel getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(DocumentsModel documents) {
+		this.documents = documents;
+	}
+
+	public Set<Referral> getReferral() {
+		return referral;
+	}
+
+	public void setReferral(Set<Referral> referral) {
+		this.referral = referral;
+	}
+
+	public Set<Certificate> getCertificate() {
+		return certificate;
+	}
+
+	public void setCertificate(Set<Certificate> certificate) {
+		this.certificate = certificate;
+	}
+
+	public Set<Prescription> getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(Set<Prescription> prescription) {
+		this.prescription = prescription;
+	}
+
+
+
+
 }

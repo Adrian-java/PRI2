@@ -2,6 +2,8 @@ package com.eclinic.documents.util;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -138,6 +140,51 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 		referralDAO.merge(r);
 		referralDAO.flush();
 
+	}
+
+	public Set<Prescription> getPrescriptionByVisit(Integer id) {
+		Visit findVisitById = visitDao.findVisitById(id);
+		Documents document = documentsDAO.findDocumentsByVisit(findVisitById);
+		Set<Prescription> set = new HashSet<Prescription>();
+		Set<DocumentsMapping> documentsMappings = document
+				.getDocumentsMappings();
+
+		for (DocumentsMapping d : documentsMappings) {
+			if (d.getPrescription() != null) {
+				set.add(d.getPrescription());
+			}
+		}
+		return set;
+	}
+
+	public Set<Referral> getReferralByVisit(Integer id) {
+		Visit findVisitById = visitDao.findVisitById(id);
+		Documents document = documentsDAO.findDocumentsByVisit(findVisitById);
+		Set<Referral> set = new HashSet<Referral>();
+		Set<DocumentsMapping> documentsMappings = document
+				.getDocumentsMappings();
+
+		for (DocumentsMapping d : documentsMappings) {
+			if (d.getReferral() != null) {
+				set.add(d.getReferral());
+			}
+		}
+		return set;
+	}
+
+	public Set<Certificate> getCertificateByVisit(Integer id) {
+		Visit findVisitById = visitDao.findVisitById(id);
+		Documents document = documentsDAO.findDocumentsByVisit(findVisitById);
+		Set<Certificate> set = new HashSet<Certificate>();
+		Set<DocumentsMapping> documentsMappings = document
+				.getDocumentsMappings();
+
+		for (DocumentsMapping d : documentsMappings) {
+			if (d.getCertificate() != null) {
+				set.add(d.getCertificate());
+			}
+		}
+		return set;
 	}
 
 }

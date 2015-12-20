@@ -138,6 +138,40 @@ public class DocumentController {
 		return createResponse(byteStream);
 	}
 
+	// ///////////
+	@GET
+	@Path("/prescription/data/{visitId}")
+	@Produces("application/json")
+	public Response findPrescriptionData(@PathParam("visitId") Integer id) {
+		try {
+			return Response.ok(documentsCrud.getPrescriptionByVisit(id)).build();
+		} catch (Exception e) {
+			return Response.noContent().build();
+		}
+	}
+
+	@GET
+	@Path("/certificate/data/{visitId}")
+	@Produces("application/json")
+	public Response findCertificateData(@PathParam("visitId") Integer id) {
+		try {
+			return Response.ok(documentsCrud.getCertificateByVisit(id)).build();
+		} catch (Exception e) {
+			return Response.noContent().build();
+		}
+	}
+
+	@GET
+	@Path("/referral/data/{visitId}")
+	@Produces("application/json")
+	public Response findReferralData(@PathParam("visitId") Integer id) {
+		try {
+			return Response.ok(documentsCrud.getReferralByVisit(id)).build();
+		} catch (Exception e) {
+			return Response.noContent().build();
+		}
+	}
+
 	@SuppressWarnings("deprecation")
 	private Response createResponse(ByteOutputStream byteStream) {
 		return Response.status(200).entity(byteStream.toByteArray()).build();
