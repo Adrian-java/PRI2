@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
 		@NamedQuery(name = "findVisitViewByPatient", query = "select vs from VisitView vs where vs.idPatient = ?1"),
 		@NamedQuery(name = "findDoneVisitViewByPatient", query = "select vs from VisitView vs where vs.idPatient = ?1 and dateOfVisit <= ?2"),
 		@NamedQuery(name = "findPlaneVisitViewByPatient", query = "select vs from VisitView vs where vs.idPatient = ?1 and dateOfVisit > ?2"),
-		@NamedQuery(name = "findVisitViewByDoctorAndDate", query = "select vs from VisitView vs where vs.idDoctor = ?1 and vs.dateOfVisit between ?2 and ?3"),
+		@NamedQuery(name = "findVisitViewByDoctorAndDate", query = "select vs from VisitView vs where vs.idDoctor = ?1 and vs.dateOfVisit between ?2 and ?3 and vs.status != 'wolna'"),
 		@NamedQuery(name = "findVisitViewByDateOfVisit", query = "select vs from VisitView vs where vs.dateOfVisit >= ?1"),
 		@NamedQuery(name = "findVisitViewBySpecialization", query = "select vs from VisitView vs where vs.specialization =  ?1"),
 		@NamedQuery(name = "findVisitViewBySpecializationAndDate", query = "select vs from VisitView vs where vs.specialization =  ?1 and vs.dateOfVisit between ?2 and ?3"),
-		@NamedQuery(name = "findVisitViewByDoctorAndSpecializationAndDate", query = "select vs from VisitView vs where vs.idDoctor = ?1 and vs.specialization =  ?2 and vs.dateOfVisit between ?3 and ?4"),
+		@NamedQuery(name = "findVisitViewByDoctorAndSpecializationAndDate", query = "select vs from VisitView vs where vs.idDoctor = ?1 and vs.specialization =  ?2 and vs.dateOfVisit between ?3 and ?4 and vs.status !='wolna'"),
 		@NamedQuery(name = "findVisitViewByDate", query = "select vs from VisitView vs where vs.dateOfVisit between ?1 and ?2"),
 		@NamedQuery(name = "findFreeVisitViewByDoctor", query = "select vs from VisitView vs where vs.status = 'wolna' and vs.idDoctor = ?1"),
 		@NamedQuery(name = "findFreeVisitViewBySpecialization", query = "select vs from VisitView vs where vs.status = 'wolna' and vs.specialization = ?1") })
