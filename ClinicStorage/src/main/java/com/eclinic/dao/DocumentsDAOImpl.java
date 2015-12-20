@@ -2,6 +2,7 @@ package com.eclinic.dao;
 
 import com.eclinic.domain.Documents;
 import com.eclinic.domain.Patient;
+import com.eclinic.domain.Visit;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -259,6 +260,11 @@ public class DocumentsDAOImpl extends AbstractJpaDao<Documents> implements
 	public Documents findDocumentsByPatient(Patient p, int startResult,
 			int maxRows) throws DataAccessException {
 		Query query = createNamedQuery("findDocumentsByPatient", startResult, maxRows,p);
+		return (Documents) query.getSingleResult();
+	}
+
+	public Documents findDocumentsByVisit(Visit v) throws DataAccessException {
+		Query query = createNamedQuery("findDocumentsByVisit", -1, -1,v);
 		return (Documents) query.getSingleResult();
 	}
 }

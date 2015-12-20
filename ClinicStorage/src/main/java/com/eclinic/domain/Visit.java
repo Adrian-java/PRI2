@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,6 +19,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -131,6 +133,11 @@ public class Visit implements Serializable {
 	@XmlTransient
 	Doctor doctor;
 
+	@OneToMany(mappedBy = "visit", cascade = { CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@XmlElement(name = "", namespace = "")
+	private
+	java.util.Set<com.eclinic.domain.Documents> documents;
+	
 	/**
 	 */
 	public void setId(Integer id) {
@@ -323,6 +330,14 @@ public class Visit implements Serializable {
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
+	}
+
+	public java.util.Set<com.eclinic.domain.Documents> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(java.util.Set<com.eclinic.domain.Documents> documents) {
+		this.documents = documents;
 	}
 
 }

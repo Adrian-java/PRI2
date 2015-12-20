@@ -10,7 +10,7 @@ public class PrescriptionModel  implements IDocumentsModel{
 	private Date issuedDate;
 	private Date executionDate;
 	private String remady;
-	private String patienId;
+	private Integer visitId;
 	public String getDepartment() {
 		return department;
 	}
@@ -41,12 +41,11 @@ public class PrescriptionModel  implements IDocumentsModel{
 	public void setRemady(String remady) {
 		this.remady = remady;
 	}
-	public void setPatientId(String patienId) {
-		this.patienId = patienId;
+	public void setVisitId(Integer patienId) {
+		this.visitId = patienId;
 	}
-	public String getPatientId() {
-		// TODO Auto-generated method stub
-		return patienId;
+	public Integer getVisitId() {
+		return visitId;
 	}
 
 }

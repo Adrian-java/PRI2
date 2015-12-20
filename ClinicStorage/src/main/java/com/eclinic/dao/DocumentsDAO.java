@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 
 import com.eclinic.domain.Documents;
 import com.eclinic.domain.Patient;
+import com.eclinic.domain.Visit;
 
 /**
  * DAO to manage Documents entities.
@@ -101,6 +102,7 @@ public interface DocumentsDAO extends JpaDao<Documents> {
 	
 	public Documents findDocumentsByPatient(Patient p, int startResult, int maxRows) throws DataAccessException;
 
+	public Documents findDocumentsByVisit(Visit v) throws DataAccessException;
 	/**
 	 * JPQL Query - findAllDocumentss
 	 *

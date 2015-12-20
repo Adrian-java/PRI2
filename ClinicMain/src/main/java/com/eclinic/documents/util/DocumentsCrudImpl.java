@@ -15,12 +15,14 @@ import com.eclinic.dao.DocumentsMappingDAO;
 import com.eclinic.dao.PatientDAO;
 import com.eclinic.dao.PrescriptionDAO;
 import com.eclinic.dao.ReferralDAO;
+import com.eclinic.dao.VisitDAO;
 import com.eclinic.domain.Certificate;
 import com.eclinic.domain.Documents;
 import com.eclinic.domain.DocumentsMapping;
 import com.eclinic.domain.Patient;
 import com.eclinic.domain.Prescription;
 import com.eclinic.domain.Referral;
+import com.eclinic.domain.Visit;
 import com.eclinic.model.IDocumentsModel;
 import com.eclinic.service.SessionBean;
 
@@ -46,17 +48,20 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 	private PrescriptionDAO prescriptionDAO;
 	@Autowired
 	private ReferralDAO referralDAO;
+	@Autowired
+	private VisitDAO visitDao;
+	private Visit findVisitById;
 
 	public void addDocument(DocumentsModel document) {
 		Documents d = new Documents();
 		Calendar c = Calendar.getInstance();
 		c.setTime(new Date());
 		d.setDateOfDocuments(c);
-		// d.setDoctor(doctorDao.findDoctorById(document.getIdDoctor()));
-		d.setDoctor(sessionBean.getLoggedSystemUser().getDoctor());
 		d.setDescription(document.getDescription().getBytes());
-		Patient p = patientDao.findPatientById(document.getIdPatient());
-		d.setPatient(p);
+		Visit visit = visitDao.findVisitById(document.getIdVisit());
+		d.setDoctor(visit.getDoctor());
+		d.setVisit(visit);
+		d.setPatient(visit.getPatient());
 
 		Documents merge = documentsDAO.merge(d);
 		documentsDAO.flush();
@@ -75,7 +80,7 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 		DocumentsMapping docMapping = getReatedMapping(certificate);
 
 		Certificate c = new Certificate();
-		c.setIdNumber(certificate.getPatientId());
+		c.setIdNumber(findVisitById.getPatient().getId());
 		c.setPurpose(certificate.getPurpose().getBytes());
 		c.setRecognition(certificate.getRecognition().getBytes());
 		c.setId(docMapping.getId());
@@ -108,10 +113,8 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 	}
 
 	private DocumentsMapping getReatedMapping(IDocumentsModel docModel) {
-		Patient findPatientById = patientDao.findPatientById(docModel
-				.getPatientId());
-		Documents document = documentsDAO.findDocumentsByPatient(
-				findPatientById, -1, -1);
+		findVisitById = visitDao.findVisitById(docModel.getVisitId());
+		Documents document = documentsDAO.findDocumentsByVisit(findVisitById);
 
 		DocumentsMapping docMapping = new DocumentsMapping();
 

@@ -14,6 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.eclinic.documents.util.CertificateModel;
 import com.eclinic.documents.util.DocumentsCrud;
+import com.eclinic.documents.util.DocumentsModel;
 import com.eclinic.documents.util.PrescriptionModel;
 import com.eclinic.documents.util.ReferralModel;
 import com.eclinic.domain.Prescription;
@@ -36,36 +37,41 @@ public class Main {
 
 		ApplicationContext ctx = new ClassPathXmlApplicationContext(
 				"applicationContext.xml");
-//		documentsCrud = (DocumentsCrud) ctx.getBean("DocumentsCrud");
+		documentsCrud = (DocumentsCrud) ctx.getBean("DocumentsCrud");
+		
+//		DocumentsModel docm = new DocumentsModel();
+//		docm.setDate(new Date());
+//		docm.setDescription("desc1");
+//		docm.setIdVisit(879);
+//		documentsCrud.addDocument(docm);
 		docController = (DocumentController) ctx.getBean("DocumentController");
 		
-		Response findPrescription = docController.findPrescription("pesel25");
-		docController.findCertificate("pesel25");
-		docController.findReferral("pesel25");
-		 PrescriptionModel prescription = new PrescriptionModel();
+		Response findPrescription = docController.findPrescription("pesel38");
+		docController.findCertificate("pesel38");
+		docController.findReferral("pesel38");
+//		 PrescriptionModel prescription = new PrescriptionModel();
 //		 Prescription d = new Prescription();
-		// Calendar c = Calendar.getInstance();
-		// c.setTime(new Date());
-		// prescription.setIssuedDate(c.getTime());
-		// prescription.setDepartment("dep");
-		// prescription.setExecutionDate(c.getTime());
-		// prescription.setIdClinic(1);
-		// prescription.setRemady("remady");
-//		 prescription.setPatientId("pesel25");
-		// documentsCrud.addPrescription(prescription);
+//		 Calendar c = Calendar.getInstance();
+//		 c.setTime(new Date());
+//		 prescription.setIssuedDate(c.getTime());
+//		 prescription.setDepartment("dep");
+//		 prescription.setExecutionDate(c.getTime());
+//		 prescription.setIdClinic(1);
+//		 prescription.setRemady("remady");
+//		 prescription.setVisitId(879);
+//		 documentsCrud.addPrescription(prescription);
 
-		// CertificateModel cert = new CertificateModel();
-		// cert.setIdNumber("123");
-		// cert.setPurpose("purpose");
-		// cert.setRecognition("recognition");
-		// cert.setPatientId("pesel25");
-//		 documentsCrud.addCertificate(csert);
-		//
-		// ReferralModel ref = new ReferralModel();
-		// ref.setDestination("destination");
-		// ref.setPurpose("purpose");
-		// ref.setRecognition("recognition");
-		// ref.setPatientId("pesel25");
-		// documentsCrud.addReferral(ref);
+//		 CertificateModel cert = new CertificateModel();
+//		 cert.setPurpose("purpose");
+//		 cert.setRecognition("recognition");
+//		 cert.setVisitId(879);
+//		 documentsCrud.addCertificate(cert);
+//		//
+//		 ReferralModel ref = new ReferralModel();
+//		 ref.setDestination("destination");
+//		 ref.setPurpose("purpose");
+//		 ref.setRecognition("recognition");
+//		 ref.setVisitId(879);
+//		 documentsCrud.addReferral(ref);
 	}
 }
