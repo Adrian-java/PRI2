@@ -107,4 +107,25 @@ angular.module 'clinic'
         console.log 'doc added'
       )
 
+    $scope.addPrescription = ->
+      prescriptionData = {
+        'issuedDate': new Date().getTime()
+        'department': '03'
+        'executionDate': new Date().getTime()
+        'remady': 'Duomox;50%;'
+        'visitId': $stateParams.visitId
+      }
+      Documents.addPrescription(prescriptionData).then((res) ->
+        console.log res
+      )
+
+    $scope.addCertificate = ->
+      certificateData = {
+        'purpose': 'certificate purpose'
+        'recognition': 'certificate recognition'
+        'visitId': $stateParams.visitId
+      }
+      Documents.addCertificate(certificateData).then((res) ->
+        console.log res
+      )
   ]

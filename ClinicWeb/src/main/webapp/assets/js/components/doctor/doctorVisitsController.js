@@ -86,12 +86,36 @@
         });
       }
       $scope.doc = {};
-      return $scope.submit = function() {
+      $scope.submit = function() {
         $scope.doc.visitId = $stateParams.visitId;
         $scope.doc.date = $scope.visit.visitView.dateOfVisit;
         return Documents.create($scope.doc).then(function(res) {
           console.log(res);
           return console.log('doc added');
+        });
+      };
+      $scope.addPrescription = function() {
+        var prescriptionData;
+        prescriptionData = {
+          'issuedDate': new Date().getTime(),
+          'department': '03',
+          'executionDate': new Date().getTime(),
+          'remady': 'Duomox;50%;',
+          'visitId': $stateParams.visitId
+        };
+        return Documents.addPrescription(prescriptionData).then(function(res) {
+          return console.log(res);
+        });
+      };
+      return $scope.addCertificate = function() {
+        var certificateData;
+        certificateData = {
+          'purpose': 'certificate purpose',
+          'recognition': 'certificate recognition',
+          'visitId': $stateParams.visitId
+        };
+        return Documents.addCertificate(certificateData).then(function(res) {
+          return console.log(res);
         });
       };
     }

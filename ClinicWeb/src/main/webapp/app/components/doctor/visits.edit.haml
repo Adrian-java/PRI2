@@ -20,5 +20,24 @@
       %ul.list-group
         %li.list-group-item.active
           Dokumenty
+          {{docActive}}
+        %li.list-group-item{:'ng-click' => 'docActive = prescription'}
+          Recepta
+          %div.form-horizontal{:'ng-if' => 'docActive == prescription'}
+            .form-group
+              %label.control-label.col-sm-2{:for => "first-name"} Imię:
+              .col-sm-10
+                %input#first-name.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'user.firstName'}
+            %button.btn.btn-primary{:'ng-click' => 'addPrescription()'}
+              Dodaj receptę
+        %li.list-group-item{:'ng-click' => 'docActive = prescription'}
+          Zaświadczenie
+          %div.form-horizontal{:'ng-if' => 'docActive == prescription'}
+            .form-group
+              %label.control-label.col-sm-2{:for => "first-name"} Imię:
+              .col-sm-10
+                %input#first-name.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'user.firstName'}
+            %button.btn.btn-primary{:'ng-click' => 'addCertificate()'}
+              Dodaj zaświadczenie
       %button.btn.btn-primary{:'ng-click' => 'submit()'}
         Zapisz

@@ -29,6 +29,35 @@
       <ul class='list-group'>
         <li class='list-group-item active'>
           Dokumenty
+          {{docActive}}
+        </li>
+        <li class='list-group-item' ng-click='docActive = prescription'>
+          Recepta
+          <div class='form-horizontal' ng-if='docActive == prescription'>
+            <div class='form-group'>
+              <label class='control-label col-sm-2' for='first-name'>Imię:</label>
+              <div class='col-sm-10'>
+                <input class='form-control' id='first-name' ng-model='user.firstName' placeholder='Wpisz imię' type='text'>
+              </div>
+            </div>
+            <button class='btn btn-primary' ng-click='addPrescription()'>
+              Dodaj receptę
+            </button>
+          </div>
+        </li>
+        <li class='list-group-item' ng-click='docActive = prescription'>
+          Zaświadczenie
+          <div class='form-horizontal' ng-if='docActive == prescription'>
+            <div class='form-group'>
+              <label class='control-label col-sm-2' for='first-name'>Imię:</label>
+              <div class='col-sm-10'>
+                <input class='form-control' id='first-name' ng-model='user.firstName' placeholder='Wpisz imię' type='text'>
+              </div>
+            </div>
+            <button class='btn btn-primary' ng-click='addCertificate()'>
+              Dodaj zaświadczenie
+            </button>
+          </div>
         </li>
       </ul>
       <button class='btn btn-primary' ng-click='submit()'>
