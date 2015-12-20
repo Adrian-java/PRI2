@@ -58,7 +58,7 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 		c.setTime(new Date());
 		d.setDateOfDocuments(c);
 		d.setDescription(document.getDescription().getBytes());
-		Visit visit = visitDao.findVisitById(document.getIdVisit());
+		Visit visit = visitDao.findVisitById(document.getVisitId());
 		d.setDoctor(visit.getDoctor());
 		d.setVisit(visit);
 		d.setPatient(visit.getPatient());
