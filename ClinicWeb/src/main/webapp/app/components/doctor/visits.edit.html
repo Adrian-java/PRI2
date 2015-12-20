@@ -23,7 +23,7 @@
           Diagnoza
         </li>
         <li class='list-group-item'>
-          <textarea class='form-control' rows='10'></textarea>
+          <textarea class='form-control' ng-model='doc.description' rows='10'></textarea>
         </li>
       </ul>
       <ul class='list-group'>
@@ -31,6 +31,9 @@
           Dokumenty
         </li>
       </ul>
+      <button class='btn btn-primary' ng-click='submit()'>
+        Zapisz
+      </button>
     </div>
   </div>
 </div>

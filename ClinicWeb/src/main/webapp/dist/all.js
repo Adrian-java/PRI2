@@ -74197,7 +74197,7 @@ angular.module('ui.calendar', [])
 
 (function() {
   angular.module('clinic').controller('DoctorVisitsController', [
-    '$scope', 'Doctors', 'Auth', 'Visits', function($scope, Doctors, Auth, Visits) {
+    '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', function($scope, Doctors, Auth, Visits, $stateParams, Documents) {
       var afterTomorrow, getAllVisitsByDate, getVisits, tomorrow;
       $scope.today = function() {
         $scope.dt = new Date;
@@ -74277,22 +74277,19 @@ angular.module('ui.calendar', [])
         return getAllVisitsByDate(startDate, endDate);
       };
       if ($stateParams.visitId) {
-        return Visits.show($stateParams.visitId).then(function(res) {
+        Visits.show($stateParams.visitId).then(function(res) {
           console.log(res);
           return $scope.visit = res.data;
         });
       }
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  angular.module('clinic').controller('LoginController', [
-    '$scope', '$uibModalInstance', 'Auth', function($scope, $uibModalInstance, Auth) {
+      $scope.doc = {};
       return $scope.submit = function() {
-        Auth.login($scope.user);
-        return $uibModalInstance.close($scope.user);
+        $scope.doc.visitId = $stateParams.visitId;
+        $scope.doc.date = $scope.visit.visitView.dateOfVisit;
+        return Documents.create($scope.doc).then(function(res) {
+          console.log(res);
+          return console.log('doc added');
+        });
       };
     }
   ]);
@@ -74386,6 +74383,18 @@ angular.module('ui.calendar', [])
           'doctor': $scope.selectedDoctor.id,
           'date': $scope.selectedDate
         });
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('LoginController', [
+    '$scope', '$uibModalInstance', 'Auth', function($scope, $uibModalInstance, Auth) {
+      return $scope.submit = function() {
+        Auth.login($scope.user);
+        return $uibModalInstance.close($scope.user);
       };
     }
   ]);

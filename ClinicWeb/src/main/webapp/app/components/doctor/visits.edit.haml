@@ -16,7 +16,9 @@
         %li.list-group-item.active
           Diagnoza
         %li.list-group-item
-          %textarea.form-control{:'rows' => '10'}
+          %textarea.form-control{:'rows' => '10', :'ng-model' => 'doc.description'}
       %ul.list-group
         %li.list-group-item.active
           Dokumenty
+      %button.btn.btn-primary{:'ng-click' => 'submit()'}
+        Zapisz

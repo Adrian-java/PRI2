@@ -1,6 +1,6 @@
 (function() {
   angular.module('clinic').controller('DoctorVisitsController', [
-    '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', function($scope, Doctors, Auth, Visits, $stateParams) {
+    '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', function($scope, Doctors, Auth, Visits, $stateParams, Documents) {
       var afterTomorrow, getAllVisitsByDate, getVisits, tomorrow;
       $scope.today = function() {
         $scope.dt = new Date;
@@ -80,11 +80,20 @@
         return getAllVisitsByDate(startDate, endDate);
       };
       if ($stateParams.visitId) {
-        return Visits.show($stateParams.visitId).then(function(res) {
+        Visits.show($stateParams.visitId).then(function(res) {
           console.log(res);
           return $scope.visit = res.data;
         });
       }
+      $scope.doc = {};
+      return $scope.submit = function() {
+        $scope.doc.visitId = $stateParams.visitId;
+        $scope.doc.date = $scope.visit.visitView.dateOfVisit;
+        return Documents.create($scope.doc).then(function(res) {
+          console.log(res);
+          return console.log('doc added');
+        });
+      };
     }
   ]);
 

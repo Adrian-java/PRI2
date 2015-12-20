@@ -1,5 +1,5 @@
 angular.module 'clinic'
-  .controller 'DoctorVisitsController', [ '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', ($scope, Doctors, Auth, Visits, $stateParams) ->
+  .controller 'DoctorVisitsController', [ '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', ($scope, Doctors, Auth, Visits, $stateParams, Documents) ->
 
     $scope.today = ->
       $scope.dt = new Date
@@ -95,6 +95,16 @@ angular.module 'clinic'
       Visits.show($stateParams.visitId).then((res) ->
         console.log res
         $scope.visit = res.data
+      )
+
+    $scope.doc = {}
+
+    $scope.submit = ->
+      $scope.doc.visitId = $stateParams.visitId
+      $scope.doc.date = $scope.visit.visitView.dateOfVisit
+      Documents.create($scope.doc).then((res) ->
+        console.log res
+        console.log 'doc added'
       )
 
   ]
