@@ -207,7 +207,7 @@ public class ClinicServiceImpl implements ClinicService {
 			existingprescriptions.setDepartment(related_prescriptions.getDepartment());
 			existingprescriptions.setIssuedDate(related_prescriptions.getIssuedDate());
 			existingprescriptions.setExecutionDate(related_prescriptions.getExecutionDate());
-			existingprescriptions.setRemady(related_prescriptions.getRemady());
+			existingprescriptions.setRemady(related_prescriptions.getRemedy());
 			related_prescriptions = existingprescriptions;
 		}
 

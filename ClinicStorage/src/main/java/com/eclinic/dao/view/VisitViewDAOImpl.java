@@ -92,8 +92,13 @@ public class VisitViewDAOImpl extends AbstractJpaDao<VisitView> implements
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 
-	public Set<VisitView> findVisitByPatient(String id) {
-		Query query = createNamedQuery("findVisitViewByPatient", -1, -1, id);
+	public Set<VisitView> findPlaneVisitByPatient(String id) {
+		Query query = createNamedQuery("findPlaneVisitViewByPatient", -1, -1, id, new Date());
+		return new LinkedHashSet<VisitView>(query.getResultList());
+	}
+	
+	public Set<VisitView> findDoneVisitByPatient(String id) {
+		Query query = createNamedQuery("findDoneVisitViewByPatient", -1, -1, id, new Date());
 		return new LinkedHashSet<VisitView>(query.getResultList());
 	}
 

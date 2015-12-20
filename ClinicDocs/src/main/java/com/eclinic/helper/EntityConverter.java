@@ -29,7 +29,7 @@ public class EntityConverter {
 		address.setCountryCodeCity(view.getCountryCodeCity());
 		address.setHomeNr(view.getHomeNr());
 		address.setProvince(view.getProvince());
-		address.setStreet("Add street in EntityConverter");
+		address.setStreet(view.getStreet());
 		
 		return address;
 	} 

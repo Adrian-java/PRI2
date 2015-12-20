@@ -2,6 +2,7 @@ package com.eclinic.converter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +39,7 @@ public class DocumentConverter {
 		data.setPatientName(getPatientName(patient));
 		data.setPatientAddress(getPatientAddress(patient));
 		
-//		TODO - add pesel to patient model data.setPesel(patient.getPesel());
-		data.setPesel("01010122393");
+		data.setPesel(patient.getId());
 		
 		data.setDepartment(prescription.getDepartment());
 		data.setPermissions(prescription.getPermissions());
@@ -62,10 +62,8 @@ public class DocumentConverter {
 		Clinic clinic = certificate.getClinic();
 		Patient patient = certificate.getPatient();
 		
-		SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
-		
 		map.put("City", clinic.getCity());
-		map.put("Date", date.format(certificate.getDate()));
+		map.put("Date", formatDate(certificate.getDate()));
 		map.put("BirthDate", "29.11.1990");
 		map.put("Name", getPatientName(patient));
 		map.put("IdNumber", patient.getId());
@@ -84,11 +82,11 @@ public class DocumentConverter {
 		
 		map.put("City", clinic.getCity());
 		map.put("Name", getPatientName(patient));
-		map.put("Pesel", "9102012351");
+		map.put("Pesel", patient.getId());
 		map.put("Purpose", referral.getPurpose());
 		map.put("Destination", referral.getDestination());
 		map.put("Recognition", referral.getRecognition());
-		map.put("Date", referral.getDate().toString());
+		map.put("Date", formatDate(referral.getDate()));
 		
 		return map;
 	}
@@ -109,16 +107,15 @@ public class DocumentConverter {
 		map.put("PatientName", getPatientName(patient));
 		map.put("PatientAddress", getPatientAddress(patient));
 		
-//		TODO - add pesel to patient model data.setPesel(patient.getPesel());
-		map.put("PatientPesel", "01010122393");
+		map.put("PatientPesel", patient.getId());
 
 		map.put("Department", prescription.getDepartment());
 		map.put("Permissions", prescription.getPermissions());
 		
 		setRemedies(prescription, map);
 		
-		map.put("IssuedDate", prescription.getIssuedDate().toString());
-		map.put("ExecutionDate", prescription.getExecutionDate().toString());
+		map.put("IssuedDate", formatDate(prescription.getIssuedDate()));
+		map.put("ExecutionDate", formatDate(prescription.getExecutionDate()));
 		map.put("DoctorName", getDoctorName(doctor));
 		map.put("DoctorSpecialization", getDoctorSpecialization(doctor));
 		
@@ -155,7 +152,7 @@ public class DocumentConverter {
 	}
 	
 	private String getPatientName(Patient patient) {
-		return patient.getName() + " " +patient.getSurname();
+		return patient.getName() + " " + patient.getSurname();
 	} 
 	
 //	TODO - add street do Address model
@@ -193,8 +190,10 @@ public class DocumentConverter {
 		return name;
 	}
 
-
-	
+	private String formatDate(Date date) {
+		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+		return format.format(date);
+	}
 	
 	
 }

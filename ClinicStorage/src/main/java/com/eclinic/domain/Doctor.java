@@ -79,7 +79,7 @@ public class Doctor implements Serializable {
 	SystemUser systemUser;
 	/**
 	 */
-	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "doctor", cascade = { CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	@XmlElement(name = "", namespace = "")
 	java.util.Set<com.eclinic.domain.Specialization> specializations;
 	/**

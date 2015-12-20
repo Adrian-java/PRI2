@@ -1,9 +1,8 @@
 package com.eclinic.visit.mapper;
 
 import java.sql.Time;
+import java.util.Date;
 import java.util.Set;
-
-import com.eclinic.domain.DayOfWeek;
 
 public class NewVisitSchedulerMapper {
 
@@ -17,9 +16,11 @@ public class NewVisitSchedulerMapper {
     
     private String description;
 
-    private Set<String> daysOfWeek;
+    private Date startDate;
     
     private Integer duration;
+    
+    private Integer visitRepeat;
     
 
     public Time getTimeFrom() {
@@ -62,20 +63,28 @@ public class NewVisitSchedulerMapper {
         this.description = description;
     }
 
-    public Set<String> getDaysOfWeek() {
-	return daysOfWeek;
-    }
-
-    public void setDaysOfWeek(Set<String> daysOfWeek) {
-	this.daysOfWeek = daysOfWeek;
-    }
-
 	public Integer getDuration() {
 		return duration;
 	}
 
 	public void setDuration(Integer duration) {
 		this.duration = duration;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Integer getVisitRepeat() {
+		return visitRepeat;
+	}
+
+	public void setVisitRepeat(Integer visitRepeat) {
+		this.visitRepeat = visitRepeat;
 	}
 
 }

@@ -44,6 +44,7 @@ import com.eclinic.domain.SystemUser;
 import com.eclinic.domain.view.AdminView;
 import com.eclinic.domain.view.DoctorView;
 import com.eclinic.domain.view.PatientView;
+import com.eclinic.domain.view.ReceptionistView;
 import com.eclinic.domain.view.SystemUserPermissionView;
 import com.eclinic.service.DoctorService;
 import com.eclinic.service.PatientService;
@@ -611,6 +612,14 @@ public class SystemUserRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPatientById(@PathParam("pesel") String pesel) {
 		PatientView patient = patientCrud.getPatientById(pesel);
+		return Response.ok(patient).build();
+	}
+	
+	@Path("/receptionist/{id}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getReceptionistById(@PathParam("id") String id) {
+		ReceptionistView patient = receptonistCrud.getReceptionistById(id);
 		return Response.ok(patient).build();
 	}
 

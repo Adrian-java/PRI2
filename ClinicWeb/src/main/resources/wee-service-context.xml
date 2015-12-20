@@ -24,11 +24,16 @@
 		scoped-proxy="interfaces" />
 	<context:component-scan base-package="com.eclinic.user"
 		scoped-proxy="interfaces" />
-	
+
 	<context:component-scan base-package="com.eclinic.visit"
 		scoped-proxy="interfaces" />
-		
+
+	<context:component-scan base-package="com.eclinic.helper"
+		scoped-proxy="interfaces" />
+
 	<context:component-scan base-package="com.eclinic.graphic"
+		scoped-proxy="interfaces" />
+	<context:component-scan base-package="com.eclinic.documents"
 		scoped-proxy="interfaces" />
 
 	<!-- ******************************************************************** -->

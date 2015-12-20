@@ -83,8 +83,12 @@ public class VisitCrudDb implements VisitCrud {
 				-1);
 	}
 
-	public Set<VisitView> findVisitByPatient(String id) {
-		return visitViewDao.findVisitByPatient(id);
+	public Set<VisitView> findPlaneVisitByPatient(String id) {
+		return visitViewDao.findPlaneVisitByPatient(id);
+	}
+	
+	public Set<VisitView> findDoneVisitByPatient(String id) {
+		return visitViewDao.findDoneVisitByPatient(id);
 	}
 
 	public Set<VisitView> findVisitBySpecialization(String specialization) {
@@ -166,6 +170,7 @@ public class VisitCrudDb implements VisitCrud {
 
 	public VisitScheduler addVisitScheduler(NewVisitSchedulerMapper vsm) {
 		VisitScheduler vs = new VisitScheduler();
+		vs.setStartDate(vsm.getStartDate());
 		vs.setDoctor(doctorDao.findDoctorById(vsm.getIdDoctor()));
 		vs.setDescription((vsm.getDescription() != null ? vsm.getDescription()
 				.getBytes() : null));
@@ -178,12 +183,14 @@ public class VisitCrudDb implements VisitCrud {
 				break;
 			}
 		}
+		if(specialization==null){
+			return null;
+		}
 		vs.setSpecialization(specialization);
 		vs.setTimeFrom(vsm.getTimeFrom());
 		vs.setTimeTo(vsm.getTimeTo());
-		SevenDays convertDaysToSevenDays = visitHelper
-				.convertDaysToSevenDays(vsm.getDaysOfWeek());
-		// vs.setSevenDays(sevenDaysDao.merge(convertDaysToSevenDays));
+		vs.setDuration(vsm.getDuration());
+		vs.setVisitRepeat(vsm.getVisitRepeat());
 		return visitSchedulerDao.merge(vs);
 	}
 
@@ -304,5 +311,9 @@ public class VisitCrudDb implements VisitCrud {
 	public VisitView findVisitWithInfoById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Set<VisitView> getAllVisitByPatient(String id) {
+		return visitViewDao.findPlaneVisitByPatient(id);
 	}
 }

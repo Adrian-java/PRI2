@@ -130,7 +130,7 @@ public class ReceptionistCrudDB implements ReceptionistCrud {
 	}
 
 	public ReceptionistView getReceptionistById(String pesel) {
-		return new ReceptionistView(); //ReceptionistViewDao.findReceptionistById(pesel);
+		return ReceptionistViewDao.findReceptionistById(pesel);
 	}
 
 }
