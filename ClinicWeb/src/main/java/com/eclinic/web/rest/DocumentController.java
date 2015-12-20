@@ -141,7 +141,7 @@ public class DocumentController {
 	// ///////////
 	@GET
 	@Path("/prescription/data/{visitId}")
-	@Produces("application/pdf")
+	@Produces("application/json")
 	public Response findPrescriptionData(@PathParam("visitId") Integer id) {
 		try {
 			return Response.ok(documentsCrud.getPrescriptionByVisit(id)).build();
@@ -152,7 +152,7 @@ public class DocumentController {
 
 	@GET
 	@Path("/certificate/data/{visitId}")
-	@Produces("application/pdf")
+	@Produces("application/json")
 	public Response findCertificateData(@PathParam("visitId") Integer id) {
 		try {
 			return Response.ok(documentsCrud.getCertificateByVisit(id)).build();
@@ -163,7 +163,7 @@ public class DocumentController {
 
 	@GET
 	@Path("/referral/data/{visitId}")
-	@Produces("application/pdf")
+	@Produces("application/json")
 	public Response findReferralData(@PathParam("visitId") Integer id) {
 		try {
 			return Response.ok(documentsCrud.getReferralByVisit(id)).build();
