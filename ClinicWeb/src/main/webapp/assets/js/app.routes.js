@@ -84,6 +84,16 @@
       templateUrl: 'app/components/doctor/patients.show.html',
       controller: 'DoctorPatientsController',
       controllerAs: 'doctor.patients.show'
+    }).state('doctor-visits', {
+      url: '/doctor/visits',
+      templateUrl: 'app/components/doctor/visits.html',
+      controller: 'DoctorVisitsController',
+      controllerAs: 'doctor.visits.index'
+    }).state('doctor-visits-edit', {
+      url: '/doctor/visits/:visitId/edit',
+      templateUrl: 'app/components/doctor/visits.edit.html',
+      controller: 'DoctorVisitsController',
+      controllerAs: 'doctor.visits.edit'
     }).state('doctor.edit', {
       url: '/edit'
     }).state('doctor.calendar', {
@@ -229,6 +239,11 @@
       controller: 'ReceptionistDoctorsVisitsController',
       controllerAs: 'receptionist.doctors.visits.index',
       templateUrl: 'app/components/receptionist/doctors.visits.html'
+    }).state('receptionist-doctors-working-hours', {
+      url: '/receptionist/doctors/:doctorId/working-hours',
+      controller: 'ReceptionistDoctorsWorkingHoursController',
+      controllerAs: 'receptionist.doctors.working-hours',
+      templateUrl: 'app/components/receptionist/doctors.working-hours.html'
     }).state('receptionist-patients', {
       url: '/receptionist/patients',
       templateUrl: 'app/components/receptionist/patients.html',

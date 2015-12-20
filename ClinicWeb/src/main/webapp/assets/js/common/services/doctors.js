@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Doctors', [
     '$http', '$cookies', 'api', function($http, $cookies, api) {
-      var create, handleError, handleSuccess, index, indexBySpeciality, remove, show, takenVisitsTimeFrame, workingTime;
+      var addWorkingHours, create, handleError, handleSuccess, index, indexBySpeciality, indexDoctorsVisits, remove, show, takenVisitsTimeFrame, workingTime;
       index = function() {
         var request;
         request = $http({
@@ -85,12 +85,39 @@
         });
         return request;
       };
+      indexDoctorsVisits = function(doctorId, start, end) {
+        var request;
+        request = $http({
+          method: 'GET',
+          url: api + 'Visit/doctor/' + doctorId + '/date/' + start + '/' + end,
+          headers: {
+            'XToken': $cookies.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
       remove = function(id) {
         var request;
         console.log(id);
         request = $http({
           method: 'DELETE',
           url: api + 'SystemUser/doctor/' + id,
+          headers: {
+            'XToken': $cookies.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
+      addWorkingHours = function(workingHours) {
+        var request;
+        console.log(workingHours);
+        request = $http({
+          method: 'POST',
+          isArray: false,
+          url: api + 'VisitScheduler/scheduler/add',
+          data: workingHours,
           headers: {
             'XToken': $cookies.token,
             'Content-Type': 'application/json'
@@ -114,7 +141,9 @@
         indexBySpeciality: indexBySpeciality,
         workingTime: workingTime,
         takenVisitsTimeFrame: takenVisitsTimeFrame,
-        remove: remove
+        remove: remove,
+        addWorkingHours: addWorkingHours,
+        indexDoctorsVisits: indexDoctorsVisits
       };
     }
   ]);

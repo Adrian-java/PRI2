@@ -29,6 +29,14 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
 
+  show = (visitId) ->
+    request = $http(
+      method: 'GET'
+      url: api + 'Visit/info/' + visitId
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json'
+    )
+    return request
+
   remove = (visitId) ->
     console.log 'visit id: ' + visitId
     request = $http(
@@ -49,6 +57,7 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
   {
     create: create
     remove: remove
+    show: show
     indexByDate: indexByDate
   }
 ]

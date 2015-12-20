@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Visits', [
     '$http', '$cookies', 'api', function($http, $cookies, api) {
-      var check, create, handleError, handleSuccess, indexByDate, remove;
+      var check, create, handleError, handleSuccess, indexByDate, remove, show;
       indexByDate = function(startDate, endDate) {
         var request;
         console.log('dates');
@@ -45,6 +45,18 @@
         });
         return request.then(handleSuccess, handleError);
       };
+      show = function(visitId) {
+        var request;
+        request = $http({
+          method: 'GET',
+          url: api + 'Visit/info/' + visitId,
+          headers: {
+            'XToken': $cookies.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
       remove = function(visitId) {
         var request;
         console.log('visit id: ' + visitId);
@@ -70,6 +82,7 @@
       return {
         create: create,
         remove: remove,
+        show: show,
         indexByDate: indexByDate
       };
     }

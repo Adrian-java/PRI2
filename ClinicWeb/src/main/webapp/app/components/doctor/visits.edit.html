@@ -1,0 +1,36 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Dane pacjenta
+        </li>
+        <li class='list-group-item'>
+          Imię i nazwisko: {{visit.patientView.name}} {{visit.patientView.surname}}
+        </li>
+        <li class='list-group-item'>
+          Pesel: {{visit.patientView.id}}
+        </li>
+        <li class='list-group-item'>
+          Data urodzenia: {{visit.patientView.dateOfBirth | date: 'dd-MM-yyyy'}}
+        </li>
+        <li class='list-group-item'>
+          Miejsce zamieszkania: {{visit.patientView.countryCode}} {{visit.patientView.city}} {{visit.patientView.street}} {{visit.patientView.homeNr}}
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Diagnoza
+        </li>
+        <li class='list-group-item'>
+          <textarea class='form-control' rows='10'></textarea>
+        </li>
+      </ul>
+      <ul class='list-group'>
+        <li class='list-group-item active'>
+          Dokumenty
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -56,12 +56,30 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     return request
 
+  indexDoctorsVisits = (doctorId, start, end) ->
+    request = $http(
+      method: 'GET'
+      url: api + 'Visit/doctor/'+doctorId+'/date/'+start+'/'+end
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+    return request
+
   remove = (id) ->
     console.log id
     request = $http(
       method: 'DELETE'
       url: api + 'SystemUser/doctor/' + id
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+    return request
+
+  addWorkingHours = (workingHours) ->
+    console.log workingHours
+    request = $http(
+      method: 'POST'
+      isArray: false
+      url: api + 'VisitScheduler/scheduler/add'
+      data: workingHours
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json'
+    )
     return request
 
   handleError = (response) ->
@@ -81,5 +99,7 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
     workingTime: workingTime
     takenVisitsTimeFrame: takenVisitsTimeFrame
     remove: remove
+    addWorkingHours: addWorkingHours
+    indexDoctorsVisits: indexDoctorsVisits
   }
 ]

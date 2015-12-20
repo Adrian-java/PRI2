@@ -1,0 +1,22 @@
+.container
+  .row
+    .col-xs-12
+      %ul.list-group
+        %li.list-group-item.active
+          Dane pacjenta
+        %li.list-group-item
+          Imię i nazwisko: {{visit.patientView.name}} {{visit.patientView.surname}}
+        %li.list-group-item
+          Pesel: {{visit.patientView.id}}
+        %li.list-group-item
+          Data urodzenia: {{visit.patientView.dateOfBirth | date: 'dd-MM-yyyy'}}
+        %li.list-group-item
+          Miejsce zamieszkania: {{visit.patientView.countryCode}} {{visit.patientView.city}} {{visit.patientView.street}} {{visit.patientView.homeNr}}
+      %ul.list-group
+        %li.list-group-item.active
+          Diagnoza
+        %li.list-group-item
+          %textarea.form-control{:'rows' => '10'}
+      %ul.list-group
+        %li.list-group-item.active
+          Dokumenty

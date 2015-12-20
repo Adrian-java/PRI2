@@ -1,0 +1,35 @@
+.container
+  .row
+    .col-xs-12
+      .input-group
+        %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "is-open" => "status.openedStart", "max-date" => "maxDate", "min-date" => "minDate", "ng-model" => "selectedStartDate", "ng-required" => "true", :type => "text", "uib-datepicker-popup" => ""}/
+        %span.input-group-btn
+          %button.btn.btn-default{"ng-click" => "openStart($event)", :type => "button"}
+            %i.glyphicon.glyphicon-calendar
+      .input-group
+        %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "is-open" => "status.openedEnd", "max-date" => "maxDate", "min-date" => "minDate", "ng-model" => "selectedEndDate", "ng-required" => "true", :type => "text", "uib-datepicker-popup" => ""}/
+        %span.input-group-btn
+          %button.btn.btn-default{"ng-click" => "openEnd($event)", :type => "button"}
+            %i.glyphicon.glyphicon-calendar
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Data
+            %th
+              Pacjent
+            %th
+              Akcje
+        %tbody
+          %tr{:'ng-repeat' => 'visit in visits'}
+            %td
+              %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy H:m'}}
+            %td
+              %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
+                {{visit.idPatient}}
+            %td
+              %a.btn.btn-danger{:'ng-click' => 'removeVisit(visit.id)'}
+                Usuń
+              %a.btn.btn-primary{:'ui-sref' => 'doctor-visits-edit({visitId: visit.id})'}
+                Edytuj

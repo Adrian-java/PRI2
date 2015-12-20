@@ -1,0 +1,26 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12 col-sm-6 col-md-3'>
+      <div class='input-group'>
+        <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' is-open='status.opened' max-date='maxDate' min-date='minDate' ng-model='selectedDate' ng-required='true' type='text' uib-datepicker-popup=''>
+        <span class='input-group-btn'>
+          <button class='btn btn-default' ng-click='open($event)' type='button'>
+            <i class='glyphicon glyphicon-calendar'></i>
+          </button>
+        </span>
+      </div>
+    </div>
+    <div class='col-xs-12'>
+      <select class='form-control' ng-model='workingHours.specialization' ng-options='speciality.name as speciality.name for speciality in specialities'>
+        <option value=''>
+          Wybierz specjalizację
+        </option>
+      </select>
+      <input class='form-control' ng-model='workingHours.timeFrom' placeholder='Od godziny'>
+      <input class='form-control' ng-model='workingHours.timeTo' placeholder='Do godziny'>
+      <button ng-click='submit()'>
+        Dodaj
+      </button>
+    </div>
+  </div>
+</div>
