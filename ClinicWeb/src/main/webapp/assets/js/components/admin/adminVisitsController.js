@@ -1,10 +1,8 @@
 (function() {
   angular.module('clinic').controller('AdminVisitsController', [
     '$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', function($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) {
-      var changeWeek, getAllDoctors, getWorkingTime, setCalendarWorkingTime;
-      $scope.removeVisit = function(id) {
-        return Visits.destroy(id);
-      };
+      var afterTomorrow, changeWeek, getAllDoctors, getAllVisitsByDate, getVisits, getWorkingTime, setCalendarWorkingTime, tomorrow;
+      $scope.selectedView = '';
       $scope.workingTime = [];
       Specialities.getSpecialities().then(function(res) {
         return $scope.specialities = res.data;
@@ -22,12 +20,12 @@
       $scope.updateDoctorsList = function() {
         if ($scope.selectedSpeciality) {
           return Doctors.indexBySpeciality($scope.selectedSpeciality).then(function(res) {
-            var doctor, i, len, ref, results;
+            var doctor, j, len, ref, results;
             $scope.doctors = res.data;
             ref = $scope.doctors;
             results = [];
-            for (i = 0, len = ref.length; i < len; i++) {
-              doctor = ref[i];
+            for (j = 0, len = ref.length; j < len; j++) {
+              doctor = ref[j];
               results.push((function() {
                 if (doctor.id === $scope.selectedDoctorId) {
                   return $scope.selectedDoctor = doctor;
@@ -54,12 +52,12 @@
       };
       $scope.workingTimeEvents = [];
       setCalendarWorkingTime = function() {
-        var date, i, len, ref, results;
+        var date, j, len, ref, results;
         $scope.workingTimeEvents.length = 0;
         ref = $scope.workingTime;
         results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          date = ref[i];
+        for (j = 0, len = ref.length; j < len; j++) {
+          date = ref[j];
           results.push((function() {
             var dayOfTheWeek, eventCurrentDate, eventCurrentEndDate, eventEndDate, eventStartDate, results1, startDate;
             startDate = new Date(date.startDate * 1000);
@@ -124,7 +122,7 @@
         /* event sources array */
       };
       $scope.eventSources = [$scope.workingTimeEvents];
-      return $scope.submit = function() {
+      $scope.submit = function() {
         var visit;
         visit = {};
         visit.patientId = $scope.selectedPatient;
@@ -133,6 +131,107 @@
         visit.typeOfVisit = 'Dermatolog';
         return Visits.create(visit).then(function(res) {
           return $state.go('admin-visits');
+        });
+      };
+      getAllVisitsByDate = function(startDate, endDate) {
+        return Visits.indexByDate(startDate, endDate).then(function(res) {
+          return $scope.visits = res.data;
+        });
+      };
+      $scope.updateAllVisits = function() {
+        var actual, endDate, startDate;
+        actual = new Date();
+        startDate = String(actual.getDate()) + '-' + String(actual.getMonth() + 1) + '-' + String(actual.getFullYear());
+        endDate = String(actual.getDate() + 1) + '-' + String(actual.getMonth() + 1) + '-' + String(actual.getFullYear());
+        return getAllVisitsByDate(startDate, endDate);
+      };
+      $scope.updateAllVisits();
+      $scope.today = function() {
+        $scope.dt = new Date;
+      };
+      $scope.today();
+      $scope.clear = function() {
+        $scope.dt = null;
+      };
+      $scope.disabled = function(date, mode) {
+        return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+      };
+      $scope.toggleMin = function() {
+        $scope.minDate = $scope.minDate ? null : new Date;
+      };
+      $scope.toggleMin();
+      $scope.maxDate = new Date(2020, 5, 22);
+      $scope.openStart = function($event) {
+        $scope.status.openedStart = true;
+      };
+      $scope.openEnd = function($event) {
+        $scope.status.openedEnd = true;
+      };
+      $scope.setDate = function(year, month, day) {
+        $scope.dt = new Date(year, month, day);
+      };
+      $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+      };
+      $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+      $scope.format = $scope.formats[0];
+      $scope.status = {
+        opened: false
+      };
+      tomorrow = new Date;
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      afterTomorrow = new Date;
+      afterTomorrow.setDate(tomorrow.getDate() + 2);
+      $scope.events = [
+        {
+          date: tomorrow,
+          status: 'full'
+        }, {
+          date: afterTomorrow,
+          status: 'partially'
+        }
+      ];
+      $scope.getDayClass = function(date, mode) {
+        var currentDay, dayToCheck, i;
+        if (mode === 'day') {
+          dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+          i = 0;
+          while (i < $scope.events.length) {
+            currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
+            if (dayToCheck === currentDay) {
+              return $scope.events[i].status;
+            }
+            i++;
+          }
+        }
+        return '';
+      };
+      $scope.$watch('selectedEndDate', function() {
+        if ($scope.selectedEndDate && $scope.selectedStartDate) {
+          return getVisits();
+        }
+      });
+      $scope.$watch('selectedStartDate', function() {
+        if ($scope.selectedEndDate && $scope.selectedStartDate) {
+          return getVisits();
+        }
+      });
+      getVisits = function() {
+        var endDate, startDate;
+        startDate = String($scope.selectedStartDate.getDate()) + '-' + String($scope.selectedStartDate.getMonth() + 1) + '-' + String($scope.selectedStartDate.getFullYear());
+        endDate = String($scope.selectedEndDate.getDate() + 1) + '-' + String($scope.selectedEndDate.getMonth() + 1) + '-' + String($scope.selectedEndDate.getFullYear());
+        return getAllVisitsByDate(startDate, endDate);
+      };
+      return $scope.removeVisit = function(id) {
+        return Visits.remove(id).then(function(res) {
+          console.log('visit removed');
+          console.log(res);
+          if ($scope.selectedStartDate && $scope.selectedEndDate) {
+            return getVisits();
+          } else {
+            return $scope.updateAllVisits();
+          }
         });
       };
     }

@@ -1,5 +1,24 @@
 angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
 
+  indexByDate = (startDate, endDate) ->
+    console.log 'dates'
+    console.log startDate
+    console.log endDate
+    request = $http(
+      method: 'GET'
+      url: api + 'Visit/all/date/'+startDate+'/'+endDate
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+    return request
+
+  check = ->
+    login = $cookies.token.split(":")[0]
+    request = $http(
+      method: 'GET'
+      url: api + 'SystemUser/role/'+login
+      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+    #request.then handleSuccess, handleError
+    return request
+
   create = (visit) ->
     console.log visit
     request = $http(
@@ -10,7 +29,7 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
       headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
 
-  destroy = (visitId) ->
+  remove = (visitId) ->
     console.log 'visit id: ' + visitId
     request = $http(
       method: 'DELETE'
@@ -29,6 +48,7 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
 
   {
     create: create
-    destroy: destroy
+    remove: remove
+    indexByDate: indexByDate
   }
 ]

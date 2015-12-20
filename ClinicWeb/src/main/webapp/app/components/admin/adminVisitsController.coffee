@@ -1,8 +1,7 @@
 angular.module 'clinic'
   .controller 'AdminVisitsController', ['$scope', '$stateParams', 'Doctors', 'Patients', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', ($scope, $stateParams, Doctors, Patients, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) ->
 
-    $scope.removeVisit = (id) ->
-      Visits.destroy(id)
+    $scope.selectedView = ''
 
     $scope.workingTime = []
 
@@ -116,6 +115,114 @@ angular.module 'clinic'
       visit.typeOfVisit = 'Dermatolog'
       Visits.create(visit).then((res)->
         $state.go('admin-visits')
+      )
+
+    getAllVisitsByDate = (startDate, endDate) ->
+      Visits.indexByDate(startDate, endDate).then((res) ->
+        $scope.visits = res.data
+      )
+
+    $scope.updateAllVisits = ->
+      actual = new Date()
+      startDate = String(actual.getDate()) + '-' + String(actual.getMonth()+1) + '-' + String(actual.getFullYear())
+      endDate = String(actual.getDate()+1) + '-' + String(actual.getMonth()+1) + '-' + String(actual.getFullYear())
+      getAllVisitsByDate(startDate, endDate)
+
+    $scope.updateAllVisits()
+
+    $scope.today = ->
+      $scope.dt = new Date
+      return
+
+    $scope.today()
+
+    $scope.clear = ->
+      $scope.dt = null
+      return
+
+    # Disable weekend selection
+
+    $scope.disabled = (date, mode) ->
+      mode == 'day' and (date.getDay() == 0 or date.getDay() == 6)
+
+    $scope.toggleMin = ->
+      $scope.minDate = if $scope.minDate then null else new Date
+      return
+
+    $scope.toggleMin()
+    $scope.maxDate = new Date(2020, 5, 22)
+
+    $scope.openStart = ($event) ->
+      $scope.status.openedStart = true
+      return
+
+    $scope.openEnd = ($event) ->
+      $scope.status.openedEnd = true
+      return
+
+    $scope.setDate = (year, month, day) ->
+      $scope.dt = new Date(year, month, day)
+      return
+
+    $scope.dateOptions =
+      formatYear: 'yy'
+      startingDay: 1
+    $scope.formats = [
+      'dd-MMMM-yyyy'
+      'yyyy/MM/dd'
+      'dd.MM.yyyy'
+      'shortDate'
+    ]
+    $scope.format = $scope.formats[0]
+    $scope.status = opened: false
+    tomorrow = new Date
+    tomorrow.setDate tomorrow.getDate() + 1
+    afterTomorrow = new Date
+    afterTomorrow.setDate tomorrow.getDate() + 2
+    $scope.events = [
+      {
+        date: tomorrow
+        status: 'full'
+      }
+      {
+        date: afterTomorrow
+        status: 'partially'
+      }
+    ]
+
+    $scope.getDayClass = (date, mode) ->
+      if mode == 'day'
+        dayToCheck = new Date(date).setHours(0, 0, 0, 0)
+        i = 0
+        while i < $scope.events.length
+          currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0)
+          if dayToCheck == currentDay
+            return $scope.events[i].status
+          i++
+      ''
+
+    $scope.$watch 'selectedEndDate', ->
+      if $scope.selectedEndDate && $scope.selectedStartDate
+        getVisits()
+
+    $scope.$watch 'selectedStartDate', ->
+      if $scope.selectedEndDate && $scope.selectedStartDate
+        getVisits()
+
+    getVisits = ->
+      startDate = String($scope.selectedStartDate.getDate()) + '-' + String($scope.selectedStartDate.getMonth()+1) + '-' + String($scope.selectedStartDate.getFullYear())
+      endDate = String($scope.selectedEndDate.getDate()+1) + '-' + String($scope.selectedEndDate.getMonth()+1) + '-' + String($scope.selectedEndDate.getFullYear())
+      #console.log startDate
+      getAllVisitsByDate(startDate, endDate)
+
+    $scope.removeVisit = (id) ->
+      Visits.remove(id).then((res) ->
+        console.log 'visit removed'
+        console.log res
+        if $scope.selectedStartDate && $scope.selectedEndDate
+          getVisits()
+        else
+          $scope.updateAllVisits()
       )
 
   ]

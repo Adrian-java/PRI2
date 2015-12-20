@@ -4,6 +4,22 @@
       <a ui-sref='admin-visits-new'>
         dodaj wizytę
       </a>
+      <div class='input-group'>
+        <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' is-open='status.openedStart' max-date='maxDate' min-date='minDate' ng-model='selectedStartDate' ng-required='true' type='text' uib-datepicker-popup=''>
+        <span class='input-group-btn'>
+          <button class='btn btn-default' ng-click='openStart($event)' type='button'>
+            <i class='glyphicon glyphicon-calendar'></i>
+          </button>
+        </span>
+      </div>
+      <div class='input-group'>
+        <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' is-open='status.openedEnd' max-date='maxDate' min-date='minDate' ng-model='selectedEndDate' ng-required='true' type='text' uib-datepicker-popup=''>
+        <span class='input-group-btn'>
+          <button class='btn btn-default' ng-click='openEnd($event)' type='button'>
+            <i class='glyphicon glyphicon-calendar'></i>
+          </button>
+        </span>
+      </div>
       <table class='table table-bordered'>
         <thead>
           <tr>
@@ -25,21 +41,21 @@
           <tr ng-repeat='visit in visits'>
             <td>
               <a ui-sref='admin-visits-show({visitId: visit.id})'>
-                {{visit}}
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy'}}
               </a>
             </td>
             <td>
               <a ui-sref='admin-visits-show({visitId: visit.id})'>
-                {{visit}}
+                {{visit.idPatient}}
               </a>
             </td>
             <td>
               <a ui-sref='admin-visits-show({visitId: visit.id})'>
-                {{visit}}
+                {{visit.name}} {{visit.surname}}
               </a>
             </td>
             <td>
-              <a class='btn btn-danger' ui-sref='admin-visits-remove({visitId: visit.id})'>
+              <a class='btn btn-danger' ng-click='removeVisit(visit.id)'>
                 Usuń
               </a>
               <a class='btn btn-primary' ui-sref='admin-visits-edit({visitId: visit.id})'>
