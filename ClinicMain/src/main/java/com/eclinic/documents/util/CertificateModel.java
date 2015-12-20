@@ -6,7 +6,7 @@ public class CertificateModel implements IDocumentsModel {
 	
 	private String recognition;
 	private String purpose;
-	private String patientId;
+	private Integer visitId;
 	public String getRecognition() {
 		return recognition;
 	}
@@ -19,11 +19,11 @@ public class CertificateModel implements IDocumentsModel {
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
-	public String getPatientId() {
-		return patientId;
+	public Integer getVisitId() {
+		return visitId;
 	}
-	public void setPatientId(String id){
-		patientId = id;
+	public void setVisitId(Integer id){
+		visitId = id;
 	}
 
 }

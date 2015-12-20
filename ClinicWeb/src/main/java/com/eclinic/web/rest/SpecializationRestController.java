@@ -1,6 +1,7 @@
 package com.eclinic.web.rest;
 
 import java.io.IOException;
+import java.util.Set;
 
 import com.eclinic.dao.DoctorDAO;
 import com.eclinic.dao.SpecalVisitFieldDAO;
@@ -11,6 +12,7 @@ import com.eclinic.domain.SpecalVisitField;
 import com.eclinic.domain.Specialization;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.service.SpecializationService;
+
 
 
 
@@ -62,6 +64,7 @@ public class SpecializationRestController {
 	 * DAO injected by Spring that manages Specialization entities
 	 * 
 	 */
+	
 	@Autowired
 	private SpecializationDAO specializationDAO;
 
@@ -347,6 +350,16 @@ public class SpecializationRestController {
 		Doctor doctor = doctorDAO.findDoctorByPrimaryKey(related_doctor_id, -1, -1);
 
 		return Response.ok(doctor).build();
+	}
+	
+	@GET
+	@Path("/doctor/{doctor_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response loadSpecializationByDoctor(@PathParam("doctor_id") String doctorId) {
+		Doctor findDoctorById = doctorDAO.findDoctorById(doctorId);
+		Set<Specialization> sp = specializationDAO.findSpecializationByDoctor(findDoctorById);
+
+		return Response.ok(sp).build();
 	}
 
 	/**

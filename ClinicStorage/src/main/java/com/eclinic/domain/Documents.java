@@ -1,24 +1,36 @@
 package com.eclinic.domain;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.io.Serializable;
-
-import java.lang.StringBuilder;
-
 import java.util.Calendar;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.xml.bind.annotation.*;
-
-import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  */
@@ -30,6 +42,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 		@NamedQuery(name = "findDocumentsByDateOfDocumentsAfter", query = "select myDocuments from Documents myDocuments where myDocuments.dateOfDocuments > ?1"),
 		@NamedQuery(name = "findDocumentsByDateOfDocumentsBefore", query = "select myDocuments from Documents myDocuments where myDocuments.dateOfDocuments < ?1"),
 		@NamedQuery(name = "findDocumentsByPatient", query = "select myDocuments from Documents myDocuments where myDocuments.patient =  ?1"),
+		@NamedQuery(name = "findDocumentsByVisit", query = "select myDocuments from Documents myDocuments where myDocuments.visit =  ?1"),
 		@NamedQuery(name = "findDocumentsById", query = "select myDocuments from Documents myDocuments where myDocuments.id = ?1"),
 		@NamedQuery(name = "findDocumentsByPrimaryKey", query = "select myDocuments from Documents myDocuments where myDocuments.id = ?1"),
 		@NamedQuery(name = "findDocumentsByTypeOfDocuments", query = "select myDocuments from Documents myDocuments where myDocuments.typeOfDocuments = ?1"),
@@ -92,6 +105,12 @@ public class Documents implements Serializable {
 	@JoinColumns({ @JoinColumn(name = "id_doctor", referencedColumnName = "Id", nullable = false) })
 	@XmlTransient
 	Doctor doctor;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumns({ @JoinColumn(name = "id_visit", referencedColumnName = "Id", nullable = true) })
+	@XmlTransient
+	private
+	Visit visit;
 	/**
 	 */
 	@OneToMany(mappedBy = "documents", cascade = { CascadeType.REMOVE }, fetch = FetchType.EAGER)
@@ -260,5 +279,13 @@ public class Documents implements Serializable {
 		if (id != null && !id.equals(equalCheck.id))
 			return false;
 		return true;
+	}
+
+	public Visit getVisit() {
+		return visit;
+	}
+
+	public void setVisit(Visit visit) {
+		this.visit = visit;
 	}
 }

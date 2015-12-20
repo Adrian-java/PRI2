@@ -8,6 +8,7 @@ public class DocumentsModel {
 	private String idPatient;
 	private String idDoctor;
 	private Date date;
+	private Integer visitId;
 	
 	public String getDescription() {
 		return description;
@@ -32,6 +33,12 @@ public class DocumentsModel {
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	public Integer getIdVisit() {
+		return visitId;
+	}
+	public void setIdVisit(Integer idVisit) {
+		this.visitId = idVisit;
 	}
 		
 

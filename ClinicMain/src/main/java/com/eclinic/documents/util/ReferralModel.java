@@ -7,7 +7,7 @@ public class ReferralModel implements IDocumentsModel {
 	private String destination;
 	private String recognition;
 	private String purpose;
-	private String patientId;
+	private Integer visitId;
 	public String getDestination() {
 		return destination;
 	}
@@ -26,11 +26,11 @@ public class ReferralModel implements IDocumentsModel {
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
-	public String getPatientId() {
-		return patientId;
+	public Integer getVisitId() {
+		return visitId;
 	}
-	public void setPatientId(String id){
-		patientId = id;
+	public void setVisitId(Integer id){
+		visitId = id;
 	}
 
 }
