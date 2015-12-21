@@ -112,8 +112,8 @@ public class DocumentBuilder implements IDocumentBuilder {
 				.getDocumentsMappings();
 		for (DocumentsMapping d : documentsMappings) {
 			if (d.getReferral() != null) {
-				referral.setDestination(d.getReferral().getDestination()
-						.toString());
+				referral.setDestination(convertByteToString(d.getReferral()
+						.getDestination()));
 				referral.setPurpose(convertByteToString(d.getReferral()
 						.getPurpose()));
 				referral.setRecognition(convertByteToString(d.getReferral()
