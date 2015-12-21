@@ -39,6 +39,12 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', ($ht
     )
     return request
 
+  #indexPrescription = (visitId) ->
+  #  request = $http(
+  #    method: 'GET'
+  #    url: api +
+  #  )
+
   {
     create: create
     addPrescription: addPrescription
