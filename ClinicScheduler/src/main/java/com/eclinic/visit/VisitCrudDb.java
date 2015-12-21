@@ -272,8 +272,8 @@ public class VisitCrudDb implements VisitCrud {
 				.getIdDoctor()));
 		v.setPatientView(patientViewDao.findPatientById(v.getVisitView()
 				.getIdPatient()));
-		v.setDocuments(createDocumentModel(documentsDao.findDocumentsByVisit(visitDao
-				.findVisitById(id))));
+//		v.setDocuments(createDocumentModel(documentsDao.findDocumentsByVisit(visitDao
+//				.findVisitById(id))));
 		return v;
 	}
 	
