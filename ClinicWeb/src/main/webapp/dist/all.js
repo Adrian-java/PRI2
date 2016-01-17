@@ -74812,7 +74812,7 @@ angular.module('ui.calendar', [])
         console.log('visit id' + $stateParams.visitId);
         prescriptionData = {
           'issuedDate': new Date().getTime(),
-          'department': '03',
+          'department': '04',
           'executionDate': new Date().getTime(),
           'remady': 'Duodmox;50%;',
           'visitId': $stateParams.visitId
@@ -74822,19 +74822,37 @@ angular.module('ui.calendar', [])
           'visitId': $stateParams.visitId,
           'date': new Date().getTime()
         };
-        Documents.addPrescription($scope.prescriptionData).then(function(res) {
-          return console.log(res);
+        return Documents.create(doc).then(function(res) {
+          return Documents.addPrescription(prescriptionData).then(function(res) {
+            return console.log(res);
+          });
         });
-        return console.log(prescriptionData);
       };
-      return $scope.addCertificate = function() {
-        var certificateData;
+      $scope.addCertificate = function() {
+        var certificateData, doc;
         certificateData = {
-          'purpose': 'certificate purpose',
-          'recognition': 'certificate recognition',
+          'purpose': 'random',
+          'recognition': 'sample text',
           'visitId': $stateParams.visitId
         };
-        return Documents.addCertificate(certificateData).then(function(res) {
+        doc = {
+          'description': 'random',
+          'visitId': $stateParams.visitId,
+          'date': new Date().getTime()
+        };
+        return Documents.create(doc).then(function(res) {
+          return Documents.addCertificate(certificateData).then(function(res) {
+            console.log(res);
+            return Documents.getCertificateData($stateParams.visitId).then(function(res) {
+              console.log('certificate');
+              return console.log(res);
+            });
+          });
+        });
+      };
+      return $scope.showDocuments = function() {
+        return Documents.getPrescription($stateParams.visitId).then(function(res) {
+          console.log('prescription');
           return console.log(res);
         });
       };
@@ -75002,6 +75020,15 @@ angular.module('ui.calendar', [])
           $scope.loggedIn = false;
         }
       });
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('PasswordChangeController', [
+    '$scope', function($scope) {
+      return console.log('password change controller');
     }
   ]);
 

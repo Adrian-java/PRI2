@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Documents', [
     '$http', '$cookies', 'api', '$localStorage', function($http, $cookies, api, $localStorage) {
-      var addCertificate, addPrescription, addReferral, create, getPrescription;
+      var addCertificate, addPrescription, addReferral, create, getCertificateData, getPrescription, getPrescriptionData;
       create = function(doc) {
         var request;
         request = $http({
@@ -18,6 +18,7 @@
       };
       addPrescription = function(prescriptionData) {
         var request;
+        console.log(prescriptionData);
         request = $http({
           method: 'POST',
           isArray: false,
@@ -32,6 +33,7 @@
       };
       addCertificate = function(certificateData) {
         var request;
+        console.log(certificateData);
         request = $http({
           method: 'POST',
           isArray: false,
@@ -58,7 +60,7 @@
         });
         return request;
       };
-      getPrescription = function(visitId) {
+      getPrescriptionData = function(visitId) {
         var request;
         request = $http({
           method: 'GET',
@@ -70,12 +72,43 @@
         });
         return request;
       };
+      getCertificateData = function(visitId) {
+        var request;
+        request = $http({
+          method: 'GET',
+          url: api + 'documents/certificate/data/' + visitId,
+          headers: {
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
+      getPrescription = function(visitId) {
+        $http({
+          method: 'GET',
+          url: api + 'documents/prescription/' + visitId,
+          responseType: 'arraybuffer',
+          headers: {
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        }).success(function(data) {
+          var file, fileURL;
+          file = new Blob([data], {
+            type: 'application/pdf'
+          });
+          fileURL = URL.createObjectURL(file);
+          return window.open(fileURL);
+        });
+      };
       return {
         create: create,
         addPrescription: addPrescription,
         addCertificate: addCertificate,
         addReferral: addReferral,
-        getPrescription: getPrescription
+        getPrescription: getPrescription,
+        getCertificateData: getCertificateData
       };
     }
   ]);

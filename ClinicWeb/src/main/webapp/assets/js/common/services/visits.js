@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Visits', [
     '$http', '$cookies', 'api', '$localStorage', function($http, $cookies, api, $localStorage) {
-      var check, create, getPatientDoneVisits, getPatientPlannedVisits, handleError, handleSuccess, indexByDate, remove, show, showDone, showPlanned;
+      var check, create, edit, getPatientDoneVisits, getPatientPlannedVisits, handleError, handleSuccess, indexByDate, remove, show, showDone, showPlanned;
       indexByDate = function(startDate, endDate) {
         var request;
         console.log('dates');
@@ -31,6 +31,21 @@
         return request;
       };
       create = function(visit) {
+        var request;
+        console.log(visit);
+        request = $http({
+          method: 'POST',
+          isArray: false,
+          url: api + 'Visit/new/',
+          data: visit,
+          headers: {
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request.then(handleSuccess, handleError);
+      };
+      edit = function(visit) {
         var request;
         console.log(visit);
         request = $http({

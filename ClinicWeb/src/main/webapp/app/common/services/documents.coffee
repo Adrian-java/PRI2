@@ -10,6 +10,7 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
     return request
 
   addPrescription = (prescriptionData) ->
+    console.log prescriptionData
     request = $http(
       method: 'POST'
       isArray: false
@@ -20,6 +21,7 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
     return request
 
   addCertificate = (certificateData) ->
+    console.log certificateData
     request = $http(
       method: 'POST'
       isArray: false
@@ -39,13 +41,40 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
     )
     return request
 
-  getPrescription = (visitId) ->
+  getPrescriptionData = (visitId) ->
     request = $http(
       method: 'GET'
       url: api + 'documents/prescription/data/' + visitId
       headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
     )
     return request
+
+  getCertificateData = (visitId) ->
+    request = $http(
+      method: 'GET'
+      url: api + 'documents/certificate/data/' + visitId
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
+    return request
+
+  getPrescription = (visitId) ->
+    $http(
+      method: 'GET'
+      url: api + 'documents/prescription/' + visitId
+      responseType: 'arraybuffer'
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+      ).success (data) ->
+        file = new Blob([ data ], type: 'application/pdf')
+        fileURL = URL.createObjectURL(file)
+        window.open fileURL
+      return
+
+    #request = $http(
+    #  method: 'GET'
+    #  url: api + 'documents/prescription/' + visitId
+    #  headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    #)
+    #return request
 
   #indexPrescription = (visitId) ->
   #  request = $http(
@@ -59,5 +88,6 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
     addCertificate: addCertificate
     addReferral: addReferral
     getPrescription: getPrescription
+    getCertificateData: getCertificateData
   }
 ]

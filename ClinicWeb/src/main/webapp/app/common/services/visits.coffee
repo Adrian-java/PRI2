@@ -29,6 +29,16 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', '$local
       headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
 
+  edit = (visit) ->
+    console.log visit
+    request = $http(
+      method: 'POST'
+      isArray: false
+      url: api + 'Visit/new/'
+      data: visit
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
+    request.then handleSuccess, handleError
+
   show = (visitId) ->
     request = $http(
       method: 'GET'

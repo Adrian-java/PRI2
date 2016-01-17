@@ -39,5 +39,7 @@
                 %input#first-name.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'user.firstName'}
             %button.btn.btn-primary{:'ng-click' => 'addCertificate()'}
               Dodaj zaświadczenie
+      %button.btn.btn-primary{:'ng-click' => 'showDocuments()'}
+        Pokaż dokumenty
       %button.btn.btn-primary{:'ng-click' => 'submit()'}
         Zapisz

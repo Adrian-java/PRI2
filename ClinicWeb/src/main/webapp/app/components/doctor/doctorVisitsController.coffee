@@ -111,7 +111,7 @@ angular.module 'clinic'
       console.log 'visit id' + $stateParams.visitId
       prescriptionData = {
         'issuedDate': new Date().getTime()
-        'department': '03'
+        'department': '04'
         'executionDate': new Date().getTime()
         'remady': 'Duodmox;50%;'
         'visitId': $stateParams.visitId
@@ -122,9 +122,12 @@ angular.module 'clinic'
         'date': new Date().getTime()
       }
 
-      Documents.addPrescription($scope.prescriptionData).then((res) ->
-        console.log res
+      Documents.create(doc).then((res) ->
+        Documents.addPrescription(prescriptionData).then((res) ->
+          console.log res
+        )
       )
+
       #Documents.create(doc).then((res) ->
       #  console.log res
         #Documents.addPrescription($scope.prescriptionData).then((res) ->
@@ -135,16 +138,34 @@ angular.module 'clinic'
         #)
       #)
 
-      console.log prescriptionData
+      #Documents.getPrescription('2546').then((res) ->
+      #  console.log res
+      #)
+
+      #console.log prescriptionData
 
 
     $scope.addCertificate = ->
       certificateData = {
-        'purpose': 'certificate purpose'
-        'recognition': 'certificate recognition'
+        'purpose': 'random'
+        'recognition': 'sample text'
         'visitId': $stateParams.visitId
       }
-      Documents.addCertificate(certificateData).then((res) ->
-        console.log res
+      doc = {
+        'description': 'random'
+        'visitId': $stateParams.visitId
+        'date': new Date().getTime()
+      }
+      Documents.create(doc).then((res) ->
+        Documents.addCertificate(certificateData).then((res) ->
+          console.log res
+          Documents.getCertificateData($stateParams.visitId).then((res) ->
+            console.log 'certificate'
+            console.log res
+          )
+        )
       )
+
+    $scope.showDocuments = ->
+      Documents.getPrescription($stateParams.visitId)
   ]

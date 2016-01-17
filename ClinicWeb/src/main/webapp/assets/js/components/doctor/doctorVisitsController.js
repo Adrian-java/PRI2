@@ -99,7 +99,7 @@
         console.log('visit id' + $stateParams.visitId);
         prescriptionData = {
           'issuedDate': new Date().getTime(),
-          'department': '03',
+          'department': '04',
           'executionDate': new Date().getTime(),
           'remady': 'Duodmox;50%;',
           'visitId': $stateParams.visitId
@@ -109,21 +109,36 @@
           'visitId': $stateParams.visitId,
           'date': new Date().getTime()
         };
-        Documents.addPrescription($scope.prescriptionData).then(function(res) {
-          return console.log(res);
+        return Documents.create(doc).then(function(res) {
+          return Documents.addPrescription(prescriptionData).then(function(res) {
+            return console.log(res);
+          });
         });
-        return console.log(prescriptionData);
       };
-      return $scope.addCertificate = function() {
-        var certificateData;
+      $scope.addCertificate = function() {
+        var certificateData, doc;
         certificateData = {
-          'purpose': 'certificate purpose',
-          'recognition': 'certificate recognition',
+          'purpose': 'random',
+          'recognition': 'sample text',
           'visitId': $stateParams.visitId
         };
-        return Documents.addCertificate(certificateData).then(function(res) {
-          return console.log(res);
+        doc = {
+          'description': 'random',
+          'visitId': $stateParams.visitId,
+          'date': new Date().getTime()
+        };
+        return Documents.create(doc).then(function(res) {
+          return Documents.addCertificate(certificateData).then(function(res) {
+            console.log(res);
+            return Documents.getCertificateData($stateParams.visitId).then(function(res) {
+              console.log('certificate');
+              return console.log(res);
+            });
+          });
         });
+      };
+      return $scope.showDocuments = function() {
+        return Documents.getPrescription($stateParams.visitId);
       };
     }
   ]);
