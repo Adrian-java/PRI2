@@ -92,10 +92,10 @@ public class DocumentBuilder implements IDocumentBuilder {
 
 					certificate.setId(getIdNumber(next.getCertificate()
 							.getIdNumber()));
-					certificate.setPurpose(convertByteToString(next
-							.getCertificate().getPurpose()));
-					certificate.setRecognition(convertByteToString(next
-							.getCertificate().getRecognition()));
+					certificate.setPurpose(next
+							.getCertificate().getPurpose());
+					certificate.setRecognition(next
+							.getCertificate().getRecognition());
 					break;
 				}
 			}
@@ -133,12 +133,12 @@ public class DocumentBuilder implements IDocumentBuilder {
 				DocumentsMapping next = mapp.next();
 				if (next.getReferral() != null) {
 
-					referral.setDestination(convertByteToString(next.getReferral()
-							.getDestination()));
-					referral.setPurpose(convertByteToString(next.getReferral()
-							.getPurpose()));
-					referral.setRecognition(convertByteToString(next.getReferral()
-							.getRecognition()));
+					referral.setDestination(next.getReferral()
+							.getDestination());
+					referral.setPurpose(next.getReferral()
+							.getPurpose());
+					referral.setRecognition(next.getReferral()
+							.getRecognition());
 					break;
 				}
 			}

@@ -52,7 +52,7 @@ public class Referral implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	byte[] destination;
+	String destination;
 	/**
 	 */
 
@@ -60,7 +60,7 @@ public class Referral implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	byte[] recognition;
+	String recognition;
 	/**
 	 */
 
@@ -68,7 +68,7 @@ public class Referral implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	byte[] purpose;
+	String purpose;
 
 	/**
 	 */
@@ -91,37 +91,37 @@ public class Referral implements Serializable {
 
 	/**
 	 */
-	public void setDestination(byte[] destination) {
+	public void setDestination(String destination) {
 		this.destination = destination;
 	}
 
 	/**
 	 */
-	public byte[] getDestination() {
+	public String getDestination() {
 		return this.destination;
 	}
 
 	/**
 	 */
-	public void setRecognition(byte[] recognition) {
+	public void setRecognition(String recognition) {
 		this.recognition = recognition;
 	}
 
 	/**
 	 */
-	public byte[] getRecognition() {
+	public String getRecognition() {
 		return this.recognition;
 	}
 
 	/**
 	 */
-	public void setPurpose(byte[] purpose) {
+	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
 
 	/**
 	 */
-	public byte[] getPurpose() {
+	public String getPurpose() {
 		return this.purpose;
 	}
 

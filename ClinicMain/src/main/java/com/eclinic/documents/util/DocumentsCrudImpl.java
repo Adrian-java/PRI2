@@ -86,8 +86,8 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 
 		Certificate c = new Certificate();
 		c.setIdNumber(findVisitById.getPatient().getId());
-		c.setPurpose(certificate.getPurpose().getBytes());
-		c.setRecognition(certificate.getRecognition().getBytes());
+		c.setPurpose(certificate.getPurpose());
+		c.setRecognition(certificate.getRecognition());
 		c.setId(docMapping.getId());
 
 		certificateDAO.merge(c);
@@ -135,9 +135,9 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 		DocumentsMapping docMapping = getReatedMapping(referral);
 
 		Referral r = new Referral();
-		r.setDestination(referral.getDestination().getBytes());
-		r.setPurpose(referral.getPurpose().getBytes());
-		r.setRecognition(referral.getRecognition().getBytes());
+		r.setDestination(referral.getDestination());
+		r.setPurpose(referral.getPurpose());
+		r.setRecognition(referral.getRecognition());
 		r.setId(docMapping.getId());
 
 		referralDAO.merge(r);

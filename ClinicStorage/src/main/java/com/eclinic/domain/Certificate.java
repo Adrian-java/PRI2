@@ -44,7 +44,7 @@ public class Certificate implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	byte[] recognition;
+	String recognition;
 	/**
 	 */
 
@@ -59,7 +59,7 @@ public class Certificate implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	byte[] purpose;
+	String purpose;
 
 	/**
 	 */
@@ -82,13 +82,13 @@ public class Certificate implements Serializable {
 
 	/**
 	 */
-	public void setRecognition(byte[] recognition) {
+	public void setRecognition(String recognition) {
 		this.recognition = recognition;
 	}
 
 	/**
 	 */
-	public byte[] getRecognition() {
+	public String getRecognition() {
 		return this.recognition;
 	}
 
@@ -106,13 +106,13 @@ public class Certificate implements Serializable {
 
 	/**
 	 */
-	public void setPurpose(byte[] purpose) {
+	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
 
 	/**
 	 */
-	public byte[] getPurpose() {
+	public String getPurpose() {
 		return this.purpose;
 	}
 
