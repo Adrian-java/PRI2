@@ -58,7 +58,7 @@ public class DocumentController {
 
 	@Autowired
 	private DocumentBuilder builder;
-	
+
 	@Autowired
 	private VisitCrudDb visitCrudDb;
 
@@ -152,11 +152,13 @@ public class DocumentController {
 	@Produces("application/json")
 	public Response findPrescriptionData(@PathParam("visitId") Integer id) {
 		try {
-			Set<com.eclinic.domain.Prescription> prescriptionByVisit = documentsCrud.getPrescriptionByVisit(id);
-			
-			return Response.ok(new ObjectMapper()
-			.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
-			.writeValueAsString(prescriptionByVisit)).build();
+			Set<com.eclinic.domain.Prescription> prescriptionByVisit = documentsCrud
+					.getPrescriptionByVisit(id);
+
+			return Response.ok(
+					new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
+							false).writeValueAsString(prescriptionByVisit))
+					.build();
 		} catch (Exception e) {
 			return Response.noContent().build();
 		}
@@ -167,10 +169,12 @@ public class DocumentController {
 	@Produces("application/json")
 	public Response findCertificateData(@PathParam("visitId") Integer id) {
 		try {
-			Set<com.eclinic.domain.Certificate> certificateByVisit = documentsCrud.getCertificateByVisit(id);
-			return Response.ok(new ObjectMapper()
-			.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
-			.writeValueAsString(certificateByVisit)).build();
+			Set<com.eclinic.domain.Certificate> certificateByVisit = documentsCrud
+					.getCertificateByVisit(id);
+			return Response.ok(
+					new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
+							false).writeValueAsString(certificateByVisit))
+					.build();
 		} catch (Exception e) {
 			return Response.noContent().build();
 		}
@@ -181,10 +185,24 @@ public class DocumentController {
 	@Produces("application/json")
 	public Response findReferralData(@PathParam("visitId") Integer id) {
 		try {
-			Set<com.eclinic.domain.Referral> referralByVisit = documentsCrud.getReferralByVisit(id);
-			return Response.ok(new ObjectMapper()
-			.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
-			.writeValueAsString(referralByVisit)).build();
+			Set<com.eclinic.domain.Referral> referralByVisit = documentsCrud
+					.getReferralByVisit(id);
+			return Response.ok(
+					new ObjectMapper().configure(Feature.FAIL_ON_EMPTY_BEANS,
+							false).writeValueAsString(referralByVisit)).build();
+		} catch (Exception e) {
+			return Response.noContent().build();
+		}
+	}
+
+	@GET
+	@Path("/exist/{visitId}")
+	@Produces("application/json")
+	public Response isDocumentByVisit(@PathParam("visitId") Integer id) {
+		try {
+			boolean referralByVisit = documentsCrud.isDocumentByVisit(id);
+			return referralByVisit ? Response.status(200).build() : Response
+					.status(204).build();
 		} catch (Exception e) {
 			return Response.noContent().build();
 		}
@@ -216,9 +234,9 @@ public class DocumentController {
 	}
 
 	private void createPrescription(Integer visitId) {
-		
+
 		Patient patient = getPatientByVisitId(visitId);
-		
+
 		String prescriptionPath = findReportPath("prescription.jasper");
 		Prescription prescription = builder.createPrescription(patient);
 
@@ -235,7 +253,8 @@ public class DocumentController {
 
 	private Patient getPatientByVisitId(Integer visitId) {
 		VisitInfo visit = visitCrudDb.findVisitById(visitId);
-		Patient patient = entityConverter.convertToPatient(visit.getPatientView());
+		Patient patient = entityConverter.convertToPatient(visit
+				.getPatientView());
 		return patient;
 	}
 

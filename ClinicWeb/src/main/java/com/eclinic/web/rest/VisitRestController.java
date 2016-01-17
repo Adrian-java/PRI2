@@ -296,5 +296,4 @@ public class VisitRestController {
 		return Response.ok(
 				visitCrud.findVisitById(id)).build();
 	}
-
 }

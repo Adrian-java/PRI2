@@ -24,5 +24,7 @@ public interface DocumentsCrud {
 	public Set<Referral> getReferralByVisit(Integer id);
 
 	public Set<Certificate> getCertificateByVisit(Integer id);
+	
+	public boolean isDocumentByVisit(Integer visitId);
 
 }

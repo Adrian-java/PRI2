@@ -1,6 +1,7 @@
 package com.eclinic.documents.util;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -85,8 +86,8 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 
 		Certificate c = new Certificate();
 		c.setIdNumber(findVisitById.getPatient().getId());
-		c.setPurpose(certificate.getPurpose().getBytes());
-		c.setRecognition(certificate.getRecognition().getBytes());
+		c.setPurpose(certificate.getPurpose());
+		c.setRecognition(certificate.getRecognition());
 		c.setId(docMapping.getId());
 
 		certificateDAO.merge(c);
@@ -134,9 +135,9 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 		DocumentsMapping docMapping = getReatedMapping(referral);
 
 		Referral r = new Referral();
-		r.setDestination(referral.getDestination().getBytes());
-		r.setPurpose(referral.getPurpose().getBytes());
-		r.setRecognition(referral.getRecognition().getBytes());
+		r.setDestination(referral.getDestination());
+		r.setPurpose(referral.getPurpose());
+		r.setRecognition(referral.getRecognition());
 		r.setId(docMapping.getId());
 
 		referralDAO.merge(r);
@@ -212,6 +213,14 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 		}
 		
 		return set;
+	}
+
+	public boolean isDocumentByVisit(Integer visitId) {
+		Visit findVisitById2 = visitDao.findVisitById(visitId);
+		 List<Documents> findDocumentsByVisitNew = documentsDAO.findDocumentsByVisitNew(findVisitById2);
+		 if(findDocumentsByVisitNew==null || findDocumentsByVisitNew.isEmpty())
+			 return false; else return true;
+				 
 	}
 
 }

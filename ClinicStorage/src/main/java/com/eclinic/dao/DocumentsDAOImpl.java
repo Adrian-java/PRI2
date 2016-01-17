@@ -258,10 +258,10 @@ public class DocumentsDAOImpl extends AbstractJpaDao<Documents> implements
 		return true;
 	}
 
-	public Documents findDocumentsByPatient(Patient p, int startResult,
+	public Set<Documents> findDocumentsByPatient(Patient p, int startResult,
 			int maxRows) throws DataAccessException {
 		Query query = createNamedQuery("findDocumentsByPatient", startResult, maxRows,p);
-		return (Documents) query.getSingleResult();
+		return  new LinkedHashSet<Documents>( query.getResultList());
 	}
 
 	public Documents findDocumentsByVisit(Visit v) throws DataAccessException {

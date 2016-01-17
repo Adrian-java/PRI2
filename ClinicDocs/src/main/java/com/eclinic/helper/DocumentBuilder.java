@@ -2,6 +2,7 @@ package com.eclinic.helper;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,24 +37,30 @@ public class DocumentBuilder implements IDocumentBuilder {
 
 	public Prescription createPrescription(Patient patient) {
 
-		Documents findDocumentsByPatient = documentsDAO.findDocumentsByPatient(
-				patient, -1, -1);
+		Set<Documents> findDocumentsByPatient = documentsDAO
+				.findDocumentsByPatient(patient, -1, -1);
 		Prescription prescription = new Prescription();
 
 		prescription.setClinic(createClinic());
 		prescription.setDepartment("02");
-		prescription.setDoctor(findDocumentsByPatient.getDoctor());
 		prescription.setExecutionDate(Calendar.getInstance().getTime());
 		prescription.setIssuedDate(Calendar.getInstance().getTime());
 
-		Set<DocumentsMapping> documentsMappings = findDocumentsByPatient
-				.getDocumentsMappings();
-		for (DocumentsMapping d : documentsMappings) {
-			if (d.getPrescription() != null) {
-				prescription.setRemedy(d.getPrescription()
-						.getRemedy());
+		for (Documents d : findDocumentsByPatient) {
+			Iterator<DocumentsMapping> mapp = d.getDocumentsMappings()
+					.iterator();
+			while (mapp.hasNext()) {
+				DocumentsMapping next = mapp.next();
+				if (next.getPrescription() != null) {
+					prescription.setRemedy(next.getPrescription().getRemedy());
+					prescription.setDoctor(d.getDoctor());
+					break;
+				}
+			}
+			if (prescription.getRemedy()!=null &&  !prescription.getRemedy().isEmpty()) {
 				break;
 			}
+
 		}
 		prescription.setNumber(1000210321);
 		prescription.setPatient(patient);
@@ -73,21 +80,31 @@ public class DocumentBuilder implements IDocumentBuilder {
 	public Certificate createCertificate(Patient patient) {
 		Certificate certificate = new Certificate();
 
-		Documents findDocumentsByPatient = documentsDAO.findDocumentsByPatient(
-				patient, -1, -1);
-		Set<DocumentsMapping> documentsMappings = findDocumentsByPatient
-				.getDocumentsMappings();
-		for (DocumentsMapping d : documentsMappings) {
-			if (d.getCertificate() != null) {
-				certificate
-						.setId(getIdNumber(d.getCertificate().getIdNumber()));
-				certificate.setPurpose(convertByteToString(d.getCertificate()
-						.getPurpose()));
-				certificate.setRecognition(convertByteToString(d
-						.getCertificate().getRecognition()));
+		Set<Documents> findDocumentsByPatient = documentsDAO
+				.findDocumentsByPatient(patient, -1, -1);
+
+		for (Documents d : findDocumentsByPatient) {
+			Iterator<DocumentsMapping> mapp = d.getDocumentsMappings()
+					.iterator();
+			while (mapp.hasNext()) {
+				DocumentsMapping next = mapp.next();
+				if (next.getCertificate() != null) {
+
+					certificate.setId(getIdNumber(next.getCertificate()
+							.getIdNumber()));
+					certificate.setPurpose(next
+							.getCertificate().getPurpose());
+					certificate.setRecognition(next
+							.getCertificate().getRecognition());
+					break;
+				}
+			}
+			if (certificate.getPurpose()!=null && !certificate.getPurpose().isEmpty()) {
 				break;
 			}
+
 		}
+
 		certificate.setClinic(createClinic());
 		certificate.setDate(Calendar.getInstance().getTime());
 		certificate.setPatient(patient);
@@ -106,21 +123,32 @@ public class DocumentBuilder implements IDocumentBuilder {
 	public Referral createReferaral(Patient patient) {
 		Referral referral = new Referral();
 
-		Documents findDocumentsByPatient = documentsDAO.findDocumentsByPatient(
-				patient, -1, -1);
-		Set<DocumentsMapping> documentsMappings = findDocumentsByPatient
-				.getDocumentsMappings();
-		for (DocumentsMapping d : documentsMappings) {
-			if (d.getReferral() != null) {
-				referral.setDestination(convertByteToString(d.getReferral()
-						.getDestination()));
-				referral.setPurpose(convertByteToString(d.getReferral()
-						.getPurpose()));
-				referral.setRecognition(convertByteToString(d.getReferral()
-						.getRecognition()));
+		Set<Documents> findDocumentsByPatient = documentsDAO
+				.findDocumentsByPatient(patient, -1, -1);
+		
+		for (Documents d : findDocumentsByPatient) {
+			Iterator<DocumentsMapping> mapp = d.getDocumentsMappings()
+					.iterator();
+			while (mapp.hasNext()) {
+				DocumentsMapping next = mapp.next();
+				if (next.getReferral() != null) {
+
+					referral.setDestination(next.getReferral()
+							.getDestination());
+					referral.setPurpose(next.getReferral()
+							.getPurpose());
+					referral.setRecognition(next.getReferral()
+							.getRecognition());
+					break;
+				}
+			}
+			if (referral.getPurpose()!=null && !referral.getPurpose().isEmpty()) {
 				break;
 			}
+
 		}
+		
+		
 		referral.setClinic(createClinic());
 		referral.setPatient(patient);
 		referral.setDate(Calendar.getInstance().getTime());
