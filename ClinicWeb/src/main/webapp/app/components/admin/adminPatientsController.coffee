@@ -2,6 +2,8 @@ angular.module 'clinic'
   .controller 'AdminPatientsController', [ '$scope', 'Patients', '$stateParams', '$state', ($scope, Patients, $stateParams, $state) ->
     console.log 'admin patients controller'
 
+    $scope.user = {}
+
     Patients.index().then((res) ->
       console.log res
       $scope.patients = res.data
@@ -40,6 +42,12 @@ angular.module 'clinic'
       Patients.edit($scope.patient.id, $scope.editedPatient).then((res) ->
         console.log res
         console.log 'patient update'
+        $state.go('admin-patients')
+      )
+
+    $scope.submit = ->
+      Patients.create($scope.user).then((res) ->
+        console.log res
         $state.go('admin-patients')
       )
 

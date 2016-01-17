@@ -148,6 +148,8 @@ angular.module 'clinic'
         controllerAs: 'admin.patients'
       .state 'admin-patients-new',
         url: '/admin/patients/new'
+        controller: 'AdminPatientsController'
+        controllerAs: 'admin.patients.new'
         templateUrl: 'app/components/admin/patients.new.html'
       .state 'admin-patients-show',
         url: '/admin/patients/:patientId/show'
@@ -193,6 +195,11 @@ angular.module 'clinic'
         templateUrl: 'app/components/admin/specialities.html'
         controller: 'AdminSpecialitiesController'
         controllerAs: 'admin.specialities'
+      .state 'admin-specialities-doctors',
+        url: '/admin/specialities/:specialitySlug/doctors'
+        templateUrl: 'app/components/admin/specialities.doctors.html'
+        controller: 'AdminSpecialitiesController'
+        controllerAs: 'admin.specialities.doctors'
       .state 'admin-visits',
         url: '/admin/visits'
         templateUrl: 'app/components/admin/visits.html'
@@ -203,6 +210,11 @@ angular.module 'clinic'
         templateUrl: 'app/components/admin/visits.show.html'
         controller: 'AdminVisitsController'
         controllesAs: 'admin.visits.show'
+      .state 'admin-visits-edit',
+        url: '/admin/visits/:visitId/edit'
+        templateUrl: 'app/components/admin/visits.edit.html'
+        controller: 'AdminVisitsController'
+        controllesAs: 'admin.visits.edit'
       .state 'admin-visits-new',
         url: '/admin/visits/new'
         templateUrl: 'app/components/admin/visits.new.html'
@@ -252,6 +264,8 @@ angular.module 'clinic'
         controllerAs: 'receptionist.patients'
       .state 'receptionist-patients-new',
         url: '/receptionist/patients/new'
+        controller: 'ReceptionistPatientsController'
+        controllerAs: 'receptinist.patients.new'
         templateUrl: 'app/components/receptionist/patients.new.html'
       .state 'receptionist-patients-show',
         url: '/receptionist/patients/:patientId/show'

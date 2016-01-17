@@ -35,7 +35,12 @@
           'surname': $scope.receptionist.surname,
           'phoneNr': $scope.receptionist.phoneNr
         };
-        return console.log($stateParams.receptionistId);
+        console.log($stateParams.receptionistId);
+        return Receptionists.edit($stateParams.receptionistId, $scope.editedReceptionist).then(function(res) {
+          console.log(res);
+          console.log('receptionist update');
+          return $state.go('admin-receptionists');
+        });
       };
     }
   ]);

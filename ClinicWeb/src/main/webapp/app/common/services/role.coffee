@@ -1,11 +1,11 @@
-angular.module('clinic').service 'Role', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
+angular.module('clinic').service 'Role', [ '$http', '$cookies', 'api', '$localStorage', ($http, $cookies, api, $localStorage) ->
 
   check = ->
-    login = $cookies.token.split(":")[0]
+    login = $localStorage.token.split(":")[0]
     request = $http(
       method: 'GET'
       url: api + 'SystemUser/role/'+login
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     #request.then handleSuccess, handleError
     return request
 

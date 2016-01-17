@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Visits', [
-    '$http', '$cookies', 'api', function($http, $cookies, api) {
-      var check, create, handleError, handleSuccess, indexByDate, remove, show;
+    '$http', '$cookies', 'api', '$localStorage', function($http, $cookies, api, $localStorage) {
+      var check, create, handleError, handleSuccess, indexByDate, remove, show, showDone, showPlanned;
       indexByDate = function(startDate, endDate) {
         var request;
         console.log('dates');
@@ -11,7 +11,7 @@
           method: 'GET',
           url: api + 'Visit/all/date/' + startDate + '/' + endDate,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -24,7 +24,7 @@
           method: 'GET',
           url: api + 'SystemUser/role/' + login,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -39,7 +39,7 @@
           url: api + 'Visit/new/',
           data: visit,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -51,7 +51,31 @@
           method: 'GET',
           url: api + 'Visit/info/' + visitId,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
+      showDone = function(id) {
+        var request;
+        request = $http({
+          method: 'GET',
+          url: api + 'Visit/patient/done/' + id,
+          headers: {
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
+      showPlanned = function(id) {
+        var request;
+        request = $http({
+          method: 'GET',
+          url: api + 'Visit/patient/plane/' + id,
+          headers: {
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -64,7 +88,7 @@
           method: 'DELETE',
           url: api + 'Visit/' + visitId,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -83,6 +107,8 @@
         create: create,
         remove: remove,
         show: show,
+        showDone: showDone,
+        showPlanned: showPlanned,
         indexByDate: indexByDate
       };
     }

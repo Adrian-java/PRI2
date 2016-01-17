@@ -15,10 +15,10 @@
         %tbody
           %tr{:'ng-repeat' => 'receptionist in receptionists'}
             %td
-              %a{:'ui-sref' => 'admin-receptionist-show({receptionistId: receptionist.id})'}
+              %a{:'ui-sref' => 'admin-receptionists-show({receptionistId: receptionist.id})'}
                 {{receptionist.name}}
             %td
-              %a{:'ui-sref' => 'admin-receptionist-show({receptionistId: receptionist.id})'}
+              %a{:'ui-sref' => 'admin-receptionists-show({receptionistId: receptionist.id})'}
                 {{receptionist.surname}}
             %td
               %a.btn.btn-danger{:'ng-click' => 'remove(receptionist.id)'}

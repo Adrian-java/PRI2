@@ -1,15 +1,15 @@
 (function() {
   angular.module('clinic').service('Role', [
-    '$http', '$cookies', 'api', function($http, $cookies, api) {
+    '$http', '$cookies', 'api', '$localStorage', function($http, $cookies, api, $localStorage) {
       var check, handleError, handleSuccess;
       check = function() {
         var login, request;
-        login = $cookies.token.split(":")[0];
+        login = $localStorage.token.split(":")[0];
         request = $http({
           method: 'GET',
           url: api + 'SystemUser/role/' + login,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });

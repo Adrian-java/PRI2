@@ -59,7 +59,12 @@ form.search-visit {
       padding: 19px 15px; }
   form.search-visit .form-control {
     margin: 26px auto;
-    padding: 26px 15px; }
+    padding: 26px 15px;
+    border: none; }
+  form.search-visit select.form-control {
+    height: 52px;
+    border-radius: 0;
+    -webkit-border-radius: 0; }
 
 .feature-box {
   margin-top: 15px;

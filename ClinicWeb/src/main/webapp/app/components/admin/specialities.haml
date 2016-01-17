@@ -5,4 +5,5 @@
         %li.list-group-item.active
           Specjalizacje
         %li.list-group-item{:'ng-repeat' => 'speciality in specialities'}
-          {{speciality.name}}
+          %a{:'ui-sref' => 'admin-specialities-doctors({specialitySlug: speciality.name})'}
+            {{speciality.name}}

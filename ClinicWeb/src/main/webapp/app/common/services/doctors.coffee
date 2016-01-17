@@ -1,10 +1,10 @@
-angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
+angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', '$localStorage', ($http, $cookies, api, $localStorage) ->
 
   index = ->
     request = $http(
       method: 'GET'
       url: api + 'SystemUser/doctors/all'
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     #request.then handleSuccess, handleError
     return request
 
@@ -15,28 +15,38 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
       isArray: false
       url: api + 'SystemUser/newDoctor'
       data: doctor
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
 
   show = (id) ->
     request = $http(
       method: 'GET'
       url: api + 'SystemUser/doctor/'+id
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
+    return request
+
+  update = (id, doctor) ->
+    request = $http(
+      method: 'POST'
+      isArray: false
+      url: api + 'SystemUser/updateDoctor/' + id
+      data: doctor
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
     return request
 
   indexBySpeciality = (speciality) ->
     request = $http(
       method: 'GET'
       url: api + 'SystemUser/doctors/specialization/'+speciality
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
   workingTime = (doctorId) ->
     request = $http(
       method: 'GET'
       url: api + 'VisitScheduler/doctor/'+doctorId
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
   takenVisitsTimeFrame = (doctorId, start, end) ->
@@ -53,14 +63,14 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
     request = $http(
       method: 'GET'
       url: api + 'Visit/doctor/'+doctorId+"/date/"+startDate.day+"-"+startDate.month+"-"+startDate.year+"/"+endDate.day+"-"+endDate.month+"-"+endDate.year
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
   indexDoctorsVisits = (doctorId, start, end) ->
     request = $http(
       method: 'GET'
       url: api + 'Visit/doctor/'+doctorId+'/date/'+start+'/'+end
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
   remove = (id) ->
@@ -68,7 +78,7 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
     request = $http(
       method: 'DELETE'
       url: api + 'SystemUser/doctor/' + id
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
   addWorkingHours = (workingHours) ->
@@ -78,7 +88,15 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
       isArray: false
       url: api + 'VisitScheduler/scheduler/add'
       data: workingHours
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json'
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
+    return request
+
+  getDoctorSpeciality = (doctorId) ->
+    request = $http(
+      method: 'GET'
+      url: api + 'Specialization/doctor/' + doctorId
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
     )
     return request
 
@@ -95,11 +113,13 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', ($http
     index: index
     create: create
     show: show
+    update: update
     indexBySpeciality: indexBySpeciality
     workingTime: workingTime
     takenVisitsTimeFrame: takenVisitsTimeFrame
     remove: remove
     addWorkingHours: addWorkingHours
     indexDoctorsVisits: indexDoctorsVisits
+    getDoctorSpeciality: getDoctorSpeciality
   }
 ]

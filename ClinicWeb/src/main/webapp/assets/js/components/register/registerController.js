@@ -1,9 +1,10 @@
 (function() {
   angular.module('clinic').controller('RegisterController', [
-    '$scope', 'Auth', function($scope, Auth) {
+    '$scope', 'Auth', '$state', function($scope, Auth, $state) {
       return $scope.submit = function() {
         console.log($scope.user);
-        return Auth.register($scope.user);
+        Auth.register($scope.user);
+        return $state.go('home');
       };
     }
   ]);

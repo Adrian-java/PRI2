@@ -11,17 +11,29 @@
         });
       };
       console.log($stateParams);
-      if ($stateParams) {
+      if ($stateParams.doctorId) {
         Doctors.show($stateParams.doctorId).then(function(res) {
+          console.log(res.data);
           return $scope.doctor = res.data;
         });
       }
-      return $scope.remove = function(id) {
+      $scope.remove = function(id) {
         return Doctors.remove(id).then(function(res) {
           console.log(res);
           return Doctors.index().then(function(res) {
             return $scope.doctors = res.data;
           });
+        });
+      };
+      return $scope.update = function() {
+        var doctor;
+        doctor = {
+          'name': $scope.doctor.name,
+          'surname': $scope.doctor.surname
+        };
+        return Doctors.update($stateParams.doctorId, doctor).then(function(res) {
+          console.log('doctor updated');
+          return $state.go('admin-doctors');
         });
       };
     }

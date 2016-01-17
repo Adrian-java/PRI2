@@ -1,4 +1,4 @@
-angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', '$state', ($http, $cookies, api, $state) ->
+angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', '$state', '$localStorage', ($http, $cookies, api, $state, $localStorage) ->
 
   login = (user) ->
     request = $http(
@@ -12,14 +12,13 @@ angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', '$state',
     request.then handleLoginSuccess, handleError
 
   logout = ->
-    $cookies.token = undefined
+    $localStorage.token = undefined
     console.log 'user logout success'
     $state.go('home')
 
   register = (user) ->
-    user.birthDate.monthId = if user.birthDate.monthId < 10 then '0' + user.birthDate.monthId else user.birthDate.monthId
-    user.birthDate.day = if user.birthDate.day < 10 then '0' + user.birthDate.day else user.birthDate.day
-
+    user.birthDate.monthId = if Number(user.birthDate.monthId) < 10 then '0' + user.birthDate.monthId else user.birthDate.monthId
+    user.birthDate.day = if Number(user.birthDate.day) < 10 then '0' + user.birthDate.day else user.birthDate.day
 
     userInfo =
       'password': user.password
@@ -44,12 +43,12 @@ angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', '$state',
       isArray: false
       url: api + 'SystemUser/newPatient'
       data: userInfo
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
 
   validate = ->
-    if $cookies.token
-      return $cookies.token.split(":")[0]
+    if $localStorage.token
+      return $localStorage.token.split(":")[0]
     else
       return false
 
@@ -63,7 +62,9 @@ angular.module('clinic').service 'Auth', [ '$http', '$cookies', 'api', '$state',
     response.data
 
   handleLoginSuccess = (response) ->
-    $cookies.token = response.data.token
+    #$cookies.token = response.data.token
+    $localStorage.token = response.data.token
+    console.log $localStorage.token
 
   {
     login: login

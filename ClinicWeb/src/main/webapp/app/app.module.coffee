@@ -1,4 +1,4 @@
-angular.module 'clinic', ['ngAnimate', 'ngCookies', 'ngResource', 'ui.router', 'ui.bootstrap', 'ui.calendar']
+angular.module 'clinic', ['ngAnimate', 'ngCookies', 'ngResource', 'ui.router', 'ui.bootstrap', 'ui.calendar', 'ngStorage']
   .constant('api', 'http://localhost:8080/rest/')
   .run(['$rootScope', 'Auth', '$state', '$location', ($rootScope, Auth, $state, $location) ->
     $rootScope.$on '$stateChangeSuccess', (e, toState, toParams, fromState, fromParams) ->

@@ -108,16 +108,35 @@ angular.module 'clinic'
       )
 
     $scope.addPrescription = ->
+      console.log 'visit id' + $stateParams.visitId
       prescriptionData = {
         'issuedDate': new Date().getTime()
         'department': '03'
         'executionDate': new Date().getTime()
-        'remady': 'Duomox;50%;'
+        'remady': 'Duodmox;50%;'
         'visitId': $stateParams.visitId
       }
-      Documents.addPrescription(prescriptionData).then((res) ->
+      doc = {
+        'description': 'random'
+        'visitId': $stateParams.visitId
+        'date': new Date().getTime()
+      }
+
+      Documents.getPrescription($stateParams.visitId).then((res) ->
         console.log res
       )
+      #Documents.create(doc).then((res) ->
+      #  console.log res
+        #Documents.addPrescription($scope.prescriptionData).then((res) ->
+        #  console.log res
+        #  Documents.getPrescription($stateParams.visitId).then((res) ->
+        #    console.log res
+        #  )
+        #)
+      #)
+
+      console.log prescriptionData
+
 
     $scope.addCertificate = ->
       certificateData = {

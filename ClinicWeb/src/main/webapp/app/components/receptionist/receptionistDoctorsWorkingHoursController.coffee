@@ -59,21 +59,27 @@ angular.module 'clinic'
       }
     ]
 
-    Specialities.getSpecialities().then((res) ->
+    Doctors.getDoctorSpeciality($stateParams.doctorId).then((res) ->
+      console.log res
       $scope.specialities = res.data
     )
 
     $scope.submit = ->
-      dateParams = $scope.selectedDate.split('-')
-      console.log dateParams
+      #console.log $scope.selectedDate
+      #dateParams = $scope.selectedDate.split('-')
+      #console.log dateParams
       $scope.workingHours.idDoctor = $stateParams.doctorId
+
       $scope.workingHours.startDate = new Date($scope.selectedDate).getTime()
+      #console.log $scope.workingHours.startDate
+      #date = new Date($scope.selectedDate)
+      #$scope.workingHours.startDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours()+2, date.getUTCMinutes(), date.getUTCSeconds()).getTime()
       $scope.workingHours.duration = 30
       $scope.workingHours.visitRepeat = 7
       $scope.workingHours.description = ''
       console.log $scope.workingHours
-      Doctors.addWorkingHours($scope.workingHours).then((res) ->
-        console.log res
-      )
+      #Doctors.addWorkingHours($scope.workingHours).then((res) ->
+#        console.log res
+#      )
 
   ]

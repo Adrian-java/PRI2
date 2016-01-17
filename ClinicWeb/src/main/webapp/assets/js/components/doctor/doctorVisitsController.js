@@ -95,17 +95,24 @@
         });
       };
       $scope.addPrescription = function() {
-        var prescriptionData;
+        var doc, prescriptionData;
+        console.log('visit id' + $stateParams.visitId);
         prescriptionData = {
           'issuedDate': new Date().getTime(),
           'department': '03',
           'executionDate': new Date().getTime(),
-          'remady': 'Duomox;50%;',
+          'remady': 'Duodmox;50%;',
           'visitId': $stateParams.visitId
         };
-        return Documents.addPrescription(prescriptionData).then(function(res) {
+        doc = {
+          'description': 'random',
+          'visitId': $stateParams.visitId,
+          'date': new Date().getTime()
+        };
+        Documents.getPrescription($stateParams.visitId).then(function(res) {
           return console.log(res);
         });
+        return console.log(prescriptionData);
       };
       return $scope.addCertificate = function() {
         var certificateData;

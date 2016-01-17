@@ -5,9 +5,73 @@
     </div>
     <div class='col-xs-12'>
       Odbyte wizyty
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Data
+            </th>
+            <th>
+              Lekarz
+            </th>
+            <th>
+              Akcje
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='visit in doneVisits'>
+            <td>
+              <a ui-sref='admin-visits-show({visitId: visit.id})'>
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy H:mm'}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='admin-visits-show({visitId: visit.id})'>
+                {{visit.name}} {{visit.surname}}
+              </a>
+            </td>
+            <td>
+              Akcje
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class='col-xs-12'>
       Planowane wizyty
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Data
+            </th>
+            <th>
+              Lekarz
+            </th>
+            <th>
+              Akcje
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='visit in plannedVisits'>
+            <td>
+              <a ui-sref='admin-visits-show({visitId: visit.id})'>
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy H:mm'}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='admin-visits-show({visitId: visit.id})'>
+                {{visit.name}} {{visit.surname}}
+              </a>
+            </td>
+            <td>
+              Akcje
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

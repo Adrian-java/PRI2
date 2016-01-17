@@ -2,6 +2,7 @@
   angular.module('clinic').controller('AdminPatientsController', [
     '$scope', 'Patients', '$stateParams', '$state', function($scope, Patients, $stateParams, $state) {
       console.log('admin patients controller');
+      $scope.user = {};
       Patients.index().then(function(res) {
         console.log(res);
         return $scope.patients = res.data;
@@ -21,7 +22,7 @@
           });
         });
       };
-      return $scope.edit = function() {
+      $scope.edit = function() {
         $scope.editedPatient = {
           'name': $scope.patient.name,
           'surname': $scope.patient.surname,
@@ -39,6 +40,12 @@
         return Patients.edit($scope.patient.id, $scope.editedPatient).then(function(res) {
           console.log(res);
           console.log('patient update');
+          return $state.go('admin-patients');
+        });
+      };
+      return $scope.submit = function() {
+        return Patients.create($scope.user).then(function(res) {
+          console.log(res);
           return $state.go('admin-patients');
         });
       };

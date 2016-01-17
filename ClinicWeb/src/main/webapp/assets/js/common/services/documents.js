@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Documents', [
-    '$http', '$cookies', 'api', function($http, $cookies, api) {
-      var addCertificate, addPrescription, addReferral, create;
+    '$http', '$cookies', 'api', '$localStorage', function($http, $cookies, api, $localStorage) {
+      var addCertificate, addPrescription, addReferral, create, getPrescription;
       create = function(doc) {
         var request;
         request = $http({
@@ -10,7 +10,7 @@
           url: api + 'documents/new/document',
           data: doc,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -24,7 +24,7 @@
           url: api + 'documents/new/prescription',
           data: prescriptionData,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -38,7 +38,7 @@
           url: api + 'documents/new/certificate',
           data: certificateData,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -52,7 +52,19 @@
           url: api + 'documents/new/referral',
           data: referralData,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
+      getPrescription = function(visitId) {
+        var request;
+        request = $http({
+          method: 'GET',
+          url: api + 'documents/prescription/data/' + visitId,
+          headers: {
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -62,7 +74,8 @@
         create: create,
         addPrescription: addPrescription,
         addCertificate: addCertificate,
-        addReferral: addReferral
+        addReferral: addReferral,
+        getPrescription: getPrescription
       };
     }
   ]);

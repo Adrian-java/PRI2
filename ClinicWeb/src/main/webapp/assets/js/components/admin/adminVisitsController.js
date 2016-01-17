@@ -223,7 +223,7 @@
         endDate = String($scope.selectedEndDate.getDate() + 1) + '-' + String($scope.selectedEndDate.getMonth() + 1) + '-' + String($scope.selectedEndDate.getFullYear());
         return getAllVisitsByDate(startDate, endDate);
       };
-      return $scope.removeVisit = function(id) {
+      $scope.removeVisit = function(id) {
         return Visits.remove(id).then(function(res) {
           console.log('visit removed');
           console.log(res);
@@ -234,6 +234,13 @@
           }
         });
       };
+      if ($stateParams.visitId) {
+        console.log($stateParams.visitId);
+        return Visits.show($stateParams.visitId).then(function(res) {
+          $scope.visit = res.data;
+          return console.log(res.data);
+        });
+      }
     }
   ]);
 

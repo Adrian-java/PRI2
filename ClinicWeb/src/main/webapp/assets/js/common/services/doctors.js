@@ -1,14 +1,14 @@
 (function() {
   angular.module('clinic').service('Doctors', [
-    '$http', '$cookies', 'api', function($http, $cookies, api) {
-      var addWorkingHours, create, handleError, handleSuccess, index, indexBySpeciality, indexDoctorsVisits, remove, show, takenVisitsTimeFrame, workingTime;
+    '$http', '$cookies', 'api', '$localStorage', function($http, $cookies, api, $localStorage) {
+      var addWorkingHours, create, getDoctorSpeciality, handleError, handleSuccess, index, indexBySpeciality, indexDoctorsVisits, remove, show, takenVisitsTimeFrame, update, workingTime;
       index = function() {
         var request;
         request = $http({
           method: 'GET',
           url: api + 'SystemUser/doctors/all',
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -23,7 +23,7 @@
           url: api + 'SystemUser/newDoctor',
           data: doctor,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -35,7 +35,21 @@
           method: 'GET',
           url: api + 'SystemUser/doctor/' + id,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
+      update = function(id, doctor) {
+        var request;
+        request = $http({
+          method: 'POST',
+          isArray: false,
+          url: api + 'SystemUser/updateDoctor/' + id,
+          data: doctor,
+          headers: {
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -47,7 +61,7 @@
           method: 'GET',
           url: api + 'SystemUser/doctors/specialization/' + speciality,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -59,7 +73,7 @@
           method: 'GET',
           url: api + 'VisitScheduler/doctor/' + doctorId,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -79,7 +93,7 @@
           method: 'GET',
           url: api + 'Visit/doctor/' + doctorId + "/date/" + startDate.day + "-" + startDate.month + "-" + startDate.year + "/" + endDate.day + "-" + endDate.month + "-" + endDate.year,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -91,7 +105,7 @@
           method: 'GET',
           url: api + 'Visit/doctor/' + doctorId + '/date/' + start + '/' + end,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -104,7 +118,7 @@
           method: 'DELETE',
           url: api + 'SystemUser/doctor/' + id,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -119,7 +133,19 @@
           url: api + 'VisitScheduler/scheduler/add',
           data: workingHours,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+        return request;
+      };
+      getDoctorSpeciality = function(doctorId) {
+        var request;
+        request = $http({
+          method: 'GET',
+          url: api + 'Specialization/doctor/' + doctorId,
+          headers: {
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -138,12 +164,14 @@
         index: index,
         create: create,
         show: show,
+        update: update,
         indexBySpeciality: indexBySpeciality,
         workingTime: workingTime,
         takenVisitsTimeFrame: takenVisitsTimeFrame,
         remove: remove,
         addWorkingHours: addWorkingHours,
-        indexDoctorsVisits: indexDoctorsVisits
+        indexDoctorsVisits: indexDoctorsVisits,
+        getDoctorSpeciality: getDoctorSpeciality
       };
     }
   ]);

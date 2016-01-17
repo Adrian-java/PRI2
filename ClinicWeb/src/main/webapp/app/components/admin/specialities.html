@@ -6,7 +6,9 @@
           Specjalizacje
         </li>
         <li class='list-group-item' ng-repeat='speciality in specialities'>
-          {{speciality.name}}
+          <a ui-sref='admin-specialities-doctors({specialitySlug: speciality.name})'>
+            {{speciality.name}}
+          </a>
         </li>
       </ul>
     </div>

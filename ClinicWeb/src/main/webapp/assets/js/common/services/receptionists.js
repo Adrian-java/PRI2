@@ -1,6 +1,6 @@
 (function() {
   angular.module('clinic').service('Receptionists', [
-    '$http', '$cookies', 'api', function($http, $cookies, api) {
+    '$http', '$cookies', 'api', '$localStorage', function($http, $cookies, api, $localStorage) {
       var create, edit, handleError, handleSuccess, index, remove, show;
       index = function() {
         var request;
@@ -8,7 +8,7 @@
           method: 'GET',
           url: api + 'Receptionist/list',
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -23,7 +23,7 @@
           url: api + 'SystemUser/newReceptionist',
           data: receptionist,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -35,7 +35,7 @@
           method: 'GET',
           url: api + 'SystemUser/receptionist/' + id,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -49,7 +49,7 @@
           url: api + 'SystemUser/updateReceptionist/' + id,
           data: receptionist,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
@@ -62,7 +62,7 @@
           method: 'DELETE',
           url: api + 'SystemUser/receptionist/' + id,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });

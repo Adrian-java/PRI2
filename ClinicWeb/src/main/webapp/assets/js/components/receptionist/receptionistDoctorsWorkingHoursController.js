@@ -46,22 +46,17 @@
           status: 'partially'
         }
       ];
-      Specialities.getSpecialities().then(function(res) {
+      Doctors.getDoctorSpeciality($stateParams.doctorId).then(function(res) {
+        console.log(res);
         return $scope.specialities = res.data;
       });
       return $scope.submit = function() {
-        var dateParams;
-        dateParams = $scope.selectedDate.split('-');
-        console.log(dateParams);
         $scope.workingHours.idDoctor = $stateParams.doctorId;
         $scope.workingHours.startDate = new Date($scope.selectedDate).getTime();
         $scope.workingHours.duration = 30;
         $scope.workingHours.visitRepeat = 7;
         $scope.workingHours.description = '';
-        console.log($scope.workingHours);
-        return Doctors.addWorkingHours($scope.workingHours).then(function(res) {
-          return console.log(res);
-        });
+        return console.log($scope.workingHours);
       };
     }
   ]);

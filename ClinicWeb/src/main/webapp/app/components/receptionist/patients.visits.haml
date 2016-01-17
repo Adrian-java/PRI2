@@ -4,5 +4,43 @@
       Wizyty użytkownika
     .col-xs-12
       Odbyte wizyty
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Data
+            %th
+              Lekarz
+            %th
+              Akcje
+        %tbody
+          %tr{:'ng-repeat' => 'visit in doneVisits'}
+            %td
+              %a{:'ui-sref' => 'admin-visits-show({visitId: visit.id})'}
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy H:mm'}}
+            %td
+              %a{:'ui-sref' => 'admin-visits-show({visitId: visit.id})'}
+                {{visit.name}} {{visit.surname}}
+            %td
+              Akcje
     .col-xs-12
       Planowane wizyty
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Data
+            %th
+              Lekarz
+            %th
+              Akcje
+        %tbody
+          %tr{:'ng-repeat' => 'visit in plannedVisits'}
+            %td
+              %a{:'ui-sref' => 'admin-visits-show({visitId: visit.id})'}
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy H:mm'}}
+            %td
+              %a{:'ui-sref' => 'admin-visits-show({visitId: visit.id})'}
+                {{visit.name}} {{visit.surname}}
+            %td
+              Akcje

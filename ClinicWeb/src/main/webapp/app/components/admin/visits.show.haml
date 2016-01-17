@@ -5,22 +5,22 @@
         %li.list-group-item.active
           Dane wizyty
         %li.list-group-item
-          Data wizyty
+          Data wizyty: {{visit.visitView.dateOfVisit | date: 'dd-MM-yyyy H:mm'}}
+        %li.list-group-item
+          Specjalizacja: {{visit.visitView.specialization}}
       %ul.list-group
         %li.list-group-item.active
           Dane pacjenta
         %li.list-group-item
-          Imię i nazwisko
+          Imię i nazwisko: {{visit.patientView.name}} {{visit.patientView.surname}}
         %li.list-group-item
-          Pesel
+          Pesel: {{visit.patientView.id}}
         %li.list-group-item
-          Data urodzenia
+          Data urodzenia: {{visit.patientView.dateOfBirth | date: 'dd-MMMM-yyyy'}}
         %li.list-group-item
-          Miejsce zamieszkania
+          Miejsce zamieszkania: {{visit.patientView.countryCodeCity}} {{visit.patientView.city}} {{visit.patientView.street}} {{visit.patientView.homeNr}}
       %ul.list-group
         %li.list-group-item.active
           Dane lekarza
         %li.list-group-item
-          Imię i Nazwisko
-        %li.list-group-item
-          Specjalizacja
+          Imię i Nazwisko: {{visit.doctorView.name}} {{visit.doctorView.surname}}

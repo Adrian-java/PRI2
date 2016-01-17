@@ -36,9 +36,9 @@ angular.module 'clinic'
         'phoneNr': $scope.receptionist.phoneNr
       }
       console.log $stateParams.receptionistId
-      #Receptionists.edit($stateParams.receptionistId, $scope.editedReceptionist).then((res) ->
-      #  console.log res
-      #  console.log 'receptionist update'
-      #  $state.go('admin-receptionists')
-      #)
+      Receptionists.edit($stateParams.receptionistId, $scope.editedReceptionist).then((res) ->
+        console.log res
+        console.log 'receptionist update'
+        $state.go('admin-receptionists')
+      )
   ]

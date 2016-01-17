@@ -6,7 +6,10 @@
           Dane wizyty
         </li>
         <li class='list-group-item'>
-          Data wizyty
+          Data wizyty: {{visit.visitView.dateOfVisit | date: 'dd-MM-yyyy H:mm'}}
+        </li>
+        <li class='list-group-item'>
+          Specjalizacja: {{visit.visitView.specialization}}
         </li>
       </ul>
       <ul class='list-group'>
@@ -14,16 +17,16 @@
           Dane pacjenta
         </li>
         <li class='list-group-item'>
-          Imię i nazwisko
+          Imię i nazwisko: {{visit.patientView.name}} {{visit.patientView.surname}}
         </li>
         <li class='list-group-item'>
-          Pesel
+          Pesel: {{visit.patientView.id}}
         </li>
         <li class='list-group-item'>
-          Data urodzenia
+          Data urodzenia: {{visit.patientView.dateOfBirth | date: 'dd-MMMM-yyyy'}}
         </li>
         <li class='list-group-item'>
-          Miejsce zamieszkania
+          Miejsce zamieszkania: {{visit.patientView.countryCodeCity}} {{visit.patientView.city}} {{visit.patientView.street}} {{visit.patientView.homeNr}}
         </li>
       </ul>
       <ul class='list-group'>
@@ -31,10 +34,7 @@
           Dane lekarza
         </li>
         <li class='list-group-item'>
-          Imię i Nazwisko
-        </li>
-        <li class='list-group-item'>
-          Specjalizacja
+          Imię i Nazwisko: {{visit.doctorView.name}} {{visit.doctorView.surname}}
         </li>
       </ul>
     </div>

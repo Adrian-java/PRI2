@@ -1,7 +1,6 @@
 .container
   .row
     .col-xs-12
-      {{patient}}
       %ul.list-group
         %li.list-group-item.active
           Pesel
@@ -16,7 +15,7 @@
         %li.list-group-item.active
           Data urodzenia
         %li.list-group-item
-          {{dateOfBirth}}
+          {{patient.dateOfBirth | date: 'yyyy-MM-dd'}}
       %ul.list-group
         %li.list-group-item.active
           Kod pocztowy | Miasto

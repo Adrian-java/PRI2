@@ -1,10 +1,15 @@
 angular.module 'clinic'
-  .controller 'AdminPatientsVisitsController', [ '$scope', 'Patients', '$stateParams', ($scope, Patients, $stateParams) ->
-    console.log 'admin patients visits controller'
+  .controller 'AdminPatientsVisitsController', [ '$scope', 'Visits', '$stateParams', ($scope, Visits, $stateParams) ->
 
-    #if $stateParams
-      #Patients.show($stateParams.patientId).then((res)->
-      #  $scope.patient = res.data
-      #)
+    if $stateParams.patientId
+      Visits.showDone($stateParams.patientId).then((res)->
+        console.log res
+        $scope.doneVisits = res.data
+      )
+
+      Visits.showPlanned($stateParams.patientId).then((res)->
+        console.log res
+        $scope.plannedVisits = res.data
+      )
 
   ]

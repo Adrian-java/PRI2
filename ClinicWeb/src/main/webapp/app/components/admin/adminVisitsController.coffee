@@ -225,4 +225,11 @@ angular.module 'clinic'
           $scope.updateAllVisits()
       )
 
+    if $stateParams.visitId
+      console.log $stateParams.visitId
+      Visits.show($stateParams.visitId).then((res) ->
+        $scope.visit = res.data
+        console.log res.data
+      )
+
   ]

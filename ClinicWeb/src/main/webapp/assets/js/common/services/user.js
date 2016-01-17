@@ -1,6 +1,6 @@
 (function() {
   angular.module('clinic').service('Auth', [
-    '$http', '$cookies', 'api', '$state', function($http, $cookies, api, $state) {
+    '$http', '$cookies', 'api', '$state', '$localStorage', function($http, $cookies, api, $state, $localStorage) {
       var handleError, handleLoginSuccess, handleSuccess, login, logout, register, validate;
       login = function(user) {
         var request;
@@ -19,14 +19,14 @@
         return request.then(handleLoginSuccess, handleError);
       };
       logout = function() {
-        $cookies.token = void 0;
+        $localStorage.token = void 0;
         console.log('user logout success');
         return $state.go('home');
       };
       register = function(user) {
         var request, userInfo;
-        user.birthDate.monthId = user.birthDate.monthId < 10 ? '0' + user.birthDate.monthId : user.birthDate.monthId;
-        user.birthDate.day = user.birthDate.day < 10 ? '0' + user.birthDate.day : user.birthDate.day;
+        user.birthDate.monthId = Number(user.birthDate.monthId) < 10 ? '0' + user.birthDate.monthId : user.birthDate.monthId;
+        user.birthDate.day = Number(user.birthDate.day) < 10 ? '0' + user.birthDate.day : user.birthDate.day;
         userInfo = {
           'password': user.password,
           'email': user.email,
@@ -53,15 +53,15 @@
           url: api + 'SystemUser/newPatient',
           data: userInfo,
           headers: {
-            'XToken': $cookies.token,
+            'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
         return request.then(handleSuccess, handleError);
       };
       validate = function() {
-        if ($cookies.token) {
-          return $cookies.token.split(":")[0];
+        if ($localStorage.token) {
+          return $localStorage.token.split(":")[0];
         } else {
           return false;
         }
@@ -76,7 +76,8 @@
         return response.data;
       };
       handleLoginSuccess = function(response) {
-        return $cookies.token = response.data.token;
+        $localStorage.token = response.data.token;
+        return console.log($localStorage.token);
       };
       return {
         login: login,

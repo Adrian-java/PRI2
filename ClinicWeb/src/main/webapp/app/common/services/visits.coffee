@@ -1,4 +1,4 @@
-angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http, $cookies, api) ->
+angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', '$localStorage', ($http, $cookies, api, $localStorage) ->
 
   indexByDate = (startDate, endDate) ->
     console.log 'dates'
@@ -7,7 +7,7 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
     request = $http(
       method: 'GET'
       url: api + 'Visit/all/date/'+startDate+'/'+endDate
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
   check = ->
@@ -15,7 +15,7 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
     request = $http(
       method: 'GET'
       url: api + 'SystemUser/role/'+login
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     #request.then handleSuccess, handleError
     return request
 
@@ -26,14 +26,30 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
       isArray: false
       url: api + 'Visit/new/'
       data: visit
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     request.then handleSuccess, handleError
 
   show = (visitId) ->
     request = $http(
       method: 'GET'
       url: api + 'Visit/info/' + visitId
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json'
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
+    return request
+
+  showDone = (id) ->
+    request = $http(
+      method: 'GET'
+      url: api + 'Visit/patient/done/' + id
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
+    return request
+
+  showPlanned = (id) ->
+    request = $http(
+      method: 'GET'
+      url: api + 'Visit/patient/plane/' + id
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
     )
     return request
 
@@ -42,7 +58,7 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
     request = $http(
       method: 'DELETE'
       url: api + 'Visit/' + visitId
-      headers: 'XToken': $cookies.token, 'Content-Type': 'application/json')
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
   handleError = (response) ->
@@ -58,6 +74,8 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', ($http,
     create: create
     remove: remove
     show: show
+    showDone: showDone
+    showPlanned: showPlanned
     indexByDate: indexByDate
   }
 ]
