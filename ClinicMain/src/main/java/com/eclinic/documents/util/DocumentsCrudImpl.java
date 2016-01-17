@@ -1,6 +1,7 @@
 package com.eclinic.documents.util;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -212,6 +213,14 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 		}
 		
 		return set;
+	}
+
+	public boolean isDocumentByVisit(Integer visitId) {
+		Visit findVisitById2 = visitDao.findVisitById(visitId);
+		 List<Documents> findDocumentsByVisitNew = documentsDAO.findDocumentsByVisitNew(findVisitById2);
+		 if(findDocumentsByVisitNew==null || findDocumentsByVisitNew.isEmpty())
+			 return false; else return true;
+				 
 	}
 
 }
