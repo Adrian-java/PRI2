@@ -18,6 +18,11 @@
     }).state('password_reset', {
       url: '/password_reset',
       templateUrl: '/app/components/password_reset/password_reset.html'
+    }).state('change-password', {
+      url: '/change-password',
+      templateUrl: 'app/components/password/change.html',
+      controller: 'PasswordChangeController',
+      controllesAs: 'password.change'
     }).state('logout', {
       url: '/logout'
     }).state('contact', {
@@ -54,20 +59,22 @@
       template: '/app/components/doctors/calendar.html'
     }).state('patient', {
       url: '/patient',
-      template: '<div ui-view>ddd</div>'
-    }).state('patient.change_password', {
-      url: '/change_password'
-    }).state('patient.edit', {
-      url: '/edit'
-    }).state('patient.visits', {
-      url: '/visits',
-      templateUrl: '/app/components/patient/patient.visits.html'
-    }).state('patient.visits.show', {
-      url: '/:id'
-    }).state('patient.visits.delete', {
-      url: '/:id/delete'
-    }).state('patient.visits.edit', {
-      url: '/:id/edit'
+      templateUrl: 'app/components/patient/panel.html'
+    }).state('patient-account', {
+      url: '/patient/account',
+      templateUrl: 'app/components/patient/account.html',
+      controller: 'PatientController',
+      controllerAs: 'patient'
+    }).state('patient-done-visits', {
+      url: '/patient/visits/done',
+      templateUrl: 'app/components/patient/visits.done.html',
+      controller: 'PatientDoneVisitsController',
+      controllerAs: 'patient.visits.done'
+    }).state('patient-planned-visits', {
+      url: '/patient/visits/planned',
+      templateUrl: 'app/components/patient/visits.planned.html',
+      controller: 'PatientPlannedVisitsController',
+      controllerAs: 'patient.visits.planned'
     }).state('doctor', {
       url: '/doctor',
       templateUrl: 'app/components/doctor/panel.html'

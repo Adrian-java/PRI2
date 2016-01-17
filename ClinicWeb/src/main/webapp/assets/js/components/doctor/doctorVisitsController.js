@@ -109,7 +109,7 @@
           'visitId': $stateParams.visitId,
           'date': new Date().getTime()
         };
-        Documents.getPrescription($stateParams.visitId).then(function(res) {
+        Documents.addPrescription($scope.prescriptionData).then(function(res) {
           return console.log(res);
         });
         return console.log(prescriptionData);

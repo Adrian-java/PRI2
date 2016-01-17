@@ -40,6 +40,8 @@ angular.module('clinic').service 'Patients', [ '$http', '$cookies', 'api', '$loc
     return request
 
   show = (id) ->
+    if(!id)
+      id = $localStorage.token.split(":")[0]
     request = $http(
       method: 'GET'
       url: api + 'SystemUser/patient/'+id

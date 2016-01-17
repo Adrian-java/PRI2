@@ -61,6 +61,24 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', '$local
       headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
+  getPatientPlannedVisits = (patientId) ->
+    if(!patientId)
+      patientId = $localStorage.token.split(":")[0]
+    request = $http(
+      method: 'GET'
+      url: api + 'Visit/patient/plane/' + patientId
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
+
+  getPatientDoneVisits = (patientId) ->
+    if(!patientId)
+      patientId = $localStorage.token.split(":")[0]
+    request = $http(
+      method: 'GET'
+      url: api + 'Visit/patient/done/' + patientId
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
+
   handleError = (response) ->
     if !angular.isObject(response.data) or !response.data.message
       return console.log('An unknown error occurred.')
@@ -77,5 +95,7 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', '$local
     showDone: showDone
     showPlanned: showPlanned
     indexByDate: indexByDate
+    getPatientPlannedVisits: getPatientPlannedVisits
+    getPatientDoneVisits: getPatientDoneVisits
   }
 ]

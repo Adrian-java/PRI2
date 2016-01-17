@@ -73893,6 +73893,11 @@ angular.module('ui.calendar', [])
     }).state('password_reset', {
       url: '/password_reset',
       templateUrl: '/app/components/password_reset/password_reset.html'
+    }).state('change-password', {
+      url: '/change-password',
+      templateUrl: 'app/components/password/change.html',
+      controller: 'PasswordChangeController',
+      controllesAs: 'password.change'
     }).state('logout', {
       url: '/logout'
     }).state('contact', {
@@ -73929,20 +73934,22 @@ angular.module('ui.calendar', [])
       template: '/app/components/doctors/calendar.html'
     }).state('patient', {
       url: '/patient',
-      template: '<div ui-view>ddd</div>'
-    }).state('patient.change_password', {
-      url: '/change_password'
-    }).state('patient.edit', {
-      url: '/edit'
-    }).state('patient.visits', {
-      url: '/visits',
-      templateUrl: '/app/components/patient/patient.visits.html'
-    }).state('patient.visits.show', {
-      url: '/:id'
-    }).state('patient.visits.delete', {
-      url: '/:id/delete'
-    }).state('patient.visits.edit', {
-      url: '/:id/edit'
+      templateUrl: 'app/components/patient/panel.html'
+    }).state('patient-account', {
+      url: '/patient/account',
+      templateUrl: 'app/components/patient/account.html',
+      controller: 'PatientController',
+      controllerAs: 'patient'
+    }).state('patient-done-visits', {
+      url: '/patient/visits/done',
+      templateUrl: 'app/components/patient/visits.done.html',
+      controller: 'PatientDoneVisitsController',
+      controllerAs: 'patient.visits.done'
+    }).state('patient-planned-visits', {
+      url: '/patient/visits/planned',
+      templateUrl: 'app/components/patient/visits.planned.html',
+      controller: 'PatientPlannedVisitsController',
+      controllerAs: 'patient.visits.planned'
     }).state('doctor', {
       url: '/doctor',
       templateUrl: 'app/components/doctor/panel.html'
@@ -75002,8 +75009,41 @@ angular.module('ui.calendar', [])
 
 (function() {
   angular.module('clinic').controller('PatientController', [
-    '$scope', '$timeout', function($scope, $timeout) {
-      return console.log('xxx');
+    '$scope', '$timeout', 'Patients', function($scope, $timeout, Patients) {
+      console.log('patient controller');
+      return Patients.show().then(function(res) {
+        return $scope.patient = res.data;
+      });
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('PatientDoneVisitsController', [
+    '$scope', '$timeout', 'Visits', function($scope, $timeout, Visits) {
+      console.log('patient done visits controller');
+      return Visits.getPatientDoneVisits().then(function(res) {
+        return $scope.visits = res.data;
+      });
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('PatientPlannedVisitsController', [
+    '$scope', '$timeout', 'Visits', function($scope, $timeout, Visits) {
+      console.log('patient planned visits controller');
+      Visits.getPatientPlannedVisits().then(function(res) {
+        $scope.visits = res.data;
+        return console.log(res.data);
+      });
+      return $scope.resign = function(visitId) {
+        return Visits.remove(visitId).then(function(res) {
+          return console.log(res);
+        });
+      };
     }
   ]);
 

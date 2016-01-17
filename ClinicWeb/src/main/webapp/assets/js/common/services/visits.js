@@ -1,7 +1,7 @@
 (function() {
   angular.module('clinic').service('Visits', [
     '$http', '$cookies', 'api', '$localStorage', function($http, $cookies, api, $localStorage) {
-      var check, create, handleError, handleSuccess, indexByDate, remove, show, showDone, showPlanned;
+      var check, create, getPatientDoneVisits, getPatientPlannedVisits, handleError, handleSuccess, indexByDate, remove, show, showDone, showPlanned;
       indexByDate = function(startDate, endDate) {
         var request;
         console.log('dates');
@@ -94,6 +94,34 @@
         });
         return request;
       };
+      getPatientPlannedVisits = function(patientId) {
+        var request;
+        if (!patientId) {
+          patientId = $localStorage.token.split(":")[0];
+        }
+        return request = $http({
+          method: 'GET',
+          url: api + 'Visit/patient/plane/' + patientId,
+          headers: {
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+      };
+      getPatientDoneVisits = function(patientId) {
+        var request;
+        if (!patientId) {
+          patientId = $localStorage.token.split(":")[0];
+        }
+        return request = $http({
+          method: 'GET',
+          url: api + 'Visit/patient/done/' + patientId,
+          headers: {
+            'XToken': $localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        });
+      };
       handleError = function(response) {
         if (!angular.isObject(response.data) || !response.data.message) {
           return console.log('An unknown error occurred.');
@@ -109,7 +137,9 @@
         show: show,
         showDone: showDone,
         showPlanned: showPlanned,
-        indexByDate: indexByDate
+        indexByDate: indexByDate,
+        getPatientPlannedVisits: getPatientPlannedVisits,
+        getPatientDoneVisits: getPatientDoneVisits
       };
     }
   ]);
