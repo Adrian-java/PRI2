@@ -101,7 +101,7 @@ public interface DocumentsDAO extends JpaDao<Documents> {
 	 */
 	public Documents findDocumentsByPrimaryKey(Integer id_1, int startResult, int maxRows) throws DataAccessException;
 	
-	public Documents findDocumentsByPatient(Patient p, int startResult, int maxRows) throws DataAccessException;
+	public Set<Documents> findDocumentsByPatient(Patient p, int startResult, int maxRows) throws DataAccessException;
 
 	public Documents findDocumentsByVisit(Visit v) throws DataAccessException;
 	/**
