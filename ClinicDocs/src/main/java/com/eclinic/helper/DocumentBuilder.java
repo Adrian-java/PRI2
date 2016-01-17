@@ -128,35 +128,6 @@ public class DocumentBuilder implements IDocumentBuilder {
 		return referral;
 	}
 
-	// private Patient createPatient() {
-	// Patient patient = new Patient();
-	//
-	// Address address = createAddress();
-	//
-	// patient.setName("Sebastian");
-	// patient.setSurname("Cebula");
-	// patient.setAddress(address);
-	//
-	// return patient;
-	// }
-
-	// private Address createAddress() {
-	// Address address = new Address();
-	// address.setCity("Warszawa");
-	// address.setHomeNr("23");
-	// address.setStreet("Wiejska");
-	// address.setCountryCodeCity("00-912");
-	// return address;
-	// }
-
-	// private Doctor createDoctor() {
-	// Doctor doctor = new Doctor();
-	//
-	// doctor.setName("Janusz");
-	// doctor.setSurname("Cebula");
-	//
-	// return doctor;
-	// }
 
 	private Clinic createClinic() {
 		Clinic clinic = new Clinic();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2015-11-23T22:35:33 -->
+<!-- 2016-01-17T21:17:41 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prescription" pageWidth="311" pageHeight="609" columnWidth="271" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="97ae5efb-e890-4a3e-9c5e-7758104beff7">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="mm"/>
@@ -292,70 +292,70 @@
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Remedy0}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Remedy0} != null ? $P{Remedy0} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="7" y="34" width="163" height="29" uuid="318a1aa1-5b77-448a-9415-d3b7a9edd963"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Remedy1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Remedy1} != null ? $P{Remedy1} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="7" y="69" width="163" height="29" uuid="245302ee-cf34-4504-9d48-2a7297182a92"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Remedy2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Remedy2} != null ? $P{Remedy2} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="7" y="104" width="163" height="29" uuid="e966209b-9b87-4e17-af67-cabc1515b88f"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Remedy3}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Remedy3} != null ? $P{Remedy3} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="8" y="139" width="163" height="29" uuid="710b53cb-d7a9-46e1-a9ee-740678ead794"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Remedy4}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Remedy4} != null ? $P{Remedy4} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="183" y="0" width="78" height="29" uuid="f7a2d182-37e6-4913-a9ff-1a730dfd21d5"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Repayment0}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Repayment0} != null ? $P{Repayment0} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="183" y="34" width="78" height="29" uuid="e757e357-dfdc-49f9-a488-8538069671f9"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Repayment1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Repayment1} != null ? $P{Repayment1} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="183" y="69" width="78" height="29" uuid="d9095555-8c4d-43a8-8b58-c85a4e282732"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Repayment2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Repayment2} != null ? $P{Repayment2} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="183" y="104" width="78" height="29" uuid="3265e120-11da-4341-a9f5-f9ce067f069a"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Repayment3}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Repayment3} != null ? $P{Repayment3} : " "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="183" y="139" width="78" height="29" uuid="ae5b73da-c474-4303-a85b-723a581659e2"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Repayment4}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Repayment4} != null ? $P{Repayment4} : " "]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

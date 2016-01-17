@@ -7,8 +7,6 @@ import com.eclinic.domain.Patient;
 
 public class Prescription {
 
-//	name, surname, address, pesel, age (<18)
-	
 	private long number;
 	
 	private Clinic clinic;
