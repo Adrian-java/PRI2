@@ -269,4 +269,10 @@ public class DocumentsDAOImpl extends AbstractJpaDao<Documents> implements
 		List<Documents>  list = query.getResultList();
 		return list.get(list.size()-1);
 	}
+	
+	public List<Documents>  findDocumentsByVisitNew(Visit v) throws DataAccessException {
+		Query query = createNamedQuery("findDocumentsByVisit", -1, -1,v);
+		List<Documents>  list = query.getResultList();
+		return list;
+	}
 }

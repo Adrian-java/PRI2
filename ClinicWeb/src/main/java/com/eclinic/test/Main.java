@@ -54,7 +54,7 @@ public class Main {
 
 		VisitEdit edit = new VisitEdit();
 		edit.setVisitId(2502);
-		edit.setDesciption("Opis testowy");
+		edit.setDescription("Opis testowy");
 		System.out.println(visitSchedulerRestController.editVisit(edit));
 //		NewVisitSchedulerMapper vsm = new NewVisitSchedulerMapper();
 //		vsm.setDuration(20);
