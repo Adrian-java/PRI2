@@ -131,8 +131,8 @@ public class DocumentConverter {
 				i++;
 			}
 			else {
-				map.put("Remedy"+i, ".");
-				map.put("Repayment"+i, ".");
+				map.put("Remedy"+i, "");
+				map.put("Repayment"+i, "");
 				i++;
 			}
 		}
