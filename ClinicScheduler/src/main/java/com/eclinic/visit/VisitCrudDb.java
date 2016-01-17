@@ -370,7 +370,7 @@ public class VisitCrudDb implements VisitCrud {
 
 	public Visit editVisit(VisitEdit ve) {
 		Visit v = visitDao.findVisitById(ve.getVisitId());
-		v.setDescriptionOfVisit(ve.getDesciption());
+		v.setDescriptionOfVisit(ve.getDescription());
 		Visit merge = visitDao.merge(v);
 		visitDao.flush();
 		return merge;

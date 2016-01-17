@@ -102,7 +102,7 @@ public class VisitRestController {
 	public Response editVisit(VisitEdit edit) {
 		try {
 			Visit addVisit = visitCrud.editVisit(edit);
-			return Response.ok(new ObjectMapper().writeValueAsString(addVisit))
+			return Response.ok()
 					.build();
 		} catch (Exception e) {
 			return Response.serverError().build();

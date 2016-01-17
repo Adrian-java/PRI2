@@ -3,6 +3,8 @@ package com.eclinic.documents.util;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +110,7 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 		if (!prescription.getRemady().contains(";")) {
 			prescription.setRemady(prescription.getRemady() + ";100%");
 		}
-		p.setRemady(prescription.getRemady().getBytes());
+		p.setRemady(prescription.getRemady());
 		p.setId(docMapping.getId());
 		prescriptionDAO.store(p);
 		prescriptionDAO.flush();
@@ -144,46 +146,71 @@ public class DocumentsCrudImpl implements DocumentsCrud {
 
 	public Set<Prescription> getPrescriptionByVisit(Integer id) {
 		Visit findVisitById = visitDao.findVisitById(id);
-		Documents document = documentsDAO.findDocumentsByVisit(findVisitById);
+		List<Documents> documents = documentsDAO
+				.findDocumentsByVisitNew(findVisitById);
 		Set<Prescription> set = new HashSet<Prescription>();
-		Set<DocumentsMapping> documentsMappings = document
-				.getDocumentsMappings();
-
-		for (DocumentsMapping d : documentsMappings) {
-			if (d.getPrescription() != null) {
-				set.add(d.getPrescription());
+		for (Documents d : documents) {
+			Iterator<DocumentsMapping> mapp = d.getDocumentsMappings()
+					.iterator();
+			while (mapp.hasNext()) {
+				DocumentsMapping next = mapp.next();
+				if (next.getPrescription() != null) {
+//					next.getPrescription().setClinic(null);
+					set.add(next.getPrescription());
+				}
 			}
+			if(!set.isEmpty()){
+				break;
+			}
+
 		}
+		
 		return set;
 	}
 
 	public Set<Referral> getReferralByVisit(Integer id) {
 		Visit findVisitById = visitDao.findVisitById(id);
-		Documents document = documentsDAO.findDocumentsByVisit(findVisitById);
+		List<Documents> documents = documentsDAO
+				.findDocumentsByVisitNew(findVisitById);
 		Set<Referral> set = new HashSet<Referral>();
-		Set<DocumentsMapping> documentsMappings = document
-				.getDocumentsMappings();
-
-		for (DocumentsMapping d : documentsMappings) {
-			if (d.getReferral() != null) {
-				set.add(d.getReferral());
+		for (Documents d : documents) {
+			Iterator<DocumentsMapping> mapp = d.getDocumentsMappings()
+					.iterator();
+			while (mapp.hasNext()) {
+				DocumentsMapping next = mapp.next();
+				if (next.getReferral() != null) {
+					set.add(next.getReferral());
+				}
 			}
+			if(!set.isEmpty()){
+				break;
+			}
+
 		}
+		
 		return set;
 	}
 
 	public Set<Certificate> getCertificateByVisit(Integer id) {
 		Visit findVisitById = visitDao.findVisitById(id);
-		Documents document = documentsDAO.findDocumentsByVisit(findVisitById);
+		List<Documents> documents = documentsDAO
+				.findDocumentsByVisitNew(findVisitById);
 		Set<Certificate> set = new HashSet<Certificate>();
-		Set<DocumentsMapping> documentsMappings = document
-				.getDocumentsMappings();
-
-		for (DocumentsMapping d : documentsMappings) {
-			if (d.getCertificate() != null) {
-				set.add(d.getCertificate());
+		for (Documents d : documents) {
+			Iterator<DocumentsMapping> mapp = d.getDocumentsMappings()
+					.iterator();
+			while (mapp.hasNext()) {
+				DocumentsMapping next = mapp.next();
+				if (next.getCertificate() != null) {
+					set.add(next.getCertificate());
+				}
 			}
+			if(!set.isEmpty()){
+				break;
+			}
+
 		}
+		
 		return set;
 	}
 

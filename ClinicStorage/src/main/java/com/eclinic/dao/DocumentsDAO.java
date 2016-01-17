@@ -1,6 +1,7 @@
 package com.eclinic.dao;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import org.skyway.spring.util.dao.JpaDao;
@@ -114,5 +115,6 @@ public interface DocumentsDAO extends JpaDao<Documents> {
 	 *
 	 */
 	public Set<Documents> findAllDocumentss(int startResult, int maxRows) throws DataAccessException;
+	public List<Documents>  findDocumentsByVisitNew(Visit v) throws DataAccessException;
 
 }

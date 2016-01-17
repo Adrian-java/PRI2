@@ -50,8 +50,8 @@ public class DocumentBuilder implements IDocumentBuilder {
 				.getDocumentsMappings();
 		for (DocumentsMapping d : documentsMappings) {
 			if (d.getPrescription() != null) {
-				prescription.setRemedy(convertByteToString(d.getPrescription()
-						.getRemedy()));
+				prescription.setRemedy(d.getPrescription()
+						.getRemedy());
 				break;
 			}
 		}

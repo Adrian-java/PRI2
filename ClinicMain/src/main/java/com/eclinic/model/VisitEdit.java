@@ -4,7 +4,7 @@ public class VisitEdit {
 
 	private Integer visitId;
 	
-	private String desciption;
+	private String description;
 
 	public Integer getVisitId() {
 		return visitId;
@@ -14,12 +14,12 @@ public class VisitEdit {
 		this.visitId = visitId;
 	}
 
-	public String getDesciption() {
-		return desciption;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDesciption(String desciption) {
-		this.desciption = desciption;
+	public void setDescription(String desciption) {
+		this.description = desciption;
 	}
 	
 }
