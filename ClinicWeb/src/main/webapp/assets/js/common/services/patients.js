@@ -52,6 +52,9 @@
       };
       show = function(id) {
         var request;
+        if (!id) {
+          id = $localStorage.token.split(":")[0];
+        }
         request = $http({
           method: 'GET',
           url: api + 'SystemUser/patient/' + id,

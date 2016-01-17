@@ -1,0 +1,43 @@
+.container
+  .row
+    .col-xs-12
+      %ul.list-group
+        %li.list-group-item.active
+          Pesel
+        %li.list-group-item
+          {{patient.id}}
+      %ul.list-group
+        %li.list-group-item.active
+          Imię i nazwisko
+        %li.list-group-item
+          {{patient.name}} {{patient.surname}}
+      %ul.list-group
+        %li.list-group-item.active
+          Data urodzenia
+        %li.list-group-item
+          {{patient.dateOfBirth | date: 'yyyy-MM-dd'}}
+      %ul.list-group
+        %li.list-group-item.active
+          Kod pocztowy | Miasto
+        %li.list-group-item
+          {{patient.countryCodeCity}} | {{patient.city}}
+      %ul.list-group
+        %li.list-group-item.active
+          Wojwództwo
+        %li.list-group-item
+          {{patient.province}}
+      %ul.list-group
+        %li.list-group-item.active
+          Państwo
+        %li.list-group-item
+          {{patient.country}}
+      %ul.list-group
+        %li.list-group-item.active
+          Telefon kontaktowy
+        %li.list-group-item
+          {{patient.phoneNr}}
+      %ul.list-group
+        %li.list-group-item.active
+          E-mail
+        %li.list-group-item
+          {{patient.EMail}}

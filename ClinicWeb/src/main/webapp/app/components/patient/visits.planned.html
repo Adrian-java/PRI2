@@ -1,0 +1,42 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Data
+            </th>
+            <th>
+              Lekarz
+            </th>
+            <th>
+              Akcje
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='visit in visits'>
+            <div ng-if='visit.status != "wolna"'>
+              <td>
+                <a ui-sref='doctor-visits-show({visitId: visit.id})'>
+                  {{visit.dateOfVisit | date: 'dd-MM-yyyy H:m'}}
+                </a>
+              </td>
+              <td>
+                <a ui-sref='doctor-visits-show({visitId: visit.id})'>
+                  {{visit.name}} {{visit.surname}}
+                </a>
+              </td>
+              <td>
+                <button class='btn btn-danger' ng-click='resign({visitId: visit.id})'>
+                  Rezygnuj
+                </button>
+              </td>
+            </div>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

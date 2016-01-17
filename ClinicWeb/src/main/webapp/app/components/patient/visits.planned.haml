@@ -1,0 +1,24 @@
+.container
+  .row
+    .col-xs-12
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Data
+            %th
+              Lekarz
+            %th
+              Akcje
+        %tbody
+          %tr{:'ng-repeat' => 'visit in visits'}
+            %div{:'ng-if' => 'visit.status != "wolna"'}
+              %td
+                %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
+                  {{visit.dateOfVisit | date: 'dd-MM-yyyy H:m'}}
+              %td
+                %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
+                  {{visit.name}} {{visit.surname}}
+              %td
+                %button.btn.btn-danger{:'ng-click' => 'resign({visitId: visit.id})'}
+                  Rezygnuj

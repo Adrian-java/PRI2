@@ -1,0 +1,38 @@
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>
+              Data
+            </th>
+            <th>
+              Lekarz
+            </th>
+            <th>
+              Rozpoznanie
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat='visit in visits'>
+            <td>
+              <a ui-sref='doctor-visits-show({visitId: visit.id})'>
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy H:m'}}
+              </a>
+            </td>
+            <td>
+              <a ui-sref='doctor-visits-show({visitId: visit.id})'>
+                {{visit.name}} {{visit.surname}}
+              </a>
+            </td>
+            <td>
+              {{visit.description}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

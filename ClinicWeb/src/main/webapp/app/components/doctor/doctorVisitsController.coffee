@@ -122,7 +122,7 @@ angular.module 'clinic'
         'date': new Date().getTime()
       }
 
-      Documents.getPrescription($stateParams.visitId).then((res) ->
+      Documents.addPrescription($scope.prescriptionData).then((res) ->
         console.log res
       )
       #Documents.create(doc).then((res) ->

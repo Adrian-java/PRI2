@@ -1,0 +1,22 @@
+.container
+  .row
+    .col-xs-12
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th
+              Data
+            %th
+              Lekarz
+            %th
+              Rozpoznanie
+        %tbody
+          %tr{:'ng-repeat' => 'visit in visits'}
+            %td
+              %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy H:m'}}
+            %td
+              %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
+                {{visit.name}} {{visit.surname}}
+            %td
+              {{visit.description}}
