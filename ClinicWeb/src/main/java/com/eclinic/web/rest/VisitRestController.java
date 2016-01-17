@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 
 import com.eclinic.dao.VisitDAO;
 import com.eclinic.domain.Visit;
+import com.eclinic.model.VisitEdit;
 import com.eclinic.visit.VisitCrud;
 import com.eclinic.visit.mapper.NewVisitMapper;
 
@@ -87,6 +88,20 @@ public class VisitRestController {
 	public Response newVisit(NewVisitMapper newVisit) {
 		try {
 			Visit addVisit = visitCrud.addVisit(newVisit);
+			return Response.ok(new ObjectMapper().writeValueAsString(addVisit))
+					.build();
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
+	}
+	
+	@POST
+	@Path("/edit")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response editVisit(VisitEdit edit) {
+		try {
+			Visit addVisit = visitCrud.editVisit(edit);
 			return Response.ok(new ObjectMapper().writeValueAsString(addVisit))
 					.build();
 		} catch (Exception e) {

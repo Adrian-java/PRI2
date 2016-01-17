@@ -36,9 +36,9 @@ public class DocumentBuilder implements IDocumentBuilder {
 
 	public Prescription createPrescription(Patient patient) {
 
-		Prescription prescription = new Prescription();
 		Documents findDocumentsByPatient = documentsDAO.findDocumentsByPatient(
 				patient, -1, -1);
+		Prescription prescription = new Prescription();
 
 		prescription.setClinic(createClinic());
 		prescription.setDepartment("02");
