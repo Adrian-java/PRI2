@@ -138,7 +138,7 @@
         });
       };
       return $scope.showDocuments = function() {
-        return Documents.getPrescription($stateParams.visitId);
+        return Documents.getCertificate($stateParams.visitId);
       };
     }
   ]);

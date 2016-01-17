@@ -167,5 +167,5 @@ angular.module 'clinic'
       )
 
     $scope.showDocuments = ->
-      Documents.getPrescription($stateParams.visitId)
+      Documents.getCertificate($stateParams.visitId)
   ]

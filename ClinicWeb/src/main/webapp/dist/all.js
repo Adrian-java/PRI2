@@ -74851,10 +74851,7 @@ angular.module('ui.calendar', [])
         });
       };
       return $scope.showDocuments = function() {
-        return Documents.getPrescription($stateParams.visitId).then(function(res) {
-          console.log('prescription');
-          return console.log(res);
-        });
+        return Documents.getCertificate($stateParams.visitId);
       };
     }
   ]);

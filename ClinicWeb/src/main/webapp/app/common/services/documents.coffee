@@ -9,6 +9,14 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
       headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
+  checkExistance = (visitID) ->
+    request = $http(
+      method: 'GET'
+      url: api + 'documents/exist/' + visitId
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
+    return request
+
   addPrescription = (prescriptionData) ->
     console.log prescriptionData
     request = $http(
@@ -57,6 +65,14 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
     )
     return request
 
+  getReferralData = (visitId) ->
+    request = $http(
+      method: 'GET'
+      url: api + 'documents/referral/data/' + visitId
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+    )
+    return request
+
   getPrescription = (visitId) ->
     $http(
       method: 'GET'
@@ -69,25 +85,41 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
         window.open fileURL
       return
 
-    #request = $http(
-    #  method: 'GET'
-    #  url: api + 'documents/prescription/' + visitId
-    #  headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
-    #)
-    #return request
+  getCertificate = (visitId) ->
+    $http(
+      method: 'GET'
+      url: api + 'documents/certificate/' + visitId
+      responseType: 'arraybuffer'
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+      ).success (data) ->
+        file = new Blob([ data ], type: 'application/pdf')
+        fileURL = URL.createObjectURL(file)
+        window.open fileURL
+      return
 
-  #indexPrescription = (visitId) ->
-  #  request = $http(
-  #    method: 'GET'
-  #    url: api +
-  #  )
+  getReferral = (visitId) ->
+    $http(
+      method: 'GET'
+      url: api + 'documents/certificate/' + visitId
+      responseType: 'arraybuffer'
+      headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
+      ).success (data) ->
+        file = new Blob([ data ], type: 'application/pdf')
+        fileURL = URL.createObjectURL(file)
+        window.open fileURL
+      return
 
   {
     create: create
+    checkExistance: checkExistance
     addPrescription: addPrescription
     addCertificate: addCertificate
     addReferral: addReferral
-    getPrescription: getPrescription
+    getPrescriptionData: getPrescriptionData
     getCertificateData: getCertificateData
+    getReferralData: getReferralData
+    getPrescription: getPrescription
+    getCertificate: getCertificate
+    getReferral: getReferral
   }
 ]

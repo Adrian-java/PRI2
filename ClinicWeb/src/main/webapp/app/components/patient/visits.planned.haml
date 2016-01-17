@@ -20,5 +20,5 @@
                 %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
                   {{visit.name}} {{visit.surname}}
               %td
-                %button.btn.btn-danger{:'ng-click' => 'resign({visitId: visit.id})'}
+                %button.btn.btn-danger{:'ng-click' => 'resign(visit.id)'}
                   Rezygnuj
