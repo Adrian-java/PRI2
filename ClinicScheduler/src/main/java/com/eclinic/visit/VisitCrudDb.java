@@ -44,6 +44,7 @@ import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.domain.view.VisitSchedulerView;
 import com.eclinic.domain.view.VisitView;
+import com.eclinic.model.VisitEdit;
 import com.eclinic.model.VisitInfo;
 import com.eclinic.visit.mapper.NewVisitMapper;
 import com.eclinic.visit.mapper.NewVisitSchedulerMapper;
@@ -365,5 +366,13 @@ public class VisitCrudDb implements VisitCrud {
 
 	public Set<VisitView> getAllVisitByPatient(String id) {
 		return visitViewDao.findPlaneVisitByPatient(id);
+	}
+
+	public Visit editVisit(VisitEdit ve) {
+		Visit v = visitDao.findVisitById(ve.getVisitId());
+		v.setDescriptionOfVisit(ve.getDesciption());
+		Visit merge = visitDao.merge(v);
+		visitDao.flush();
+		return merge;
 	}
 }

@@ -7,6 +7,7 @@ import com.eclinic.domain.Visit;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -265,6 +266,7 @@ public class DocumentsDAOImpl extends AbstractJpaDao<Documents> implements
 
 	public Documents findDocumentsByVisit(Visit v) throws DataAccessException {
 		Query query = createNamedQuery("findDocumentsByVisit", -1, -1,v);
-		return (Documents) query.getSingleResult();
+		List<Documents>  list = query.getResultList();
+		return list.get(list.size()-1);
 	}
 }

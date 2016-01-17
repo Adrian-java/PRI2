@@ -6,6 +6,7 @@ import java.util.Set;
 import com.eclinic.domain.Visit;
 import com.eclinic.domain.VisitScheduler;
 import com.eclinic.domain.view.VisitView;
+import com.eclinic.model.VisitEdit;
 import com.eclinic.model.VisitInfo;
 import com.eclinic.visit.mapper.NewVisitMapper;
 import com.eclinic.visit.mapper.NewVisitSchedulerMapper;
@@ -67,4 +68,6 @@ public interface VisitCrud {
 			String specialization, Date parse, Date parse2);
 
 	public Set<VisitView> getAllVisitByPatient(String id);
+	
+	public Visit editVisit(VisitEdit ve);
 }

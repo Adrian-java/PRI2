@@ -77,6 +77,10 @@ public class DoctorCrudDB implements DoctorCrud {
 		try {
 			map.put("status","ok");
 			String i = systemUserService.saveSystemUserDoctor(systemUser,false);
+			Specialization sp = systemUser.getDoctor().getSpecializations().iterator().next();
+			sp.setDoctor(doctorDao.findDoctorById(i));
+			specializationDao.merge(sp);
+			specializationDao.flush();
 			return Response.ok(map)
 					.build();
 		} catch (Exception e) {
