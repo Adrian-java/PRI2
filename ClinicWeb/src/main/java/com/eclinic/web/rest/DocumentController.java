@@ -3,6 +3,7 @@ package com.eclinic.web.rest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -149,7 +152,11 @@ public class DocumentController {
 	@Produces("application/json")
 	public Response findPrescriptionData(@PathParam("visitId") Integer id) {
 		try {
-			return Response.ok(documentsCrud.getPrescriptionByVisit(id)).build();
+			Set<com.eclinic.domain.Prescription> prescriptionByVisit = documentsCrud.getPrescriptionByVisit(id);
+			
+			return Response.ok(new ObjectMapper()
+			.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
+			.writeValueAsString(prescriptionByVisit)).build();
 		} catch (Exception e) {
 			return Response.noContent().build();
 		}
@@ -160,7 +167,10 @@ public class DocumentController {
 	@Produces("application/json")
 	public Response findCertificateData(@PathParam("visitId") Integer id) {
 		try {
-			return Response.ok(documentsCrud.getCertificateByVisit(id)).build();
+			Set<com.eclinic.domain.Certificate> certificateByVisit = documentsCrud.getCertificateByVisit(id);
+			return Response.ok(new ObjectMapper()
+			.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
+			.writeValueAsString(certificateByVisit)).build();
 		} catch (Exception e) {
 			return Response.noContent().build();
 		}
@@ -171,7 +181,10 @@ public class DocumentController {
 	@Produces("application/json")
 	public Response findReferralData(@PathParam("visitId") Integer id) {
 		try {
-			return Response.ok(documentsCrud.getReferralByVisit(id)).build();
+			Set<com.eclinic.domain.Referral> referralByVisit = documentsCrud.getReferralByVisit(id);
+			return Response.ok(new ObjectMapper()
+			.configure(Feature.FAIL_ON_EMPTY_BEANS, false)
+			.writeValueAsString(referralByVisit)).build();
 		} catch (Exception e) {
 			return Response.noContent().build();
 		}

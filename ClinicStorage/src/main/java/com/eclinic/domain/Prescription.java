@@ -14,6 +14,7 @@ import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.*;
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -76,12 +77,13 @@ public class Prescription implements Serializable {
 	@Basic(fetch = FetchType.EAGER)
 	@Lob
 	@XmlElement
-	byte[] remady;
+	String remady;
 
 	/**
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({ @JoinColumn(name = "id_clinic", referencedColumnName = "Id", nullable = false) })
+	@JoinColumns({ @JoinColumn(name = "id_clinic", referencedColumnName = "Id", nullable = true) })
+	@JsonIgnore
 	@XmlTransient
 	Clinic clinic;
 	/**
@@ -141,13 +143,13 @@ public class Prescription implements Serializable {
 
 	/**
 	 */
-	public void setRemady(byte[] remady) {
+	public void setRemady(String remady) {
 		this.remady = remady;
 	}
 
 	/**
 	 */
-	public byte[] getRemedy() {
+	public String getRemedy() {
 		return this.remady;
 	}
 
