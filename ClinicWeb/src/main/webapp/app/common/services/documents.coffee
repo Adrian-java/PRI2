@@ -9,7 +9,7 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
       headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
     return request
 
-  checkExistance = (visitID) ->
+  checkExistance = (visitId) ->
     request = $http(
       method: 'GET'
       url: api + 'documents/exist/' + visitId
@@ -100,7 +100,7 @@ angular.module('clinic').service 'Documents', [ '$http', '$cookies', 'api', '$lo
   getReferral = (visitId) ->
     $http(
       method: 'GET'
-      url: api + 'documents/certificate/' + visitId
+      url: api + 'documents/referral/' + visitId
       responseType: 'arraybuffer'
       headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json'
       ).success (data) ->

@@ -11,35 +11,63 @@
         %li.list-group-item
           Data urodzenia: {{visit.patientView.dateOfBirth | date: 'dd-MM-yyyy'}}
         %li.list-group-item
-          Miejsce zamieszkania: {{visit.patientView.countryCode}} {{visit.patientView.city}} {{visit.patientView.street}} {{visit.patientView.homeNr}}
+          Miejsce zamieszkania: {{visit.patientView.city}} {{visit.patientView.street}} {{visit.patientView.homeNr}}
       %ul.list-group
         %li.list-group-item.active
           Diagnoza
         %li.list-group-item
-          %textarea.form-control{:'rows' => '10', :'ng-model' => 'doc.description'}
+          %textarea.form-control{"ng-model" => "visit.visitView.descriptionOfVisit", :rows => "10"}
       %ul.list-group
         %li.list-group-item.active
           Dokumenty
-          {{docActive}}
         %li.list-group-item
-          Recepta
-          %div.form-horizontal
+          Dodaj receptę
+          .form-horizontal
             .form-group
-              %label.control-label.col-sm-2{:for => "first-name"} Imię:
+              %label.control-label.col-sm-2{:for => "department"} Oddział:
               .col-sm-10
-                %input#first-name.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'user.firstName'}
-            %button.btn.btn-primary{:'ng-click' => 'addPrescription()'}
+                %input#department.form-control{"ng-model" => "prescription.department", :placeholder => "Wpisz numer oddziału", :type => "text"}/
+            .form-group
+              %label.control-label.col-sm-2{:for => "remady"} Lista leków:
+              .col-sm-10
+                %input#remady.form-control{"ng-model" => "prescription.remady", :placeholder => "Wpisz listę leków", :type => "text"}/
+            %button.btn.btn-primary{"ng-click" => "addPrescription()"}
               Dodaj receptę
         %li.list-group-item
-          Zaświadczenie
-          %div.form-horizontal
+          Dodaj zaświadczenie
+          .form-horizontal
             .form-group
-              %label.control-label.col-sm-2{:for => "first-name"} Imię:
+              %label.control-label.col-sm-2{:for => "purpose"} Cel wydania:
               .col-sm-10
-                %input#first-name.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'user.firstName'}
-            %button.btn.btn-primary{:'ng-click' => 'addCertificate()'}
+                %input#purpose.form-control{"ng-model" => "certificate.purpose", :placeholder => "Wpisz cel wydania zaświadczenia", :type => "text"}/
+            .form-group
+              %label.control-label.col-sm-2{:for => "recognition"} Rozpoznanie:
+              .col-sm-10
+                %input#recognition.form-control{"ng-model" => "certificate.recognition", :placeholder => "Wpisz rozpoznanie", :type => "text"}/
+            %button.btn.btn-primary{"ng-click" => "addCertificate()"}
               Dodaj zaświadczenie
-      %button.btn.btn-primary{:'ng-click' => 'showDocuments()'}
-        Pokaż dokumenty
-      %button.btn.btn-primary{:'ng-click' => 'submit()'}
+        %li.list-group-item
+          Dodaj skierowanie
+          .form-horizontal
+            .form-group
+              %label.control-label.col-sm-2{:for => "destination"} Skierowanie do:
+              .col-sm-10
+                %input#destination.form-control{"ng-model" => "referral.destination", :placeholder => "Wpisz jakiej jednostki dotyczy skierowanie", :type => "text"}/
+            .form-group
+              %label.control-label.col-sm-2{:for => "purpose"} Cel wydania:
+              .col-sm-10
+                %input#purpose.form-control{"ng-model" => "referral.purpose", :placeholder => "Wpisz cel wydania skierowanie", :type => "text"}/
+            .form-group
+              %label.control-label.col-sm-2{:for => "recognition"} Rozpoznanie:
+              .col-sm-10
+                %input#recognition.form-control{"ng-model" => "referral.recognition", :placeholder => "Wpisz rozpoznanie", :type => "text"}/
+            %button.btn.btn-primary{"ng-click" => "addReferral()"}
+              Dodaj skierowanie
+      %button.btn.btn-primary{"ng-click" => "showPrescription()"}
+        Pokaż receptę
+      %button.btn.btn-primary{"ng-click" => "showReferral()"}
+        Pokaż skierowanie
+      %button.btn.btn-primary{"ng-click" => "showCertificate()"}
+        Pokaż zaświadczenie
+      %button.btn.btn-primary{"ng-click" => "submit()"}
         Zapisz

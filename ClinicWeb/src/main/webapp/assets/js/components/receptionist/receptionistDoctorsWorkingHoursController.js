@@ -51,12 +51,17 @@
         return $scope.specialities = res.data;
       });
       return $scope.submit = function() {
+        var date;
         $scope.workingHours.idDoctor = $stateParams.doctorId;
-        $scope.workingHours.startDate = new Date($scope.selectedDate).getTime();
+        date = new Date($scope.selectedDate);
+        $scope.workingHours.startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 3).getTime();
         $scope.workingHours.duration = 30;
         $scope.workingHours.visitRepeat = 7;
         $scope.workingHours.description = '';
-        return console.log($scope.workingHours);
+        console.log($scope.workingHours);
+        return Doctors.addWorkingHours($scope.workingHours).then(function(res) {
+          return console.log(res);
+        });
       };
     }
   ]);

@@ -21,11 +21,7 @@
               %a{:'ui-sref' => 'receptionist-doctors-show({doctorId: doctor.id})'}
                 {{doctor.surname}}
             %td
-              %a.btn.btn-danger{:'ui-sref' => 'receptionist-doctors-remove({doctorId: doctor.id})'}
-                Usuń
-              %a.btn.btn-primary{:'ui-sref' => 'receptionist-doctors-edit({doctorId: doctor.id})'}
-                Edytuj
               %a.btn.btn-primary{:'ui-sref' => 'receptionist-doctors-visits({doctorId: doctor.id})'}
                 Wizyty
               %a.btn.btn-primary{:'ui-sref' => 'receptionist-doctors-working-hours({doctorId: doctor.id})'}
-                Godziny pracy
+                Dodaj godziny pracy

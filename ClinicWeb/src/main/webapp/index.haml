@@ -5,6 +5,10 @@
     %title Clinic
     %link{:href => "dist/all.css", :rel => "stylesheet", :type => "text/css"}/
   %body{:'ng-controller' => 'MainController'}
+    .loader{:'data-loading' => ''}
+      %img{:'src' => 'assets/img/spinner.gif'}
+      %h2
+        Trwa ładowanie danych
     / navigation
     %nav.navbar.navbar-default.navbar-fixed-top{:role => "navigation"}
       .container
@@ -45,6 +49,7 @@
     %script{:src => "assets/js/common/services/password.js"}
     %script{:src => "assets/js/common/directives/date_select.js"}
     %script{:src => "assets/js/common/directives/form_validation.js"}
+    %script{:src => "assets/js/common/directives/loading.js"}
     %script{:src => "assets/js/components/home/homeController.js"}
     %script{:src => "assets/js/components/login/loginController.js"}
     %script{:src => "assets/js/components/main/mainController.js"}

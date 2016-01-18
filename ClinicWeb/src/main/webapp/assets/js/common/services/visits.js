@@ -51,14 +51,14 @@
         request = $http({
           method: 'POST',
           isArray: false,
-          url: api + 'Visit/new/',
+          url: api + 'Visit/edit',
           data: visit,
           headers: {
             'XToken': $localStorage.token,
             'Content-Type': 'application/json'
           }
         });
-        return request.then(handleSuccess, handleError);
+        return request;
       };
       show = function(visitId) {
         var request;
@@ -150,6 +150,7 @@
         create: create,
         remove: remove,
         show: show,
+        edit: edit,
         showDone: showDone,
         showPlanned: showPlanned,
         indexByDate: indexByDate,

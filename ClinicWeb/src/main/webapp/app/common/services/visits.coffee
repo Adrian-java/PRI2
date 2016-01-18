@@ -34,10 +34,10 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', '$local
     request = $http(
       method: 'POST'
       isArray: false
-      url: api + 'Visit/new/'
+      url: api + 'Visit/edit'
       data: visit
       headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
-    request.then handleSuccess, handleError
+    return request
 
   show = (visitId) ->
     request = $http(
@@ -102,6 +102,7 @@ angular.module('clinic').service 'Visits', [ '$http', '$cookies', 'api', '$local
     create: create
     remove: remove
     show: show
+    edit: edit
     showDone: showDone
     showPlanned: showPlanned
     indexByDate: indexByDate

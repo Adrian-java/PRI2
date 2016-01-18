@@ -70,16 +70,16 @@ angular.module 'clinic'
       #console.log dateParams
       $scope.workingHours.idDoctor = $stateParams.doctorId
 
-      $scope.workingHours.startDate = new Date($scope.selectedDate).getTime()
+      #$scope.workingHours.startDate = new Date($scope.selectedDate).getTime()
       #console.log $scope.workingHours.startDate
-      #date = new Date($scope.selectedDate)
-      #$scope.workingHours.startDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours()+2, date.getUTCMinutes(), date.getUTCSeconds()).getTime()
+      date = new Date($scope.selectedDate)
+      $scope.workingHours.startDate = new Date(date.getFullYear(),date.getMonth(),date.getDate()-3).getTime()
       $scope.workingHours.duration = 30
       $scope.workingHours.visitRepeat = 7
       $scope.workingHours.description = ''
       console.log $scope.workingHours
-      #Doctors.addWorkingHours($scope.workingHours).then((res) ->
-#        console.log res
-#      )
+      Doctors.addWorkingHours($scope.workingHours).then((res) ->
+        console.log res
+      )
 
   ]

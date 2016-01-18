@@ -74714,7 +74714,10 @@ angular.module('ui.calendar', [])
 (function() {
   angular.module('clinic').controller('DoctorVisitsController', [
     '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', function($scope, Doctors, Auth, Visits, $stateParams, Documents) {
-      var afterTomorrow, getAllVisitsByDate, getVisits, tomorrow;
+      var afterTomorrow, checkVisitDocument, getAllVisitsByDate, getVisits, tomorrow;
+      $scope.prescription = {};
+      $scope.referral = {};
+      $scope.certificate = {};
       $scope.today = function() {
         $scope.dt = new Date;
       };
@@ -74800,39 +74803,63 @@ angular.module('ui.calendar', [])
       }
       $scope.doc = {};
       $scope.submit = function() {
-        $scope.doc.visitId = $stateParams.visitId;
-        $scope.doc.date = $scope.visit.visitView.dateOfVisit;
-        return Documents.create($scope.doc).then(function(res) {
-          console.log(res);
-          return console.log('doc added');
+        var visit;
+        visit = {
+          'visitId': $stateParams.visitId,
+          'description': $scope.visit.visitView.descriptionOfVisit
+        };
+        console.log('save visit');
+        return Visits.edit(visit).then(function(res) {
+          return console.log(res);
         });
+      };
+      checkVisitDocument = function() {
+        var status;
+        status = '';
+        Documents.checkExistance($stateParams.visitId).then(function(res) {
+          return status = res.status;
+        });
+        if (status === '200') {
+          return true;
+        } else {
+          return false;
+        }
       };
       $scope.addPrescription = function() {
         var doc, prescriptionData;
+        console.log('check' + checkVisitDocument());
+        console.log($scope.prescription.department);
         console.log('visit id' + $stateParams.visitId);
         prescriptionData = {
           'issuedDate': new Date().getTime(),
-          'department': '04',
+          'department': $scope.prescription.department,
           'executionDate': new Date().getTime(),
-          'remady': 'Duodmox;50%;',
+          'remady': $scope.prescription.remady,
           'visitId': $stateParams.visitId
         };
         doc = {
-          'description': 'random',
+          'description': 'visit document',
           'visitId': $stateParams.visitId,
           'date': new Date().getTime()
         };
-        return Documents.create(doc).then(function(res) {
+        if (!checkVisitDocument()) {
+          console.log('here');
+          return Documents.create(doc).then(function(res) {
+            return Documents.addPrescription(prescriptionData).then(function(res) {
+              return console.log(res);
+            });
+          });
+        } else {
           return Documents.addPrescription(prescriptionData).then(function(res) {
             return console.log(res);
           });
-        });
+        }
       };
       $scope.addCertificate = function() {
         var certificateData, doc;
         certificateData = {
-          'purpose': 'random',
-          'recognition': 'sample text',
+          'purpose': $scope.certificate.purpose,
+          'recognition': $scope.certificate.recognition,
           'visitId': $stateParams.visitId
         };
         doc = {
@@ -74840,17 +74867,50 @@ angular.module('ui.calendar', [])
           'visitId': $stateParams.visitId,
           'date': new Date().getTime()
         };
-        return Documents.create(doc).then(function(res) {
-          return Documents.addCertificate(certificateData).then(function(res) {
-            console.log(res);
-            return Documents.getCertificateData($stateParams.visitId).then(function(res) {
-              console.log('certificate');
+        if (!checkVisitDocument()) {
+          return Documents.create(doc).then(function(res) {
+            return Documents.addCertificate(certificateData).then(function(res) {
               return console.log(res);
             });
           });
-        });
+        } else {
+          return Documents.addCertificate(certificateData).then(function(res) {
+            return console.log(res);
+          });
+        }
       };
-      return $scope.showDocuments = function() {
+      $scope.addReferral = function() {
+        var doc, referralData;
+        referralData = {
+          'destination': $scope.referral.destination,
+          'purpose': $scope.referral.purpose,
+          'recognition': $scope.referral.recognition,
+          'visitId': $stateParams.visitId
+        };
+        doc = {
+          'description': 'random',
+          'visitId': $stateParams.visitId,
+          'date': new Date().getTime()
+        };
+        if (!checkVisitDocument()) {
+          return Documents.create(doc).then(function(res) {
+            return Documents.addReferral(referralData).then(function(res) {
+              return console.log(res);
+            });
+          });
+        } else {
+          return Documents.addReferral(referralData).then(function(res) {
+            return console.log(res);
+          });
+        }
+      };
+      $scope.showPrescription = function() {
+        return Documents.getPrescription($stateParams.visitId);
+      };
+      $scope.showReferral = function() {
+        return Documents.getReferral($stateParams.visitId);
+      };
+      return $scope.showCertificate = function() {
         return Documents.getCertificate($stateParams.visitId);
       };
     }
@@ -75032,48 +75092,6 @@ angular.module('ui.calendar', [])
 }).call(this);
 
 (function() {
-  angular.module('clinic').controller('PatientController', [
-    '$scope', '$timeout', 'Patients', function($scope, $timeout, Patients) {
-      console.log('patient controller');
-      return Patients.show().then(function(res) {
-        return $scope.patient = res.data;
-      });
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  angular.module('clinic').controller('PatientDoneVisitsController', [
-    '$scope', '$timeout', 'Visits', function($scope, $timeout, Visits) {
-      console.log('patient done visits controller');
-      return Visits.getPatientDoneVisits().then(function(res) {
-        return $scope.visits = res.data;
-      });
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  angular.module('clinic').controller('PatientPlannedVisitsController', [
-    '$scope', '$timeout', 'Visits', function($scope, $timeout, Visits) {
-      console.log('patient planned visits controller');
-      Visits.getPatientPlannedVisits().then(function(res) {
-        $scope.visits = res.data;
-        return console.log(res.data);
-      });
-      return $scope.resign = function(visitId) {
-        return Visits.remove(visitId).then(function(res) {
-          return console.log(res);
-        });
-      };
-    }
-  ]);
-
-}).call(this);
-
-(function() {
   angular.module('clinic').controller('ReceptionistDoctorsController', [
     '$scope', '$stateParams', 'Doctors', '$state', function($scope, $stateParams, Doctors, $state) {
       console.log('admin doctors controller');
@@ -75219,12 +75237,17 @@ angular.module('ui.calendar', [])
         return $scope.specialities = res.data;
       });
       return $scope.submit = function() {
+        var date;
         $scope.workingHours.idDoctor = $stateParams.doctorId;
-        $scope.workingHours.startDate = new Date($scope.selectedDate).getTime();
+        date = new Date($scope.selectedDate);
+        $scope.workingHours.startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1).getTime();
         $scope.workingHours.duration = 30;
         $scope.workingHours.visitRepeat = 7;
         $scope.workingHours.description = '';
-        return console.log($scope.workingHours);
+        console.log($scope.workingHours);
+        return Doctors.addWorkingHours($scope.workingHours).then(function(res) {
+          return console.log(res);
+        });
       };
     }
   ]);
@@ -75447,6 +75470,48 @@ angular.module('ui.calendar', [])
         console.log($scope.user);
         Auth.register($scope.user);
         return $state.go('home');
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('PatientController', [
+    '$scope', '$timeout', 'Patients', function($scope, $timeout, Patients) {
+      console.log('patient controller');
+      return Patients.show().then(function(res) {
+        return $scope.patient = res.data;
+      });
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('PatientDoneVisitsController', [
+    '$scope', '$timeout', 'Visits', function($scope, $timeout, Visits) {
+      console.log('patient done visits controller');
+      return Visits.getPatientDoneVisits().then(function(res) {
+        return $scope.visits = res.data;
+      });
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('clinic').controller('PatientPlannedVisitsController', [
+    '$scope', '$timeout', 'Visits', function($scope, $timeout, Visits) {
+      console.log('patient planned visits controller');
+      Visits.getPatientPlannedVisits().then(function(res) {
+        $scope.visits = res.data;
+        return console.log(res.data);
+      });
+      return $scope.resign = function(visitId) {
+        return Visits.remove(visitId).then(function(res) {
+          return console.log(res);
+        });
       };
     }
   ]);

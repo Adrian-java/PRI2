@@ -16,7 +16,7 @@
         });
         return request;
       };
-      checkExistance = function(visitID) {
+      checkExistance = function(visitId) {
         var request;
         request = $http({
           method: 'GET',
@@ -147,7 +147,7 @@
       getReferral = function(visitId) {
         $http({
           method: 'GET',
-          url: api + 'documents/certificate/' + visitId,
+          url: api + 'documents/referral/' + visitId,
           responseType: 'arraybuffer',
           headers: {
             'XToken': $localStorage.token,

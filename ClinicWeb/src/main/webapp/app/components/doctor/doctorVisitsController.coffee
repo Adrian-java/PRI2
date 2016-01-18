@@ -1,6 +1,10 @@
 angular.module 'clinic'
   .controller 'DoctorVisitsController', [ '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', ($scope, Doctors, Auth, Visits, $stateParams, Documents) ->
 
+    $scope.prescription = {}
+    $scope.referral = {}
+    $scope.certificate = {}
+
     $scope.today = ->
       $scope.dt = new Date
       return
@@ -100,33 +104,59 @@ angular.module 'clinic'
     $scope.doc = {}
 
     $scope.submit = ->
-      $scope.doc.visitId = $stateParams.visitId
-      $scope.doc.date = $scope.visit.visitView.dateOfVisit
-      Documents.create($scope.doc).then((res) ->
+      visit = {
+        'visitId': $stateParams.visitId
+        'description': $scope.visit.visitView.descriptionOfVisit
+      }
+      console.log 'save visit'
+      Visits.edit(visit).then((res) ->
         console.log res
-        console.log 'doc added'
       )
 
+    checkVisitDocument = ->
+      status = ''
+      Documents.checkExistance($stateParams.visitId).then((res) ->
+        status = res.status
+      )
+      if(status == '200')
+        return true
+      else
+        return false
+
     $scope.addPrescription = ->
+      console.log 'check' + checkVisitDocument()
+      console.log $scope.prescription.department
       console.log 'visit id' + $stateParams.visitId
       prescriptionData = {
         'issuedDate': new Date().getTime()
-        'department': '04'
+        'department': $scope.prescription.department
         'executionDate': new Date().getTime()
-        'remady': 'Duodmox;50%;'
+        'remady': $scope.prescription.remady
         'visitId': $stateParams.visitId
       }
       doc = {
-        'description': 'random'
+        'description': 'visit document'
         'visitId': $stateParams.visitId
         'date': new Date().getTime()
       }
-
-      Documents.create(doc).then((res) ->
+      if !checkVisitDocument()
+        console.log 'here'
+        Documents.create(doc).then((res) ->
+          Documents.addPrescription(prescriptionData).then((res) ->
+            console.log res
+          )
+        )
+      else
         Documents.addPrescription(prescriptionData).then((res) ->
           console.log res
         )
-      )
+
+
+      #Documents.create(doc).then((res) ->
+      #  Documents.addPrescription(prescriptionData).then((res) ->
+      #    console.log res
+      #  )
+      #)
 
       #Documents.create(doc).then((res) ->
       #  console.log res
@@ -147,8 +177,8 @@ angular.module 'clinic'
 
     $scope.addCertificate = ->
       certificateData = {
-        'purpose': 'random'
-        'recognition': 'sample text'
+        'purpose': $scope.certificate.purpose
+        'recognition': $scope.certificate.recognition
         'visitId': $stateParams.visitId
       }
       doc = {
@@ -156,16 +186,46 @@ angular.module 'clinic'
         'visitId': $stateParams.visitId
         'date': new Date().getTime()
       }
-      Documents.create(doc).then((res) ->
-        Documents.addCertificate(certificateData).then((res) ->
-          console.log res
-          Documents.getCertificateData($stateParams.visitId).then((res) ->
-            console.log 'certificate'
+      if !checkVisitDocument()
+        Documents.create(doc).then((res) ->
+          Documents.addCertificate(certificateData).then((res) ->
             console.log res
           )
         )
-      )
+      else
+        Documents.addCertificate(certificateData).then((res) ->
+          console.log res
+        )
 
-    $scope.showDocuments = ->
+    $scope.addReferral = ->
+      referralData = {
+        'destination': $scope.referral.destination
+        'purpose': $scope.referral.purpose
+        'recognition': $scope.referral.recognition
+        'visitId': $stateParams.visitId
+      }
+      doc = {
+        'description': 'random'
+        'visitId': $stateParams.visitId
+        'date': new Date().getTime()
+      }
+      if !checkVisitDocument()
+        Documents.create(doc).then((res) ->
+          Documents.addReferral(referralData).then((res) ->
+            console.log res
+          )
+        )
+      else
+        Documents.addReferral(referralData).then((res) ->
+          console.log res
+        )
+
+    $scope.showPrescription = ->
+      Documents.getPrescription($stateParams.visitId)
+
+    $scope.showReferral = ->
+      Documents.getReferral($stateParams.visitId)
+
+    $scope.showCertificate = ->
       Documents.getCertificate($stateParams.visitId)
   ]
