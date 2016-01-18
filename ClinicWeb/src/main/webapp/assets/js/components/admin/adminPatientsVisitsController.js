@@ -6,11 +6,19 @@
           console.log(res);
           return $scope.doneVisits = res.data;
         });
-        return Visits.showPlanned($stateParams.patientId).then(function(res) {
+        Visits.showPlanned($stateParams.patientId).then(function(res) {
           console.log(res);
           return $scope.plannedVisits = res.data;
         });
       }
+      return $scope.remove = function(visitId) {
+        return Visits.remove(visitId).then(function(res) {
+          return Visits.showPlanned($stateParams.patientId).then(function(res) {
+            console.log(res);
+            return $scope.plannedVisits = res.data;
+          });
+        });
+      };
     }
   ]);
 

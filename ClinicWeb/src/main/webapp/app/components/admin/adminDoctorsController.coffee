@@ -7,16 +7,28 @@ angular.module 'clinic'
     )
 
     $scope.submit = ->
+      specialities = $scope.specialities.split(',')
+      specialitiesArray = []
+      for speciality in specialities
+        specialitiesArray.push({
+          'name': speciality
+        })
+      $scope.doctor.doctor.specializations = specialitiesArray
       Doctors.create($scope.doctor).then((res)->
         $state.go('admin-doctors')
       )
 
     console.log $stateParams
-    if $stateParams.doctorId
-      Doctors.show($stateParams.doctorId).then((res)->
-        console.log res.data
-        $scope.doctor = res.data
-      )
+    if $stateParams
+      if $stateParams.doctorId
+        Doctors.show($stateParams.doctorId).then((res)->
+          $scope.doctor = res.data
+          console.log res
+        )
+        Doctors.getDoctorSpeciality($stateParams.doctorId).then((res)->
+          $scope.doctorSpecialities = res.data
+        )
+
 
     $scope.remove = (id) ->
       Doctors.remove(id).then((res) ->

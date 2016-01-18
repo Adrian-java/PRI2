@@ -13,11 +13,15 @@
         .form-group
           %label.control-label.col-sm-2{:for => "surname"} Nazwisko lekarza:
           .col-sm-10
-            %input#surname.form-control{:placeholder => "Wpisz imię", :type => "text", :'ng-model' => 'doctor.doctor.surname'}
+            %input#surname.form-control{:placeholder => "Wpisz nazwisko", :type => "text", :'ng-model' => 'doctor.doctor.surname'}
         .form-group
           %label.control-label.col-sm-2{:for => "password"} Hasło:
           .col-sm-10
             %input#password.form-control{:placeholder => "Wpisz hasło", :type => "password", :'ng-model' => 'doctor.password'}
+        .form-group
+          %label.control-label.col-sm-2{:for => "specialities"} Specjalizacje:
+          .col-sm-10
+            %input#password.form-control{:placeholder => "Wpisz specjalizacje", :type => "text", :'ng-model' => 'specialities'}
         .form-group
           %label.control-label.col-sm-2{:for => "email"} E-mail:
           .col-sm-10

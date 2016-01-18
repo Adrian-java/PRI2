@@ -1,1 +1,19 @@
-change password
+.container
+  .row
+    .col-xs-12
+      %form.form-horizontal{:role => "form", :'ng-submit' => 'submit()', :'form-validation' => ''}
+        .form-group
+          %label.control-label.col-sm-2{:for => "old-password"} Stare hasło:
+          .col-sm-10
+            %input#password.form-control{:placeholder => "Wpisz stare hasło", :type => "password", :'ng-model' => 'password.oldPass'}
+        .form-group
+          %label.control-label.col-sm-2{:for => "new-password"} Nowe hasło:
+          .col-sm-10
+            %input#password.form-control{:placeholder => "Wpisz nowe hasło", :type => "password", :'ng-model' => 'password.newPass'}
+        .form-group
+          %label.control-label.col-sm-2{:for => "new-password-confirmation"} Potwierdzenie hasła:
+          .col-sm-10
+            %input#password.form-control{:placeholder => "Potwierdź nowe hasło", :type => "password", :'ng-model' => 'password.repeatNewPass'}
+        .form-group
+          .col-sm-offset-2.col-sm-10
+            %button.btn.btn-default{:type => "submit"} Dodaj

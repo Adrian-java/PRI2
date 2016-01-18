@@ -16,7 +16,8 @@
       };
       create = function(doctor) {
         var request;
-        console.log($cookies.token);
+        console.log('new doctor');
+        console.log(doctor);
         request = $http({
           method: 'POST',
           isArray: false,

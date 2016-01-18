@@ -9,10 +9,12 @@
       });
       console.log($stateParams);
       if ($stateParams) {
-        Patients.show($stateParams.patientId).then(function(res) {
-          console.log(res);
-          return $scope.patient = res.data;
-        });
+        if ($stateParams.patientId) {
+          Patients.show($stateParams.patientId).then(function(res) {
+            console.log(res);
+            return $scope.patient = res.data;
+          });
+        }
       }
       $scope.remove = function(id) {
         return Patients.remove(id).then(function(res) {

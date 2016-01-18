@@ -7747,11 +7747,22 @@ form.search-visit {
   background: #fff;
   height: 100vh;
   width: 100%;
-  position: relative;
+  position: fixed;
+  top: 0;
   z-index: 9999;
   text-align: center;
   padding-top: 200px; }
+  .loader img {
+    width: 115px; }
   .loader h2 {
     color: deepskyblue;
     font-size: 24px;
     font-weight: 300; }
+
+.panel-image img {
+  width: 100%; }
+
+.panel-image h4 {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 300; }

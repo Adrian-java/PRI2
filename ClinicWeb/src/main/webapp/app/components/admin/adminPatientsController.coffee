@@ -11,10 +11,11 @@ angular.module 'clinic'
 
     console.log $stateParams
     if $stateParams
-      Patients.show($stateParams.patientId).then((res)->
-        console.log res
-        $scope.patient = res.data
-      )
+      if $stateParams.patientId
+        Patients.show($stateParams.patientId).then((res)->
+          console.log res
+          $scope.patient = res.data
+        )
 
     $scope.remove = (id) ->
       Patients.remove(id).then((res) ->

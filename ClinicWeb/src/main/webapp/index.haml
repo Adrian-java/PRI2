@@ -6,7 +6,7 @@
     %link{:href => "dist/all.css", :rel => "stylesheet", :type => "text/css"}/
   %body{:'ng-controller' => 'MainController'}
     .loader{:'data-loading' => ''}
-      %img{:'src' => 'assets/img/spinner.gif'}
+      %img{:'src' => 'assets/img/spinner2.gif'}
       %h2
         Trwa ładowanie danych
     / navigation
@@ -24,7 +24,7 @@
                 %img{:src => "assets/img/logo.png"}/
             #navbarCollapse.collapse.navbar-collapse
               %ul.nav.navbar-nav.navbar-right
-                %li
+                %li{:'ng-if' => 'role != "admin" && role != "receptionist" && role != "admin" && rol != "doctor"'}
                   %a{"ui-sref" => "visits.new"} Umów się
                 %li
                   %a{:"ng-hide" => "loggedIn", :"ui-sref" => "register"} Zarejestruj się
@@ -54,8 +54,8 @@
     %script{:src => "assets/js/components/login/loginController.js"}
     %script{:src => "assets/js/components/main/mainController.js"}
     %script{:src => "assets/js/components/patient/patientController.js"}
-    %script{:src => "assets/js/components/patient/PatientPlannedVisitsController.js"}
-    %script{:src => "assets/js/components/patient/PatientDoneVisitsController.js"}
+    %script{:src => "assets/js/components/patient/patientPlannedVisitsController.js"}
+    %script{:src => "assets/js/components/patient/patientDoneVisitsController.js"}
     %script{:src => "assets/js/components/register/registerController.js"}
     %script{:src => "assets/js/components/visits/visitsController.js"}
     %script{:src => "assets/js/components/admin/adminDoctorsController.js"}

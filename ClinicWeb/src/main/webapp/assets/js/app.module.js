@@ -5,6 +5,8 @@
         if (Auth.validate() === false) {
           console.log('not logged');
           if (toState.name !== 'register' && toState.name !== 'home' && toState.name !== 'visits.new') {
+            $rootScope.previousState = fromState.name;
+            $rootScope.currentState = toState.name;
             console.log('bad state');
             return $location.path('home');
           }

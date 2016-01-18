@@ -14,9 +14,6 @@
             <th>
               Lekarz
             </th>
-            <th>
-              Akcje
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -30,9 +27,6 @@
               <a ui-sref='admin-visits-show({visitId: visit.id})'>
                 {{visit.name}} {{visit.surname}}
               </a>
-            </td>
-            <td>
-              Akcje
             </td>
           </tr>
         </tbody>
@@ -67,7 +61,9 @@
               </a>
             </td>
             <td>
-              Akcje
+              <a class='btn btn-danger' ng-click='remove(visit.id)'>
+                Usuń
+              </a>
             </td>
           </tr>
         </tbody>

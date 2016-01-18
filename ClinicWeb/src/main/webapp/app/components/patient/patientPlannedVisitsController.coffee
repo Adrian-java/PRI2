@@ -8,7 +8,10 @@ angular.module 'clinic'
 
     $scope.resign = (visitId) ->
       Visits.remove(visitId).then((res) ->
-        console.log res
+        Visits.getPatientPlannedVisits().then((res) ->
+          $scope.visits = res.data
+          console.log res.data
+        )
       )
 
   ]

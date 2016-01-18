@@ -26,8 +26,6 @@
               %a{:'ui-sref' => 'receptionist-patients-show({patientId: patient.id})'}
                 {{patient.surname}}
             %td
-              %a.btn.btn-danger{:'ui-sref' => 'receptionist-patients-remove({patientId: patient.id})'}
-                Usuń
               %a.btn.btn-primary{:'ui-sref' => 'receptionist-patients-edit({patientId: patient.id})'}
                 Edytuj
               %a.btn.btn-primary{:'ui-sref' => 'receptionist-patients-visits({patientId: patient.id})'}

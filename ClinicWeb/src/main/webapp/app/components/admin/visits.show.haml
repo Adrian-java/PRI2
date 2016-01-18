@@ -24,3 +24,8 @@
           Dane lekarza
         %li.list-group-item
           Imię i Nazwisko: {{visit.doctorView.name}} {{visit.doctorView.surname}}
+      %ul.list-group
+        %li.list-group-item.active
+          Notatka z wizyty
+        %li.list-group-item
+          {{visit.visitView.descriptionOfVisit}}

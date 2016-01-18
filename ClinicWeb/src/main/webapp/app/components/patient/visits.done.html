@@ -19,7 +19,7 @@
           <tr ng-repeat='visit in visits'>
             <td>
               <a ui-sref='doctor-visits-show({visitId: visit.id})'>
-                {{visit.dateOfVisit | date: 'dd-MM-yyyy H:m'}}
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy HH:mm'}}
               </a>
             </td>
             <td>

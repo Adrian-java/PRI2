@@ -11,8 +11,6 @@
               Data
             %th
               Lekarz
-            %th
-              Akcje
         %tbody
           %tr{:'ng-repeat' => 'visit in doneVisits'}
             %td
@@ -21,8 +19,6 @@
             %td
               %a{:'ui-sref' => 'admin-visits-show({visitId: visit.id})'}
                 {{visit.name}} {{visit.surname}}
-            %td
-              Akcje
     .col-xs-12
       Planowane wizyty
       %table.table.table-bordered
@@ -43,4 +39,5 @@
               %a{:'ui-sref' => 'admin-visits-show({visitId: visit.id})'}
                 {{visit.name}} {{visit.surname}}
             %td
-              Akcje
+              %a.btn.btn-danger{:'ng-click' => 'remove(visit.id)'}
+                Usuń

@@ -14,11 +14,9 @@
           %tr{:'ng-repeat' => 'visit in visits'}
             %div{:'ng-if' => 'visit.status != "wolna"'}
               %td
-                %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
-                  {{visit.dateOfVisit | date: 'dd-MM-yyyy H:m'}}
+                {{visit.dateOfVisit | date: 'dd-MM-yyyy HH:mm'}}
               %td
-                %a{:'ui-sref' => 'doctor-visits-show({visitId: visit.id})'}
-                  {{visit.name}} {{visit.surname}}
+                {{visit.name}} {{visit.surname}}
               %td
                 %button.btn.btn-danger{:'ng-click' => 'resign(visit.id)'}
                   Rezygnuj

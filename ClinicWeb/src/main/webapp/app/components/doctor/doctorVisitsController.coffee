@@ -1,5 +1,5 @@
 angular.module 'clinic'
-  .controller 'DoctorVisitsController', [ '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', ($scope, Doctors, Auth, Visits, $stateParams, Documents) ->
+  .controller 'DoctorVisitsController', [ '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', '$state', ($scope, Doctors, Auth, Visits, $stateParams, Documents, $state) ->
 
     $scope.prescription = {}
     $scope.referral = {}
@@ -111,6 +111,8 @@ angular.module 'clinic'
       console.log 'save visit'
       Visits.edit(visit).then((res) ->
         console.log res
+        $state.go('doctor-visits')
+
       )
 
     checkVisitDocument = ->
@@ -228,4 +230,9 @@ angular.module 'clinic'
 
     $scope.showCertificate = ->
       Documents.getCertificate($stateParams.visitId)
+
+    $scope.removeVisit = (visitId) ->
+      Visits.remove(visitId).then((res) ->
+        getVisits()
+      )
   ]

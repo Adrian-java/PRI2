@@ -1,14 +1,16 @@
 (function() {
   angular.module('clinic').service('Password', [
-    '$http', 'api', function($http, api) {
+    '$http', 'api', '$localStorage', function($http, api, $localStorage) {
       var changePassword;
-      changePassword = function(passData) {
+      changePassword = function(password) {
         var request;
+        password.id = $localStorage.token.split(":")[0];
+        console.log(password);
         request = $http({
           method: 'POST',
           isArray: false,
           url: api + 'SystemUser/pass/change',
-          data: passData,
+          data: password,
           headers: {
             'XToken': $localStorage.token,
             'Content-Type': 'application/json'

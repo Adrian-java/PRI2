@@ -1,34 +1,24 @@
 .container
   .row
-    .col-xs-12.col-sm-6.col-md-3
+    .col-xs-12.col-sm-6
       %select.form-control{:'ng-options' => 'speciality.name as speciality.name for speciality in specialities', :'ng-model' => 'selectedSpeciality', :'ng-change' => 'updateDoctorsList()'}
         %option{:'value' => ''}
           Wybierz specjalizację
-    .col-xs-12.col-sm-6.col-md-3
+    .col-xs-12.col-sm-6
       %select.form-control{:'ng-options' => 'doctor as doctor.name + " " + doctor.surname for doctor in doctors', :'ng-model' => 'selectedDoctor'}
         %option{:'value' => ''}
           Wybierz lekarza
-    .col-xs-12.col-sm-6.col-md-3
-      .input-group
-        %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "is-open" => "status.opened", "max-date" => "maxDate", "min-date" => "minDate", "ng-model" => "selectedDate", "ng-required" => "true", :type => "text", "uib-datepicker-popup" => ""}/
-        %span.input-group-btn
-          %button.btn.btn-default{"ng-click" => "open($event)", :type => "button"}
-            %i.glyphicon.glyphicon-calendar
+    -#.col-xs-12.col-sm-3.col-md-4
+    -#  .input-group
+    -#    %input.form-control{"close-text" => "Close", "date-disabled" => "disabled(date, mode)", "datepicker-options" => "dateOptions", "is-open" => "status.opened", "max-date" => "maxDate", "min-date" => "minDate", "ng-model" => "selectedDate", "ng-required" => "true", :type => "text", "uib-datepicker-popup" => ""}/
+    -#    %span.input-group-btn
+    -#      %button.btn.btn-default{"ng-click" => "open($event)", :type => "button"}
+    -#        %i.glyphicon.glyphicon-calendar
 
 .container
   .row
     .col-xs-12
-      {{selectedSpeciality}}
-      %br
-      {{selectedDoctor}}
-      %br
-      {{selectedDate}}
-      %br
-      {{workingTime}}
-      %br
-      {{selectedVisitDate}}
-    .col-xs-12
       #cal.span8.calendar{:'ui-calendar' => 'uiConfig.calendar', :'ng-model' => 'eventSources', :'calendar' => 'cal'}
     .col-xs-12
-      %button.btn.btn-default{:'ng-click' => 'submit()'}
+      %button.btn.btn-primary{:'ng-click' => 'submit()'}
         Dodaj wizytę

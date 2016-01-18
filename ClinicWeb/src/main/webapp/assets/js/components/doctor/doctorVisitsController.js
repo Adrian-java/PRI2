@@ -1,6 +1,6 @@
 (function() {
   angular.module('clinic').controller('DoctorVisitsController', [
-    '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', function($scope, Doctors, Auth, Visits, $stateParams, Documents) {
+    '$scope', 'Doctors', 'Auth', 'Visits', '$stateParams', 'Documents', '$state', function($scope, Doctors, Auth, Visits, $stateParams, Documents, $state) {
       var afterTomorrow, checkVisitDocument, getAllVisitsByDate, getVisits, tomorrow;
       $scope.prescription = {};
       $scope.referral = {};
@@ -97,7 +97,8 @@
         };
         console.log('save visit');
         return Visits.edit(visit).then(function(res) {
-          return console.log(res);
+          console.log(res);
+          return $state.go('doctor-visits');
         });
       };
       checkVisitDocument = function() {
@@ -197,8 +198,13 @@
       $scope.showReferral = function() {
         return Documents.getReferral($stateParams.visitId);
       };
-      return $scope.showCertificate = function() {
+      $scope.showCertificate = function() {
         return Documents.getCertificate($stateParams.visitId);
+      };
+      return $scope.removeVisit = function(visitId) {
+        return Visits.remove(visitId).then(function(res) {
+          return getVisits();
+        });
       };
     }
   ]);

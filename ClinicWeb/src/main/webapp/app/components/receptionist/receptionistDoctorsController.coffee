@@ -13,7 +13,13 @@ angular.module 'clinic'
 
     console.log $stateParams
     if $stateParams
-      Doctors.show($stateParams.doctorId).then((res)->
-        $scope.doctor = res.data
-      )
+      if $stateParams.doctorId
+        Doctors.show($stateParams.doctorId).then((res)->
+          $scope.doctor = res.data
+          console.log res
+        )
+        Doctors.getDoctorSpeciality($stateParams.doctorId).then((res)->
+          $scope.doctorSpecialities = res.data
+        )
+
   ]

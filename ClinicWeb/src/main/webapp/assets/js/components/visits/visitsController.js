@@ -1,6 +1,6 @@
 (function() {
   angular.module('clinic').controller('VisitsController', [
-    '$scope', '$stateParams', 'Doctors', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', function($scope, $stateParams, Doctors, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal) {
+    '$scope', '$stateParams', 'Doctors', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', function($scope, $stateParams, Doctors, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) {
       var changeWeek, getAllDoctors, getStateParams, getWorkingTime, setCalendarWorkingTime;
       $scope.workingTime = [];
       Specialities.getSpecialities().then(function(res) {
@@ -165,7 +165,8 @@
           visit.typeOfVisit = 'Dermatolog';
           console.log(visit);
           return Visits.create(visit).then(function(res) {
-            return console.log(res);
+            console.log(res);
+            return $state.go('patient-planned-visits');
           });
         } else {
           modalInstance = $uibModal.open({

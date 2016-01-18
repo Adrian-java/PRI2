@@ -6,16 +6,31 @@
         return $scope.doctors = res.data;
       });
       $scope.submit = function() {
+        var i, len, specialities, specialitiesArray, speciality;
+        specialities = $scope.specialities.split(',');
+        specialitiesArray = [];
+        for (i = 0, len = specialities.length; i < len; i++) {
+          speciality = specialities[i];
+          specialitiesArray.push({
+            'name': speciality
+          });
+        }
+        $scope.doctor.doctor.specializations = specialitiesArray;
         return Doctors.create($scope.doctor).then(function(res) {
           return $state.go('admin-doctors');
         });
       };
       console.log($stateParams);
-      if ($stateParams.doctorId) {
-        Doctors.show($stateParams.doctorId).then(function(res) {
-          console.log(res.data);
-          return $scope.doctor = res.data;
-        });
+      if ($stateParams) {
+        if ($stateParams.doctorId) {
+          Doctors.show($stateParams.doctorId).then(function(res) {
+            $scope.doctor = res.data;
+            return console.log(res);
+          });
+          Doctors.getDoctorSpeciality($stateParams.doctorId).then(function(res) {
+            return $scope.doctorSpecialities = res.data;
+          });
+        }
       }
       $scope.remove = function(id) {
         return Doctors.remove(id).then(function(res) {

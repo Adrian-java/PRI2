@@ -7,7 +7,7 @@
   </head>
   <body ng-controller='MainController'>
     <div class='loader' data-loading=''>
-      <img src='assets/img/spinner.gif'>
+      <img src='assets/img/spinner2.gif'>
       <h2>
         Trwa ładowanie danych
       </h2>
@@ -30,7 +30,7 @@
             </div>
             <div class='collapse navbar-collapse' id='navbarCollapse'>
               <ul class='nav navbar-nav navbar-right'>
-                <li>
+                <li ng-if='role != "admin" &amp;&amp; role != "receptionist" &amp;&amp; role != "admin" &amp;&amp; rol != "doctor"'>
                   <a ui-sref='visits.new'>Umów się</a>
                 </li>
                 <li>
@@ -71,8 +71,8 @@
     <script src='assets/js/components/login/loginController.js'></script>
     <script src='assets/js/components/main/mainController.js'></script>
     <script src='assets/js/components/patient/patientController.js'></script>
-    <script src='assets/js/components/patient/PatientPlannedVisitsController.js'></script>
-    <script src='assets/js/components/patient/PatientDoneVisitsController.js'></script>
+    <script src='assets/js/components/patient/patientPlannedVisitsController.js'></script>
+    <script src='assets/js/components/patient/patientDoneVisitsController.js'></script>
     <script src='assets/js/components/register/registerController.js'></script>
     <script src='assets/js/components/visits/visitsController.js'></script>
     <script src='assets/js/components/admin/adminDoctorsController.js'></script>

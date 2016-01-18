@@ -1,49 +1,28 @@
 <div class='container'>
   <div class='row'>
-    <div class='col-xs-12 col-sm-6 col-md-3'>
+    <div class='col-xs-12 col-sm-6'>
       <select class='form-control' ng-change='updateDoctorsList()' ng-model='selectedSpeciality' ng-options='speciality.name as speciality.name for speciality in specialities'>
         <option value=''>
           Wybierz specjalizację
         </option>
       </select>
     </div>
-    <div class='col-xs-12 col-sm-6 col-md-3'>
+    <div class='col-xs-12 col-sm-6'>
       <select class='form-control' ng-model='selectedDoctor' ng-options='doctor as doctor.name + " " + doctor.surname for doctor in doctors'>
         <option value=''>
           Wybierz lekarza
         </option>
       </select>
     </div>
-    <div class='col-xs-12 col-sm-6 col-md-3'>
-      <div class='input-group'>
-        <input class='form-control' close-text='Close' date-disabled='disabled(date, mode)' datepicker-options='dateOptions' is-open='status.opened' max-date='maxDate' min-date='minDate' ng-model='selectedDate' ng-required='true' type='text' uib-datepicker-popup=''>
-        <span class='input-group-btn'>
-          <button class='btn btn-default' ng-click='open($event)' type='button'>
-            <i class='glyphicon glyphicon-calendar'></i>
-          </button>
-        </span>
-      </div>
-    </div>
   </div>
 </div>
 <div class='container'>
   <div class='row'>
     <div class='col-xs-12'>
-      {{selectedSpeciality}}
-      <br>
-      {{selectedDoctor}}
-      <br>
-      {{selectedDate}}
-      <br>
-      {{workingTime}}
-      <br>
-      {{selectedVisitDate}}
-    </div>
-    <div class='col-xs-12'>
       <div calendar='cal' class='span8 calendar' id='cal' ng-model='eventSources' ui-calendar='uiConfig.calendar'></div>
     </div>
     <div class='col-xs-12'>
-      <button class='btn btn-default' ng-click='submit()'>
+      <button class='btn btn-primary' ng-click='submit()'>
         Dodaj wizytę
       </button>
     </div>

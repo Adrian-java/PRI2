@@ -1,5 +1,5 @@
 angular.module 'clinic'
-  .controller 'VisitsController', ['$scope', '$stateParams', 'Doctors', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', ($scope, $stateParams, Doctors, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal) ->
+  .controller 'VisitsController', ['$scope', '$stateParams', 'Doctors', '$compile', 'uiCalendarConfig', '$timeout', 'Specialities', 'Visits', 'Auth', '$uibModal', '$state', ($scope, $stateParams, Doctors, $compile, uiCalendarConfig, $timeout, Specialities, Visits, Auth, $uibModal, $state) ->
 
     $scope.workingTime = []
 
@@ -181,6 +181,7 @@ angular.module 'clinic'
         console.log visit
         Visits.create(visit).then((res)->
           console.log res
+          $state.go('patient-planned-visits')
         )
       else
         modalInstance = $uibModal.open(

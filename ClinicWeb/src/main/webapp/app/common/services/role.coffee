@@ -6,7 +6,6 @@ angular.module('clinic').service 'Role', [ '$http', '$cookies', 'api', '$localSt
       method: 'GET'
       url: api + 'SystemUser/role/'+login
       headers: 'XToken': $localStorage.token, 'Content-Type': 'application/json')
-    #request.then handleSuccess, handleError
     return request
 
   handleError = (response) ->

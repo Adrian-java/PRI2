@@ -12,4 +12,13 @@ angular.module 'clinic'
         $scope.plannedVisits = res.data
       )
 
+    $scope.remove = (visitId) ->
+      Visits.remove(visitId).then((res) ->
+        Visits.showPlanned($stateParams.patientId).then((res)->
+          console.log res
+          $scope.plannedVisits = res.data
+        )
+      )
+
+
   ]

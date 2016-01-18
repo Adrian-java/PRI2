@@ -9,7 +9,8 @@ angular.module('clinic').service 'Doctors', [ '$http', '$cookies', 'api', '$loca
     return request
 
   create = (doctor) ->
-    console.log $cookies.token
+    console.log 'new doctor'
+    console.log doctor
     request = $http(
       method: 'POST'
       isArray: false

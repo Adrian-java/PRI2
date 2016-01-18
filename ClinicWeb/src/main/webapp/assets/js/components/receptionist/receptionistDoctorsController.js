@@ -12,9 +12,15 @@
       };
       console.log($stateParams);
       if ($stateParams) {
-        return Doctors.show($stateParams.doctorId).then(function(res) {
-          return $scope.doctor = res.data;
-        });
+        if ($stateParams.doctorId) {
+          Doctors.show($stateParams.doctorId).then(function(res) {
+            $scope.doctor = res.data;
+            return console.log(res);
+          });
+          return Doctors.getDoctorSpeciality($stateParams.doctorId).then(function(res) {
+            return $scope.doctorSpecialities = res.data;
+          });
+        }
       }
     }
   ]);
